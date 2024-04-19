@@ -1,9 +1,14 @@
 {
+  "name": "restoria",
+  "version": "0.0.1",
+  "description": "my first socket.io app",
+  "type": "module",
   "scripts": {
     "start": "nodemon index.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
