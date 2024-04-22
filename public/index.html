@@ -25,11 +25,12 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      const userName = prompt("What is your userName?");
       const socket = io();
       const form = document.getElementById('form');
       const input = document.getElementById('input');
       const messages = document.getElementById('messages');
-
+      
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (input.value) {
@@ -40,7 +41,7 @@
 
       socket.on('chat message', (msg) => {
         const item = document.createElement('li');
-        item.textContent = msg;
+        item.textContent = `${userName}: ${msg}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
