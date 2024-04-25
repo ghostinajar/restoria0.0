@@ -5,7 +5,10 @@ import { dirname, join } from 'node:path';
 import { Server } from 'socket.io';
 import setupRoutes from './routes.js';
 import setupSocket from './socket.js';
+import dotenv from 'dotenv';
 
+dotenv.config();
+const mongodb_uri = process.env.MONGODB_URI;
 const port = 3000
 const app = express()
 const server = createServer(app);
