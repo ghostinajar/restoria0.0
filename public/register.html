@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Restoria 0.0.1</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+			<ul id="messages">
+        <li>Restoria 0.0.1</li>
+        <li>Log in</li>
+        <li>
+          <form action="/register" method="post">
+            <section>
+              <label for="username">Username</label>
+              <input id="username" name="username" type="text" autocomplete="username" required>
+            </section>
+            <section>
+              <label for="new-password">Password</label>
+              <input id="new-password" name="password" type="password" autocomplete="new-password" required>
+            </section>
+            <button class="button" type="submit">Register</button>
+          </form>
+        </li>
+        <li>Already have an account? <a href="/login">Log in</a></li>
+        <li>Or go <a href="/">home.</a></li>
+      </ul>
+	</body>
+
+</html>

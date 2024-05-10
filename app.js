@@ -14,8 +14,9 @@ const port = process.env.PORT || 3000;
 const app = express()
 const server = createServer(app);
 const io = new Server(server);
-//
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
+
+app.use(express.static('public'));
 
 // Setup routes
 setupRoutes(app, __dirname);
