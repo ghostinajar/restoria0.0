@@ -1,6 +1,7 @@
 import { join } from 'node:path';
 
 const setupRoutes = (app, __dirname) => {
+
   app.get('/', (req, res) => {
     res.sendFile(join(__dirname, 'public/index.html'));
   });
@@ -16,7 +17,7 @@ const setupRoutes = (app, __dirname) => {
   app.get('/register', (req, res) => {
     res.sendFile(join(__dirname, 'public/register.html'));
   });
-  
+
 };
 
 export default setupRoutes;
