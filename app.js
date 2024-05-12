@@ -14,14 +14,16 @@ import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
 
-dotenv.config();
+dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
 const port = process.env.PORT || 3000;
-const app = express()
-const server = createServer(app);
-const io = new Server(server);
+const app = express() // Express app
+const server = createServer(app); // HTTP server
+const io = new Server(server); // Socket.io server
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'));
 app.use(session({

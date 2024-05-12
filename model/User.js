@@ -6,6 +6,7 @@ const { Schema, model } = mongoose;
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash
+    salt: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
     isTeacher: { type: Boolean, default: false },
     location: {
@@ -15,13 +16,13 @@ const userSchema = new Schema({
         },
         roomId: String
     },
-    pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
+    pronouns: { type: Number, default: 3 }, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     creationDate: {
         type: Date,
         default: Date.now
     },
     lastLogin: Date,
-    hoursPlayed: Number,
+    hoursPlayed: { type: Number, default: 0 },
     description: {
         look: String,
         examine: String,
@@ -40,22 +41,6 @@ const userSchema = new Schema({
             ref: 'User'
         }
     ],
-});
-
-userSchema.pre('save', async function(next) {
-    try {
-        if (!this.isModified('password')) {
-            return next();
-        }
-        if (this.password.length < 8) {
-            throw new Error('Password must be at least 8 characters long.');
-        }
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (err) {
-        next(err);
-    }
 });
 
 userSchema.methods.comparePassword = async function(candidatePassword) {
