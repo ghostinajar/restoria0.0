@@ -9,8 +9,16 @@ const setupRoutes = (app, __dirname) => {
     res.sendFile(join(__dirname, 'public/index.html'));
   });
 
-  app.get('/game_terminal', (req, res, next) => {
-    res.sendFile(join(__dirname, 'public/game_terminal.html'));
+  const isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    } else {
+      res.redirect('/login');
+    }
+  };
+
+  app.get('/game_terminal', isAuthenticated, (req, res, next) => {
+    res.sendFile(join(__dirname, 'secure/game_terminal.html'));
   });
 
   app.get('/login', (req, res, next) => {
@@ -18,7 +26,7 @@ const setupRoutes = (app, __dirname) => {
   });
 
   app.post('/login/password', passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: '/game_terminal',
     failureRedirect: '/login'
   }));
 
@@ -73,18 +81,14 @@ const setupRoutes = (app, __dirname) => {
 
       req.login(user, function(err) {
         if (err) { return next(err); }
-        res.redirect('/');
+        res.redirect('/game_terminal');
       });
     } catch (err) {
       console.error(err);
       res.status(500).send('Internal server error');
     }
   });
-
-  app.get('/game_terminal', (req, res, next) => {
-    res.sendFile(join(__dirname, 'public/game_terminal.html'));
-  });
-
+  
 };
 
 export default setupRoutes;

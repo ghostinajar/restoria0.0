@@ -47,6 +47,7 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
 
       const isPasswordValid = await user.comparePassword(password);
       if (!isPasswordValid) {
+          console.log('Incorrect password');
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
       
@@ -61,7 +62,6 @@ passport.serializeUser(function(user, cb) {
     return cb(null, {
       id: user.id,
       username: user.username,
-      picture: user.picture
     });
   });
 });

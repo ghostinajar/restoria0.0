@@ -16,7 +16,7 @@ const userSchema = new Schema({
         },
         roomId: String
     },
-    pronouns: { type: Number, default: 3 }, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
+    pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     creationDate: {
         type: Date,
         default: Date.now
