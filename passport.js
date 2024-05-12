@@ -2,7 +2,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const Author = require('../model/Author.js');
 
-
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
     try {
         const author = await Author.findOne({ username });

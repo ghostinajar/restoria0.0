@@ -8,6 +8,8 @@ import setupSocket from './socket.js';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+import Author from './model/Author.js';
 
 dotenv.config();
 const mongodb_uri = process.env.MONGODB_URI;
@@ -20,6 +22,25 @@ const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory 
 app.use(express.static('public'));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Setup passport
+passport.use(new LocalStrategy(async function verify(username, password, cb) {
+  try {
+      const author = await Author.findOne({ username });
+      if (!author) {
+          return cb(null, false, { message: 'Incorrect username or password.' });
+      }
+
+      const isPasswordValid = await author.comparePassword(password);
+      if (!isPasswordValid) {
+          return cb(null, false, { message: 'Incorrect username or password.' });
+      }
+      
+      return cb(null, author);
+  } catch (err) {
+      return cb(err);
+  }
+}));
 
 // Setup routes
 setupRoutes(app, __dirname);

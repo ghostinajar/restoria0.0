@@ -1,3 +1,4 @@
+import passport from 'passport';
 import { join } from 'node:path';
 
 const setupRoutes = (app, __dirname) => {
@@ -13,6 +14,11 @@ const setupRoutes = (app, __dirname) => {
   app.get('/login', (req, res) => {
     res.sendFile(join(__dirname, 'public/login.html'));
   });
+
+  app.post('/login/password', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  }));
 
   app.get('/register', (req, res) => {
     res.sendFile(join(__dirname, 'public/register.html'));
