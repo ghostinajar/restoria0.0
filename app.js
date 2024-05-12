@@ -7,6 +7,7 @@ import setupRoutes from './routes.js';
 import setupSocket from './socket.js';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import passport from 'passport';
 
 dotenv.config();
 const mongodb_uri = process.env.MONGODB_URI;
@@ -17,6 +18,8 @@ const io = new Server(server);
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
 
 app.use(express.static('public'));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Setup routes
 setupRoutes(app, __dirname);

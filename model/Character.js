@@ -4,6 +4,13 @@ const { Schema, model } = mongoose;
 const characterSchema = new Schema({   
             name: String,
             pronouns: Number, // 0 = he/him, 1 = she/her, 2 = they/them, 3 = it/it
+            location: {
+                zoneId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Zone'
+                },
+                roomId: String
+            },
             creationDate: {
                 type: Date,
                 default: Date.now
