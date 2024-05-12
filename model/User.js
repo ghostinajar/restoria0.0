@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 const { Schema, model } = mongoose;
 
-// the author lacks most of the data that a character has, but is playable, and stores the user's auth info
-const authorSchema = new Schema({
+// the user (aka "Author") lacks most of the data that a character has, but is playable, and stores the user's auth info
+const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash
     isAdmin: { type: Boolean, default: false },
@@ -37,12 +37,12 @@ const authorSchema = new Schema({
     students: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Author'
+            ref: 'User'
         }
     ],
 });
 
-authorSchema.pre('save', async function(next) {
+userSchema.pre('save', async function(next) {
     try {
         if (!this.isModified('password')) {
             return next();
@@ -58,7 +58,7 @@ authorSchema.pre('save', async function(next) {
     }
 });
 
-authorSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function(candidatePassword) {
     try {
         return await bcrypt.compare(candidatePassword, this.password);
     } catch (err) {
@@ -66,5 +66,5 @@ authorSchema.methods.comparePassword = async function(candidatePassword) {
     }
 };
 
-const Author = model('Author', authorSchema);
-export default Author;
+const User = model('User', userSchema);
+export default User;

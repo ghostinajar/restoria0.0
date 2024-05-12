@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 const zoneSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'Author'
+        ref: 'User'
     },
     name: String,
     creationDate: {
@@ -27,7 +27,7 @@ const zoneSchema = new Schema({
             roomId: String,
             author: {
                 type: Schema.Types.ObjectId,
-                ref: 'Author'
+                ref: 'User'
             },
             roomType: String,
             name: String,
@@ -67,7 +67,7 @@ const zoneSchema = new Schema({
                     suggestionId: String,
                     author: {
                         type: Schema.Types.ObjectId,
-                        ref: 'Author'
+                        ref: 'User'
                     },
                     body: String,
                     creationDate: {
@@ -245,7 +245,7 @@ const zoneSchema = new Schema({
             mobId: String,
             author: {
                 type: Schema.Types.ObjectId,
-                ref: 'Author'
+                ref: 'User'
             },
             name: String,
             pronouns: Number, // 0 = he/him, 1 = she/her, 2 = they/them, 3 = it/it
@@ -284,7 +284,7 @@ const zoneSchema = new Schema({
                     suggestionId: String,
                     author: {
                         type: Schema.Types.ObjectId,
-                        ref: 'Author'
+                        ref: 'User'
                     },
                     body: String,
                     creationDate: {
@@ -329,7 +329,7 @@ const zoneSchema = new Schema({
             itemId: String,
             author: {
                 type: Schema.Types.ObjectId,
-                ref: 'Author'
+                ref: 'User'
             },
             name: String,
             itemType: String,
@@ -362,7 +362,7 @@ const zoneSchema = new Schema({
                     suggestionId: String,
                     author: {
                         type: Schema.Types.ObjectId,
-                        ref: 'Author'
+                        ref: 'User'
                     },
                     body: String,
                     creationDate: {

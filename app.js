@@ -9,7 +9,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import Author from './model/Author.js';
+import User from './model/User.js';
+import session from 'express-session';
 
 dotenv.config();
 const mongodb_uri = process.env.MONGODB_URI;
@@ -19,28 +20,54 @@ const server = createServer(app);
 const io = new Server(server);
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
 
+
 app.use(express.static('public'));
+app.use(session({
+  secret: 'white cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } //TODO set to true when app moves to https
+}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(passport.authenticate('session'));
+
 
 // Setup passport
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   try {
-      const author = await Author.findOne({ username });
-      if (!author) {
+      const user = await User.findOne({ username });
+      if (!user) {
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
 
-      const isPasswordValid = await author.comparePassword(password);
+      const isPasswordValid = await user.comparePassword(password);
       if (!isPasswordValid) {
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
       
-      return cb(null, author);
+      return cb(null, user);
   } catch (err) {
       return cb(err);
   }
 }));
+
+passport.serializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, {
+      id: user.id,
+      username: user.username,
+      picture: user.picture
+    });
+  });
+});
+
+passport.deserializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
+
 
 // Setup routes
 setupRoutes(app, __dirname);

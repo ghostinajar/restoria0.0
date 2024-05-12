@@ -4,11 +4,11 @@ const { Schema, model } = mongoose;
 const abuseReportSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'Author'
+        ref: 'User'
     },
     reportedUser: {
         type: Schema.Types.ObjectId,
-        ref: 'Author'
+        ref: 'User'
     },
     explanation: String,
     commands: [String]

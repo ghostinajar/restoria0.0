@@ -20,6 +20,11 @@ const setupRoutes = (app, __dirname) => {
     failureRedirect: '/login'
   }));
 
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
+
   app.get('/register', (req, res) => {
     res.sendFile(join(__dirname, 'public/register.html'));
   });

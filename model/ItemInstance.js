@@ -5,7 +5,7 @@ const itemInstanceSchema = new Schema({
     itemId: String,
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'Author'
+        ref: 'User'
     },
     name: String,
     itemType: String,
