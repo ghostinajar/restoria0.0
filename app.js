@@ -11,6 +11,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import User from './model/User.js';
 import session from 'express-session';
+import morgan from 'morgan';
 
 dotenv.config();
 const mongodb_uri = process.env.MONGODB_URI;
@@ -20,8 +21,8 @@ const server = createServer(app);
 const io = new Server(server);
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
 
-
 app.use(express.static('public'));
+app.use(morgan('dev'));
 app.use(session({
   secret: 'white cat',
   resave: false,
