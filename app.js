@@ -80,7 +80,17 @@ setupRoutes(app, __dirname);
 setupSocket(io);
 
 // mongoose
-mongoose.connect(mongodb_uri);
+mongoose.connect(mongodb_uri)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch(err => {
+    console.error('Error connecting to MongoDB', err);
+  });
+mongoose.connection.on('error', err => {
+  console.error(`MongoDB connection error: ${err}`);
+});
+  
 
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`)
