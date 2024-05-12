@@ -13,6 +13,7 @@ import User from './model/User.js';
 import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
@@ -22,6 +23,9 @@ const server = createServer(app); // HTTP server
 const io = new Server(server); // Socket.io server
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
 
+// Middleware
+app.set('view engine', 'ejs');
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -29,7 +33,7 @@ app.use(morgan('dev'));
 app.use(session({
   secret: 'white cat',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: { secure: false } //TODO set to true when app moves to https
 }));
 app.use(passport.initialize());

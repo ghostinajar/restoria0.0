@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Restoria 0.0.1</title>
+    <title>Restoria 0.0.1 with ejs</title>
     <link rel="stylesheet" href="styles.css">
   </head>
+
   <body>
     <nav class="nav">
+        <h1>Restoria 0.0.1 with ejs</h1>
+        <span class="username">Username: <%= userName %></span>
           <form action="/logout" method="post">
             <button class="logout" type="submit">Sign out</button>
           </form>
     </nav>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <label for="input"></label>
+      <input id="input" autocomplete="off" /><button type="submit">Send</button>
     </form>
 
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const userName = prompt("What is your userName?");
       const socket = io();
       const form = document.getElementById('form');
       const input = document.getElementById('input');
@@ -36,10 +40,11 @@
 
       socket.on('chat message', (msg) => {
         const item = document.createElement('li');
-        item.textContent = `${userName}: ${msg}`;
+        item.textContent = `${msg} - ${userName}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
     </script>
   </body>
+
 </html>

@@ -15,6 +15,7 @@ body {
     display: flex;
     height: 3rem;
     box-sizing: border-box;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 

@@ -1,12 +1,11 @@
 import passport from 'passport';
-import { join } from 'node:path';
 import bcrypt from 'bcrypt';
 import User from './model/User.js';
 
 const setupRoutes = (app, __dirname) => {
 
   app.get('/', (req, res, next) => {
-    res.sendFile(join(__dirname, 'public/index.html'));
+    res.render('index');
   });
 
   const isAuthenticated = (req, res, next) => {
@@ -18,11 +17,11 @@ const setupRoutes = (app, __dirname) => {
   };
 
   app.get('/game_terminal', isAuthenticated, (req, res, next) => {
-    res.sendFile(join(__dirname, 'secure/game_terminal.html'));
+    res.render('game_terminal', { userName: req.username });
   });
 
   app.get('/login', (req, res, next) => {
-    res.sendFile(join(__dirname, 'public/login.html'));
+    res.render('login');
   });
 
   app.post('/login/password', passport.authenticate('local', {
@@ -38,7 +37,7 @@ const setupRoutes = (app, __dirname) => {
   });
 
   app.get('/register', (req, res, next) => {
-    res.sendFile(join(__dirname, 'public/register.html'));
+    res.render('register');
   });
 
   app.post('/register', async function(req, res, next) {
@@ -59,7 +58,8 @@ const setupRoutes = (app, __dirname) => {
       // Check for existing user
       const existingUser = await User.findOne({ username  });
       if (existingUser) {
-        return res.status(400).send('Username already exists');
+        console.log('Username already exists');
+        return res.status(400).send(`Error creating user.`);
       };
       
       // Hash password
