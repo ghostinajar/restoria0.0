@@ -17,7 +17,7 @@ const setupRoutes = (app, __dirname) => {
   };
 
   app.get('/game_terminal', isAuthenticated, (req, res, next) => {
-    res.render('game_terminal', { userName: req.username });
+    res.render('game_terminal', { username: req.user.username });
   });
 
   app.get('/login', (req, res, next) => {

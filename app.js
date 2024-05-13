@@ -30,12 +30,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'));
-app.use(session({
+const sessionMiddleware = session({
   secret: 'white cat',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } //TODO set to true when app moves to https
-}));
+});
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate('session'));
@@ -81,6 +82,9 @@ passport.deserializeUser(function(user, cb) {
 setupRoutes(app, __dirname);
 
 // Setup socket.io
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, {}, next);
+});
 setupSocket(io);
 
 // mongoose
