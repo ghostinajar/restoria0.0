@@ -7,16 +7,16 @@ const setupSocket = (io) => {
         return;
       }
       const user = socket.request.session.passport.user;
-      console.log(`a user connected: ${user.username}`);
-      socket.on('chat message', (msg) => {
-        if(isValidCommand(msg))
-        {io.emit('chat message', msg);}
-        else {
-          io.emit('chat message', 'Invalid command', user.username);
-        };
+      console.log(`User connected: ${user.username}`);
+      socket.on('user command', (msg) => {
+        if(!isValidCommand(msg))
+        {socket.emit('room echo', 'Invalid command');
+          return;
+        }
+        io.emit('room echo', msg);
       });
       socket.on('disconnect', () => {
-        console.log('user disconnected');
+        console.log(`User connected: ${user.username}`);
       });
     });
   };

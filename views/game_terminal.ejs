@@ -25,7 +25,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io();
+      const socket = io(); // no URL needed for now; it defaults to trying to connect to the host that serves the page
       const username = '<%= username %>';
       const commandForm = document.getElementById('commandForm');
       const input = document.getElementById('input');
@@ -34,12 +34,12 @@
       commandForm.addEventListener('submit', (e) => {
         e.preventDefault();
         if (input.value) {
-          socket.emit('chat message', input.value);
+          socket.emit('user command', input.value);
           input.value = '';
         }
       });
 
-      socket.on('chat message', (msg) => {
+      socket.on('room echo', (msg) => {
         const item = document.createElement('li');
         item.textContent = `${msg}`;
         messages.appendChild(item);

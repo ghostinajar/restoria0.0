@@ -4,7 +4,7 @@ function isValidCommand (string) {
     //validate first word
     const command = string.split(" ")[0];
     if (!validCommands.includes(command.toLowerCase())) {
-        console.log(`User entered invalid command: ${command}`);
+        console.log(`User entered invalid command: ${string}`);
         return false;
     }
     return true;
