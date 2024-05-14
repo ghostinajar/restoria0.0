@@ -39,9 +39,16 @@
         }
       });
 
-      socket.on('room echo', (msg) => {
+      socket.on('say', (parsedCommand) => {
         const item = document.createElement('li');
-        item.textContent = `${msg}`;
+        item.textContent = `${username}: ${parsedCommand.string}`;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      socket.on('invalid', (parsedCommand) => {
+        const item = document.createElement('li');
+        item.textContent = `Invalid command: ${parsedCommand.commandWord}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
