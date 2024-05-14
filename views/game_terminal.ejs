@@ -26,12 +26,12 @@
     <script>
       const socket = io(); // no URL needed for now; defaults to host that serves the page
       const username = '<%= username %>';
+      const validCommandWords = '<%- JSON.stringify(validCommandWords) %>';
       const commandForm = document.getElementById('commandForm');
       const input = document.getElementById('input');
       const messages = document.getElementById('messages');
 
       //command parsing and validation
-      const validCommandWords = ["say"];
       function isValidCommandWord (commandWord) {
           if (!validCommandWords.includes(commandWord.toLowerCase())) {
             return false;

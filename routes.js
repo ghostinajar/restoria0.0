@@ -1,7 +1,7 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import User from './model/User.js';
-//TODO can I include validCommandWords.js here to use in client-side validation?
+import validCommandWords from './constants/validCommandWords.js';
 
 const setupRoutes = (app, __dirname) => {
 
@@ -18,7 +18,8 @@ const setupRoutes = (app, __dirname) => {
   };
 
   app.get('/game_terminal', isAuthenticated, (req, res, next) => {
-    res.render('game_terminal', { username: req.user.username });
+    // TODO replace username: req.user.username with full object containing all data needed per message
+    res.render('game_terminal', { username: req.user.username, validCommandWords: validCommandWords });
   });
 
   app.get('/login', (req, res, next) => {
