@@ -45,17 +45,16 @@ const setupRoutes = (app, __dirname) => {
     try {
       const { username, password } = req.body;
 
-      // Check username length and alphanumeric characters
-      if (username.length > 18 || !/^[a-zA-Z]+$/.test(username)) {
-        return res.status(400).send('Username must only contain letters and have a maximum length of 18 characters');
-      }
-
-      // Check for missing username or password
       if (!username || !password) {
         return res.status(400).send('Username and password are required');
       };
       
-      // Validate the password strength
+      // Validate username
+      if (username.length > 18 || !/^[a-zA-Z]+$/.test(username)) {
+        return res.status(400).send('Username must only contain letters and have a maximum length of 18 characters');
+      }
+
+      // Validate password strength
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
       if (!passwordRegex.test(password)) {
           return res.status(400).send('Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.');
