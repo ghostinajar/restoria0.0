@@ -1,4 +1,4 @@
-import { commandParser } from './commands/commandParser.js'; 
+import isValidCommandWord from "./commands/isValidCommandWord.js";
 
 const setupSocket = (io) => {
     io.on('connection', (socket) => {
@@ -12,15 +12,18 @@ const setupSocket = (io) => {
       console.log(`User connected: ${user.username}`);
 
       // Listen for user commands
-      socket.on('user command', (command) => {
-        const parsedCommand = commandParser(command);
-        // return if the command is invalid
-        if (parsedCommand === 'invalid command') {
-          socket.emit('invalid', parsedCommand);
+      socket.on('user command', (parsedCommand) => {
+        // report/return invalid command
+        if (!isValidCommandWord(parsedCommand.commandWord)) {
+          socket.emit('invalid', 'Server rejected your command.');
           return;
         }
+
         console.log(`User command: ${JSON.stringify(parsedCommand)}`);
-        io.emit(parsedCommand);
+        /*TODO in a separate module, process the command and emit server response to relevant sockets/rooms
+        for now, just broadcast the command. E.g. 'say' commands will construct a string using the speaker 
+        and what they said*/
+        io.emit(parsedCommand.commandWord, parsedCommand);
       });
 
       socket.on('disconnect', () => {

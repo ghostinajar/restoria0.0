@@ -47,6 +47,10 @@ const itemInstanceSchema = new Schema({
     spellChargesRemaining: Number,
     isIdentified: Boolean,
     isPrecious: Boolean,
+    dubCode: { 
+        type: String, 
+        maxLength: 10 
+    },
     affixes: [
         {
             affix: String,

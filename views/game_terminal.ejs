@@ -22,36 +22,74 @@
       <input id="input" autocomplete="off" /><button type="submit">Send</button>
     </form>
 
-
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io(); // no URL needed for now; it defaults to trying to connect to the host that serves the page
+      const socket = io(); // no URL needed for now; defaults to host that serves the page
       const username = '<%= username %>';
       const commandForm = document.getElementById('commandForm');
       const input = document.getElementById('input');
       const messages = document.getElementById('messages');
-      
+
+      //command parsing and validation
+      const validCommandWords = ["say"];
+      function isValidCommandWord (commandWord) {
+          if (!validCommandWords.includes(commandWord.toLowerCase())) {
+            return false;
+          }
+          return true;
+      };
+      function parseCommand (command) {
+          const parsedCommand = {};
+          splitCommand = command.split(" ");
+          parsedCommand.commandWord = splitCommand[0];
+          if (splitCommand.length > 1) {
+          parsedCommand.string = splitCommand.slice(1).join(" ");
+          }
+
+          return parsedCommand;
+      };
+
+      const appendStringToTerminal = (message) => {
+        //TODO unpack string and class (for style) from message object
+        const item = document.createElement('li');
+        item.textContent = message;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      };
+
+      /*TODO write appendSafeStringToTerminal function to 
+      unpack and display emits that don't include user-gen content, 
+      allowing inner html for multi-color lines */
+
       commandForm.addEventListener('submit', (e) => {
         e.preventDefault();
         if (input.value) {
-          socket.emit('user command', input.value);
+          parsedCommand = parseCommand(input.value);
+          //reject invalid command words
+          if (!isValidCommandWord(parsedCommand.commandWord)) {
+            const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
+            appendStringToTerminal(`Sorry, '${shortenedCommand}' is not a valid command word.`);
+            input.value = '';
+            return;
+          }
+          socket.emit('user command', parsedCommand);
           input.value = '';
         }
       });
 
+      //TODO use appendStringToTerminal for 'say' and 'invalid' events
       socket.on('say', (parsedCommand) => {
         const item = document.createElement('li');
+        //TODO replace username below with parsedCommand.speaker
         item.textContent = `${username}: ${parsedCommand.string}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
 
-      socket.on('invalid', (parsedCommand) => {
-        const item = document.createElement('li');
-        item.textContent = `Invalid command: ${parsedCommand.commandWord}`;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+      socket.on('invalid', (rejectionString) => {
+        appendStringToTerminal(rejectionString);
       });
+
     </script>
   </body>
 
