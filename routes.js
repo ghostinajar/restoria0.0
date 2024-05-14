@@ -1,6 +1,7 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import User from './model/User.js';
+//TODO can I include validCommandWords.js here to use in client-side validation?
 
 const setupRoutes = (app, __dirname) => {
 
@@ -44,6 +45,11 @@ const setupRoutes = (app, __dirname) => {
     try {
       const { username, password } = req.body;
 
+      // Check username length and alphanumeric characters
+      if (username.length > 18 || !/^[a-zA-Z]+$/.test(username)) {
+        return res.status(400).send('Username must only contain letters and have a maximum length of 18 characters');
+      }
+
       // Check for missing username or password
       if (!username || !password) {
         return res.status(400).send('Username and password are required');
@@ -56,7 +62,7 @@ const setupRoutes = (app, __dirname) => {
       }
 
       // Check for existing user
-      const existingUser = await User.findOne({ username  });
+      const existingUser = await User.findOne({ username });
       if (existingUser) {
         console.log('Username already exists');
         return res.status(400).send(`Error creating user.`);
