@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
-const itemInstanceSchema = new Schema({
-    itemId: String,
+const storedItemInstanceSchema = new Schema({
+    itemBlueprintId: String,
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'StoredUser'
     },
     name: String,
     itemType: String,
@@ -29,7 +29,7 @@ const itemInstanceSchema = new Schema({
         level: Number,
         maxCharges: Number
     },
-    itemTags: [String],
+    tags: [String],
     keywords: [String],
     wearableLocations: [String],
     creationDate: {
@@ -61,10 +61,10 @@ const itemInstanceSchema = new Schema({
     inventory: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'StoredItemInstance'
         }
     ]
 });
 
-const ItemInstance = model('ItemInstance', itemInstanceSchema);
-export default ItemInstance;
+const StoredItemInstance = model('StoredItemInstance', storedItemInstanceSchema);
+export default StoredItemInstance;

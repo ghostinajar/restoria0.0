@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
-const zoneSchema = new Schema({
+const storedZoneSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'StoredUser'
     },
     name: String,
     creationDate: {
@@ -27,9 +27,9 @@ const zoneSchema = new Schema({
             roomId: String,
             author: {
                 type: Schema.Types.ObjectId,
-                ref: 'User'
+                ref: 'StoredUser'
             },
-            roomType: String,
+            type: String,
             name: String,
             creationDate: {
                 type: Date,
@@ -51,8 +51,8 @@ const zoneSchema = new Schema({
             blocksMobs: Boolean,
             blocksCasting: Boolean,
             blocksCombat: Boolean,
-            itemIdsForSale: [String],
-            mountIdsForSale: [String],
+            itemsForSale: [String], // just Ids
+            mountsForSale: [String], // just Ids
             mapCoords: {
                 x: Number,
                 y: Number,
@@ -67,7 +67,7 @@ const zoneSchema = new Schema({
                     suggestionId: String,
                     author: {
                         type: Schema.Types.ObjectId,
-                        ref: 'User'
+                        ref: 'StoredUser'
                     },
                     body: String,
                     creationDate: {
@@ -229,13 +229,13 @@ const zoneSchema = new Schema({
             mobNodes: [
                 {
                     mobId: String,
-                    quanity: Number
+                    quantity: Number
                 }
             ],
             itemNodes: [
                 {
                     itemId: String,
-                    quanity: Number
+                    quantity: Number
                 }
             ]
         },
@@ -245,7 +245,7 @@ const zoneSchema = new Schema({
             mobId: String,
             author: {
                 type: Schema.Types.ObjectId,
-                ref: 'User'
+                ref: 'StoredUser'
             },
             name: String,
             pronouns: Number, // 0 = he/him, 1 = she/her, 2 = they/them, 3 = it/it
@@ -284,7 +284,7 @@ const zoneSchema = new Schema({
                     suggestionId: String,
                     author: {
                         type: Schema.Types.ObjectId,
-                        ref: 'User'
+                        ref: 'StoredUser'
                     },
                     body: String,
                     creationDate: {
@@ -319,17 +319,17 @@ const zoneSchema = new Schema({
             itemNodes: [
                 {
                     itemId: String,
-                    quanity: Number
+                    quantity: Number
                 }
             ]
         }
     ],
-    items: [
+    itemBlueprints: [
         {
             itemId: String,
             author: {
                 type: Schema.Types.ObjectId,
-                ref: 'User'
+                ref: 'StoredUser'
             },
             name: String,
             itemType: String,
@@ -362,7 +362,7 @@ const zoneSchema = new Schema({
                     suggestionId: String,
                     author: {
                         type: Schema.Types.ObjectId,
-                        ref: 'User'
+                        ref: 'StoredUser'
                     },
                     body: String,
                     creationDate: {
@@ -386,7 +386,7 @@ const zoneSchema = new Schema({
                 level: Number,
                 maxCharges: Number
             },
-            itemTags: [String],
+            tags: [String],
             keywords: [String],
             wearableLocations: [String],
             affixNodes: [
@@ -398,12 +398,12 @@ const zoneSchema = new Schema({
             itemNodes: [
                 {
                     itemId: String,
-                    quanity: Number
+                    quantity: Number
                 }
             ]
         }
     ]
 });
 
-const Zone = model('Zone', zoneSchema);
-export default Zone;
+const StoredZone = model('StoredZone', zoneSchema);
+export default StoredZone;

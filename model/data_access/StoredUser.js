@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 const { Schema, model } = mongoose;
 
 // the user (aka "Author") lacks most of the data that a character has, but is playable, and stores the user's auth info
-const userSchema = new Schema({
+const storedUserSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash
     salt: { type: String, required: true },
@@ -12,7 +12,7 @@ const userSchema = new Schema({
     location: {
         zoneId: {
             type: Schema.Types.ObjectId,
-            ref: 'Zone'
+            ref: 'StoredZone'
         },
         roomId: String
     },
@@ -32,18 +32,18 @@ const userSchema = new Schema({
     characters: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Character'
+            ref: 'StoredCharacter'
         }
     ],
     students: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'StoredUser'
         }
     ],
 });
 
-userSchema.methods.comparePassword = async function(candidatePassword) {
+storedUserSchema.methods.comparePassword = async function(candidatePassword) {
     try {
         return await bcrypt.compare(candidatePassword, this.password);
     } catch (err) {
@@ -51,5 +51,5 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     }
 };
 
-const User = model('User', userSchema);
-export default User;
+const StoredUser = model('StoredUser', storedUserSchema);
+export default StoredUser;
