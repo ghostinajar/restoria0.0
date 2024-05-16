@@ -1,18 +1,18 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
-const abuseReportSchema = new Schema({
+const storedAbuseReportSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'StoredUser'
     },
     reportedUser: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'StoredUser'
     },
     explanation: String,
     commands: [String]
   });
 
-const AbuseReport = model('AbuseReport', abuseReportSchema);
-export default AbuseReport;
+const StoredAbuseReport = model('StoredAbuseReport', storedAbuseReportSchema);
+export default StoredAbuseReport;
