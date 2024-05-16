@@ -2,17 +2,9 @@ import UserRepository from './UserRepository.js';
 
 class GameWorld {
     constructor() {
-        this.userInstances = new Map();  // Stores all zones by their unique ID
-        this.userRepository = new UserRepository(); //data access layer
+        this.UserManager = new this.UserManager();  // Stores all zones by their unique ID
     }
-
-    addZone(zone) {
-        this.zones.set(zone.id, zone);
-    }
-
-    getZoneById(id) {
-        return this.zones.get(id);
-    }
+    
 }
 
 
