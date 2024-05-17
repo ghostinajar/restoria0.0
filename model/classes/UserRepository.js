@@ -1,34 +1,34 @@
 import User from "./User";
 import StoredUser from "../data_access/StoredUser";
 
+/* Data access layer for User objects. 
+Can retrieve, instantiate, update, create, delete StoredUser records from db */
+
 class UserRepository {
     constructor() {
     }
-    
-    async instantiateUserbyId(id) {
-        try {
-            const storedUser = await StoredUser.findById(id);
-            if (!storedUser) {
-                throw new Error("Couldn't find a User id");
-            }
-            const user = new User(storedUser);
-            if (!user) {
-                throw new Error("Couldn't make a User from the StoredUser");
-            }
-            return new User(storedUser);
 
+    async retrieveStoredUser(username) {
+        try {
+            const storedUser = await this.User.findOne({ username});
+            if (!storedUser) {
+                throw new Error(`Couldn't find storedUser with username: "${username}" in the db.`);
+            }
+            return storedUser;
         } catch (error) {
             console.log(error);
         }
     }
     
-    async getStoredUserByUsername(username) {
+    async instantiateUser(username) {
         try {
-            const storedUser = await this.User.findOne({ username });
-            if (!storedUser) {
-                throw new Error("No StoredUser found with that id");
+            this.retrieveStoredUser(username);
+            const user = new User(storedUser);
+            if (!user) {
+                throw new Error(`Couldn't make a User from the StoredUser with username: "${username}".`);
             }
-            return user;
+            return new User(storedUser);
+
         } catch (error) {
             console.log(error);
         }
