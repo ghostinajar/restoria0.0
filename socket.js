@@ -1,30 +1,28 @@
 import isValidCommandWord from "./commands/isValidCommandWord.js";
+import parseCommand from "./commands/parseCommand.js";
 import logger from "./logger.js";
 
-const setupSocket = (io) => {
-    io.on('connection', (socket) => {
+const setupSocket = (io, gameWorld) => {
+    io.on('connection', async (socket) => {
       // Check if the user is authenticated
       if (!socket.request.session.passport || !socket.request.session.passport.user) {
         socket.disconnect();
         return;
       }
-      // Get the user from the session and log it
-      const user = socket.request.session.passport.user;
-      logger.info(`User connected: ${user.username}`);
+      // Get the username and _id from the session and log it
+      const sessionUser = socket.request.session.passport.user;  
+      // NB: session only has username and id, not User object
+      logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
+      // TODO alert UserManager to instantiate User object and add to userInstances map
+      const userInstance = await gameWorld.userManager.instantiateUserByUsername(user.username);
+      logger.info(`userInstance: ${JSON.stringify(userInstance)}`);
 
       // Listen for user commands
-      socket.on('user command', (parsedCommand) => {
-        // report/return invalid command
-        if (!isValidCommandWord(parsedCommand.commandWord)) {
-          socket.emit('invalid', 'Server rejected your command.');
-          return;
-        }
-
-        logger.info(`User command: ${JSON.stringify(parsedCommand)}`);
-        /*TODO in a separate module, process the command and emit server response to relevant sockets/rooms
-        for now, just broadcast the command. E.g. 'say' commands will construct a string using the speaker 
-        and what they said*/
-        io.emit(parsedCommand.commandWord, parsedCommand);
+      socket.on('user command', (userInput) => {
+        /*TODO in a separate module: sanitize, parse, validate the command. 
+        Process with game logic and emit server response to relevant sockets/rooms*/
+        logger.info(`User command: ${userInput}`);
+        io.emit('say', JSON.stringify(userInput));
       });
 
       socket.on('disconnect', () => {

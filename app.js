@@ -15,6 +15,7 @@ import morgan from 'morgan';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from './logger.js';
+import GameWorld from './model/classes/GameWorld.js';
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
@@ -55,7 +56,6 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
       if (!isPasswordValid) {
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
-      
       return cb(null, user);
   } catch (err) {
       return cb(err);
@@ -65,7 +65,7 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
     return cb(null, {
-      id: user.id,
+      _id: user._id,
       username: user.username,
     });
   });
@@ -81,11 +81,15 @@ passport.deserializeUser(function(user, cb) {
 // Setup routes
 setupRoutes(app, __dirname);
 
+// Setup game world
+const gameWorld = new GameWorld();
+logger.info('GameWorld instantiated!');
+
 // Setup socket.io
 io.use((socket, next) => {
   sessionMiddleware(socket.request, {}, next);
 });
-setupSocket(io);
+setupSocket(io, gameWorld);
 
 // mongoose
 mongoose.connect(mongodb_uri)

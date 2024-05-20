@@ -1,11 +1,11 @@
-import User from "./User";
-import { StoredUser } from "../data_access/StoredUser";
+import StoredUser from '../data_access/StoredUser.js';
 
 /* Data access layer for User objects. 
-Can retrieve, instantiate, update, create, delete StoredUser records from db */
+Can retrieve, update, [maybe] create, delete StoredUser records from db */
 
 class UserRepository {
     constructor() {
+        this.testProp = 'User Repository exists!'
     }
 
     async retrieveStoredUserByUsername(username) {
@@ -20,19 +20,6 @@ class UserRepository {
         }
     }
     
-    async instantiateUserByUsername(username) {
-        try {
-            const storedUser = await this.retrieveStoredUserByUsername(username);
-            const user = new User(storedUser);
-            if (!user) {
-                throw new Error(`Couldn't make a User from the StoredUser with username: "${username}".`);
-            }
-            return user;
-        } catch (error) {
-            throw error;
-        }
-    }
-    
     async updateStoredUser(user) {
         try {
             return await StoredUser.findByIdAndUpdate(user._id, user, { new: true });
@@ -40,6 +27,8 @@ class UserRepository {
             throw error;
         }
     }
+
+/* NOT SURE IF NEEDED
 
     async createStoredUser(newUser) {
         try {
@@ -49,7 +38,8 @@ class UserRepository {
             throw error; 
         }
     }
-    
+*/
+
     async deleteStoredUserById(id) {
         try {
             return await StoredUser.findByIdAndDelete(id); 

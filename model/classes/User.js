@@ -1,5 +1,6 @@
 class User {
   constructor(storedUser) {
+    this._id = storedUser._id;
     this.name = storedUser.name;
     this.username = storedUser.username;
     this.isAdmin = storedUser.isAdmin;

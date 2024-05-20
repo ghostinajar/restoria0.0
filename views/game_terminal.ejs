@@ -31,7 +31,7 @@
       const input = document.getElementById('input');
       const messages = document.getElementById('messages');
 
-      //command parsing and validation
+      //methods definitions (validation and parsing are client version)
       function isValidCommandWord (commandWord) {
           if (!validCommandWords.includes(commandWord.toLowerCase())) {
             return false;
@@ -48,13 +48,12 @@
 
           return parsedCommand;
       };
-
-      const appendStringToTerminal = (message) => {
+      function appendStringToTerminal (message) {
         //TODO unpack string and class (for style) from message object
-        const item = document.createElement('li');
-        item.textContent = message;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+          const item = document.createElement('li');
+          item.textContent = message;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
       };
 
       /*TODO write appendSafeStringToTerminal function to 
@@ -72,16 +71,16 @@
             input.value = '';
             return;
           }
-          socket.emit('user command', parsedCommand);
+          socket.emit('user command', input.value);
           input.value = '';
         }
       });
 
       //TODO use appendStringToTerminal for 'say' and 'invalid' events
-      socket.on('say', (parsedCommand) => {
+      socket.on('say', (userInput) => {
         const item = document.createElement('li');
         //TODO replace username below with parsedCommand.speaker
-        item.textContent = `${username}: ${parsedCommand.string}`;
+        item.textContent = `${username}: ${userInput}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
