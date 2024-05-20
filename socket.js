@@ -1,4 +1,5 @@
 import isValidCommandWord from "./commands/isValidCommandWord.js";
+import logger from "./logger.js";
 
 const setupSocket = (io) => {
     io.on('connection', (socket) => {
@@ -9,7 +10,7 @@ const setupSocket = (io) => {
       }
       // Get the user from the session and log it
       const user = socket.request.session.passport.user;
-      console.log(`User connected: ${user.username}`);
+      logger.info(`User connected: ${user.username}`);
 
       // Listen for user commands
       socket.on('user command', (parsedCommand) => {
@@ -19,7 +20,7 @@ const setupSocket = (io) => {
           return;
         }
 
-        console.log(`User command: ${JSON.stringify(parsedCommand)}`);
+        logger.info(`User command: ${JSON.stringify(parsedCommand)}`);
         /*TODO in a separate module, process the command and emit server response to relevant sockets/rooms
         for now, just broadcast the command. E.g. 'say' commands will construct a string using the speaker 
         and what they said*/
@@ -27,7 +28,7 @@ const setupSocket = (io) => {
       });
 
       socket.on('disconnect', () => {
-        console.log(`User disconnected: ${user.username}`);
+        logger.info(`User disconnected: ${user.username}`);
       });
     });
   };

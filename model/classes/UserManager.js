@@ -6,3 +6,5 @@ class UserManager {
         this.userRepository = new UserRepository(); //data access layer
     };
 }
+
+export default UserManager;

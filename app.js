@@ -9,11 +9,12 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import User from './model/User.js';
+import StoredUser from './model/data_access/StoredUser.js';
 import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import logger from './logger.js';
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
@@ -45,14 +46,13 @@ app.use(passport.authenticate('session'));
 // Setup passport
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   try {
-      const user = await User.findOne({ username });
+      const user = await StoredUser.findOne({ username });
       if (!user) {
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
 
       const isPasswordValid = await user.comparePassword(password);
       if (!isPasswordValid) {
-          console.log('Incorrect password');
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
       
@@ -90,16 +90,16 @@ setupSocket(io);
 // mongoose
 mongoose.connect(mongodb_uri)
   .then(() => {
-    console.log('Connected to MongoDB');
+    logger.info('Connected to MongoDB');
   })
   .catch(err => {
-    console.error('Error connecting to MongoDB', err);
+    logger.error('Error connecting to MongoDB', err);
   });
 mongoose.connection.on('error', err => {
-  console.error(`MongoDB connection error: ${err}`);
+  logger.error(`MongoDB connection error: ${err}`);
 });
   
 
 server.listen(port, () => {
-  console.log(`Server listening on port ${port}`)
+  logger.info(`Server listening on port ${port}`)
 })

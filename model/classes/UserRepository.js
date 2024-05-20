@@ -16,7 +16,6 @@ class UserRepository {
             }
             return storedUser;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     }
@@ -29,9 +28,7 @@ class UserRepository {
                 throw new Error(`Couldn't make a User from the StoredUser with username: "${username}".`);
             }
             return user;
-
         } catch (error) {
-            console.log(error);
             throw error;
         }
     }
@@ -40,7 +37,6 @@ class UserRepository {
         try {
             return await StoredUser.findByIdAndUpdate(user._id, user, { new: true });
         } catch (error) {
-            console.log("Database returned an error on updateStoredUser:", error);
             throw error;
         }
     }
@@ -50,7 +46,6 @@ class UserRepository {
             const storedUser = new StoredUser(newUser);
             return await storedUser.save();
         } catch (error) {
-            console.log("Database returned an error on createStoredUser:", error);
             throw error; 
         }
     }
@@ -59,7 +54,6 @@ class UserRepository {
         try {
             return await StoredUser.findByIdAndDelete(id); 
         } catch (error) {
-            console.log("Database returned an error on deleteStoredUser:", error);
             throw error; 
         }
     }

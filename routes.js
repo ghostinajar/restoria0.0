@@ -1,7 +1,8 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
-import User from './model/User.js';
+import StoredUser from './model/data_access/StoredUser.js';
 import validCommandWords from './constants/validCommandWords.js';
+import logger from './logger.js';
 
 const setupRoutes = (app, __dirname) => {
 
@@ -62,9 +63,8 @@ const setupRoutes = (app, __dirname) => {
       }
 
       // Check for existing user
-      const existingUser = await User.findOne({ username });
+      const existingUser = await StoredUser.findOne({ username });
       if (existingUser) {
-        console.log('Username already exists');
         return res.status(400).send(`Error creating user.`);
       };
       
@@ -72,13 +72,14 @@ const setupRoutes = (app, __dirname) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       
-      const newUser = new User({
+      const newUser = new StoredUser({
         username: req.body.username,
         password: hashedPassword,
         salt: salt
       });
 
       await newUser.save();
+      logger.info(`User Registered: ${newUser.username}`);
 
       const user = {
         id: newUser._id,
@@ -90,7 +91,7 @@ const setupRoutes = (app, __dirname) => {
         res.redirect('/game_terminal');
       });
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       res.status(500).send('Internal server error');
     }
   });

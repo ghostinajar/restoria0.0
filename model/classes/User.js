@@ -18,3 +18,5 @@ class User {
   //TODO - add methods for user actions
   
   }
+
+  export default User;
