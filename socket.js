@@ -12,10 +12,10 @@ const setupSocket = (io, gameWorld) => {
       // Get the username and _id from the session and log it
       const sessionUser = socket.request.session.passport.user;  
       // NB: session only has username and id, not User object
-      logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
+      logger.info(`User socket connected: username on session: ${sessionUser.username}, id on session: ${sessionUser._id}`);
       // TODO alert UserManager to instantiate User object and add to userInstances map
-      const userInstance = await gameWorld.userManager.instantiateUserByUsername(user.username);
-      logger.info(`userInstance: ${JSON.stringify(userInstance)}`);
+      //const userInstance = await gameWorld.userManager.instantiateUserByUsername(user.username);
+      //logger.info(`userInstance: ${JSON.stringify(userInstance)}`);
 
       // Listen for user commands
       socket.on('user command', (userInput) => {

@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 
 const storedCharacterSchema = new Schema({   
     name: String,
-    pronouns: Number, // 0 = he/him, 1 = she/her, 2 = they/them, 3 = it/it
+    pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     location: {
         zoneId: {
             type: Schema.Types.ObjectId,
@@ -89,15 +89,15 @@ const storedCharacterSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'StoredItemInstance'
         },
+        held: {
+            type: Schema.Types.ObjectId,
+            ref: 'StoredItemInstance'
+        },
         legs: {
             type: Schema.Types.ObjectId,
             ref: 'StoredItemInstance'
         },
         neck: {
-            type: Schema.Types.ObjectId,
-            ref: 'StoredItemInstance'
-        },
-        offhand: {
             type: Schema.Types.ObjectId,
             ref: 'StoredItemInstance'
         },
@@ -121,14 +121,18 @@ const storedCharacterSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'StoredItemInstance'
         },
-        weapon: {
+        weapon1: {
             type: Schema.Types.ObjectId,
             ref: 'StoredItemInstance'
-        }            
+        },
+        weapon2: {
+            type: Schema.Types.ObjectId,
+            ref: 'StoredItemInstance'
+        }               
     },
     affixes: [
         {
-            affix: String,
+            affixType: String,
             value: Number,
             secondsRemaining: Number
         }

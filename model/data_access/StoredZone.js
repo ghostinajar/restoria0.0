@@ -24,7 +24,7 @@ const storedZoneSchema = new Schema({
     },
     rooms: [
         {
-            roomId: String,
+            roomId: Number,
             author: {
                 type: Schema.Types.ObjectId,
                 ref: 'StoredUser'
@@ -53,6 +53,7 @@ const storedZoneSchema = new Schema({
             blocksCombat: Boolean,
             itemsForSale: [String], // just Ids
             mountsForSale: [String], // just Ids
+            //mapCoord at "centre" of zone is 39,39,0 (so map can be loaded from 0,0 out to 79,79)
             mapCoords: {
                 x: Number,
                 y: Number,
@@ -64,7 +65,7 @@ const storedZoneSchema = new Schema({
             },
             suggestions: [
                 {
-                    suggestionId: String,
+                    suggestionId: Number,
                     author: {
                         type: Schema.Types.ObjectId,
                         ref: 'StoredUser'
@@ -82,11 +83,11 @@ const storedZoneSchema = new Schema({
             ],
             exits: {
                 north: {
-                    destinationRoomId: String,
+                    destinationRoomId: Number,
                     isHidden: Boolean,
                     isClosed: Boolean,
                     isLocked: Boolean,
-                    keyItemId: String,
+                    keyItemId: Number,
                     echoes: {
                         unlock: {
                             origin: String,
@@ -106,11 +107,11 @@ const storedZoneSchema = new Schema({
                     },
                 },
                 south: {
-                    destinationRoomId: String,
+                    destinationRoomId: Number,
                     isHidden: Boolean,
                     isClosed: Boolean,
                     isLocked: Boolean,
-                    keyItemId: String,
+                    keyItemId: Number,
                     echoes: {
                         unlock: {
                             origin: String,
@@ -130,11 +131,11 @@ const storedZoneSchema = new Schema({
                     },
                 },
                 east: {
-                    destinationRoomId: String,
+                    destinationRoomId: Number,
                     isHidden: Boolean,
                     isClosed: Boolean,
                     isLocked: Boolean,
-                    keyItemId: String,
+                    keyItemId: Number,
                     echoes: {
                         unlock: {
                             origin: String,
@@ -154,11 +155,11 @@ const storedZoneSchema = new Schema({
                     },
                 },
                 west: {
-                    destinationRoomId: String,
+                    destinationRoomId: Number,
                     isHidden: Boolean,
                     isClosed: Boolean,
                     isLocked: Boolean,
-                    keyItemId: String,
+                    keyItemId: Number,
                     echoes: {
                         unlock: {
                             origin: String,
@@ -178,11 +179,11 @@ const storedZoneSchema = new Schema({
                     },
                 },
                 up: {
-                    destinationRoomId: String,
+                    destinationRoomId: Number,
                     isHidden: Boolean,
                     isClosed: Boolean,
                     isLocked: Boolean,
-                    keyItemId: String,
+                    keyItemId: Number,
                     echoes: {
                         unlock: {
                             origin: String,
@@ -202,11 +203,11 @@ const storedZoneSchema = new Schema({
                     },
                 },
                 down: {
-                    destinationRoomId: String,
+                    destinationRoomId: Number,
                     isHidden: Boolean,
                     isClosed: Boolean,
                     isLocked: Boolean,
-                    keyItemId: String,
+                    keyItemId: Number,
                     echoes: {
                         unlock: {
                             origin: String,
@@ -228,13 +229,13 @@ const storedZoneSchema = new Schema({
             },
             mobNodes: [
                 {
-                    mobId: String,
+                    mobId: Number,
                     quantity: Number
                 }
             ],
             itemNodes: [
                 {
-                    itemId: String,
+                    itemId: Number,
                     quantity: Number
                 }
             ]
@@ -242,13 +243,13 @@ const storedZoneSchema = new Schema({
     ],
     mobs: [
         {
-            mobId: String,
+            mobId: Number,
             author: {
                 type: Schema.Types.ObjectId,
                 ref: 'StoredUser'
             },
             name: String,
-            pronouns: Number, // 0 = he/him, 1 = she/her, 2 = they/them, 3 = it/it
+            pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
             creationDate: {
                 type: Date,
                 default: Date.now
@@ -281,7 +282,7 @@ const storedZoneSchema = new Schema({
             },
             suggestions: [
                 {
-                    suggestionId: String,
+                    suggestionId: Number,
                     author: {
                         type: Schema.Types.ObjectId,
                         ref: 'StoredUser'
@@ -300,7 +301,7 @@ const storedZoneSchema = new Schema({
             keywords: [String],
             affixNodes: [
                 {
-                    affix: String,
+                    affixType: String,
                     value: Number
                 }
             ],
@@ -318,15 +319,15 @@ const storedZoneSchema = new Schema({
             ],
             itemNodes: [
                 {
-                    itemId: String,
+                    itemId: Number,
                     quantity: Number
                 }
             ]
         }
     ],
-    itemBlueprints: [
+    items: [
         {
-            itemId: String,
+            itemId: Number,
             author: {
                 type: Schema.Types.ObjectId,
                 ref: 'StoredUser'
@@ -344,12 +345,10 @@ const storedZoneSchema = new Schema({
                 type: Date,
                 default: Date.now
             },
-            expiryDate: {
-                type: Date,
-                default: function() {
-                    return Date.now() + 1000 * 60 * 60 * 24 * 180;
-                },
-            },
+            tweakDuration: {
+                type: Number,
+                default: 182,
+            }, 
             completionStatus: String,
             description: {
                 look: String,
@@ -359,7 +358,7 @@ const storedZoneSchema = new Schema({
             },
             suggestions: [
                 {
-                    suggestionId: String,
+                    suggestionId: Number,
                     author: {
                         type: Schema.Types.ObjectId,
                         ref: 'StoredUser'
@@ -391,13 +390,13 @@ const storedZoneSchema = new Schema({
             wearableLocations: [String],
             affixNodes: [
                 {
-                    affix: String,
+                    affixType: String,
                     value: Number
                 }
             ],
             itemNodes: [
                 {
-                    itemId: String,
+                    itemId: Number,
                     quantity: Number
                 }
             ]

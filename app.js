@@ -102,7 +102,6 @@ mongoose.connect(mongodb_uri)
 mongoose.connection.on('error', err => {
   logger.error(`MongoDB connection error: ${err}`);
 });
-  
 
 server.listen(port, () => {
   logger.info(`Server listening on port ${port}`)
