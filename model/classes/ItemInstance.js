@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
-const storedItemInstanceSchema = new Schema({
-    itemBlueprintId: String,
+const itemInstanceSchema = new Schema({
+    instanceOfItemId: String, //how to reference a specific item's ObjectId in the zones collection?
     author: {
         type: Schema.Types.ObjectId,
         ref: 'StoredUser'
@@ -61,10 +61,10 @@ const storedItemInstanceSchema = new Schema({
     inventory: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'StoredItemInstance'
+            ref: 'ItemInstance'
         }
     ]
 });
 
-const StoredItemInstance = model('StoredItemInstance', storedItemInstanceSchema);
-export default StoredItemInstance;
+const ItemInstance = model('ItemInstance', itemInstanceSchema);
+export default ItemInstance;

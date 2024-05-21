@@ -1,45 +1,37 @@
-import StoredUser from '../data_access/StoredUser.js';
+import User from './StoredUser.js';
 
 /* Data access layer for User objects. 
 Can retrieve, instantiate, update, create, delete StoredUser records from db */
 
 class UserRepository {
     constructor() {
-        this.testProp = 'User Repository exists!'
     }
 
-    async retrieveStoredUserByUsername(username) {
+    async retrieveUserByUsername(username) {
         try {
-            const storedUser = await StoredUser.findOne({ username });
-            if (!storedUser) {
-                throw new Error(`Couldn't retrieve storedUser with username: "${username}" in the db.`);
-            }
-            return storedUser;
+            return await User.findOne({ username });
         } catch (error) {
             console.log(error);
             throw error;
         }
     }
     
-    async updateStoredUser(user) {
+    async saveUser(user) {
         try {
-            return await StoredUser.findByIdAndUpdate(user._id, user, { new: true });
+            return await User.save();
         } catch (error) {
             throw error;
         }
     }
 
-/* NOT SURE IF NEEDED
-
-    async createStoredUser(newUser) {
+    async createUser(newUser) {
         try {
-            const storedUser = new StoredUser(newUser);
+            const user = new StoredUser(newUser);
             return await storedUser.save();
         } catch (error) {
             throw error; 
         }
     }
-*/
 
     async deleteStoredUserById(id) {
         try {
