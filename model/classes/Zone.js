@@ -12,3 +12,5 @@ class Zone {
         return this.rooms.get(id);
     }
 }
+
+export default Zone;

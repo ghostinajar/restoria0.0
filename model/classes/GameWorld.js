@@ -1,11 +1,11 @@
-import UserRepository from './UserRepository.js';
+import UserManager from './UserManager.js';
 
 class GameWorld {
     constructor() {
-        this.UserManager = new this.UserManager();  // Stores all zones by their unique ID
+        this.userManager = new UserManager();
     }
     
 }
 
-
+export default GameWorld;
 

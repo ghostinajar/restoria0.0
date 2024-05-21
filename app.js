@@ -9,11 +9,15 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import User from './model/User.js';
+import StoredUser from './model/data_access/StoredUser.js';
 import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import logger from './logger.js';
+import GameWorld from './model/classes/GameWorld.js';
+import StoredZone from './model/data_access/StoredZone.js';
+import sampleZone from './sampleData.js'
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
@@ -45,17 +49,15 @@ app.use(passport.authenticate('session'));
 // Setup passport
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   try {
-      const user = await User.findOne({ username });
+      const user = await StoredUser.findOne({ username });
       if (!user) {
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
 
       const isPasswordValid = await user.comparePassword(password);
       if (!isPasswordValid) {
-          console.log('Incorrect password');
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
-      
       return cb(null, user);
   } catch (err) {
       return cb(err);
@@ -65,7 +67,7 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
     return cb(null, {
-      id: user.id,
+      _id: user._id,
       username: user.username,
     });
   });
@@ -81,25 +83,35 @@ passport.deserializeUser(function(user, cb) {
 // Setup routes
 setupRoutes(app, __dirname);
 
+// Setup game world
+const gameWorld = new GameWorld();
+logger.info('GameWorld instantiated!');
+
 // Setup socket.io
 io.use((socket, next) => {
   sessionMiddleware(socket.request, {}, next);
 });
-setupSocket(io);
+setupSocket(io, gameWorld);
 
 // mongoose
 mongoose.connect(mongodb_uri)
   .then(() => {
-    console.log('Connected to MongoDB');
+    logger.info('Connected to MongoDB');
   })
   .catch(err => {
-    console.error('Error connecting to MongoDB', err);
+    logger.error('Error connecting to MongoDB', err);
   });
 mongoose.connection.on('error', err => {
-  console.error(`MongoDB connection error: ${err}`);
+  logger.error(`MongoDB connection error: ${err}`);
 });
-  
+
+try {
+  const storedZone = new StoredZone(sampleZone);
+  await storedZone.save();
+} catch (err) {
+  logger.error('Error saving sample zone', err);
+}
 
 server.listen(port, () => {
-  console.log(`Server listening on port ${port}`)
+  logger.info(`Server listening on port ${port}`)
 })

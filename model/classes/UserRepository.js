@@ -1,12 +1,11 @@
-import User from "./User";
-import { StoredUser } from "../data_access/StoredUser";
+import StoredUser from '../data_access/StoredUser.js';
 
 /* Data access layer for User objects. 
-Can create, update, delete, retrieve, StoredUser records from db, 
-and instantiate them into the game as User */
+Can retrieve, instantiate, update, create, delete StoredUser records from db */
 
 class UserRepository {
     constructor() {
+        this.testProp = 'User Repository exists!'
     }
 
     async retrieveStoredUserByUsername(username) {
@@ -22,30 +21,45 @@ class UserRepository {
         }
     }
     
+    async instantiateUserByUsername(username) {
+        try {
+            const storedUser = await this.retrieveStoredUserByUsername(username);
+            const user = new User(storedUser);
+            if (!user) {
+                throw new Error(`Couldn't make a User from the StoredUser with username: "${username}".`);
+            }
+            return user;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    
     async updateStoredUser(user) {
         try {
             return await StoredUser.findByIdAndUpdate(user._id, user, { new: true });
         } catch (error) {
-            console.log("Database returned an error on updateStoredUser:", error);
             throw error;
         }
     }
+
+/* NOT SURE IF NEEDED
 
     async createStoredUser(newUser) {
         try {
             const storedUser = new StoredUser(newUser);
             return await storedUser.save();
         } catch (error) {
-            console.log("Database returned an error on createStoredUser:", error);
             throw error; 
         }
     }
-    
+*/
+
     async deleteStoredUserById(id) {
         try {
             return await StoredUser.findByIdAndDelete(id); 
         } catch (error) {
-            console.log("Database returned an error on deleteStoredUser:", error);
             throw error; 
         }
     }

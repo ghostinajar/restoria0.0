@@ -53,7 +53,7 @@ const storedItemInstanceSchema = new Schema({
     },
     affixes: [
         {
-            affix: String,
+            affixType: String,
             value: Number,
             currentTweak: Number
         }

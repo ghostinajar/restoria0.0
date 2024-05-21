@@ -11,7 +11,6 @@ const storedAbuseReportSchema = new Schema({
         ref: 'StoredUser'
     },
     explanation: String,
-    commands: [String]
   });
 
 const StoredAbuseReport = model('StoredAbuseReport', storedAbuseReportSchema);

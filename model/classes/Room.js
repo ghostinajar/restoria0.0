@@ -15,3 +15,5 @@ class Room {
         this.items.push(item.id);
     }
 }
+
+export default Room;
