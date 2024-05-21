@@ -16,6 +16,6 @@ const ROOM_TYPE = {
     STABLE: "stable",
     STORAGE: "storage",
     TRAINER: "trainer"
-}
+};
 
 export default ROOM_TYPE;

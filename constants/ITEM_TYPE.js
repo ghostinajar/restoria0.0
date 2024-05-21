@@ -14,6 +14,6 @@ const ITEM_TYPE = {
     WAND: 'wand',
     WEAPON: 'weapon',
     FISHING_ROD: 'fishing_rod'
-}
+};
 
 export default ITEM_TYPE;

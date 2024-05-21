@@ -12,6 +12,7 @@ const ITEM_TAG = {
     LIGHT: 'light',
     MAGE: 'mage',
     NEUTRAL: 'neutral',
+    QUEST: 'quest',
     OFFHAND: 'offhand',
     REACH: 'reach',
     TEMPORARY: 'temporary',

@@ -16,6 +16,8 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from './logger.js';
 import GameWorld from './model/classes/GameWorld.js';
+import StoredZone from './model/data_access/StoredZone.js';
+import sampleZone from './sampleData.js'
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
@@ -102,6 +104,13 @@ mongoose.connect(mongodb_uri)
 mongoose.connection.on('error', err => {
   logger.error(`MongoDB connection error: ${err}`);
 });
+
+try {
+  const storedZone = new StoredZone(sampleZone);
+  await storedZone.save();
+} catch (err) {
+  logger.error('Error saving sample zone', err);
+}
 
 server.listen(port, () => {
   logger.info(`Server listening on port ${port}`)
