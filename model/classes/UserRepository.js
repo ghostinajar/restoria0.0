@@ -13,24 +13,9 @@ class UserRepository {
         try {
             const storedUser = await StoredUser.findOne({ username });
             if (!storedUser) {
-                throw new Error(`Couldn't find storedUser with username: "${username}" in the db.`);
+                throw new Error(`Couldn't retrieve storedUser with username: "${username}" in the db.`);
             }
             return storedUser;
-        } catch (error) {
-            console.log(error);
-            throw error;
-        }
-    }
-    
-    async instantiateUserByUsername(username) {
-        try {
-            const storedUser = await this.retrieveStoredUserByUsername(username);
-            const user = new User(storedUser);
-            if (!user) {
-                throw new Error(`Couldn't make a User from the StoredUser with username: "${username}".`);
-            }
-            return user;
-
         } catch (error) {
             console.log(error);
             throw error;

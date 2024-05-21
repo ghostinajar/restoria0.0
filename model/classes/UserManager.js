@@ -8,8 +8,12 @@ class UserManager {
 
     async instantiateUserByUsername(username) {
         try {
-            const user = await this.userRepository.instantiateUserByUsername(username);
+            const storedUser = await this.userRepository.retrieveStoredUserByUsername(username);
             this.userInstances.set(user.username, user);
+            const user = new User(storedUser);
+            if (!user) {
+                throw new Error(`Couldn't make a User from the storedUser with username: "${username}".`);
+            }
             return user;
         } catch (error) {
             console.log(error);
