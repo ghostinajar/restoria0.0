@@ -1,11 +1,10 @@
 import UserManager from './UserManager.js';
 
-class GameWorld {
+class World {
     constructor() {
         this.userManager = new UserManager();
     }
     
 }
 
-export default GameWorld;
-
+export default World;

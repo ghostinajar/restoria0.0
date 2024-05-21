@@ -2,7 +2,7 @@ import isValidCommandWord from "./commands/isValidCommandWord.js";
 import parseCommand from "./commands/parseCommand.js";
 import logger from "./logger.js";
 
-const setupSocket = (io, gameWorld) => {
+const setupSocket = (io, world) => {
     io.on('connection', async (socket) => {
       // Check if the user is authenticated
       if (!socket.request.session.passport || !socket.request.session.passport.user) {
@@ -14,7 +14,7 @@ const setupSocket = (io, gameWorld) => {
       // NB: session only has username and id, not User object
       logger.info(`User socket connected: username on session: ${sessionUser.username}, id on session: ${sessionUser._id}`);
       // TODO alert UserManager to instantiate User object and add to userInstances map
-      //const userInstance = await gameWorld.userManager.instantiateUserByUsername(user.username);
+      //const userInstance = await world.userManager.instantiateUserByUsername(user.username);
       //logger.info(`userInstance: ${JSON.stringify(userInstance)}`);
 
       // Listen for user commands

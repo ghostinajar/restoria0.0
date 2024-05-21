@@ -15,7 +15,7 @@ import morgan from 'morgan';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from './logger.js';
-import GameWorld from './model/classes/GameWorld.js';
+import World from './model/classes/World.js';
 import StoredZone from './model/data_access/StoredZone.js';
 import sampleZone from './sampleData.js'
 

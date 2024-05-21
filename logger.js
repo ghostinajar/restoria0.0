@@ -14,10 +14,10 @@ const logLevels = {
     error: 0,
     warn: 1,
     info: 2,
-    http: 3,
-    debug: 4,
-    comm: 5,
-    loot: 6
+    debug: 3,
+    comms: 4,
+    loot: 5,
+    input: 6
 };
 
 // Create a logger with the configuration defined above 
