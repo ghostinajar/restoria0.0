@@ -2,7 +2,8 @@ import User from "./User";
 import { StoredUser } from "../data_access/StoredUser";
 
 /* Data access layer for User objects. 
-Can retrieve, instantiate, update, create, delete StoredUser records from db */
+Can create, update, delete, retrieve, StoredUser records from db, 
+and instantiate them into the game as User */
 
 class UserRepository {
     constructor() {
