@@ -21,21 +21,6 @@ class UserRepository {
         }
     }
     
-    async instantiateUserByUsername(username) {
-        try {
-            const storedUser = await this.retrieveStoredUserByUsername(username);
-            const user = new User(storedUser);
-            if (!user) {
-                throw new Error(`Couldn't make a User from the StoredUser with username: "${username}".`);
-            }
-            return user;
-
-        } catch (error) {
-            console.log(error);
-            throw error;
-        }
-    }
-    
     async updateStoredUser(user) {
         try {
             return await StoredUser.findByIdAndUpdate(user._id, user, { new: true });
