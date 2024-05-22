@@ -1,30 +1,21 @@
 import mongoose from 'mongoose';
+import descriptionSchema from './Description.js';
+import affixSchema from './Affix.js';
+import statBlockSchema from './StatBlock.js';
 
 const { Schema, model } = mongoose;
 
-const characterSchema = new Schema({   
+const characterSchema = new Schema({
     name: String,
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
-    location: {
-        zoneId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Zone'
-        },
-        roomId: String
-    },
+    locationRoomId: String, // how can we reference a Room's ObjectId, which would be embedded in a zone?
     creationDate: {
         type: Date,
         default: Date.now
     },
     hoursPlayed: Number,
-    currentJob: String,
-    strength: Number,
-    dexterity: Number,
-    constitution: Number,
-    intelligence: Number,
-    wisdom: Number,
-    charisma: Number,
-    spirit: Number,
+    job: String,
+    statusbar: statBlockSchema,
     goldHeld: Number,
     goldBanked: Number,
     trainingPoints: Number,
@@ -34,22 +25,18 @@ const characterSchema = new Schema({
         thief: Number,
         warrior: Number
     },
-    description: {
-        look: String,
-        examine: String,
-        study: String,
-        research: String
-    },
+    description: descriptionSchema,
     trained: {
-        passives: {
+        passives: [{
             name: String,
             level: Number
-        },
-        spells: {
+        }],
+        spells: [{
             name: String,
             level: Number
-        },
+        }],
     },
+
     inventory: [
         {
             type: Schema.Types.ObjectId,
@@ -128,15 +115,9 @@ const characterSchema = new Schema({
         weapon2: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance'
-        }               
+        },               
     },
-    affixes: [
-        {
-            affixType: String,
-            value: Number,
-            secondsRemaining: Number
-        }
-    ],
+    affixes: [affixSchema],
 });
 
 const Character = model('Character', characterSchema);

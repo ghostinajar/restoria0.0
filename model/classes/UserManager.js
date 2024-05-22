@@ -1,5 +1,4 @@
 import UserRepository from './UserRepository.js';
-import User from './User.js';
 
 class UserManager {
     constructor() {

@@ -1,8 +1,7 @@
-import User from './StoredUser.js';
+import User from './User.js';
 
 /* Data access layer for User objects. 
-Can retrieve, instantiate, update, create, delete StoredUser records from db */
-
+Can create, retrieve, save, or delete User records from db */
 class UserRepository {
     constructor() {
     }
@@ -18,22 +17,25 @@ class UserRepository {
     
     async saveUser(user) {
         try {
-            return await User.save();
+            return await user.save();
         } catch (error) {
             throw error;
         }
     }
 
-    async createUser(newUser) {
+    async createUser(username, password) {
         try {
-            const user = new StoredUser(newUser);
-            return await storedUser.save();
+            //TODO move user creation code from routes.js to here, 
+            //and call this method from routes.js
+            const user = new User({username: username, password: password});
+            user.createdDate = new Date();
+            return await user.save();
         } catch (error) {
             throw error; 
         }
     }
 
-    async deleteStoredUserById(id) {
+    async deleteUserById(id) {
         try {
             return await StoredUser.findByIdAndDelete(id); 
         } catch (error) {

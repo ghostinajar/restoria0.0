@@ -1,25 +1,27 @@
 import mongoose from 'mongoose';
+import descriptionSchema from './Description.js';
+import affixSchema from './Affix.js';
+
 const { Schema, model } = mongoose;
 
+//itemInstance properties are duplicated so they can be loaded without having to query
+//dozens of zones in db to get each itemInstance's item properties when a character 
+//enters the game
+
 const itemInstanceSchema = new Schema({
-    instanceOfItemId: String, //how to reference a specific item's ObjectId in the zones collection?
+    instanceOfItemId: String, // how can we reference an Item's ObjectId, which would be embedded in a zone?
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'StoredUser'
+        ref: 'UserUser'
     },
     name: String,
     itemType: String,
     price: Number,
     capacity: Number,
     levelRestriction: Number,
-    description: {
-        look: String,
-        examine: String,
-        study: String,
-        research: String
-    },
+    description: descriptionSchema,
     weaponStats: {
-        damageDieType: Number,
+        damageDieSides: Number,
         damageDieQuantity: Number,
         damageType: String,
         isRanged: Boolean
@@ -51,13 +53,7 @@ const itemInstanceSchema = new Schema({
         type: String, 
         maxLength: 10 
     },
-    affixes: [
-        {
-            affixType: String,
-            value: Number,
-            currentTweak: Number
-        }
-    ],
+    affixes: [affixSchema],
     inventory: [
         {
             type: Schema.Types.ObjectId,
