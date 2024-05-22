@@ -28,7 +28,9 @@ const setupSocket = (io, world) => {
       });
 
       socket.on('disconnect', () => {
-        logger.info(`User disconnected: ${sessionUser.username}`);
+        try {
+        logger.info(`User disconnected: ${socket.request.session.passport.user.username}`);
+        } catch(err) {logger.error(err)};
       });
     });
   };

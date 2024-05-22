@@ -16,6 +16,7 @@ import dotenv from 'dotenv';
 import logger from './logger.js';
 import User from './model/classes/User.js';
 import World from './model/classes/World.js';
+import logger from './logger.js';
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
@@ -24,6 +25,7 @@ const app = express() // Express app
 const server = createServer(app); // HTTP server
 const io = new Server(server); // Socket.io server
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
+logger.level = process.env.LOG_LEVEL;
 
 // Middleware
 app.set('view engine', 'ejs');
@@ -75,7 +77,6 @@ passport.deserializeUser(function(user, cb) {
     return cb(null, user);
   });
 });
-
 
 // Setup routes
 setupRoutes(app, __dirname);

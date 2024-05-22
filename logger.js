@@ -23,7 +23,7 @@ const logLevels = {
 // Create a logger with the configuration defined above 
 const logger = winston.createLogger({
     levels: logLevels,
-    level: process.env.LOG_LEVEL || 'info',
+    level: 'info',
     format: combine(errors({ stack: true }), timestamp(), json()),
     transports: [
         fileRotateTransport, 
