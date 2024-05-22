@@ -5,7 +5,6 @@ function parseCommand (command) {
     if (splitCommand.length > 1) {
     parsedCommand.string = splitCommand.slice(1).join(" ");
     }
-
     return parsedCommand;
 };
 

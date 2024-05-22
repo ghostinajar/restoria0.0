@@ -11,7 +11,6 @@
   <body>
     <nav class="nav">
         <h1>Restoria 0.0.1 with ejs</h1>
-        <span class="username">Username: <%= username %></span>
           <form action="/logout" method="post">
             <button class="logout" type="submit">Sign out</button>
           </form>
@@ -25,7 +24,6 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io(); // no URL needed for now; defaults to host that serves the page
-      const username = '<%= username %>';
       const validCommandWords = '<%- JSON.stringify(validCommandWords) %>';
       const commandForm = document.getElementById('commandForm');
       const input = document.getElementById('input');
@@ -76,11 +74,12 @@
         }
       });
 
-      //TODO use appendStringToTerminal for 'say' and 'invalid' events
+      //TODO server needs to know username on the socket, what's the best
+      //way to get access to it and send with messages? On session? 
+      //maybe this all happens serverside?
       socket.on('say', (userInput) => {
         const item = document.createElement('li');
-        //TODO replace username below with parsedCommand.speaker
-        item.textContent = `${username}: ${userInput}`;
+        item.textContent = `User: ${userInput}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });

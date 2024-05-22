@@ -3,21 +3,19 @@ import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { Server } from 'socket.io';
-import setupRoutes from './routes.js';
-import setupSocket from './socket.js';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import StoredUser from './model/data_access/StoredUser.js';
 import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import mongoose from 'mongoose';
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+import setupRoutes from './routes.js';
+import setupSocket from './socket.js';
+import dotenv from 'dotenv';
 import logger from './logger.js';
+import User from './model/classes/User.js';
 import World from './model/classes/World.js';
-import StoredZone from './model/data_access/StoredZone.js';
-import sampleZone from './sampleData.js'
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;
@@ -45,15 +43,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate('session'));
 
-
 // Setup passport
-passport.use(new LocalStrategy(async function verify(username, password, cb) {
+passport.use (new LocalStrategy(async function verify(username, password, cb) {
   try {
-      const user = await StoredUser.findOne({ username });
+      const user = await User.findOne({ username });
       if (!user) {
           return cb(null, false, { message: 'Incorrect username or password.' });
       }
-
+ 
       const isPasswordValid = await user.comparePassword(password);
       if (!isPasswordValid) {
           return cb(null, false, { message: 'Incorrect username or password.' });
@@ -84,14 +81,14 @@ passport.deserializeUser(function(user, cb) {
 setupRoutes(app, __dirname);
 
 // Setup game world
-const gameWorld = new GameWorld();
-logger.info('GameWorld instantiated!');
+const world = new World();
+logger.info('World instantiated!');
 
 // Setup socket.io
 io.use((socket, next) => {
   sessionMiddleware(socket.request, {}, next);
 });
-setupSocket(io, gameWorld);
+setupSocket(io, world);
 
 // mongoose
 mongoose.connect(mongodb_uri)
@@ -104,13 +101,6 @@ mongoose.connect(mongodb_uri)
 mongoose.connection.on('error', err => {
   logger.error(`MongoDB connection error: ${err}`);
 });
-
-try {
-  const storedZone = new StoredZone(sampleZone);
-  await storedZone.save();
-} catch (err) {
-  logger.error('Error saving sample zone', err);
-}
 
 server.listen(port, () => {
   logger.info(`Server listening on port ${port}`)

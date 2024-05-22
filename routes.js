@@ -1,6 +1,6 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
-import StoredUser from './model/data_access/StoredUser.js';
+import User from './model/classes/User.js';
 import validCommandWords from './constants/validCommandWords.js';
 import logger from './logger.js';
 
@@ -19,8 +19,7 @@ const setupRoutes = (app, __dirname) => {
   };
 
   app.get('/game_terminal', isAuthenticated, (req, res, next) => {
-    // TODO replace username: req.user.username with full object containing all data needed per message
-    res.render('game_terminal', { username: req.user.username, validCommandWords: validCommandWords });
+    res.render('game_terminal', { validCommandWords: validCommandWords });
   });
 
   app.get('/login', (req, res, next) => {
@@ -63,7 +62,7 @@ const setupRoutes = (app, __dirname) => {
       }
 
       // Check for existing user
-      const existingUser = await StoredUser.findOne({ username });
+      const existingUser = await User.findOne({ username });
       if (existingUser) {
         return res.status(400).send(`Error creating user.`);
       };
@@ -72,7 +71,7 @@ const setupRoutes = (app, __dirname) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       
-      const newUser = new StoredUser({
+      const newUser = new User({
         username: req.body.username,
         password: hashedPassword,
         salt: salt
@@ -90,6 +89,7 @@ const setupRoutes = (app, __dirname) => {
         if (err) { return next(err); }
         res.redirect('/game_terminal');
       });
+
     } catch (err) {
       logger.error(err);
       res.status(500).send('Internal server error');
