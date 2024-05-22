@@ -9,18 +9,19 @@ class UserRepository {
     async retrieveUserByUsername(username) {
         try {
             return await User.findOne({ username });
-        } catch (error) {
-            console.log(error);
-            throw error;
-        }
+        } catch (error) {throw error;};
+    }
+
+    async retrieveUserById(id) {
+        try {
+            return await User.findById(id);
+        } catch (error) {throw error;};
     }
     
     async saveUser(user) {
         try {
             return await user.save();
-        } catch (error) {
-            throw error;
-        }
+        } catch (error) {throw error;}
     }
 
     async createUser(username, password) {
@@ -30,17 +31,13 @@ class UserRepository {
             const user = new User({username: username, password: password});
             user.createdDate = new Date();
             return await user.save();
-        } catch (error) {
-            throw error; 
-        }
+        } catch (error) {throw error;}
     }
 
     async deleteUserById(id) {
         try {
             return await StoredUser.findByIdAndDelete(id); 
-        } catch (error) {
-            throw error; 
-        }
+        } catch (error) {throw error;}
     }
 }
 

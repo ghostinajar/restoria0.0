@@ -4,7 +4,7 @@ class World {
     constructor() {
         this.userManager = new UserManager();
     }
-    
+
 }
 
 export default World;

@@ -8,15 +8,19 @@ const setupSocket = (io, world) => {
           socket.disconnect();
           return;
         }
+
         // Get the username and _id from the session and log it
-        const sessionUser = socket.request.session.passport.user;  
         // NB: session only knows username and id, not User object
+        const sessionUser = socket.request.session.passport.user;  
         logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
-        // TODO alert UserManager to instantiate User object and add to userInstances map
-        //const userInstance = await world.userManager.instantiateUserByUsername(user.username);
-        //logger.info(`userInstance: ${JSON.stringify(userInstance)}`);
+        //TODO alert userManager to add user to users map, and return user object
+        try {
+          const user = await world.userManager.addUserById(sessionUser._id);
+          logger.info(`Got user: ${user.username}`)
+        } catch(err) {logger.error(err);};
+        
       } catch(err) {
-        logger.error("Couldn't grab the username/id from the session.", err);
+        logger.error(err);
       };
 
         // Listen for user commands
