@@ -80,28 +80,31 @@ passport.deserializeUser(function(user, cb) {
 // Setup routes
 setupRoutes(app, __dirname);
 
-// Setup game world
-const world = new World();
-//world.zoneManager.zoneRepository.createZone('Restoria Town', '664d9519c192a9fa0ffa2562');
-logger.info('World instantiated!');
+async function main() {
+  // Setup mongoose  
+  mongoose.connect(mongodb_uri)
+      .then(() => {
+        logger.info('Connected to MongoDB');
+      })
+      .catch(err => {
+        logger.error('Error connecting to MongoDB', err);
+      });
+    mongoose.connection.on('error', err => {
+      logger.error(`MongoDB connection error: ${err}`);
+    });
 
-// Setup socket.io
-io.use((socket, next) => {
-  sessionMiddleware(socket.request, {}, next);
-});
-setupSocket(io, world);
+  // Setup game world
+  const world = await new World();
+  logger.info('World instantiated!');
+  await world.zoneManager.addZoneById('664f8ca70cc5ae9b173969a8') // load Restoria Town
 
-// mongoose
-mongoose.connect(mongodb_uri)
-  .then(() => {
-    logger.info('Connected to MongoDB');
-  })
-  .catch(err => {
-    logger.error('Error connecting to MongoDB', err);
+  // Setup socket.io
+  io.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next);
   });
-mongoose.connection.on('error', err => {
-  logger.error(`MongoDB connection error: ${err}`);
-});
+  setupSocket(io, world);
+}
+main();
 
 server.listen(port, () => {
   logger.info(`Server listening on port ${port}`)

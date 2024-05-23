@@ -6,7 +6,7 @@ class ZoneManager {
     constructor() {
         this.zones = new Map();  // Stores all zones with their ObjectId as key
         this.zoneRepository = new ZoneRepository(); //data access layer
-        if (this.zoneRepository) {logger.info(`zoneRepository exists!`)}
+        //if (this.zoneRepository) {logger.info(`zoneRepository initialized!`)}
     };
 
     ensureIdIsObjectId(id) {

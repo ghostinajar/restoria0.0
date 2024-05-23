@@ -15,7 +15,7 @@ const userSchema = new Schema({
     isTeacher: { type: Boolean, default: false },
     location: {
         type: locationSchema,
-        default: () => ({})
+        default: {inZone: '664f8ca70cc5ae9b173969a8'}
     },
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     creationDate: {
