@@ -9,14 +9,20 @@ const { Schema, model } = mongoose;
 const characterSchema = new Schema({
     name: String,
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
-    location: locationSchema,
+    location: {
+    type: locationSchema,
+    default: () => ({})
+    },
     creationDate: {
         type: Date,
         default: Date.now
     },
     hoursPlayed: Number,
     job: String,
-    statBlock: statBlockSchema,
+    statBlock: {
+    type: statBlockSchema,
+    default: () => ({})
+    },
     goldHeld: Number,
     goldBanked: Number,
     trainingPoints: Number,
@@ -26,7 +32,10 @@ const characterSchema = new Schema({
         thief: Number,
         warrior: Number
     },
-    description: descriptionSchema,
+    description: {
+        type: descriptionSchema,
+        default: () => ({})
+    },
     //TODO decide how to implement training. should name be one from a list of SPELLS constants?
     //should I merge command authorization with character ability authorization, where most commands
     //like create room have a default level 1, but trainable abilities like bash or cast fireball
@@ -122,7 +131,10 @@ const characterSchema = new Schema({
             ref: 'ItemInstance'
         },               
     },
-    affixes: [affixSchema],
+    affixes: [{
+        type: affixSchema,
+        default: () => ({})
+    }],
 });
 
 const Character = model('Character', characterSchema);

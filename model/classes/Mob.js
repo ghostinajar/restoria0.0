@@ -19,22 +19,43 @@ const mobSchema = new Schema({
     },
     name: String,
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
-    history: historySchema,
+    history: {
+        type: historySchema,
+        default: () => ({})
+    },
     level: Number,
     job: String,
-    statBlock: statBlockSchema,
+    statBlock: {
+        type: statBlockSchema,
+        default: () => ({})
+    },
     goldHeld: Number,
     isUnique: Boolean,
     isMount: Boolean,
     isAggressive: Boolean,
     chattersToPlayer: Boolean,
     emotesToPlayer: Boolean,
-    description: descriptionSchema,
+    description: {
+        type: descriptionSchema,
+        default: () => ({})
+    },
     keywords: [String],
-    affixes: [affixSchema],
-    chatters: [chatterSchema], 
-    emotes: [emoteSchema],
-    itemNodes: [itemNodeSchema],
+    affixes: [{
+        type: affixSchema,
+        default: () => ({})
+    }],
+    chatters: [{
+        type: chatterSchema,
+        default: () => ({})
+    }], 
+    emotes: [{
+        type: emoteSchema,
+        default: () => ({})
+    }],
+    itemNodes: [{
+        type: itemNodeSchema,
+        default: () => ({})
+    }],
 });
 
 export default mobSchema;

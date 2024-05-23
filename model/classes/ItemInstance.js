@@ -26,7 +26,10 @@ const itemInstanceSchema = new Schema({
     price: Number,
     capacity: Number,
     levelRestriction: Number,
-    description: descriptionSchema,
+    description: {
+        type: descriptionSchema,
+        default: () => ({})
+    },
     weaponStats: {
         damageDieSides: Number,
         damageDieQuantity: Number,
@@ -60,7 +63,10 @@ const itemInstanceSchema = new Schema({
         type: String, 
         maxLength: 10 
     },
-    affixes: [affixSchema],
+    affixes: [{
+        type: affixSchema,
+        default: () => ({})
+    }],
     inventory: {
         type: Map,
         of: {

@@ -13,7 +13,10 @@ const userSchema = new Schema({
     salt: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
     isTeacher: { type: Boolean, default: false },
-    location: locationSchema,
+    location: {
+        type: locationSchema,
+        default: () => ({})
+    },
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     creationDate: {
         type: Date,
@@ -21,7 +24,10 @@ const userSchema = new Schema({
     },
     lastLoginDate: Date,
     hoursPlayed: { type: Number, default: 0 },
-    description: descriptionSchema,
+    description: {
+        type: descriptionSchema,
+        default: () => ({})
+    },
     characters: [
         {
             type: Schema.Types.ObjectId,

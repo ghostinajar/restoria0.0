@@ -82,6 +82,7 @@ setupRoutes(app, __dirname);
 
 // Setup game world
 const world = new World();
+//world.zoneManager.zoneRepository.createZone('Restoria Town', '664d9519c192a9fa0ffa2562');
 logger.info('World instantiated!');
 
 // Setup socket.io

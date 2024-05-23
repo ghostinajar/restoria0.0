@@ -21,8 +21,14 @@ const itemSchema = new Schema({
     price: Number,
     capacity: Number,
     levelRestriction: Number,
-    history: historySchema,
-    description: descriptionSchema,
+    history: {
+        type: historySchema,
+        default: () => ({})
+    },
+    description: {
+        type: descriptionSchema,
+        default: () => ({})
+    },
     weaponStats: {
         damageDieSides: Number,
         damageDieQuantity: Number,
@@ -37,12 +43,18 @@ const itemSchema = new Schema({
     tags: [String],
     keywords: [String],
     wearableLocations: [String],
-    affixes: [affixSchema],
+    affixes: [{
+        type: affixSchema,
+        default: () => ({})
+    }],
     tweakDuration: {
         type: Number,
         default: 182,
     }, 
-    itemNodes: [itemNodeSchema],
+    itemNodes: [{
+        type: itemNodeSchema,
+        default: () => ({})
+    }],
 });
 
 export default itemSchema;

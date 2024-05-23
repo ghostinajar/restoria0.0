@@ -14,12 +14,34 @@ const zoneSchema = new Schema({
         ref: 'User'
     },
     name: String,
-    history: historySchema,
-    description: descriptionSchema,
-    rooms: {type: Map, of: roomSchema},
-    mobs: {type: Map, of: mobSchema},
-    items: {type: Map, of: itemSchema},
-    suggestions: {type: Map, of: suggestionSchema},
+    history: {
+        type: historySchema,
+        default: () => ({})
+    },
+    description: {
+        type: descriptionSchema,
+        default: () => ({})
+    },
+    rooms: {type: Map, of: {
+        type: roomSchema,
+        default: () => ({})
+        }
+    },
+    mobs: {type: Map, of: {
+        type: mobSchema,
+        default: () => ({})
+        }
+    },
+    items: {type: Map, of: {
+        type: itemSchema,
+        default: () => ({})
+        }
+    },
+    suggestions: {type: Map, of: {
+        type: suggestionSchema,
+        default: () => ({})
+        }
+    },
 });
 
 const Zone = mongoose.model('Zone', zoneSchema);

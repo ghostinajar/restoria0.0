@@ -24,9 +24,18 @@ const exitSchema = new Schema({
         ref: 'Zone'
     },
     echoes: {
-        unlock: echoSchema,
-        open: echoSchema,
-        close: echoSchema,
+        unlock: {
+            type: echoSchema,
+            default: () => ({})
+        },
+        open: {
+            type: echoSchema,
+            default: () => ({})
+        },
+        close: {
+            type: echoSchema,
+            default: () => ({})
+        },
     },
 });
 

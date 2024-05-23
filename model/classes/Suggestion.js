@@ -24,7 +24,10 @@ const suggestionSchema = new Schema({
         ref: 'Item'
     }, 
     body: String,
-    history: historySchema,
+    history: {
+        type: historySchema,
+        default: () => ({})
+    },
 });
 
 export default suggestionSchema;

@@ -14,7 +14,10 @@ const roomSchema = new Schema({
     },
     roomType: String,
     name: String,
-    history: historySchema,
+    history: {
+        type: historySchema,
+        default: () => ({})
+    },
     playerCap: Number,
     mobCap: Number,
     isDark: Boolean,
@@ -51,17 +54,44 @@ const roomSchema = new Schema({
         y: Number,
         z: Number,
     },
-    description: descriptionSchema,
-    exits: {
-        north: exitSchema,
-        south: exitSchema,
-        east: exitSchema,
-        west: exitSchema,
-        up: exitSchema,
-        down: exitSchema,
+    description: {
+        type: descriptionSchema,
+        default: () => ({})
     },
-    mobNodes: [mobNodeSchema],            
-    itemNodes: [itemNodeSchema],
+    exits: {
+        north: {
+            type: exitSchema,
+            default: () => ({})
+        },
+        south: {
+            type: exitSchema,
+            default: () => ({})
+        },
+        east: {
+            type: exitSchema,
+            default: () => ({})
+        },
+        west: {
+            type: exitSchema,
+            default: () => ({})
+        },
+        up: {
+            type: exitSchema,
+            default: () => ({})
+        },
+        down: {
+            type: exitSchema,
+            default: () => ({})
+        },
+    },
+    mobNodes: [{
+        type: mobNodeSchema,
+        default: () => ({})
+    }],            
+    itemNodes: [{
+        type: itemNodeSchema,
+        default: () => ({})
+    }],
     //populate from below
 });     
 
