@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import echoSchema from './Echo.js';
 
 const { Schema } = mongoose;
 

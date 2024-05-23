@@ -29,14 +29,14 @@ class UserRepository {
             //TODO move user creation code from routes.js to here, 
             //and call this method from routes.js
             const user = new User({username: username, password: password});
-            user.createdDate = new Date();
+            user.creationDate = new Date();
             return await user.save();
         } catch (error) {throw error;}
     }
 
     async deleteUserById(id) {
         try {
-            return await StoredUser.findByIdAndDelete(id); 
+            return await User.findByIdAndDelete(id); 
         } catch (error) {throw error;}
     }
 }
