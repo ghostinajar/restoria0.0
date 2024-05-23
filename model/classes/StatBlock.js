@@ -10,6 +10,6 @@ const statBlockSchema = new Schema({
     wisdom: Number,
     charisma: Number,
     spirit: Number,
-});
+}, { _id: false });
 
 export default statBlockSchema;

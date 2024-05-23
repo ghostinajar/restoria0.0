@@ -26,9 +26,26 @@ const roomSchema = new Schema({
     blocksMobs: Boolean,
     blocksCasting: Boolean,
     blocksCombat: Boolean,
-    itemIdsForSale: [String], // how can we reference an Item's ObjectId, which would be embedded in a zone?
-    mountIdForSale: [String], // how can we reference a Mob's ObjectId, which would be embedded in a zone?
-    //mapCoord at "centre" of zone is 39,39,0 (so map can be loaded from 0,0 out to 79,79)
+    itemsForSale: [{
+        item: {
+            type: Schema.Types.ObjectId,
+            ref: 'Item'
+        },
+        fromZone: {
+            type: Schema.Types.ObjectId,
+            ref: 'Zone'
+        }
+    }],
+    mountIdForSale: [{
+        mob: {
+            type: Schema.Types.ObjectId,
+            ref: 'mob'
+        },
+        fromZone: {
+            type: Schema.Types.ObjectId,
+            ref: 'Zone'
+        }
+    }],
     mapCoords: {
         x: Number,
         y: Number,
@@ -48,20 +65,25 @@ const roomSchema = new Schema({
     //populate from below
 });     
 
+roomSchema.methods.initiate = function() {
+    this.mobs = [];
+    this.items = [];
+    this.users = [];
+    this.characters = [];
+};
+
+roomSchema.methods.addEntity = function(entityType, instance) {
+    if (this[entityType]) {
+      this[entityType].push(instance);
+    }
+  };
+  
+roomSchema.methods.removeEntity = function(entityType, instance) {
+    if (this[entityType]) {
+      this[entityType] = this[entityType].filter(function(entity) {
+        return entity !== instance;
+      });
+    }
+};
+
 export default roomSchema;
-
- /* TODO add these unsaved properties to a room instance on instantiation
-
-    mobInstances = [];  // map of references to instances (which are stored in MobManager)
-    itemInstances = [];  // map of references to instances (which are stored in ItemManager)
-    userInstances = [];  // // map of references to instances (which are stored in UserManager)
-    characterInstances = [];  // map of references to instances (which are stored in CharacterManager)
-
-    addMob(mob) {
-        this.mobs.push(mob.id);
-    }
-
-    addItem(item) {
-        this.items.push(item.id);
-    }
-*/

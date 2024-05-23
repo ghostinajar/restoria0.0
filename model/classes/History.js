@@ -17,6 +17,6 @@ const historySchema = new Schema({
         default: COMPLETION_STATUS.DRAFT,
     },
     completionDate: Date,
-});
+}, { _id: false });
 
 export default historySchema;

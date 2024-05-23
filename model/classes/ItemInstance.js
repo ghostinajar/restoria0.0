@@ -9,10 +9,17 @@ const { Schema, model } = mongoose;
 //enters the game
 
 const itemInstanceSchema = new Schema({
-    instanceOfItemId: String, // how can we reference an Item's ObjectId, which would be embedded in a zone?
+    ofItem: {
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+    },
+    fromZone: {
+        type: Schema.Types.ObjectId,
+        ref: 'Zone'
+    },
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'UserUser'
+        ref: 'User'
     },
     name: String,
     itemType: String,
@@ -54,12 +61,13 @@ const itemInstanceSchema = new Schema({
         maxLength: 10 
     },
     affixes: [affixSchema],
-    inventory: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+    inventory: {
+        type: Map,
+        of: {
+          type: Schema.Types.ObjectId,
+          ref: 'ItemInstance'
         }
-    ]
+    },
 });
 
 const ItemInstance = model('ItemInstance', itemInstanceSchema);

@@ -3,8 +3,15 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const mobNodeSchema = new Schema({
-    mobId: String, // how can we reference a Mob's ObjectId, which would be embedded in a zone?
+    loadsMob: {
+        type: Schema.Types.ObjectId,
+        ref: 'Mob'  
+    },
+    fromZone: {
+        type: Schema.Types.ObjectId,
+        ref: 'Zone'  
+    },
     quantity: Number
-});
+}, { _id: false });
 
 export default mobNodeSchema;

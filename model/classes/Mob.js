@@ -1,11 +1,18 @@
 import mongoose from 'mongoose';
-import historySchema from './History';
-import statBlockSchema from './StatBlock';
+import historySchema from './History.js';
+import statBlockSchema from './StatBlock.js';
+import descriptionSchema from './Description.js';
+import affixSchema from './Affix.js';
+import chatterSchema from './Chatter.js';
+import emoteSchema from './Emote.js';
+import itemNodeSchema from './ItemNode.js';
 
 const { Schema } = mongoose;
 
+//since mob instances will never be saved, 
+//mobManager will have to assign them unique Ids
+
 const mobSchema = new Schema({
-    basedOnMobId: String, // how can we reference a Mob's ObjectId, which would be embedded in a zone?
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -15,7 +22,7 @@ const mobSchema = new Schema({
     history: historySchema,
     level: Number,
     job: String,
-    statBlock:  statBlockSchema,
+    statBlock: statBlockSchema,
     goldHeld: Number,
     isUnique: Boolean,
     isMount: Boolean,
@@ -25,10 +32,9 @@ const mobSchema = new Schema({
     description: descriptionSchema,
     keywords: [String],
     affixes: [affixSchema],
-    chatters: [ChatterSchema], 
-    emotes: [EmoteSchema],
+    chatters: [chatterSchema], 
+    emotes: [emoteSchema],
     itemNodes: [itemNodeSchema],
 });
-
 
 export default mobSchema;

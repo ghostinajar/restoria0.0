@@ -1,16 +1,19 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import locationSchema from './Location.js';
+import descriptionSchema from './Description.js';
 
 const { Schema, model } = mongoose;
 
-// the user (aka "Author") lacks most of the data/methods of a character, but is playable, and stores the user's auth info
+// the user (aka "Author") lacks most of the data/methods of a character, 
+// but is playable, and stores the user's auth info
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash
     salt: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
     isTeacher: { type: Boolean, default: false },
-    locationRoomId: String,  // how can we reference a Room's ObjectId if it's embedded in a zone?
+    location: locationSchema,
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     creationDate: {
         type: Date,
@@ -18,12 +21,7 @@ const userSchema = new Schema({
     },
     lastLoginDate: Date,
     hoursPlayed: { type: Number, default: 0 },
-    description: {
-        look: String,
-        examine: String,
-        study: String,
-        research: String
-    },
+    description: descriptionSchema,
     characters: [
         {
             type: Schema.Types.ObjectId,

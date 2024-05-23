@@ -9,9 +9,20 @@ const suggestionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    refersToRoomId: String, // how can we reference a Room's ObjectId, which would be embedded in a zone?
-    refersToMobId: String, // how can we reference a Mob's ObjectId, which would be embedded in a zone?
-    refersToItemId: String, // how can we reference a Item's ObjectId, which would be embedded in a zone?
+    //probably won't need to reference Zone ObjectId since suggestions in a zone 
+    //will only refer to things within that zone
+    refersToRoom: {
+        type: Schema.Types.ObjectId,
+        ref: 'Room'
+    },
+    refersToMob: {
+        type: Schema.Types.ObjectId,
+        ref: 'Mob'
+    },
+    refersToItem: {
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+    }, 
     body: String,
     history: historySchema,
 });

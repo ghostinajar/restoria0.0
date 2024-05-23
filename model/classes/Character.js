@@ -2,20 +2,21 @@ import mongoose from 'mongoose';
 import descriptionSchema from './Description.js';
 import affixSchema from './Affix.js';
 import statBlockSchema from './StatBlock.js';
+import locationSchema from './Location.js';
 
 const { Schema, model } = mongoose;
 
 const characterSchema = new Schema({
     name: String,
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
-    locationRoomId: String, // how can we reference a Room's ObjectId, which would be embedded in a zone?
+    location: locationSchema,
     creationDate: {
         type: Date,
         default: Date.now
     },
     hoursPlayed: Number,
     job: String,
-    statusbar: statBlockSchema,
+    statBlock: statBlockSchema,
     goldHeld: Number,
     goldBanked: Number,
     trainingPoints: Number,
@@ -26,6 +27,10 @@ const characterSchema = new Schema({
         warrior: Number
     },
     description: descriptionSchema,
+    //TODO decide how to implement training. should name be one from a list of SPELLS constants?
+    //should I merge command authorization with character ability authorization, where most commands
+    //like create room have a default level 1, but trainable abilities like bash or cast fireball
+    //can have higher levels which help calculate their effects?
     trained: {
         passives: [{
             name: String,
@@ -36,13 +41,13 @@ const characterSchema = new Schema({
             level: Number
         }],
     },
-
-    inventory: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+    inventory: {
+        type: Map,
+        of: {
+          type: Schema.Types.ObjectId,
+          ref: 'ItemInstance'
         }
-    ],
+    },
     equipped: {
         arms: {
             type: Schema.Types.ObjectId,

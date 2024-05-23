@@ -10,9 +10,7 @@ class UserManager {
 
     ensureIdIsObjectId(id) {
         if (typeof id === 'string') {
-            logger.info(`id was a string, converting to ObjectId`);
             id = new mongoose.Types.ObjectId(id);
-            logger.info(`id is now ${typeof id}`);
         }
     }
 
@@ -20,10 +18,14 @@ class UserManager {
         try {
             this.ensureIdIsObjectId(id);
             const user = await this.userRepository.retrieveUserById(id);
-            logger.info(`userManager.userRepository retrieved ${user.username}, id: ${user._id}.`);
-            this.users.set(user._id, user);
-            logger.info(`Added to usermanager.users ${user.username}, id: ${user._id}.`);
-            return user;
+            if (user) {
+                //logger.info(`userManager.userRepository retrieved ${user.username}, id: ${user._id}.`);
+                this.users.set(user._id, user);
+                //logger.info(`userManager added ${user.username} to users.`);
+                return user;
+            } else {
+                logger.error(`userManager couldn't add user with id ${id} to users.`)
+            }
         } catch(err) {throw err};
     }
 
@@ -32,10 +34,10 @@ class UserManager {
             this.ensureIdIsObjectId(id);
             const user = this.users.get(id);
             if (user) {
-                logger.info(`Got user from UserManager ${user.username}, id: ${user._id} id Type ${typeof user._id}`);
+                //logger.info(`userManager got ${user.username} from users.`);
                 return user;
             } else {
-                logger.info(`No user found with id: ${id}. Type of id ${typeof id}`);
+                logger.info(`userManager can't find user with id: ${id}.`);
                 return null;
             };
         } catch(err) {
@@ -47,7 +49,7 @@ class UserManager {
         try {
             this.ensureIdIsObjectId(id);
             this.users.delete(id);
-            logger.info(`Deleted from userManager.users user with id ${id}.`)
+            logger.info(`userManager deleted user with id ${id} from users.`)
         } catch(err) {throw err};
     }
 }

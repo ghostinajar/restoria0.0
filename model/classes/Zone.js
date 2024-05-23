@@ -8,9 +8,7 @@ import suggestionSchema from './Suggestion.js';
 
 const { Schema, model } = mongoose;   
 
-try {
 const zoneSchema = new Schema({
-    numberInWorld: Number,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -18,13 +16,12 @@ const zoneSchema = new Schema({
     name: String,
     history: historySchema,
     description: descriptionSchema,
-    rooms: [roomSchema],
-    mobs: [mobSchema],
-    items: [itemSchema],
-    suggestions: [suggestionSchema],
+    rooms: {type: Map, of: roomSchema},
+    mobs: {type: Map, of: mobSchema},
+    items: {type: Map, of: itemSchema},
+    suggestions: {type: Map, of: suggestionSchema},
 });
 
 const Zone = mongoose.model('Zone', zoneSchema);
-} catch(err) {console.log(err)};
 
 export default Zone;

@@ -16,7 +16,9 @@ const setupSocket = (io, world) => {
         //TODO alert userManager to add user to users map, and return user object
         try {
           const user = await world.userManager.addUserById(sessionUser._id);
-          logger.info(`Got user: ${user.username}`)
+          //logger.info(`Got user: ${user.username}`)
+          socket.user = user;
+          //logger.info(`io attached user ${socket.user.username} to socket.`)
         } catch(err) {logger.error(err);};
         
       } catch(err) {
@@ -26,8 +28,9 @@ const setupSocket = (io, world) => {
         // Listen for user commands
       socket.on('user command', (userInput) => {
         /*TODO in a separate module: sanitize, parse, validate the command. 
+        If invalid command word, disconnect user, log IP (suspicious because client should prevent this)
         Process with game logic and emit server response to relevant sockets/rooms*/
-        logger.input(`User command: ${userInput}`);
+        logger.input(`${socket.user.username} sent command: ${userInput}`);
         io.emit('say', JSON.stringify(userInput));
       });
 
