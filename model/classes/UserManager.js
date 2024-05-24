@@ -22,12 +22,9 @@ class UserManager {
             } else {
                 logger.error(`userManager couldn't add user with id ${id} to users.`);
             }
-        } catch (err) {
-            throw err;
-        }
+        } catch (err) {throw err}
     }
     
-
     async getUserById(id) {
         try {
             const user = this.users.get(id.toString());
@@ -37,9 +34,7 @@ class UserManager {
                 logger.error(`userManager can't find user with id: ${id}.`);
                 return null;
             };
-        } catch(err) {
-            throw err;
-        }
+        } catch(err) {throw err;}
     }
 
     async removeUserById(id) {
