@@ -3,18 +3,16 @@ import logger from '../../logger.js';
 
 class UserManager {
     constructor() {
-        this.users = new Map();  // Stores all users with their ObjectId as key
+        this.users = new Map();  // Stores all users with their _id.toString() as key
         this.userRepository = new UserRepository(); //data access layer
     };
 
     async addUserById(id) {
         try {
-            //make sure id is an ObjectId object
             const user = await this.userRepository.retrieveUserById(id);
             if (user) {
-                //logger.info(`userManager.userRepository retrieved ${user.username}, id: ${user._id}.`);
-                this.users.set(user._id, user);
-                //logger.info(`userManager added ${user.username} to users.`);
+                this.users.set(user._id.toString(), user);
+                logger.info(`userManager added ${user.username} to users.`);
                 return user;
             } else {
                 logger.error(`userManager couldn't add user with id ${id} to users.`)
@@ -24,13 +22,11 @@ class UserManager {
 
     async getUserById(id) {
         try {
-            //make sure id is an ObjectId object
-            const user = this.users.get(id);
+            const user = this.users.get(id.toString());
             if (user) {
-                //logger.info(`userManager got ${user.username} from users.`);
                 return user;
             } else {
-                logger.info(`userManager can't find user with id: ${id}.`);
+                logger.error(`userManager can't find user with id: ${id}.`);
                 return null;
             };
         } catch(err) {
@@ -40,11 +36,11 @@ class UserManager {
 
     async removeUserById(id) {
         try {
-            logger.debug(typeof id);
-            this.users.delete(id);
+            this.users.delete(id.toString());
             logger.info(`userManager deleted user with id ${id} from users.`)
         } catch(err) {throw err};
     }
 }
+
 
 export default UserManager;

@@ -16,10 +16,9 @@ const setupSocket = (io, world) => {
         //TODO alert userManager to add user to users map, and return user object
         try {
           const user = await world.userManager.addUserById(sessionUser._id);
-          //logger.info(`Got user: ${user.username}`)
-          logger.info(`userManager.users = ${JSON.stringify(Array.from(world.userManager.users))}`)
+          //logger.info(`userManager.users = ${JSON.stringify(Array.from(world.userManager.users))}`)
           socket.user = user;
-          logger.info(`io attached user ${socket.user.username} to socket.`)
+          //logger.info(`io attached user ${socket.user.username} to socket.`)
         } catch(err) {logger.error(err);};
         
       } catch(err) {
