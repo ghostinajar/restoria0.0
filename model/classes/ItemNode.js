@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const itemNodeSchema = new Schema({
-    loadsItem: {
+    loadsItemId: {
         type: Schema.Types.ObjectId,
         ref: 'Item'  
     },
-    fromZone: {
+    fromZoneId: {
         type: Schema.Types.ObjectId,
         ref: 'Zone'  
     },
