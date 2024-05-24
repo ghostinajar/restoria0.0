@@ -80,12 +80,13 @@ const setupRoutes = (app, __dirname) => {
       await newUser.save();
       logger.info(`User Registered: ${newUser.username}`);
 
-      const user = {
-        id: newUser._id,
+      const sessionUser = {
+        _id: newUser._id,
         username: newUser.username
       };
+      logger.debug(`sessionUser: ${JSON.stringify(sessionUser)}`)
 
-      req.login(user, function(err) {
+      req.login(sessionUser, function(err) {
         if (err) { return next(err); }
         res.redirect('/game_terminal');
       });

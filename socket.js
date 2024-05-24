@@ -17,8 +17,9 @@ const setupSocket = (io, world) => {
         try {
           const user = await world.userManager.addUserById(sessionUser._id);
           //logger.info(`Got user: ${user.username}`)
+          logger.info(`userManager.users = ${JSON.stringify(Array.from(world.userManager.users))}`)
           socket.user = user;
-          //logger.info(`io attached user ${socket.user.username} to socket.`)
+          logger.info(`io attached user ${socket.user.username} to socket.`)
         } catch(err) {logger.error(err);};
         
       } catch(err) {
@@ -37,6 +38,7 @@ const setupSocket = (io, world) => {
       socket.on('disconnect', () => {
         try {
         logger.info(`User disconnected: ${socket.request.session.passport.user.username}`);
+        world.userManager.removeUserById(socket.request.session.passport.user._id);
         } catch(err) {logger.error(err)};
       });
     });

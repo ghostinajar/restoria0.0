@@ -40,7 +40,7 @@ class UserManager {
 
     async removeUserById(id) {
         try {
-            //make sure id is an ObjectId object
+            logger.debug(typeof id);
             this.users.delete(id);
             logger.info(`userManager deleted user with id ${id} from users.`)
         } catch(err) {throw err};
