@@ -12,6 +12,10 @@ const roomSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    fromZoneId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Zone'
+    },
     roomType: String,
     name: String,
     history: {

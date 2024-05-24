@@ -1,6 +1,6 @@
 import UserRepository from './UserRepository.js';
 import logger from '../../logger.js';
-import mongoose from 'mongoose';
+import ensureIdIsObjectId from '../ensureIdIsObjectId.js';
 
 class UserManager {
     constructor() {
@@ -8,15 +8,9 @@ class UserManager {
         this.userRepository = new UserRepository(); //data access layer
     };
 
-    ensureIdIsObjectId(id) {
-        if (typeof id === 'string') {
-            id = new mongoose.Types.ObjectId(id);
-        }
-    }
-
     async addUserById(id) {
         try {
-            this.ensureIdIsObjectId(id);
+            ensureIdIsObjectId(id);
             const user = await this.userRepository.retrieveUserById(id);
             if (user) {
                 //logger.info(`userManager.userRepository retrieved ${user.username}, id: ${user._id}.`);
@@ -31,7 +25,7 @@ class UserManager {
 
     async getUserById(id) {
         try {
-            this.ensureIdIsObjectId(id);
+            ensureIdIsObjectId(id);
             const user = this.users.get(id);
             if (user) {
                 //logger.info(`userManager got ${user.username} from users.`);
@@ -47,7 +41,7 @@ class UserManager {
 
     async removeUserById(id) {
         try {
-            this.ensureIdIsObjectId(id);
+            ensureIdIsObjectId(id);
             this.users.delete(id);
             logger.info(`userManager deleted user with id ${id} from users.`)
         } catch(err) {throw err};

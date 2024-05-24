@@ -1,5 +1,7 @@
-/*CAUTION: Used in dev only to populate the database with sample data
-Clear after running once. */
+/*CAUTION: This data was written before many refinements of the schemata.
+Before implementing, make sure it matches the current schemata,
+including authorId (the one in this document doesn't exist anymore)
+*/
 
 import ROOM_TYPE from "./constants/ROOM_TYPE.js";
 import JOB from "./constants/JOB.js";
@@ -10,8 +12,7 @@ import AFFIX_TYPE from "./constants/AFFIX_TYPE.js";
 import DAMAGE_TYPE from "./constants/DAMAGE_TYPE.js";
 
 const sampleZone = {
-    zoneNumber: 1,
-    author: '664abf7e3483742125002171',
+    author: '664d9519c192a9fa0ffa2562',
     name: 'Restoria Town',
     description: {
         look: 'A humble town with a few buildings and a fountain bustles quietly',
@@ -21,8 +22,8 @@ const sampleZone = {
     },
     rooms: [
         {
-            roomNumber: 1,
-            author: '664abf7e3483742125002171',
+            author: '664d9519c192a9fa0ffa2562',
+            fromZoneId: '664f8ca70cc5ae9b173969a8',
             roomType: ROOM_TYPE.FOUNTAIN,
             name: 'Restoria Town Fountain',
             blocksCombat: true,
@@ -57,14 +58,16 @@ const sampleZone = {
             },
             mobNodes: [
                 {
-                mobNumber: 1,
-                quantity: 3
-                }
+                    loadsMobId: {/*TODO add mango lovebird ObjectId*/},
+                    fromZoneId: '664f8ca70cc5ae9b173969a8',
+                    quantity: 1
+                },
             ],            
             itemNodes: [
                 {
-                itemNumber: 1,
-                quantity: 1
+                    loadsItemId: {/*TODO add golden coin ObjectId*/},
+                    fromZoneId: '664f8ca70cc5ae9b173969a8',
+                    quantity: 1
                 }
             ],
         },
@@ -258,35 +261,30 @@ const sampleZone = {
     ],
     mobs: [
         {
-            mobNumber: 1,
-            author: '664abf7e3483742125002171',
+            author: '664d9519c192a9fa0ffa2562',
             name: 'a mango lovebird',
             pronouns: 0, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
             level: 1,
             job: JOB.THIEF,
-            strength: 8,
-            dexterity: 12,
-            constitution: 10,
-            intelligence: 10,
-            wisdom: 10,
-            charisma: 14,
-            spirit: 10,
+            statBlock: {
+                strength: 8,
+                dexterity: 12,
+                constitution: 10,
+                intelligence: 10,
+                wisdom: 10,
+                charisma: 14,
+                spirit: 10,
+            },
             goldHeld: 5,
-            emotesToPlayer: true,
             description: {
                 look: 'This bird has the size, colour, and sweetness of small, ripe mango.',
                 examine: "Its feathers are so small and delicate that you'd have to look closely to see them. The bird is a bright orange, with a yellow belly and a green tail. Its eyes are large and black, and it has a round beak. It hops around the fountain, chirping and looking for its companion.",
             },
             keywords: ['bird', 'lovebird', 'mango'],
-            emotes: [
-                {
-                    name: 'hop',
-                    text: 'hops merrily around the fountain.',
-                }
-            ],
             itemNodes: [
                 {
-                    itemNumber: 3,
+                    loadsItemId: {/*TODO add birdseed ObjectId*/},
+                    fromZoneId: '664f8ca70cc5ae9b173969a8',
                     quantity: 1
                 }
             ],
@@ -328,8 +326,7 @@ const sampleZone = {
     ],
     items: [
         {
-            itemNumber: 1,
-            author: '664abf7e3483742125002171',
+            author: '664d9519c192a9fa0ffa2562',
             name: 'a strange, golden coin',
             price: 100,
             description: {
@@ -347,8 +344,7 @@ const sampleZone = {
             ],
         },
         {
-            itemNumber: 2,
-            author: '664abf7e3483742125002171',
+            author: '664d9519c192a9fa0ffa2562',
             name: 'an apple',
             itemType: ITEM_TYPE.FOOD,
             price: 10,
@@ -359,7 +355,6 @@ const sampleZone = {
             keywords: ['red', 'crisp', 'juicy', 'apple'],
         },
         {
-            itemNumber: 3,
             author: '664abf7e3483742125002171',
             name: 'a pinch of birdseed',
             itemType: ITEM_TYPE.FOOD,
