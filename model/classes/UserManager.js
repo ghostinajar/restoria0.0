@@ -1,6 +1,5 @@
 import UserRepository from './UserRepository.js';
 import logger from '../../logger.js';
-import ensureIdIsObjectId from '../ensureIdIsObjectId.js';
 
 class UserManager {
     constructor() {
@@ -10,7 +9,7 @@ class UserManager {
 
     async addUserById(id) {
         try {
-            ensureIdIsObjectId(id);
+            //make sure id is an ObjectId object
             const user = await this.userRepository.retrieveUserById(id);
             if (user) {
                 //logger.info(`userManager.userRepository retrieved ${user.username}, id: ${user._id}.`);
@@ -25,7 +24,7 @@ class UserManager {
 
     async getUserById(id) {
         try {
-            ensureIdIsObjectId(id);
+            //make sure id is an ObjectId object
             const user = this.users.get(id);
             if (user) {
                 //logger.info(`userManager got ${user.username} from users.`);
@@ -41,7 +40,7 @@ class UserManager {
 
     async removeUserById(id) {
         try {
-            ensureIdIsObjectId(id);
+            //make sure id is an ObjectId object
             this.users.delete(id);
             logger.info(`userManager deleted user with id ${id} from users.`)
         } catch(err) {throw err};

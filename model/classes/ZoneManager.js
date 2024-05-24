@@ -1,7 +1,6 @@
 import ZoneRepository from './ZoneRepository.js';
 import logger from '../../logger.js';
 import mongoose from 'mongoose';
-import ensureIdIsObjectId from '../ensureIdIsObjectId.js';
 import Room from './Room.js'
 
 class ZoneManager {
@@ -34,7 +33,7 @@ class ZoneManager {
 
     async addZoneById(id) {
         try {
-            ensureIdIsObjectId(id);
+            //make sure id is an ObjectId object
             const zone = await this.zoneRepository.retrieveZone(id);
             if (zone) {
                 logger.info(`zoneManager.zoneRepository retrieved ${zone.name}, id: ${zone._id}.`);
@@ -49,7 +48,7 @@ class ZoneManager {
 
     async getZoneById(id) {
         try {
-            ensureIdIsObjectId(id);
+            //make sure id is an ObjectId object
             const zone = this.zones.get(id);
             if (zone) {
                 //logger.info(`zoneManager got ${zone.name} from zones.`);
@@ -63,7 +62,7 @@ class ZoneManager {
 
     async removeZoneById(id) {
         try {
-            ensureIdIsObjectId(id);
+            //make sure id is an ObjectId object
             this.zones.delete(id);
             logger.info(`zoneManager deleted zone with id ${id} from zones.`)
         } catch(err) {throw err};
