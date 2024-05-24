@@ -11,14 +11,22 @@ class UserManager {
         try {
             const user = await this.userRepository.retrieveUserById(id);
             if (user) {
-                this.users.set(user._id.toString(), user);
-                logger.info(`userManager added ${user.username} to users.`);
+                if (!this.users.has(user._id.toString())) {
+                    this.users.set(user._id.toString(), user);
+                    logger.info(`userManager added ${user.username} to users.`);
+                } else {
+                    logger.warn(`User with id ${id} already exists in users.`);
+                }
+                logger.info(`users map: ${JSON.stringify(Array.from(this.users))}`);
                 return user;
             } else {
-                logger.error(`userManager couldn't add user with id ${id} to users.`)
+                logger.error(`userManager couldn't add user with id ${id} to users.`);
             }
-        } catch(err) {throw err};
+        } catch (err) {
+            throw err;
+        }
     }
+    
 
     async getUserById(id) {
         try {
