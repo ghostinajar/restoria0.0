@@ -84,8 +84,13 @@
         window.scrollTo(0, document.body.scrollHeight);
       });
 
+      socket.on('redirect-to-login', () => {
+        // Redirect to /login
+        window.location.href = '/login';
+      });
+
       socket.on('invalid', (rejectionString) => {
-        appendStringToTerminal(rejectionString);
+        appendStringToTerminal('Server says invalid command.');
       });
 
     </script>

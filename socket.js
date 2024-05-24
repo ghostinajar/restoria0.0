@@ -1,31 +1,33 @@
 import logger from "./logger.js";
 
 const setupSocket = (io, world) => {
+  try {  
     io.on('connection', async (socket) => {
-      try {
-        // Check if the user is authenticated
-        if (!socket.request.session.passport || !socket.request.session.passport.user) {
-          socket.disconnect();
-          return;
-        }
-
-        // Get the username and _id from the session and log it
-        // NB: session only knows username and id, not User object
-        const sessionUser = socket.request.session.passport.user;  
-        logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
-        //TODO alert userManager to add user to users map, and return user object
-        try {
-          const user = await world.userManager.addUserById(sessionUser._id);
-          //logger.info(`userManager.users = ${JSON.stringify(Array.from(world.userManager.users))}`)
-          socket.user = user;
-          //logger.info(`io attached user ${socket.user.username} to socket.`)
-        } catch(err) {logger.error(err);};
         
-      } catch(err) {
-        logger.error(err);
+      // Check for authenticated
+      if (!socket.request.session.passport || !socket.request.session.passport.user) {
+        socket.disconnect();
+        return;
+      }
+
+      // Log username and _id on session (NB: not User object)
+      const sessionUser = socket.request.session.passport.user;  
+      logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
+      
+      // Check for duplicate user, disconnect duplicate socket and tell client to redirect to /login
+      if (world.userManager.users.has(sessionUser._id)) {
+        logger.warn(`Username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
+        socket.emit('redirect-to-login');
+        socket.disconnect();
+        return;
       };
 
-        // Listen for user commands
+      // Add user to userManager, attach to socket
+      const user = await world.userManager.addUserById(sessionUser._id);
+      //logger.info(`userManager.users = ${JSON.stringify(Array.from(world.userManager.users))}`)
+      socket.user = user;
+
+      // Listen for user commands
       socket.on('user command', (userInput) => {
         /*TODO in a separate module: sanitize, parse, validate the command. 
         If invalid command word, disconnect user, log IP (suspicious because client should prevent this)
@@ -40,8 +42,9 @@ const setupSocket = (io, world) => {
         world.userManager.removeUserById(socket.request.session.passport.user._id);
         } catch(err) {logger.error(err)};
       });
-    });
-  };
+
+    })
+  } catch(err) {throw err};
+};
   
-  export default setupSocket;
-  
+export default setupSocket;
