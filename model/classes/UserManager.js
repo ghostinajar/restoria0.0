@@ -21,7 +21,10 @@ class UserManager {
             } else {
                 logger.error(`userManager couldn't add user with id ${id} to users.`);
             }
-        } catch (err) {throw err}
+        } catch (err) {
+            logger.error(`Error in addUserById: ${err.message}`);
+            throw err;
+        }
     }
     
     async getUserById(id) {
@@ -33,16 +36,21 @@ class UserManager {
                 logger.error(`userManager can't find user with id: ${id}.`);
                 return null;
             };
-        } catch(err) {throw err;}
+        } catch(err) {
+            logger.error(`Error in getUserById: ${err.message}`);
+            throw err;
+        }
     }
 
     async removeUserById(id) {
         try {
             this.users.delete(id.toString());
             logger.info(`Active users: ${JSON.stringify(Array.from(this.users.values()).map(user => user.username))}`)
-        } catch(err) {throw err};
+        } catch(err) {
+            logger.error(`Error in removeUserById: ${err.message}`);
+            throw err;
+        };
     }
 }
-
 
 export default UserManager;

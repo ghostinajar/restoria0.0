@@ -7,7 +7,7 @@ class ZoneManager {
         this.zones = new Map();
     };
   
-    async createEntityInZone (zoneId, entityType, entity) {
+    async createEntityInZoneId (zoneId, entityType, entity) {
         
         // validate entityType
         const validEntityTypes = ['item', 'mob', 'room', 'suggestion'];
@@ -65,7 +65,10 @@ class ZoneManager {
                 }
             }
             return await zone.save();
-        } catch(err) {throw(err)}
+        } catch(err) {
+            logger.error(`Error in createEntityInZoneId: ${err.message}`);
+            throw(err);
+        }
     }
 
     async addZoneById(id) {
@@ -83,7 +86,10 @@ class ZoneManager {
             } else {
                 logger.error(`zoneManager couldn't add zone with id ${id} to zones.`)
             }
-        } catch(err) {throw err};
+        } catch(err) {
+            logger.error(`Error in addZoneById: ${err.message}`);
+            throw err;
+        };
     }
 
     async getZoneById(id) {
@@ -95,15 +101,35 @@ class ZoneManager {
                 logger.info(`zoneManager can't find zone with id: ${id}.`);
                 return null;
             };
-        } catch(err) {throw err;}
+        } catch(err) {
+            logger.error(`Error in getZoneById: ${err.message}`);
+            throw err;
+        }
     }
 
     async removeZoneById(id) {
         try {
-            this.zones.delete(id.toString());
-            logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
-        } catch(err) {throw err};
+            const zone = this.zones.get(id.toString());
+            if (zone) {
+                // Remove all rooms and their contents from the zone
+                for (let room of zone.rooms.values()) {
+                    // Assuming each room has a method to clear its contents
+                    room.clearContents();
+                    // Remove the room from the zone
+                    zone.rooms.delete(room._id.toString());
+                }
+                // Remove the zone
+                this.zones.delete(id.toString());
+                logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
+            } else {
+                logger.warn(`Zone with id ${id} does not exist in zones.`);
+            }
+        } catch(err) {
+            logger.error(`Error in removeZoneById: ${err.message}`);
+            throw err;
+        }
     }
+    
 }
 
 export default ZoneManager;

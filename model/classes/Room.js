@@ -116,8 +116,8 @@ const roomSchema = new Schema({
 //during gameplay. These are added via methods since they never need to be in db
 
 roomSchema.methods.initiate = function() {
-    this.mobs = [];
-    this.items = [];
+    this.mobInstances = [];
+    this.itemInstances = [];
     this.users = [];
     this.characters = [];
 };
@@ -135,6 +135,13 @@ roomSchema.methods.removeEntity = function(entityType, instance) {
         return entity !== instance;
       });
     }
+};
+
+roomSchema.methods.clearContents = function() {
+    this.mobInstances = [];
+    this.itemInstances = [];
+    this.users = [];
+    this.characters = [];
 };
 
 export default roomSchema;
