@@ -100,7 +100,7 @@ async function main() {
   await world.zoneManager.addZoneById('664f8ca70cc5ae9b173969a8') // load Restoria Town
   //await world.zoneManager.createEntityInZone('664f8ca70cc5ae9b173969a8', 'item', muffin);
   //await world.zoneManager.createEntityInZone('664f8ca70cc5ae9b173969a8', 'mob', goblin);
-  //await world.zoneManager.createEntityInZone('664f8ca70cc5ae9b173969a8', 'room', down);
+  //await world.zoneManager.createEntityInZone('664f8ca70cc5ae9b173969a8', 'room', testRoom);
   //await world.zoneManager.createEntityInZone('664f8ca70cc5ae9b173969a8', 'suggestion', s1);
 
 

@@ -44,16 +44,16 @@ class ZoneManager {
                     break;
                 }
                 case 'room' : {
-                    // if(entity.mapCoords) {
-                    // const newRoomCoords = JSON.stringify(entity.mapCoords);
-                    //     // If newRoomCoords match an existing room's, set new room's coords to []
-                    //     for (let room of this.rooms.values()) {
-                    //         if (JSON.stringify(room.mapCoords) === newRoomCoords) {
-                    //             entity.mapCoords = []
-                    //             // TODO notify User their new room's duplicate coords were wiped
-                    //         }
-                    //     }
-                    // };
+                    if(entity.mapCoords) {
+                    const newRoomCoords = JSON.stringify(entity.mapCoords);
+                        // If newRoomCoords match an existing room's, set new room's coords to []
+                        for (let room of zone.rooms.values()) {
+                            if (JSON.stringify(room.mapCoords) === newRoomCoords) {
+                                entity.mapCoords = []
+                                // TODO notify User their new room's duplicate coords were wiped
+                            }
+                        }
+                    };
                     zone.rooms.set(entity._id.toString(), entity);
                     creationReport();
                     break;
