@@ -23,14 +23,35 @@ const characterSchema = new Schema({
     type: statBlockSchema,
     default: () => ({})
     },
-    goldHeld: Number,
-    goldBanked: Number,
-    trainingPoints: Number,
+    goldHeld: {
+        type: Number,
+        default: 0
+    },
+    goldBanked: {
+        type: Number,
+        default: 0
+    },
+    trainingPoints: {
+        type: Number,
+        default: 0
+    },
     jobLevels: {
-        cleric: Number,
-        mage: Number,
-        thief: Number,
-        warrior: Number
+        cleric: {
+            type: Number,
+            default: 0
+        },
+        mage: {
+            type: Number,
+            default: 0
+        },
+        thief: {
+            type: Number,
+            default: 0
+        },
+        warrior: {
+            type: Number,
+            default: 0
+        },
     },
     description: {
         type: descriptionSchema,
@@ -55,80 +76,99 @@ const characterSchema = new Schema({
         of: {
           type: Schema.Types.ObjectId,
           ref: 'ItemInstance'
-        }
+        },
+        default: {}
     },
     equipped: {
         arms: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         body: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         ears: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         feet: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         finger1: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         finger2: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         hands: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         head: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         held: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         legs: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         neck: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         shield: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         shoulders: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         waist: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         wrist1: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         wrist2: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         weapon1: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },
         weapon2: {
             type: Schema.Types.ObjectId,
-            ref: 'ItemInstance'
+            ref: 'ItemInstance',
+            default: {}
         },               
     },
     affixes: [{
