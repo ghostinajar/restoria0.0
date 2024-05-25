@@ -43,7 +43,7 @@ const zoneSchema = new Schema({
         }
     },
     minutesToRepop: {
-        type: number,
+        type: Number,
         default: 15,
         min: [5, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [120, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']

@@ -1,7 +1,6 @@
 import UserManager from './UserManager.js';
 import ZoneManager from './ZoneManager.js';
 import CharacterManager from './CharacterManager.js';
-import logger from '../../logger.js';
 
 class World {
     constructor() {
