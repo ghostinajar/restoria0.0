@@ -102,13 +102,6 @@ async function main() {
   //await world.zoneManager.createEntityInZoneId('664f8ca70cc5ae9b173969a8', 'mob', goblin);
   //await world.zoneManager.createEntityInZoneId('664f8ca70cc5ae9b173969a8', 'room', testRoom);
   //await world.zoneManager.createEntityInZoneId('664f8ca70cc5ae9b173969a8', 'suggestion', s1);
-  
-
-setTimeout(async function() {
-  await world.zoneManager.removeZoneById('664f8ca70cc5ae9b173969a8');
-}, 5000);
-
-
 
   // Setup socket.io
   io.use((socket, next) => {

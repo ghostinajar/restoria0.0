@@ -11,7 +11,10 @@ const characterSchema = new Schema({
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     location: {
     type: locationSchema,
-    default: () => ({})
+    default: {
+        inZone: '664f8ca70cc5ae9b173969a8',
+        inRoom: '66516e71db5355ed8ff39f59',
+        }
     },
     creationDate: {
         type: Date,
@@ -83,92 +86,92 @@ const characterSchema = new Schema({
         arms: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         body: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         ears: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         feet: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         finger1: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         finger2: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         hands: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         head: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         held: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         legs: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         neck: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         shield: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         shoulders: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         waist: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         wrist1: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         wrist2: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         weapon1: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },
         weapon2: {
             type: Schema.Types.ObjectId,
             ref: 'ItemInstance',
-            default: {}
+            default: null
         },               
     },
     affixes: [{

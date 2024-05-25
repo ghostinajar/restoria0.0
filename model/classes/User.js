@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import logger from '../../logger.js';
 import locationSchema from './Location.js';
 import descriptionSchema from './Description.js';
+import Character from './Character.js';
 
 const { Schema, model } = mongoose;
 
@@ -55,15 +57,15 @@ userSchema.methods.createCharacter = async function(characterData) {
         //set character's author as reference its creator's User._id
         characterData.author = this._id;
         //create the character
-        character = await new Character(characterData)
+        const character = new Character(characterData)
         character.save();
+        logger.info(`User "${this.username}" created character "${character.name}".`)
         return character;
     } catch (err) {
         logger.error(`Error in userSchema.createCharacter: ${err.message} `)
         throw err;
     }
 };
-
 
 const User = model('User', userSchema);
 export default User;
