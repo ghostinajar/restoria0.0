@@ -2,18 +2,18 @@ import logger from '../../logger.js';
 
 //handles active room instances in the game
 class RoomManager {
-    constructor() {
+    constructor(zone) {
+        this.zone = zone;
         this.rooms = new Map();
     };
   
-    async addRoomFromZoneId(zoneId, roomId) {
+    async addRooms(roomId) {
         try {
             //get zone and room data
-            const zone = world.zoneManager.getZoneById(zoneId.toString());
-            const room = zone.rooms.get(roomId.toString());
+            const zone = this.zone;
             
-            //check for duplicate rooms, add room
-            if (zone && room) {
+            //instantiate room instances
+            if (zone) {
                 if (!this.rooms.has(room._id.toString())) {
                     this.rooms.set(room._id.toString(), room);
                     logger.info(`zoneManager added ${room.name} to rooms.`);
@@ -25,7 +25,7 @@ class RoomManager {
                 //TODO populate room's contents array
                 return room;
             } else {
-                logger.error(`roomManager couldn't add room with id ${id} to rooms.`)
+                logger.error(`A roomManager has no reference to its zone!`)
             }
         } catch(err) {
             logger.error(`Error in addRoomFromZoneId: ${err.message}`);
@@ -48,6 +48,10 @@ class RoomManager {
         }
     }
 
+    clearContents() {
+        zone = null;
+        rooms = []
+    }
 }
 
 export default RoomManager;

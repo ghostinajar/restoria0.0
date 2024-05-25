@@ -51,6 +51,10 @@ class UserManager {
             throw err;
         };
     }
+
+    clearContents() {
+        this.users = []
+    }
 }
 
 export default UserManager;

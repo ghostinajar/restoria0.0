@@ -10,6 +10,11 @@ class World {
         this.characterManager = new CharacterManager();
     }
 
+    clearContents() {
+        this.userManager = [];
+        this.zoneManager = [];
+        this.characterManager = [];
+    }
 }
 
 export default World;

@@ -180,5 +180,7 @@ const characterSchema = new Schema({
     }],
 });
 
+//TODO add loadInventory method, and clearContents method for garbage collection
+
 const Character = model('Character', characterSchema);
 export default Character;

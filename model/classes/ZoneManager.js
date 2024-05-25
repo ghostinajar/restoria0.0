@@ -136,6 +136,11 @@ class ZoneManager {
             throw err;
         }
     }
+
+    clearContents() {
+        this.zones = [];
+        this.roomManagers = [];
+    }
     
 }
 

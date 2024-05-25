@@ -52,6 +52,10 @@ class CharacterManager {
             throw err;
         };
     }
+
+    clearContents() {
+        this.characters = []
+    }
 }
 
 export default CharacterManager; 
