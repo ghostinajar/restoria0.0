@@ -50,5 +50,20 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     }
 };
 
+userSchema.methods.createCharacter = async function(characterData) {
+    try {
+        //set character's author as reference its creator's User._id
+        characterData.author = this._id;
+        //create the character
+        character = await new Character(characterData)
+        character.save();
+        return character;
+    } catch (err) {
+        logger.error(`Error in userSchema.createCharacter: ${err.message} `)
+        throw err;
+    }
+};
+
+
 const User = model('User', userSchema);
 export default User;
