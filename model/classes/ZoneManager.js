@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 import logger from '../../logger.js';
 import Zone from './Zone.js';
+import RoomManager from './RoomManager.js';
 
 class ZoneManager {
     constructor() {
         this.zones = new Map();
+        this.roomManagers = new Map();
     };
   
     async createEntityInZoneId (zoneId, entityType, entity) {
@@ -77,6 +79,8 @@ class ZoneManager {
             if (zone) {
                 if (!this.zones.has(zone._id.toString())) {
                     this.zones.set(zone._id.toString(), zone);
+                    // Create a new RoomManager for this zone
+                    this.roomManagers.set(zone._id.toString(), new RoomManager());
                     logger.info(`zoneManager added ${zone.name} to zones.`);
                 } else {
                     logger.warn(`Zone with id ${id} already exists in zones.`);
@@ -119,7 +123,10 @@ class ZoneManager {
                     zone.rooms.delete(room._id.toString());
                 }
                 // Remove the zone
+                logger.info(`Removing zone "${zone.name}" from zones.`)
                 this.zones.delete(id.toString());
+                // Remove the zone's roomManager
+                this.roomManagers.delete(id.toString())
                 logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
             } else {
                 logger.warn(`Zone with id ${id} does not exist in zones.`);
