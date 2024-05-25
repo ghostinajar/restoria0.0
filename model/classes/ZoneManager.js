@@ -1,26 +1,41 @@
 import mongoose from 'mongoose';
 import logger from '../../logger.js';
 import Zone from './Zone.js';
-import Item from './Item.js';
-import Room from './Room.js';
 
 class ZoneManager {
     constructor() {
-        this.zones = new Map();  
+        this.zones = new Map();
     };
   
-    async createItemInZoneId (item,zoneId) {
+    async createEntityInZone (zoneId, entityType, entity) {
         try {
-            const itemId = new mongoose.Types.ObjectId();
-            item._id = itemId;
+            const entityId = new mongoose.Types.ObjectId();
+            entity._id = entityId;
             const zone = await this.zones.get(zoneId.toString());
-            logger.info(`zoneManager got zone ${zone.name} from zones.`)
+            //logger.info(`zoneManager got zone ${zone.name} from zones.`)
+
+            const creationReport = () => {
+                logger.info(`zoneManager added ${entityType}: "${entity.name}" to "${zone.name}".`);
+            };
+
             if (zone) {
-                zone.items.set(item._id.toString(), item);
-                logger.info(`zoneManager added ${item.name} to ${zone.name}. ${JSON.stringify(Array.from(zone.items))}`);
+                switch (entityType) {
+                    case 'item' : {
+                        zone.items.set(entity._id.toString(), entity);
+                        creationReport();
+                    }
+                    case 'mob' : {
+                        zone.mobs.set(entity._id.toString(), entity);
+                        creationReport();
+                    }
+                    case 'room' : {
+                        zone.rooms.set(entity._id.toString(), entity);
+                        creationReport();
+                    }
+                }
                 return await zone.save();
             } else {
-                logger.debug(`zoneManager couldn't add ${item.name} to zoneId ${zoneId}.`);
+                logger.debug(`zoneManager couldn't add ${entity.name} to zoneId ${zoneId}.`);
                 return null;
             }
         } catch(err) {throw(err)}
