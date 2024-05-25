@@ -3,13 +3,14 @@ Before implementing, make sure it matches the current schemata,
 including authorId (the one in this document doesn't exist anymore)
 */
 
-import ROOM_TYPE from "./constants/ROOM_TYPE.js";
-import JOB from "./constants/JOB.js";
-import ITEM_TYPE from "./constants/ITEM_TYPE.js";
-import ITEM_TAG from "./constants/ITEM_TAG.js";
-import WEARABLE_LOCATION from "./constants/WEARABLE_LOCATION.js";
 import AFFIX_TYPE from "./constants/AFFIX_TYPE.js";
 import DAMAGE_TYPE from "./constants/DAMAGE_TYPE.js";
+import COMPLETION_STATUS from "./constants/COMPLETION_STATUS.js";
+import ITEM_TAG from "./constants/ITEM_TAG.js";
+import ITEM_TYPE from "./constants/ITEM_TYPE.js";
+import JOB from "./constants/JOB.js";
+import ROOM_TYPE from "./constants/ROOM_TYPE.js";
+import WEARABLE_LOCATION from "./constants/WEARABLE_LOCATION.js";
 
 const sampleZone = {
     author: '664d9519c192a9fa0ffa2562',
@@ -324,103 +325,7 @@ const sampleZone = {
             ],
         },
     ],
-    items: [
-        {
-            author: '664d9519c192a9fa0ffa2562',
-            name: 'a strange, golden coin',
-            price: 100,
-            description: {
-                look: 'This is strange, golden coin stamped with symbols you do not recognize.',
-                examine: 'The coin is made of a golden-hued metal you cannot identify. On its surface is stamped a spiral of characters in an ancient script. The coin is warm to the touch, and you feel a sense of yearning when you hold it.',
-            },
-            tags: [ITEM_TAG.TEMPORARY],
-            keywords: ['strange', 'gold', 'golden', 'coin'],
-            wearableLocations: [WEARABLE_LOCATION.HELD],
-            affixNodes: [
-                {
-                    affixType: AFFIX_TYPE.WISDOM,
-                    value: 1
-                }
-            ],
-        },
-        {
-            author: '664d9519c192a9fa0ffa2562',
-            name: 'an apple',
-            itemType: ITEM_TYPE.FOOD,
-            price: 10,
-            description: {
-                look: 'A red apple is here, looking crisp and juicy.',
-                examine: 'The apple is a deep red, with a shiny skin and a green leaf on top. It smells sweet and fresh.',
-            },
-            keywords: ['red', 'crisp', 'juicy', 'apple'],
-        },
-        {
-            author: '664abf7e3483742125002171',
-            name: 'a pinch of birdseed',
-            itemType: ITEM_TYPE.FOOD,
-            price: 10,
-            description: {
-                look: 'Some bright, shiny birdseed is scattered on the ground.',
-                examine: "The birdseed is a mix of seeds and nuts, and it smells fresh and tasty. It's a little shinier than you'd expect, almost glowing.",
-            },  
-            spellCharges: {
-                name: 'bless',
-                level: 10,
-            },
-            tags: [ITEM_TAG.LIGHT, ITEM_TAG.TEMPORARY],
-            keywords: ['bright', 'shiny', 'birdseed'],
-        },
-        {
-            itemNumber: 4,
-            author: '664abf7e3483742125002171',
-            name: 'a little dagger',
-            itemType: ITEM_TYPE.WEAPON,
-            price: 50,
-            levelRestriction: 2,
-            description: {
-                look: 'A little dagger is lying here.',
-                examine: 'Smaller than your average dagger, this little dagger is sharp but poorly crafted. The hilt is wrapped in leather, and the blade is made of some dull, cheap metal.',
-            },
-            weaponStats: {
-                damageDieSides: 3,
-                damageDieQuantity: 1,
-                damageType: DAMAGE_TYPE.PIERCING,
-            },
-            tags: [ITEM_TAG.DAGGER, ITEM_TAG.OFFHAND, ITEM_TAG.THIEF],
-            keywords: ['little', 'dagger'],
-            wearableLocations: [WEARABLE_LOCATION.WEAPON1, WEARABLE_LOCATION.WEAPON2],
-            affixNodes: [
-                {
-                    affixType: AFFIX_TYPE.HITBONUS,
-                    value: 1,
-                },
-                {
-                    affixType: AFFIX_TYPE.DAMAGEBONUS,
-                    value: 1,
-                }
-            ],
-        },
-        {
-            itemNumber: 5,
-            author: '664abf7e3483742125002171',
-            name: 'a big wooden bin',
-            itemType: ITEM_TYPE.CONTAINER,
-            price: 25,
-            capacity: 100,    
-            description: {
-                look: "There's a big wooden bin on the ground here.",
-                examine: 'Made of thick, heavy planks and iron bands, this bin is sturdy and weighs more than anyone would be comfortable carrying. It smells faintly of apples.',
-            },
-            tags: [ITEM_TAG.FIXTURE],
-            keywords: ['wooden', 'bin'],
-            itemNodes: [
-                {
-                itemNumber: 2,
-                quantity: 1
-                }
-            ],
-        },
-    ],
+    items: [], //already in db
     suggestions: [
         {
             suggestionNumber: 1,

@@ -16,7 +16,7 @@ class UserManager {
                 } else {
                     logger.warn(`User with id ${id} already exists in users.`);
                 }
-                logger.info(`users map: ${JSON.stringify(Array.from(this.users))}`);
+                logger.info(`Active users: ${JSON.stringify(Array.from(this.users.values()).map(user => user.username))}`);
                 return user;
             } else {
                 logger.error(`userManager couldn't add user with id ${id} to users.`);
@@ -39,7 +39,7 @@ class UserManager {
     async removeUserById(id) {
         try {
             this.users.delete(id.toString());
-            logger.info(`userManager deleted user with id ${id} from users.`)
+            logger.info(`Active users: ${JSON.stringify(Array.from(this.users.values()).map(user => user.username))}`)
         } catch(err) {throw err};
     }
 }

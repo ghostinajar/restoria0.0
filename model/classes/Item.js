@@ -36,7 +36,7 @@ const itemSchema = new Schema({
         isRanged: Boolean
     },
     spellCharges: {
-        name: String,
+        spellName: String,
         level: Number,
         maxCharges: Number
     },
