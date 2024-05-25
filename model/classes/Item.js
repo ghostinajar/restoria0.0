@@ -18,7 +18,10 @@ const itemSchema = new Schema({
     },
     name: String,
     itemType: String,
-    price: Number,
+    price: {
+        type: Number,
+        default: 0
+    },
     capacity: Number,
     levelRestriction: Number,
     history: {

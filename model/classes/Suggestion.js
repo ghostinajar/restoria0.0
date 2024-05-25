@@ -4,7 +4,6 @@ import historySchema from './History.js';
 const { Schema } = mongoose;
 
 const suggestionSchema = new Schema({
-    suggestionNumber: Number,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
