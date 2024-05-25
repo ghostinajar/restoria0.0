@@ -96,8 +96,11 @@ const roomSchema = new Schema({
         type: itemNodeSchema,
         default: () => ({})
     }],
-    //populate from below
 });     
+
+//since there will only ever be one instance of a Room, the Room class will have
+//arrays to store active mobs, items, users, and characters inside the room
+//during gameplay. These are added via methods since they never need to be in db
 
 roomSchema.methods.initiate = function() {
     this.mobs = [];
@@ -106,12 +109,13 @@ roomSchema.methods.initiate = function() {
     this.characters = [];
 };
 
+//entityType should be a string to indicate which array to use ("mobs", "items", "users", or "characters")
 roomSchema.methods.addEntity = function(entityType, instance) {
     if (this[entityType]) {
       this[entityType].push(instance);
     }
-  };
-  
+};
+
 roomSchema.methods.removeEntity = function(entityType, instance) {
     if (this[entityType]) {
       this[entityType] = this[entityType].filter(function(entity) {
