@@ -1,15 +1,14 @@
-import UserRepository from './UserRepository.js';
 import logger from '../../logger.js';
+import User from './User.js';
 
 class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
-        this.userRepository = new UserRepository(); //data access layer
     };
 
     async addUserById(id) {
         try {
-            const user = await this.userRepository.retrieveUserById(id);
+            const user = await User.findById(id);
             if (user) {
                 if (!this.users.has(user._id.toString())) {
                     this.users.set(user._id.toString(), user);

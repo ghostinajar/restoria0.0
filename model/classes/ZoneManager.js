@@ -1,12 +1,11 @@
-import ZoneRepository from './ZoneRepository.js';
-import logger from '../../logger.js';
 import mongoose from 'mongoose';
+import logger from '../../logger.js';
+import Zone from './Zone.js'
 import Room from './Room.js'
 
 class ZoneManager {
     constructor() {
         this.zones = new Map();  
-        this.zoneRepository = new ZoneRepository(); 
     };
   
     // async createRoomInZoneId (roomData,zoneId) {
@@ -32,7 +31,7 @@ class ZoneManager {
 
     async addZoneById(id) {
         try {
-            const zone = await this.zoneRepository.retrieveZoneById(id);
+            const zone = await Zone.findById(id);
             if (zone) {
                 if (!this.zones.has(zone._id.toString())) {
                     this.zones.set(zone._id.toString(), zone);
