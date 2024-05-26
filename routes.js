@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import User from './model/classes/User.js';
 import validCommandWords from './constants/validCommandWords.js';
 import logger from './logger.js';
+import isValidName from './isValidName.js';
 
 const setupRoutes = (app, __dirname) => {
 
@@ -49,9 +50,8 @@ const setupRoutes = (app, __dirname) => {
       if (!username || !password) {
         return res.status(400).send('Username and password are required');
       };
-      
-      // Validate username
-      if (username.length > 18 || !/^[a-zA-Z]+$/.test(username)) {
+
+      if (!isValidName(username)) {
         return res.status(400).send('Username must only contain letters and have a maximum length of 18 characters');
       }
 
@@ -66,23 +66,24 @@ const setupRoutes = (app, __dirname) => {
       if (existingUser) {
         return res.status(400).send(`Error creating user.`);
       };
+    
       
       // Hash password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       
       const newUser = new User({
-        username: req.body.username,
+        name: req.body.username,
         password: hashedPassword,
         salt: salt
       });
 
       await newUser.save();
-      logger.info(`User Registered: ${newUser.username}`);
+      logger.info(`User Registered: ${newUser.name}`);
 
       const sessionUser = {
         _id: newUser._id,
-        username: newUser.username
+        name: newUser.name
       };
       logger.debug(`sessionUser: ${JSON.stringify(sessionUser)}`)
 
