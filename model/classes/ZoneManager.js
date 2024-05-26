@@ -76,19 +76,24 @@ class ZoneManager {
     async addZoneById(id) {
         try {
             const zone = await Zone.findById(id);
-            if (zone) {
-                if (!this.zones.has(zone._id.toString())) {
-                    this.zones.set(zone._id.toString(), zone);
-                    // Create a new RoomManager for this zone
-                    this.roomManagers.set(zone._id.toString(), new RoomManager());
-                    logger.info(`zoneManager added ${zone.name} to zones.`);
-                } else {
-                    logger.warn(`Zone with id ${id} already exists in zones.`);
-                }
+            //if zone exists and isn't already in zones map
+            if (zone && !this.zones.has(zone._id.toString())) {  
+                // add zone to zones map              
+                this.zones.set(zone._id.toString(), zone);
+                logger.info(`zoneManager added ${zone.name} to zones.`);
+
+                // create a new RoomManager for this zone
+                const newRoomManager = new RoomManager(zone);
+                this.roomManagers.set(zone._id.toString(), newRoomManager);
+                
+                // load rooms into roomManager
+                newRoomManager.addRooms();
+
                 logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
                 return zone;
             } else {
                 logger.error(`zoneManager couldn't add zone with id ${id} to zones.`)
+                return null;
             }
         } catch(err) {
             logger.error(`Error in addZoneById: ${err.message}`);

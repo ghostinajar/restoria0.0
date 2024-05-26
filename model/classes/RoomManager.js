@@ -7,23 +7,17 @@ class RoomManager {
         this.rooms = new Map();
     };
   
-    async addRooms(roomId) {
+    async addRooms() {
         try {
-            //get zone and room data
-            const zone = this.zone;
-            
             //instantiate room instances
-            if (zone) {
-                if (!this.rooms.has(room._id.toString())) {
+            if (this.zone) {
+                    this.zone.rooms.forEach(room => {
                     this.rooms.set(room._id.toString(), room);
-                    logger.info(`zoneManager added ${room.name} to rooms.`);
-                } else {
-                    logger.warn(`Room with id ${roomId} already exists in rooms.`);
-                }
+                    room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
+                });
                 logger.info(`Active rooms: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
-                room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
                 //TODO populate room's contents array
-                return room;
+                return;
             } else {
                 logger.error(`A roomManager has no reference to its zone!`)
             }
