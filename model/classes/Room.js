@@ -34,9 +34,9 @@ const roomSchema = new Schema({
     blocksCasting: Boolean,
     blocksCombat: Boolean,
     itemsForSale: [{
-        item: {
+        itemBlueprint: {
             type: Schema.Types.ObjectId,
-            ref: 'Item'
+            ref: 'ItemBlueprint'
         },
         fromZone: {
             type: Schema.Types.ObjectId,
@@ -44,9 +44,9 @@ const roomSchema = new Schema({
         }
     }],
     mountIdForSale: [{
-        mob: {
+        mobBlueprint: {
             type: Schema.Types.ObjectId,
-            ref: 'mob'
+            ref: 'MobBlueprint'
         },
         fromZone: {
             type: Schema.Types.ObjectId,
@@ -116,20 +116,21 @@ const roomSchema = new Schema({
 //during gameplay. These are added via methods since they never need to be in db
 
 roomSchema.methods.initiate = function() {
-    this.mobInstances = [];
-    this.itemInstances = [];
+    this.mobs = [];
+    this.items = [];
     this.users = [];
     this.characters = [];
 };
 
 //entityType should be a string to indicate which array to use ("mobs", "items", "users", or "characters")
-roomSchema.methods.addEntity = function(entityType, instance) {
+
+roomSchema.methods.addEntityTo = function(entityType, instance) {
     if (this[entityType]) {
       this[entityType].push(instance);
     }
 };
 
-roomSchema.methods.removeEntity = function(entityType, instance) {
+roomSchema.methods.removeEntityFrom = function(entityType, instance) {
     if (this[entityType]) {
       this[entityType] = this[entityType].filter(function(entity) {
         return entity !== instance;
@@ -138,8 +139,8 @@ roomSchema.methods.removeEntity = function(entityType, instance) {
 };
 
 roomSchema.methods.clearContents = function() {
-    this.mobInstances = [];
-    this.itemInstances = [];
+    this.mob = [];
+    this.item = [];
     this.users = [];
     this.characters = [];
 };

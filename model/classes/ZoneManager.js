@@ -12,7 +12,7 @@ class ZoneManager {
     async createEntityInZoneId (zoneId, entityType, entity) {
         
         // validate entityType
-        const validEntityTypes = ['item', 'mob', 'room', 'suggestion'];
+        const validEntityTypes = ['itemBlueprint', 'mobBlueprint', 'room', 'suggestion'];
         if (!validEntityTypes.includes(entityType)) {
             throw new Error(`Invalid entity type: ${entityType}. Must be one of ${validEntityTypes.join(', ')}`);
         }
@@ -35,13 +35,13 @@ class ZoneManager {
 
             // create the entity
             switch (entityType) {
-                case 'item' : {
-                    zone.items.set(entity._id.toString(), entity);
+                case 'itemBlueprint' : {
+                    zone.itemBlueprints.set(entity._id.toString(), entity);
                     creationReport();
                     break;
                 }
-                case 'mob' : {
-                    zone.mobs.set(entity._id.toString(), entity);
+                case 'mobBlueprint' : {
+                    zone.mobBlueprints.set(entity._id.toString(), entity);
                     creationReport();
                     break;
                 }

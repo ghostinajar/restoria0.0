@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const mobNodeSchema = new Schema({
-    loadsMobId: {
+    loadsMobBlueprintId: {
         type: Schema.Types.ObjectId,
-        ref: 'Mob'  
+        ref: 'MobBlueprint'  
     },
     fromZoneId: {
         type: Schema.Types.ObjectId,

@@ -9,10 +9,9 @@ import itemNodeSchema from './ItemNode.js';
 
 const { Schema } = mongoose;
 
-//since mob instances will never be saved, 
-//mobManager will have to assign them unique Ids
+//there is no Mob.js schema since mobs are never saved, only their blueprints
 
-const mobSchema = new Schema({
+const mobBlueprintSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -58,4 +57,4 @@ const mobSchema = new Schema({
     }],
 });
 
-export default mobSchema;
+export default mobBlueprintSchema;

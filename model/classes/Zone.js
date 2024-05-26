@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 import historySchema from './History.js';
 import descriptionSchema from './Description.js';
 import roomSchema from './Room.js';
-import mobSchema from './Mob.js';
-import itemSchema from './Item.js';
+import mobBlueprintSchema from './MobBlueprint.js';
+import itemBlueprintSchema from './ItemBlueprint.js';
 import suggestionSchema from './Suggestion.js';
 
 const { Schema, model } = mongoose;   
@@ -27,13 +27,13 @@ const zoneSchema = new Schema({
         default: () => ({})
         }
     },
-    mobs: {type: Map, of: {
-        type: mobSchema,
+    mobBlueprintss: {type: Map, of: {
+        type: mobBlueprintSchema,
         default: () => ({})
         }
     },
-    items: {type: Map, of: {
-        type: itemSchema,
+    itemBlueprints: {type: Map, of: {
+        type: itemBlueprintSchema,
         default: () => ({})
         }
     },

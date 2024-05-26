@@ -15,9 +15,9 @@ const exitSchema = new Schema({
     isHidden: Boolean,
     isClosed: Boolean,
     isLocked: Boolean,
-    keyItem: {
+    keyItemBlueprint: {
         type: Schema.Types.ObjectId,
-        ref: 'Item'
+        ref: 'ItemBlueprint'
     },
     keyItemZone: {
         type: Schema.Types.ObjectId,

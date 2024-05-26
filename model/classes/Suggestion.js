@@ -14,13 +14,13 @@ const suggestionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Room'
     },
-    refersToMob: {
+    refersToMobBlueprint: {
         type: Schema.Types.ObjectId,
-        ref: 'Mob'
+        ref: 'MobBlueprint'
     },
-    refersToItem: {
+    refersToItemBlueprint: {
         type: Schema.Types.ObjectId,
-        ref: 'Item'
+        ref: 'ItemBlueprint'
     }, 
     body: String,
     history: {

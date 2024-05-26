@@ -1,33 +1,32 @@
 import mongoose from 'mongoose';
-import historySchema from './History.js';
 import descriptionSchema from './Description.js';
 import affixSchema from './Affix.js';
-import itemNodeSchema from './ItemNode.js';
 
-const { Schema } = mongoose;
+const { Schema, model } = mongoose;
 
-//itemInstance properties are duplicated so they can be loaded without having to query
-//dozens of zones in db to get each itemInstance's item properties when a character 
-//enters the game. If you change itemSchema, please also make the change to 
-//itemInstanceSchema
+//each item's properties are duplicated so they can be loaded without having to query
+//dozens of zones in db to get the itemBlueprint when a character logs in
+//Items have their own collection in db because there will be thousands and thousands
+//and they need to change location quickly and often
 
 const itemSchema = new Schema({
+    itemBlueprint: {
+        type: Schema.Types.ObjectId,
+        ref: 'ItemBlueprint'
+    },
+    fromZone: {
+        type: Schema.Types.ObjectId,
+        ref: 'Zone'
+    },
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
     name: String,
     itemType: String,
-    price: {
-        type: Number,
-        default: 0
-    },
+    price: Number,
     capacity: Number,
     levelRestriction: Number,
-    history: {
-        type: historySchema,
-        default: () => ({})
-    },
     description: {
         type: descriptionSchema,
         default: () => ({})
@@ -39,25 +38,44 @@ const itemSchema = new Schema({
         isRanged: Boolean
     },
     spellCharges: {
-        spellName: String,
+        name: String,
         level: Number,
         maxCharges: Number
     },
     tags: [String],
     keywords: [String],
     wearableLocations: [String],
+    creationDate: {
+        type: Date,
+        default: Date.now
+    },
+    expiryDate: {
+        type: Date,
+        default: function() {
+            return Date.now() + 1000 * 60 * 60 * 24 * 180;
+        },
+    },
+    levelRestrictionTweak: Number,
+    isInStorage: Boolean,
+    spellChargesRemaining: Number,
+    isIdentified: Boolean,
+    isPrecious: Boolean,
+    dubCode: { 
+        type: String, 
+        maxLength: 10 
+    },
     affixes: [{
         type: affixSchema,
         default: () => ({})
     }],
-    tweakDuration: {
-        type: Number,
-        default: 182,
-    }, 
-    itemNodes: [{
-        type: itemNodeSchema,
-        default: () => ({})
-    }],
+    inventory: {
+        type: Map,
+        of: {
+          type: Schema.Types.ObjectId,
+          ref: 'Item'
+        }
+    },
 });
 
-export default itemSchema;
+const Item = model('Item', itemSchema);
+export default Item;
