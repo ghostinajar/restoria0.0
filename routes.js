@@ -66,7 +66,6 @@ const setupRoutes = (app, __dirname) => {
       if (existingUser) {
         return res.status(400).send(`Error creating user.`);
       };
-    
       
       // Hash password
       const salt = await bcrypt.genSalt(10);
@@ -79,11 +78,11 @@ const setupRoutes = (app, __dirname) => {
       });
 
       await newUser.save();
-      logger.info(`User Registered: ${newUser.name}`);
+      logger.info(`User Registered: ${newUser.username}`);
 
       const sessionUser = {
         _id: newUser._id,
-        name: newUser.name
+        username: newUser.username
       };
       logger.debug(`sessionUser: ${JSON.stringify(sessionUser)}`)
 

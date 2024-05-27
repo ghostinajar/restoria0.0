@@ -1,20 +1,28 @@
 import logger from '../../logger.js';
 import User from './User.js';
+import worldEmitter from './WorldEmitter.js';
 
 class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
-    };
+        worldEmitter.on('checkMultiplay', (id) => {
+            logger.info(`worldEmitter received 'checkMultiplay', checking...`)
+            const isDuplicate = this.users.has(id.toString);
+            logger.info(`worldEmitter send multiplayCheck with value ${isDuplicate}...`)
+            worldEmitter.emit('multiplayCheck', isDuplicate);
+          });
+    };     
 
     async addUserById(id) {
         try {
             const user = await User.findById(id);
             if (user) {
-                if (!this.users.has(user._id.toString())) {
+                if (!this.users.has(id.toString())) {
                     this.users.set(user._id.toString(), user);
                     logger.info(`userManager added ${user.username} to users.`);
                 } else {
                     logger.warn(`User with id ${id} already exists in users.`);
+                    return null;
                 }
                 logger.info(`Active users: ${JSON.stringify(Array.from(this.users.values()).map(user => user.username))}`);
                 return user;

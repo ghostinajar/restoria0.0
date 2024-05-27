@@ -11,7 +11,7 @@ const { Schema, model } = mongoose;
 // the user (aka "Author") lacks most of the data/methods of a character, 
 // but is playable, and stores the user's auth info
 const userSchema = new Schema({
-    name: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash
     salt: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
@@ -44,6 +44,17 @@ const userSchema = new Schema({
         }
     ],
 });
+
+userSchema.virtual('name')
+    .get(function() {
+        return this.username;
+    })
+    .set(function(name) {
+        this.username = name;
+    });
+
+userSchema.set('toJSON', { virtuals: true });
+userSchema.set('toObject', { virtuals: true });
 
 userSchema.methods.comparePassword = async function(candidatePassword) {
     try {

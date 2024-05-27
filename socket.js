@@ -1,4 +1,5 @@
 import logger from "./logger.js";
+import worldEmitter from "./model/classes/WorldEmitter.js";
 
 const setupSocket = (io, world) => {
   try {  
@@ -14,8 +15,13 @@ const setupSocket = (io, world) => {
       const sessionUser = socket.request.session.passport.user;  
       logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
       
-      // Check for duplicate user, disconnect duplicate socket and tell client to redirect to /login
-      if (world.userManager.users.has(sessionUser._id)) {
+      //use worldEmitter to signal for check for duplicate user, using promise
+      const isMultiplay = await new Promise((resolve) => {
+        worldEmitter.once('multiplayCheck', resolve);
+        worldEmitter.emit('checkMultiplay', sessionUser._id);
+      });
+    
+      if (isMultiplay) {
         logger.warn(`Username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
         socket.emit('redirect-to-login');
         socket.disconnect();
