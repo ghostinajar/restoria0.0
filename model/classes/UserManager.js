@@ -8,9 +8,18 @@ class UserManager {
         worldEmitter.on('checkMultiplay', (id) => {
             logger.info(`worldEmitter received 'checkMultiplay' and ${id}, checking...`)
             const isDuplicate = this.users.has(id.toString());
-            logger.info(`worldEmitter send multiplayCheck with value ${isDuplicate}...`)
+            logger.info(`worldEmitter sending multiplayCheck with value ${isDuplicate}...`)
             worldEmitter.emit('multiplayCheck', isDuplicate);
           });
+        worldEmitter.on('loginUser', async (id) => {
+            logger.info(`worldEmitter received 'loginUser' and ${id}, checking...`)
+            const user = await this.addUserById(id.toString());
+            logger.info(`worldEmitter sending 'userLogin' and ${user.username}...`)
+            worldEmitter.emit('userLogin', user);
+        });
+        worldEmitter.on('logoutUser', (id) => {
+            this.removeUserById(id);
+        })
     };     
 
     async addUserById(id) {
@@ -20,6 +29,7 @@ class UserManager {
                 if (!this.users.has(id.toString())) {
                     this.users.set(user._id.toString(), user);
                     logger.info(`userManager added ${user.username} to users.`);
+                    return user;
                 } else {
                     logger.warn(`User with id ${id} already exists in users.`);
                     return null;

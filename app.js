@@ -108,7 +108,7 @@ async function main() {
   io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
   });
-  setupSocket(io, world);
+  setupSocket(io);
 }
 main();
 

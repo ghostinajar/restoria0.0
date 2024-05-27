@@ -1,7 +1,7 @@
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 
-const setupSocket = (io, world) => {
+const setupSocket = (io) => {
   try {  
     io.on('connection', async (socket) => {
         
@@ -15,7 +15,7 @@ const setupSocket = (io, world) => {
       const sessionUser = socket.request.session.passport.user;  
       logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
       
-      //use worldEmitter to signal for check for duplicate user, using promise
+      //check for duplicate user
       const isMultiplay = await new Promise((resolve) => {
         worldEmitter.once('multiplayCheck', resolve);
         worldEmitter.emit('checkMultiplay', sessionUser._id);
@@ -29,8 +29,10 @@ const setupSocket = (io, world) => {
       };
 
       // Add user to userManager, attach to socket
-      const user = await world.userManager.addUserById(sessionUser._id);
-      //logger.info(`userManager.users = ${JSON.stringify(Array.from(world.userManager.users))}`)
+      const user = await new Promise((resolve) => {
+        worldEmitter.once('userLogin', resolve);
+        worldEmitter.emit('loginUser', sessionUser._id);
+      });
       socket.user = user;
 
       // Listen for user commands
@@ -44,8 +46,8 @@ const setupSocket = (io, world) => {
 
       socket.on('disconnect', () => {
         try {
-        logger.info(`User disconnected: ${socket.request.session.passport.user.username}`);
-        world.userManager.removeUserById(socket.request.session.passport.user._id);
+        logger.info(`User disconnected: ${sessionUser.username}`);
+        worldEmitter.emit('logoutUser', sessionUser._id);
         } catch(err) {logger.error(err)};
       });
 

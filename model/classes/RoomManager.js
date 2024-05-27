@@ -6,7 +6,7 @@ class RoomManager {
         this.zone = zone;
         this.rooms = new Map();
     };
-  
+
     async addRooms() {
         try {
             //instantiate room instances
@@ -14,9 +14,9 @@ class RoomManager {
                     this.zone.rooms.forEach(room => {
                     this.rooms.set(room._id.toString(), room);
                     room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
+                    //TODO populate room's contents array from its mobNodes and itemNodes
                 });
-                logger.info(`Active rooms in ${this.zone.name}: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
-                //TODO populate room's contents array
+                //logger.info(`Active rooms in ${this.zone.name}: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
                 return;
             } else {
                 logger.error(`A roomManager has no reference to its zone!`)
