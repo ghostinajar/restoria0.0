@@ -5,6 +5,10 @@ import roomSchema from './Room.js';
 import mobBlueprintSchema from './MobBlueprint.js';
 import itemBlueprintSchema from './ItemBlueprint.js';
 import suggestionSchema from './Suggestion.js';
+import logger from '../../Logger.js';
+import { EventEmitter } from 'events';
+
+class ZoneEmitter extends EventEmitter {}
 
 const { Schema, model } = mongoose;   
 
@@ -49,6 +53,29 @@ const zoneSchema = new Schema({
         max: [120, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     }
 });
+
+zoneSchema.pre('init', function() {
+    this.zoneEmitter = new ZoneEmitter();
+    //setup listeners here (each zone will have its own set of the listeners defined here)
+  });
+
+zoneSchema.methods.removeFromWorld = function() {
+    try {
+        // Remove all listeners from the zoneEmitter
+        this.zoneEmitter.removeAllListeners();
+        // Empty the rooms array
+        for (let room of this.rooms.values()) {
+        // Assuming each room has a method to clear its contents
+        room.clearContents();
+        // Remove the room from the zone
+        this.rooms.delete(room._id.toString());
+        }
+        logger.info(`Active rooms in ${this.name}: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
+    } catch(err) {
+        logger.error(`Error in zoneSchema.methods.removeFromWorld(): ${err.message}`)
+        throw err;
+    }
+};
 
 const Zone = mongoose.model('Zone', zoneSchema);
 

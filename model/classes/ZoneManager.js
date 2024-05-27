@@ -120,15 +120,8 @@ class ZoneManager {
         try {
             const zone = this.zones.get(id.toString());
             if (zone) {
-                // Remove all rooms and their contents from the zone
-                for (let room of zone.rooms.values()) {
-                    // Assuming each room has a method to clear its contents
-                    room.clearContents();
-                    // Remove the room from the zone
-                    zone.rooms.delete(room._id.toString());
-                }
-                // Remove the zone
-                logger.info(`Removing zone "${zone.name}" from zones.`)
+                zone.removeFromWorld()
+                logger.info(`Removing zone "${zone.name}" from zones...`)
                 this.zones.delete(id.toString());
                 // Remove the zone's roomManager
                 this.roomManagers.delete(id.toString())

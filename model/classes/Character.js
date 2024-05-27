@@ -60,10 +60,7 @@ const characterSchema = new Schema({
         type: descriptionSchema,
         default: () => ({})
     },
-    //TODO decide how to implement training. should name be one from a list of SPELLS constants?
-    //should I merge command authorization with character ability authorization, where most commands
-    //like create room have a default level 1, but trainable abilities like bash or cast fireball
-    //can have higher levels which help calculate their effects?
+    //may change when training is implemented
     trained: {
         passives: [{
             name: String,

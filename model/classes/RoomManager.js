@@ -15,7 +15,7 @@ class RoomManager {
                     this.rooms.set(room._id.toString(), room);
                     room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
                 });
-                logger.info(`Active rooms: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
+                logger.info(`Active rooms in ${this.zone.name}: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
                 //TODO populate room's contents array
                 return;
             } else {
