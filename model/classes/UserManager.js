@@ -6,8 +6,8 @@ class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
         worldEmitter.on('checkMultiplay', (id) => {
-            logger.info(`worldEmitter received 'checkMultiplay', checking...`)
-            const isDuplicate = this.users.has(id.toString);
+            logger.info(`worldEmitter received 'checkMultiplay' and ${id}, checking...`)
+            const isDuplicate = this.users.has(id.toString());
             logger.info(`worldEmitter send multiplayCheck with value ${isDuplicate}...`)
             worldEmitter.emit('multiplayCheck', isDuplicate);
           });
