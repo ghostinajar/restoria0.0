@@ -5,21 +5,27 @@ import worldEmitter from './WorldEmitter.js';
 class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
-        worldEmitter.on('checkMultiplay', (id) => {
+        const checkMultiplayResponder = (id) => {
             logger.info(`worldEmitter received 'checkMultiplay' and ${id}, checking...`)
             const isDuplicate = this.users.has(id.toString());
             logger.info(`worldEmitter sending multiplayCheck with value ${isDuplicate}...`)
             worldEmitter.emit('multiplayCheck', isDuplicate);
-          });
-        worldEmitter.on('loginUser', async (id) => {
+        };
+
+        const loginUserResponder = async (id) => {
             logger.info(`worldEmitter received 'loginUser' and ${id}, checking...`)
             const user = await this.addUserById(id.toString());
             logger.info(`worldEmitter sending 'userLogin' and ${user.username}...`)
             worldEmitter.emit('userLogin', user);
-        });
-        worldEmitter.on('logoutUser', (id) => {
+        };
+
+        const logoutUserResponder = (id) => {
             this.removeUserById(id);
-        })
+        };
+
+        worldEmitter.on('checkMultiplay', checkMultiplayResponder);
+        worldEmitter.on('loginUser', loginUserResponder);
+        worldEmitter.on('logoutUser', logoutUserResponder);
     };     
 
     async addUserById(id) {
@@ -72,6 +78,9 @@ class UserManager {
 
     clearContents() {
         this.users = []
+        worldEmitter.off('checkMultiplay', checkMultiplayResponder);
+        worldEmitter.off('loginUser', loginUserResponder);
+        worldEmitter.off('logoutUser', logoutUserResponder);
     }
 }
 
