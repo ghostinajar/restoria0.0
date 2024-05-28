@@ -5,7 +5,7 @@ import roomSchema from './Room.js';
 import mobBlueprintSchema from './MobBlueprint.js';
 import itemBlueprintSchema from './ItemBlueprint.js';
 import suggestionSchema from './Suggestion.js';
-import logger from '../../Logger.js';
+import logger from '../../logger.js';
 import { EventEmitter } from 'events';
 
 class ZoneEmitter extends EventEmitter {}

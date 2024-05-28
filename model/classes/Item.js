@@ -4,10 +4,13 @@ import affixSchema from './Affix.js';
 
 const { Schema, model } = mongoose;
 
-//each item's properties are duplicated so they can be loaded without having to query
-//dozens of zones in db to get the itemBlueprint when a character logs in
-//Items have their own collection in db because there will be thousands and thousands
-//and they need to change location quickly and often
+//each item's properties are duplicated to avoid having to query
+//dozens of zones in db to get their data when a character logs in.
+//This way they can also persist even if a zone or its itemBlueprints are deleted.
+//Items have their own collection in db because:
+//-mongodb says Data used together should be stored together (character and its inventory)
+//-there will be thousands and thousands
+//-and they need to change location quickly and often
 
 const itemSchema = new Schema({
     itemBlueprint: {

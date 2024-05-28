@@ -139,8 +139,8 @@ roomSchema.methods.removeEntityFrom = function(entityType, instance) {
 };
 
 roomSchema.methods.clearContents = function() {
-    this.mob = [];
-    this.item = [];
+    this.mobs = [];
+    this.items = [];
     this.users = [];
     this.characters = [];
 };
