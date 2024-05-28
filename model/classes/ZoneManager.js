@@ -9,6 +9,7 @@ class ZoneManager {
         this.roomManagers = new Map();
     };
   
+    //TODO move to zoneSchema.methods
     async createEntityInZoneId (zoneId, entityType, entity) {
         
         // validate entityType
