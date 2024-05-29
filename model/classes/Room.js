@@ -118,8 +118,7 @@ const roomSchema = new Schema({
 roomSchema.methods.initiate = function() {
     this.mobs = [];
     this.items = [];
-    this.users = [];
-    this.characters = [];
+    this.players = [];
 };
 
 //entityType should be a string to indicate which array to use ("mobs", "items", "users", or "characters")
@@ -141,8 +140,7 @@ roomSchema.methods.removeEntityFrom = function(entityType, instance) {
 roomSchema.methods.clearContents = function() {
     this.mobs = [];
     this.items = [];
-    this.users = [];
-    this.characters = [];
+    this.players = [];
 };
 
 export default roomSchema;
