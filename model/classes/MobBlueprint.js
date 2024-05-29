@@ -8,8 +8,10 @@ import emoteSchema from './Emote.js';
 import itemNodeSchema from './ItemNode.js';
 
 const { Schema } = mongoose;
-
-//there is no Mob.js schema since mobs are never saved, only their blueprints
+/*only mobs and items have blueprints, and only because multiple instances 
+of them will exist in game simultaneously, and they can't all share the same id
+There is no Mob.js schema since mobs are never saved, only their blueprints
+*/
 
 const mobBlueprintSchema = new Schema({
     author: {

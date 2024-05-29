@@ -31,7 +31,7 @@ const zoneSchema = new Schema({
         default: () => ({})
         }
     },
-    mobBlueprintss: {type: Map, of: {
+    mobBlueprints: {type: Map, of: {
         type: mobBlueprintSchema,
         default: () => ({})
         }

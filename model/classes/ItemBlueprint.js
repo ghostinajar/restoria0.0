@@ -6,10 +6,13 @@ import itemNodeSchema from './ItemNode.js';
 
 const { Schema } = mongoose;
 
-//item properties are duplicated so they can be loaded without having to query
-//dozens of zones in db to get each item's itemBlueprint properties when a character 
-//enters the game. If you change itemBlueprintSchema, please also make the change to 
-//itemSchema
+/*only mobs and items have blueprints, and only because multiple instances 
+of them will exist in game simultaneously, and they can't all share the same id.
+Item properties are duplicated so they can be loaded without having to query
+dozens of zones in db to get each item's itemBlueprint properties when a character 
+enters the game. If you change itemBlueprintSchema, please also make the change to 
+itemSchema
+*/
 
 const itemBlueprintSchema = new Schema({
     author: {

@@ -1,5 +1,5 @@
 import logger from '../../logger.js';
-
+//TODO remove this class after methods are moved elsewhere
 //handles active room instances in the game
 class RoomManager {
     constructor(zone) {
@@ -7,6 +7,7 @@ class RoomManager {
         this.rooms = new Map();
     };
 
+    //TODO move to zoneSchema.methods
     async addRooms() {
         try {
             //instantiate room instances
@@ -27,6 +28,7 @@ class RoomManager {
         };
     }
 
+    //TODO check if this is used anywhere, if not, delete
     async getRoomById(id) {
         try {
             const room = this.rooms.get(id.toString());
