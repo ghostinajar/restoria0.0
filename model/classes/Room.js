@@ -115,14 +115,14 @@ const roomSchema = new Schema({
 //arrays to store active mobs, items, users, and characters inside the room
 //during gameplay. These are added via methods since they never need to be in db
 
-roomSchema.methods.initiate = function() {
+roomSchema.pre('init', function() {
+    logger.info(`Room loaded: "${this.name}"`)
     this.mobs = [];
     this.items = [];
     this.players = [];
-};
+});
 
-//entityType should be a string to indicate which array to use ("mobs", "items", "users", or "characters")
-
+//entityType should be a string to indicate which array to use ("mobs", "items", or "players")
 roomSchema.methods.addEntityTo = function(entityType, instance) {
     if (this[entityType]) {
       this[entityType].push(instance);
