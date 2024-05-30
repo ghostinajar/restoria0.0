@@ -6,20 +6,21 @@ class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
         const checkMultiplayResponder = (id) => {
-            logger.info(`worldEmitter received 'checkMultiplay' and ${id}, checking...`)
+            //logger.info(`worldEmitter received 'checkMultiplay' and ${id}, checking...`)
             const isDuplicate = this.users.has(id.toString());
-            logger.info(`worldEmitter sending multiplayCheck with value ${isDuplicate}...`)
+            //logger.info(`worldEmitter sending multiplayCheck with value ${isDuplicate}...`)
             worldEmitter.emit('multiplayCheck', isDuplicate);
         };
 
         const loginUserResponder = async (id) => {
-            logger.info(`worldEmitter received 'loginUser' and ${id}, checking...`)
+            //logger.info(`worldEmitter received 'loginUser' and ${id}, checking...`)
             const user = await this.addUserById(id.toString());
-            logger.info(`worldEmitter sending 'userLogin' and ${user.username}...`)
+            //logger.info(`worldEmitter sending 'userLogin' and ${user.username}...`)
             worldEmitter.emit('userLogin', user);
         };
 
         const logoutUserResponder = (id) => {
+            logger.debug(`logoutUserResponder called`)
             this.removeUserById(id);
         };
 
@@ -34,7 +35,7 @@ class UserManager {
             if (user) {
                 if (!this.users.has(id.toString())) {
                     this.users.set(user._id.toString(), user);
-                    logger.info(`userManager added ${user.username} to users.`);
+                    //logger.info(`userManager added ${user.username} to users.`);
                     return user;
                 } else {
                     logger.warn(`User with id ${id} already exists in users.`);

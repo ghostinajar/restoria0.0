@@ -118,8 +118,9 @@ const roomSchema = new Schema({
 
 //entityType should be a string to indicate which array to use ("mobs", "items", or "players")
 roomSchema.methods.addEntityTo = function(entityType, instance) {
-    if (this[entityType]) {
-      this[entityType].push(instance);
+    //if the array exists, and the instance doesn't already exist in the array, add it
+    if (this[entityType] && !this[entityType].find(el => el._id.toString() === instance._id.toString())) {
+        this[entityType].push(instance);
     }
 };
 
@@ -132,9 +133,9 @@ roomSchema.methods.removeEntityFrom = function(entityType, instance) {
 };
 
 roomSchema.methods.initiate = function() {
-    this.mobs = ['butt'];
-    this.items = ['cookie'];
-    this.players = ['party'];
+    this.mobs = [];
+    this.items = [];
+    this.players = [];
 };
 
 roomSchema.methods.clearContents = function() {
