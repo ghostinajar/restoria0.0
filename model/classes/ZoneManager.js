@@ -39,7 +39,7 @@ class ZoneManager {
             //put player in location, else at world recall
             if (zone && room) {
                 room.addEntityTo('players', player);
-                logger.debug(`Player placed in location! Room.players: ${room.players.map(player => player.name)}`);
+                //logger.debug(`Player placed in location! Room.players: ${room.players.map(player => player.name)}`);
             } else {
                 player.location = {inZone: '664f8ca70cc5ae9b173969a8', inRoom: '66516e71db5355ed8ff39f59'};
                 logger.debug('Player location reset to worldRecall, due to failure loading location.');
@@ -47,24 +47,24 @@ class ZoneManager {
         }
 
         const playerLogoutHandler = async (player) => {
-            logger.debug(`playerLogoutHandler called`)
+            //logger.debug(`playerLogoutHandler called`)
             let {inRoom, inZone} = player.location;
             let zone = this.zones.get(inZone.toString());
             let room = zone.rooms.find(room => room._id.toString() == inRoom.toString());
           
             //remove player from location
             if (zone && room) {
+                //logger.debug(`Room.players before removal: ${room.players.map(player => player.name)}`)
                 room.removeEntityFrom('players', player);
-                logger.debug(`Player removed from location. Room.players: ${room.players.map(player => player.name)}`);
+                //logger.debug(`Player removed from location. Room.players: ${room.players.map(player => player.name)}`);
             } else {
                 logger.error('Player location not found at logout!');
             }
+            worldEmitter.emit('playerRemoved', player);
         }
         
         worldEmitter.on('userLogin', playerLoginHandler);
-        worldEmitter.on('userLogout', playerLogoutHandler);
-        worldEmitter.on('characterLogin', playerLoginHandler);
-        worldEmitter.on('characterLogout', playerLogoutHandler);
+        worldEmitter.on('userDisconnected', playerLogoutHandler);
 
     };
 

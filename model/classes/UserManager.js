@@ -19,14 +19,17 @@ class UserManager {
             worldEmitter.emit('userLogin', user);
         };
 
-        const logoutUserResponder = (id) => {
-            logger.debug(`logoutUserResponder called`)
-            this.removeUserById(id);
+        const logoutUserResponder = (user) => {
+            //logger.debug(`logoutUserResponder called`)
+            //logger.debug(`Users before removal: ${Array.from(this.users)}`)
+            this.removeUserById(user._id);
+            //logger.debug(`Users after removal: ${Array.from(this.users)}`)
+
         };
 
         worldEmitter.on('checkMultiplay', checkMultiplayResponder);
         worldEmitter.on('loginUser', loginUserResponder);
-        worldEmitter.on('logoutUser', logoutUserResponder);
+        worldEmitter.on('playerRemoved', logoutUserResponder);
     };     
 
     async addUserById(id) {

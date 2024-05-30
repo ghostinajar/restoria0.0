@@ -46,8 +46,9 @@ const setupSocket = (io) => {
 
       socket.on('disconnect', () => {
         try {
-        logger.info(`User disconnected: ${sessionUser.username}`);
-        worldEmitter.emit('logoutUser', sessionUser._id);
+        logger.info(`User disconnected: ${user.name}`);
+        //zoneManager listening for:
+        worldEmitter.emit('userDisconnected', user);
         } catch(err) {logger.error(err)};
       });
 
