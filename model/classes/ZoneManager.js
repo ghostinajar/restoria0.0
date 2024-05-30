@@ -8,13 +8,14 @@ class ZoneManager {
 
     async addZoneById(id) {
         try {
-            const zone = await Zone.findById(id)//.populate('rooms').populate('itemBlueprints').populate('mobBlueprints').populate('suggestions');            
+            const zone = await Zone.findById(id).populate('rooms').populate('itemBlueprints').populate('mobBlueprints').populate('suggestions');            
             //if zone exists and isn't already in zones map
             if (zone && !this.zones.has(zone._id.toString())) {  
                 // add zone to zones map              
                 this.zones.set(zone._id.toString(), zone);
                 logger.info(`zoneManager added ${zone.name} to zones.`);
                 logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
+                logger.info(`${zone.rooms}`)
                 return zone;
             } else {
                 logger.error(`zoneManager couldn't add zone with id ${id} to zones.`)
@@ -48,8 +49,6 @@ class ZoneManager {
                 zone.removeFromWorld()
                 logger.info(`Removing zone "${zone.name}" from zones...`)
                 this.zones.delete(id.toString());
-                // Remove the zone's roomManager
-                this.roomManagers.delete(id.toString())
                 logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
             } else {
                 logger.warn(`Zone with id ${id} does not exist in zones.`);
@@ -62,7 +61,6 @@ class ZoneManager {
 
     clearContents() {
         this.zones = [];
-        this.roomManagers = [];
     }
     
 }
