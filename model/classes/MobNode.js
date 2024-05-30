@@ -12,6 +12,6 @@ const mobNodeSchema = new Schema({
         ref: 'Zone'  
     },
     quantity: Number
-}, { _id: false });
+});
 
 export default mobNodeSchema;

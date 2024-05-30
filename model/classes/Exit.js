@@ -37,6 +37,6 @@ const exitSchema = new Schema({
             default: () => ({})
         },
     },
-});
+}, { _id: false });
 
 export default exitSchema;

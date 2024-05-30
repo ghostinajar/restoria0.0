@@ -7,6 +7,6 @@ const descriptionSchema = new Schema({
     examine : String,
     study : String,
     research : String,
-});
+}, { _id: false });
 
 export default descriptionSchema;

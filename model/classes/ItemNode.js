@@ -12,6 +12,6 @@ const itemNodeSchema = new Schema({
         ref: 'Zone'  
     },
     quantity: Number
-}, { _id: false });
+});
 
 export default itemNodeSchema;
