@@ -7,7 +7,8 @@ import locationSchema from './Location.js';
 const { Schema, model } = mongoose;
 
 const characterSchema = new Schema({
-    name: String,
+    name: { type: String, required: true, unique: true },
+    displayName: { type: String, required: true, unique: true },
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     location: {
         type: locationSchema,
@@ -172,6 +173,16 @@ const characterSchema = new Schema({
         type: affixSchema,
         default: () => ({})
     }],
+});
+
+characterSchema.pre('save', function(next) {
+    this.name = this.displayName.toLowerCase();
+    next();
+});
+  
+characterSchema.pre('findOneAndUpdate', function(next) {
+    this._update.name = this._update.displayName.toLowerCase();
+    next();
 });
 
 //TODO add loadInventory method, and clearContents method for garbage collection
