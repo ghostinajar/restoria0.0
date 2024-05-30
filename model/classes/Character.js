@@ -9,7 +9,7 @@ const { Schema, model } = mongoose;
 const characterSchema = new Schema({
     name: { type: String, required: true, unique: true },
     displayName: { type: String, required: true, unique: true },
-    pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
+    pronouns: Number, // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
     location: {
         type: locationSchema,
         default: () => {}

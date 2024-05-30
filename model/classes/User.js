@@ -21,7 +21,7 @@ const userSchema = new Schema({
         type: locationSchema,
         default: () => {}
     },
-    pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
+    pronouns: Number, // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
     creationDate: {
         type: Date,
         default: Date.now
