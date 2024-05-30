@@ -8,14 +8,14 @@ class ZoneManager {
 
     async addZoneById(id) {
         try {
-            const zone = await Zone.findById(id).populate('rooms').populate('itemBlueprints').populate('mobBlueprints').populate('suggestions');            
+            const zone = await Zone.findById(id);
             //if zone exists and isn't already in zones map
             if (zone && !this.zones.has(zone._id.toString())) {  
-                // add zone to zones map              
+                // add zone to zones map        
                 this.zones.set(zone._id.toString(), zone);
                 logger.info(`zoneManager added ${zone.name} to zones.`);
                 logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
-                logger.info(`${zone.rooms}`)
+                await zone.initRooms();
                 return zone;
             } else {
                 logger.error(`zoneManager couldn't add zone with id ${id} to zones.`)

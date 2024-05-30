@@ -4,6 +4,7 @@ import descriptionSchema from './Description.js';
 import exitSchema from './Exit.js';
 import mobNodeSchema from './MobNode.js';
 import itemNodeSchema from './ItemNode.js';
+import logger from '../../logger.js';
 
 const { Schema } = mongoose;
 
@@ -115,13 +116,6 @@ const roomSchema = new Schema({
 //arrays to store active mobs, items, users, and characters inside the room
 //during gameplay. These are added via methods since they never need to be in db
 
-roomSchema.pre('init', function() {
-    logger.info(`Room loaded: "${this.name}"`)
-    this.mobs = [];
-    this.items = [];
-    this.players = [];
-});
-
 //entityType should be a string to indicate which array to use ("mobs", "items", or "players")
 roomSchema.methods.addEntityTo = function(entityType, instance) {
     if (this[entityType]) {
@@ -135,6 +129,12 @@ roomSchema.methods.removeEntityFrom = function(entityType, instance) {
         return entity !== instance;
       });
     }
+};
+
+roomSchema.methods.initiate = function() {
+    this.mobs = ['butt'];
+    this.items = ['cookie'];
+    this.players = ['party'];
 };
 
 roomSchema.methods.clearContents = function() {

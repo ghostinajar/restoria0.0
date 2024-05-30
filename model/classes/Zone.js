@@ -26,26 +26,22 @@ const zoneSchema = new Schema({
         type: descriptionSchema,
         default: () => ({})
     },
-    rooms: {type: Map, of: {
+    rooms: [{
         type: roomSchema,
-        default: () => ({})
-        }
-    },
-    mobBlueprints: {type: Map, of: {
+        default: () => ([])
+        }],
+    mobBlueprints: [{
         type: mobBlueprintSchema,
-        default: () => ({})
-        }
-    },
-    itemBlueprints: {type: Map, of: {
+        default: () => ([])
+        }],
+    itemBlueprints: [{
         type: itemBlueprintSchema,
-        default: () => ({})
-        }
-    },
-    suggestions: {type: Map, of: {
+        default: () => ([])
+        }],
+    suggestions: [{
         type: suggestionSchema,
         default: () => ({})
-        }
-    },
+        }],
     minutesToRepop: {
         type: Number,
         default: 15,
@@ -57,22 +53,20 @@ const zoneSchema = new Schema({
 zoneSchema.pre('init', function() {
     this.zoneEmitter = new ZoneEmitter();
     //setup listeners here (each zone will have its own set of the listeners defined here)
-  });
+});
 
-//Can I make this obsolete with roomSchema.pre('init')
-// zoneSchema.methods.addRooms = async function () {
-//     try {
-//         //instantiate room instances
-//                 this.rooms.forEach(room => {
-//                 room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
-//             });
-//             logger.info(`Active rooms in ${this.zone.name}: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
-//             return;
-//     } catch(err) {
-//         logger.error(`Error in addRooms: ${err.message}`);
-//         throw err;
-//     };
-// }
+zoneSchema.methods.initRooms = async function () {
+    try {
+        //instantiate room instances
+            this.rooms.forEach(room => {
+                room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
+            });
+            return;
+    } catch(err) {
+        logger.error(`Error in addRooms: ${err.message}`);
+        throw err;
+    };
+}
 
 zoneSchema.methods.createEntityIn = async function (entityType, entity) {   
     // OLD WAY:
