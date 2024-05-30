@@ -123,6 +123,8 @@ class ZoneManager {
 
     clearContents() {
         this.zones = [];
+        worldEmitter.off('userLogin', playerLoginHandler);
+        worldEmitter.off('userDisconnected', playerLogoutHandler);
     }
     
 }

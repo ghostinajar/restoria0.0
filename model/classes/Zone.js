@@ -52,7 +52,7 @@ const zoneSchema = new Schema({
 
 zoneSchema.pre('init', function() {
     this.zoneEmitter = new ZoneEmitter();
-    //setup listeners here (each zone will have its own set of the listeners defined here)
+    //setup handlers and listeners here (each zone will have its own set of those defined here)
 });
 
 zoneSchema.methods.initRooms = async function () {

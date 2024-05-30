@@ -84,7 +84,7 @@ class UserManager {
         this.users = []
         worldEmitter.off('checkMultiplay', checkMultiplayResponder);
         worldEmitter.off('loginUser', loginUserResponder);
-        worldEmitter.off('logoutUser', logoutUserResponder);
+        worldEmitter.off('playerRemoved', logoutUserResponder);
     }
 }
 
