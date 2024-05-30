@@ -48,6 +48,7 @@ app.use(passport.authenticate('session'));
 // Setup passport
 passport.use (new LocalStrategy(async function verify(username, password, cb) {
   try {
+      username = username.toLowerCase();
       const user = await User.findOne({ username });
       if (!user) {
           return cb(null, false, { message: 'Incorrect username or password.' });

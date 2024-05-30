@@ -70,9 +70,10 @@ const setupRoutes = (app, __dirname) => {
       // Hash password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-      
+      const lowercased = req.body.username.toLowerCase();
       const newUser = new User({
-        name: req.body.username,
+        displayName: req.body.username,
+        username: lowercased,
         password: hashedPassword,
         salt: salt,
         location: JSON.parse(process.env.WORLD_RECALL),

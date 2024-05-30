@@ -12,6 +12,7 @@ const { Schema, model } = mongoose;
 // but is playable, and stores the user's auth info
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
+    displayName: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash
     salt: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
@@ -43,6 +44,16 @@ const userSchema = new Schema({
             ref: 'User'
         }
     ],
+});
+
+userSchema.pre('save', function(next) {
+    this.username = this.displayName.toLowerCase();
+    next();
+});
+  
+userSchema.pre('findOneAndUpdate', function(next) {
+    this._update.username = this._update.displayName.toLowerCase();
+    next();
 });
 
 userSchema.virtual('name')
