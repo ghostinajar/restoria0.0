@@ -1,2 +1,2 @@
-const validCommandWords = ["say"];
+const validCommandWords = ["say", "character"];
 export default validCommandWords;

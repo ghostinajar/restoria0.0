@@ -44,6 +44,15 @@ const setupSocket = (io) => {
         io.emit('say', JSON.stringify(userInput));
       });
 
+      socket.on('userSubmittedNewCharacter', (character) => {
+        if (user.characters.length < 13) {
+          user.createCharacter(character);
+          socket.emit('say', `Character ${character.displayName} the ${character.job} created!`)
+        } else {
+          socket.emit('say', `You already have 12 characters, and that's the limit!`)
+        }
+      });
+
       socket.on('disconnect', () => {
         try {
         logger.info(`User disconnected: ${user.name}`);

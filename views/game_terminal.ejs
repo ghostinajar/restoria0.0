@@ -10,15 +10,42 @@
 
   <body>
     <nav class="nav">
-        <h1>Restoria 0.0.1 with ejs</h1>
+        <h1>Restoria 0.0.1</h1>
           <form action="/logout" method="post">
             <button class="logout" type="submit">Sign out</button>
           </form>
     </nav>
+
+    <form id="characterForm" style="display: none;">
+      <label for="characterName">Name:</label>
+      <input id="characterName" type="text" required />
+      
+      <label for="pronouns">Pronouns:</label>
+      <select id="pronouns" required>
+        <option value=0>He/Him</option>
+        <option value=1>It/It</option>
+        <option value=2>She/Her</option>
+        <option value=3>They/Them</option>
+      </select>
+
+      <label for="job">Job:</label>
+      <select id="job" required>
+        <option value="cleric">Cleric</option>
+        <option value="mage">Mage</option>
+        <option value="rogue">Rogue</option>
+        <option value="warrior">Warrior</option>
+      </select>
+      
+      <button type="submit">Create Character</button>
+      <button type="button" id="cancelCharacterForm">Cancel</button>
+    </form>
+    
     <ul id="messages"></ul>
+
     <form id="commandForm" action="">
       <label for="input"></label>
-      <input id="input" autocomplete="off" /><button type="submit">Send</button>
+      <input id="input" autocomplete="off" />
+      <button type="submit">Send</button>
     </form>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -26,6 +53,8 @@
       const socket = io(); // no URL needed for now; defaults to host that serves the page
       const validCommandWords = '<%- JSON.stringify(validCommandWords) %>';
       const commandForm = document.getElementById('commandForm');
+      const characterForm = document.getElementById('characterForm');
+      const characterName = document.getElementById('characterName');
       const input = document.getElementById('input');
       const messages = document.getElementById('messages');
 
@@ -58,11 +87,20 @@
       unpack and display emits that don't include user-gen content, 
       allowing inner html for multi-color lines */
 
+      document.getElementById('cancelCharacterForm').addEventListener('click', function() {
+        characterForm.style.display = 'none';
+      });
+      
       commandForm.addEventListener('submit', (e) => {
         e.preventDefault();
         if (input.value) {
           parsedCommand = parseCommand(input.value);
           //reject invalid command words
+          if (input.value.toLowerCase() === 'character new') {
+            characterForm.style.display = 'block';
+            input.value = '';
+            return;
+          }
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
             appendStringToTerminal(`Sorry, '${shortenedCommand}' is not a valid command word.`);
@@ -74,9 +112,18 @@
         }
       });
 
-      //TODO server needs to know username on the socket, what's the best
-      //way to get access to it and send with messages? On session? 
-      //maybe this all happens serverside?
+      characterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const character = {
+          name: document.getElementById('characterName').value,
+          pronouns: document.getElementById('pronouns').value,
+          job: document.getElementById('job').value,
+        };
+        socket.emit('userSubmittedNewCharacter', character);
+        characterName.value = '';
+        characterForm.style.display = 'none'; // Hide the form after submission
+      });
+
       socket.on('say', (userInput) => {
         const item = document.createElement('li');
         item.textContent = `User: ${userInput}`;

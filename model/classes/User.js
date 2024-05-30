@@ -83,12 +83,36 @@ userSchema.methods.createCharacter = async function(characterData) {
         }
         //set character's author as reference its creator's User._id
         characterData.author = this._id;
+        characterData.displayName = characterData.name;
+        characterData.name = characterData.displayName.toLowerCase();
+        characterData.statBlock = {}
+        switch (characterData.job) {
+            case 'cleric' : {
+                characterData.statBlock.wisdom = 14;
+                break;
+            }
+            case 'mage' : {
+                characterData.statBlock.intelligence = 14;
+                break;
+            }
+            case 'rogue' : {
+                characterData.statBlock.dexterity = 14;
+                break;
+            }
+            case 'warrior' : {
+                characterData.statBlock.strength = 14;
+                break;
+            }
+            default : break
+        }
         //set location to default world_recall
         characterData.location = JSON.parse(process.env.WORLD_RECALL);
         //create the character
         const character = new Character(characterData);
         character.save();
-        logger.info(`User "${this.name}" created character "${character.name}".`)
+        this.characters.push(character._id);
+        this.save();
+        logger.info(`User "${this.name}" created character "${character.name}". That's number ${this.characters.length}!`)
         return character;
     } catch (err) {
         logger.error(`Error in userSchema.createCharacter: ${err.message} `)
