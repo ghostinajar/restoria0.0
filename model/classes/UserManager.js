@@ -44,8 +44,6 @@ class UserManager {
                     logger.warn(`User with id ${id} already exists in users.`);
                     return null;
                 }
-                logger.info(`Active users: ${JSON.stringify(Array.from(this.users.values()).map(user => user.username))}`);
-                return user;
             } else {
                 logger.error(`userManager couldn't add user with id ${id} to users.`);
             }

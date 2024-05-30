@@ -74,7 +74,8 @@ const setupRoutes = (app, __dirname) => {
       const newUser = new User({
         name: req.body.username,
         password: hashedPassword,
-        salt: salt
+        salt: salt,
+        location: JSON.parse(process.env.WORLD_RECALL),
       });
 
       await newUser.save();

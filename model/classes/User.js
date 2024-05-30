@@ -18,7 +18,7 @@ const userSchema = new Schema({
     isTeacher: { type: Boolean, default: false },
     location: {
         type: locationSchema,
-        default: {inZone: '664f8ca70cc5ae9b173969a8', inRoom: '66516e71db5355ed8ff39f59'}
+        default: () => {}
     },
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     creationDate: {
@@ -72,8 +72,10 @@ userSchema.methods.createCharacter = async function(characterData) {
         }
         //set character's author as reference its creator's User._id
         characterData.author = this._id;
+        //set location to default world_recall
+        characterData.location = JSON.parse(process.env.WORLD_RECALL);
         //create the character
-        const character = new Character(characterData)
+        const character = new Character(characterData);
         character.save();
         logger.info(`User "${this.name}" created character "${character.name}".`)
         return character;

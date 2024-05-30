@@ -10,11 +10,8 @@ const characterSchema = new Schema({
     name: String,
     pronouns: Number, // 0 = it/it, 1 = he/him, 2 = she/her, 3 = they/them
     location: {
-    type: locationSchema,
-    default: {
-        inZone: '664f8ca70cc5ae9b173969a8',
-        inRoom: '66516e71db5355ed8ff39f59',
-        }
+        type: locationSchema,
+        default: () => {}
     },
     creationDate: {
         type: Date,
