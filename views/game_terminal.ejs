@@ -107,7 +107,7 @@
             input.value = '';
             return;
           }
-          socket.emit('user command', input.value);
+          socket.emit('userSentCommand', input.value);
           input.value = '';
         }
       });
@@ -124,14 +124,14 @@
         characterForm.style.display = 'none'; // Hide the form after submission
       });
 
-      socket.on('say', (message) => {
+      socket.on('serverSendingResponse', (message) => {
         const item = document.createElement('li');
         item.textContent = `${message}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
 
-      socket.on('redirect-to-login', () => {
+      socket.on('redirectToLogin', () => {
         // Redirect to /login
         window.location.href = '/login';
       });

@@ -10,7 +10,7 @@ const setupRoutes = (app, __dirname) => {
 
   app.get('/', (req, res, next) => {
     res.render('index');
-  });
+  });   
 
   const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {

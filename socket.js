@@ -17,39 +17,39 @@ const setupSocket = (io) => {
       
       //check for duplicate user
       const isMultiplay = await new Promise((resolve) => {
-        worldEmitter.once('multiplayCheck', resolve);
-        worldEmitter.emit('checkMultiplay', sessionUser._id);
+        worldEmitter.once('userManagerCheckedMultiplay', resolve);
+        worldEmitter.emit('socketCheckingMultiplay', sessionUser._id);
       });
     
       if (isMultiplay) {
         logger.warn(`Username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
-        socket.emit('redirect-to-login');
+        socket.emit('redirectToLogin');
         socket.disconnect();
         return;
       };
 
       // Add user to userManager, attach to socket
       const user = await new Promise((resolve) => {
-        worldEmitter.once('userLogin', resolve);
-        worldEmitter.emit('loginUser', sessionUser._id);
+        worldEmitter.once('userManagerAddedUser', resolve);
+        worldEmitter.emit('socketConnectingUser', sessionUser._id);
       });
       socket.user = user;
 
-      // Listen for user commands
-      socket.on('user command', (userInput) => {
+      // Listen for userSentCommands
+      socket.on('userSentCommand', (userInput) => {
         /*TODO in a separate module: sanitize, parse, validate the command. 
         If invalid command word, disconnect user, log IP (suspicious because client should prevent this)
         Process with game logic and emit server response to relevant sockets/rooms*/
         logger.input(`${socket.user.username} sent command: ${userInput}`);
-        io.emit('say', JSON.stringify(userInput));
+        io.emit('serverSendingResponse', JSON.stringify(userInput));
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
           const response = await user.createCharacter(character);
           if (typeof response == 'string') {
-            socket.emit('say', response);
+            socket.emit('serverSendingResponse', response);
           } else {
-            socket.emit('say', `Character ${character.displayName} the ${character.job} created! That's number ${user.characters.length}.`)
+            socket.emit('serverSendingResponse', `Character ${character.displayName} the ${character.job} created! That's number ${user.characters.length}.`)
           }
       });
 
@@ -57,7 +57,7 @@ const setupSocket = (io) => {
         try {
         logger.info(`User disconnected: ${user.name}`);
         //zoneManager listening for:
-        worldEmitter.emit('userDisconnected', user);
+        worldEmitter.emit('socketDisconnectedUser', user);
         } catch(err) {logger.error(err)};
       });
 

@@ -7,7 +7,7 @@ class ZoneManager {
         this.zones = new Map();
 
         //placing player in location on login
-        const playerLoginHandler = async (player) => {
+        const managerAddedPlayerHandler = async (player) => {
             let {inRoom, inZone} = player.location;
             if (!inRoom || !inZone) {
                 logger.error('Player location missing, reset to worldRecall.');
@@ -60,11 +60,11 @@ class ZoneManager {
             } else {
                 logger.error('Player location not found at logout!');
             }
-            worldEmitter.emit('playerRemoved', player);
+            worldEmitter.emit('zoneManagerRemovedPlayer', player);
         }
         
-        worldEmitter.on('userLogin', playerLoginHandler);
-        worldEmitter.on('userDisconnected', playerLogoutHandler);
+        worldEmitter.on('userManagerAddedUser', managerAddedPlayerHandler);
+        worldEmitter.on('socketDisconnectedUser', playerLogoutHandler);
 
     };
 
@@ -123,8 +123,8 @@ class ZoneManager {
 
     clearContents() {
         this.zones = [];
-        worldEmitter.off('userLogin', playerLoginHandler);
-        worldEmitter.off('userDisconnected', playerLogoutHandler);
+        worldEmitter.off('userManagerAddedUser', managerAddedPlayerHandler);
+        worldEmitter.off('socketDisconnectedUser', playerLogoutHandler);
     }
     
 }

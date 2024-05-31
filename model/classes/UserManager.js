@@ -5,18 +5,18 @@ import worldEmitter from './WorldEmitter.js';
 class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
-        const checkMultiplayResponder = (id) => {
-            //logger.info(`worldEmitter received 'checkMultiplay' and ${id}, checking...`)
+        const socketCheckingMultiplayResponder = (id) => {
+            //logger.info(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`)
             const isDuplicate = this.users.has(id.toString());
-            //logger.info(`worldEmitter sending multiplayCheck with value ${isDuplicate}...`)
-            worldEmitter.emit('multiplayCheck', isDuplicate);
+            //logger.info(`worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`)
+            worldEmitter.emit('userManagerCheckedMultiplay', isDuplicate);
         };
 
-        const loginUserResponder = async (id) => {
-            //logger.info(`worldEmitter received 'loginUser' and ${id}, checking...`)
+        const socketConnectingUserResponder = async (id) => {
+            //logger.info(`worldEmitter received 'socketConnectingUser' and ${id}, checking...`)
             const user = await this.addUserById(id.toString());
-            //logger.info(`worldEmitter sending 'userLogin' and ${user.username}...`)
-            worldEmitter.emit('userLogin', user);
+            //logger.info(`worldEmitter sending 'userManagerAddedUser' and ${user.username}...`)
+            worldEmitter.emit('userManagerAddedUser', user);
         };
 
         const logoutUserResponder = (user) => {
@@ -27,9 +27,9 @@ class UserManager {
 
         };
 
-        worldEmitter.on('checkMultiplay', checkMultiplayResponder);
-        worldEmitter.on('loginUser', loginUserResponder);
-        worldEmitter.on('playerRemoved', logoutUserResponder);
+        worldEmitter.on('socketCheckingMultiplay', socketCheckingMultiplayResponder);
+        worldEmitter.on('socketConnectingUser', socketConnectingUserResponder);
+        worldEmitter.on('zoneManagerRemovedPlayer', logoutUserResponder);
     };     
 
     async addUserById(id) {
@@ -80,9 +80,9 @@ class UserManager {
 
     clearContents() {
         this.users = []
-        worldEmitter.off('checkMultiplay', checkMultiplayResponder);
-        worldEmitter.off('loginUser', loginUserResponder);
-        worldEmitter.off('playerRemoved', logoutUserResponder);
+        worldEmitter.off('socketCheckingMultiplay', socketCheckingMultiplayResponder);
+        worldEmitter.off('socketConnectingUser', socketConnectingUserResponder);
+        worldEmitter.off('zoneManagerRemovedPlayer', logoutUserResponder);
     }
 }
 
