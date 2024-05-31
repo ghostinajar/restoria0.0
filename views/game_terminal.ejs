@@ -124,7 +124,7 @@
         characterForm.style.display = 'none'; // Hide the form after submission
       });
 
-      socket.on('serverSendingResponse', (message) => {
+      socket.on('serverSendingCommandResponse', (message) => {
         const item = document.createElement('li');
         item.textContent = `${message}`;
         messages.appendChild(item);

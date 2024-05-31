@@ -1,5 +1,9 @@
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
+import validator from "validator";
+import parseCommand from "./commands/parseCommand.js";
+import isValidCommandWord from "./commands/isValidCommandWord.js";
+import processCommand from "./commands/processCommand.js";
 
 const setupSocket = (io) => {
   try {  
@@ -37,19 +41,25 @@ const setupSocket = (io) => {
 
       // Listen for userSentCommands
       socket.on('userSentCommand', (userInput) => {
-        /*TODO in a separate module: sanitize, parse, validate the command. 
-        If invalid command word, disconnect user, log IP (suspicious because client should prevent this)
-        Process with game logic and emit server response to relevant sockets/rooms*/
         logger.input(`${socket.user.username} sent command: ${userInput}`);
-        io.emit('serverSendingResponse', JSON.stringify(userInput));
+        /*TODO sanitize, parse, validate the command. 
+        If invalid command word, disconnect user, log IP (suspicious because client should prevent this)
+        Process with game logic and emit commandResponse to relevant sockets/rooms*/
+        let sanitizedInput = validator.escape(userInput);
+        let parsedInput = parseCommand(sanitizedInput);
+        if (!isValidCommandWord(parsedInput.commandWord)) {
+          socket.emit('redirectToLogin', `Server rejected command.`)
+        }
+        const commandResponse = processCommand(parsedInput, user);
+        io.emit('serverSendingCommandResponse', JSON.stringify(commandResponse));
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
-          const response = await user.createCharacter(character);
-          if (typeof response == 'string') {
-            socket.emit('serverSendingResponse', response);
+          const commandResponse = await user.createCharacter(character);
+          if (typeof commandResponse == 'string') {
+            socket.emit('serverSendingCommandResponse', commandResponse);
           } else {
-            socket.emit('serverSendingResponse', `Character ${character.displayName} the ${character.job} created! That's number ${user.characters.length}.`)
+            socket.emit('serverSendingCommandResponse', `Character ${character.displayName} the ${character.job} created! That's number ${user.characters.length}.`)
           }
       });
 
