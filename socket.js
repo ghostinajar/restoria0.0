@@ -20,12 +20,12 @@ const setupSocket = (io) => {
       logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
       
       //check for duplicate user
-      const isMultiplay = await new Promise((resolve) => {
+      const isMultiplaying = await new Promise((resolve) => {
         worldEmitter.once('userManagerCheckedMultiplay', resolve);
         worldEmitter.emit('socketCheckingMultiplay', sessionUser._id);
       });
     
-      if (isMultiplay) {
+      if (isMultiplaying) {
         logger.warn(`Username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
         socket.emit('redirectToLogin');
         socket.disconnect();
@@ -42,14 +42,13 @@ const setupSocket = (io) => {
       // Listen for userSentCommands
       socket.on('userSentCommand', (userInput) => {
         logger.input(`${socket.user.username} sent command: ${userInput}`);
-        /*TODO sanitize, parse, validate the command. 
-        If invalid command word, disconnect user, log IP (suspicious because client should prevent this)
-        Process with game logic and emit commandResponse to relevant sockets/rooms*/
         let sanitizedInput = validator.escape(userInput);
         let parsedInput = parseCommand(sanitizedInput);
         if (!isValidCommandWord(parsedInput.commandWord)) {
+          //TODO If invalid command word log IP (suspicious because client should prevent this)
           socket.emit('redirectToLogin', `Server rejected command.`)
         }
+        //Process with game logic and emit commandResponse to relevant sockets/rooms
         const commandResponse = processCommand(parsedInput, user);
         io.emit('serverSendingCommandResponse', JSON.stringify(commandResponse));
       });
