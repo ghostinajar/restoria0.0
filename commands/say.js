@@ -1,7 +1,7 @@
 function say(parsedCommand, user) {
     const response = {
-        toUser : `You say, "${parsedCommand.string}"`,
-        toBroadcast : `${user.displayName} says, "${parsedCommand.string}"` 
+        emitToUser : `You say, "${parsedCommand.string}"`,
+        broadcastToRoom : `${user.displayName} says, "${parsedCommand.string}"` 
     };
     return response;
 }

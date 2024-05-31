@@ -38,9 +38,10 @@ const setupSocket = (io) => {
         worldEmitter.emit('socketConnectingUser', sessionUser._id);
       });
       socket.user = user;
+      socket.character = null;
 
       // Listen for userSentCommands
-      socket.on('userSentCommand', (userInput) => {
+      socket.on('userSentCommand', async (userInput) => {
         logger.input(`${socket.user.username} sent command: ${userInput}`);
         let sanitizedInput = validator.escape(userInput);
         let parsedInput = parseCommand(sanitizedInput);
@@ -49,7 +50,8 @@ const setupSocket = (io) => {
           socket.emit('redirectToLogin', `Server rejected command.`)
         }
         //Process with game logic and emit commandResponse to relevant sockets/rooms
-        const commandResponse = processCommand(parsedInput, user);
+        const commandResponse = await processCommand(parsedInput, user);
+        //TODO emit and/or broadcast to appropriate ioRooms
         io.emit('serverSendingCommandResponse', JSON.stringify(commandResponse));
       });
 

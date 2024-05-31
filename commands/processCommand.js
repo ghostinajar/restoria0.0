@@ -1,5 +1,6 @@
 import logger from "../logger.js";
 import say from "./say.js";
+import character from "./character.js"
 
 function processCommand(parsedCommand, user) {
     logger.info(`Processing command: ${JSON.stringify(parsedCommand)}`)
@@ -9,22 +10,11 @@ function processCommand(parsedCommand, user) {
             response = say(parsedCommand, user)
             break;
         }
-        
-        // case 'character' : {
-        //     //build a command to switch user's socket to characterState and pass it the character object
-        //     const splitString = parsedCommand.string.split();
-        //     const directObject = splitString[0];
-        //     const character = user.characters.find(character => character.name === directObject);
-        //     if (character) {
-        //         response = {
-        //             toUser : `Switching to character ${user.displayName}...`
-        //         }
-        //     } else {
-        //         response = {
-        //             toUser : `No character found by the name "${directObject}".`
-        //         }
-        //     }
-        // }
+        case 'character' : {
+            response = character(parsedCommand, user)
+            //build a command to switch user's socket to characterState and pass it the character object
+            break;
+        }
         default : {response = {toUser : `Command couldn't be processed.`}};
     }
     return response;
