@@ -124,9 +124,9 @@
         characterForm.style.display = 'none'; // Hide the form after submission
       });
 
-      socket.on('say', (userInput) => {
+      socket.on('say', (message) => {
         const item = document.createElement('li');
-        item.textContent = `User: ${userInput}`;
+        item.textContent = `${message}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });

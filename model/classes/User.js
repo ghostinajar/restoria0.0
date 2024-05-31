@@ -78,10 +78,16 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 userSchema.methods.createCharacter = async function(characterData) {
     try {
         if (!isValidName(characterData.name)) {
-            logger.error(`${characterData.name} is not a valid name. Returning null.`)
-            return null
+            return `${characterData.name} is not a valid name.`
         }
-        //set character's author as reference its creator's User._id
+        if (this.characters.length >= 12) {
+            return `You already have 12 characters. That's the limit!`
+        }
+        const userExists = await User.findOne({username: characterData.name.toLowerCase()});
+        const characterExists = await Character.findOne({name: characterData.name.toLowerCase()});
+        if (userExists || characterExists) {
+            return `There's already a character with that name.`
+        }
         characterData.author = this._id;
         characterData.displayName = characterData.name;
         characterData.name = characterData.displayName.toLowerCase();
@@ -108,10 +114,10 @@ userSchema.methods.createCharacter = async function(characterData) {
         //set location to default world_recall
         characterData.location = JSON.parse(process.env.WORLD_RECALL);
         //create the character
-        const character = new Character(characterData);
-        character.save();
+        const character = await new Character(characterData);
+        await character.save();
         this.characters.push(character._id);
-        this.save();
+        await this.save();
         logger.info(`User "${this.name}" created character "${character.name}". That's number ${this.characters.length}!`)
         return character;
     } catch (err) {

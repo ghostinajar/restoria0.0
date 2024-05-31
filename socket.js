@@ -44,13 +44,13 @@ const setupSocket = (io) => {
         io.emit('say', JSON.stringify(userInput));
       });
 
-      socket.on('userSubmittedNewCharacter', (character) => {
-        if (user.characters.length < 13) {
-          user.createCharacter(character);
-          socket.emit('say', `Character ${character.displayName} the ${character.job} created!`)
-        } else {
-          socket.emit('say', `You already have 12 characters, and that's the limit!`)
-        }
+      socket.on('userSubmittedNewCharacter', async (character) => {
+          const response = await user.createCharacter(character);
+          if (typeof response == 'string') {
+            socket.emit('say', response);
+          } else {
+            socket.emit('say', `Character ${character.displayName} the ${character.job} created! That's number ${user.characters.length}.`)
+          }
       });
 
       socket.on('disconnect', () => {

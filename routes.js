@@ -4,6 +4,7 @@ import User from './model/classes/User.js';
 import validCommandWords from './constants/validCommandWords.js';
 import logger from './logger.js';
 import isValidName from './isValidName.js';
+import Character from './model/classes/Character.js';
 
 const setupRoutes = (app, __dirname) => {
 
@@ -61,9 +62,10 @@ const setupRoutes = (app, __dirname) => {
           return res.status(400).send('Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.');
       }
 
-      // Check for existing user
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
+      // Prevent duplicate usernames
+      const userExists = await User.findOne({ username: username.toLowerCase() });
+      const characterExists = await Character.findOne({ name: username.toLowerCase() })
+      if (userExists || characterExists) {
         return res.status(400).send(`Error creating user.`);
       };
       
