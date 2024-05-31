@@ -1,10 +1,24 @@
+import { commandsWith1Param, commandsWith2Params } from "../constants/validCommandWords.js";
+
 function parseCommand (command) {
     const parsedCommand = {};
-    splitCommand = command.split(" ");
+    const splitCommand = command.split(" ");
     parsedCommand.commandWord = splitCommand[0];
-    if (splitCommand.length > 1) {
-    parsedCommand.string = splitCommand.slice(1).join(" ");
+    if (commandsWith1Param.find(word => word === parsedCommand.commandWord)) {
+        parsedCommand.directObject = splitCommand[1];
+        if (splitCommand.length > 2) {
+            parsedCommand.string = splitCommand.slice(2).join(" ");
+            }
+    } else if (commandsWith2Params.find(word => word === parsedCommand.commandWord)) {
+        parsedCommand.directObject = splitCommand[1];
+        parsedCommand.indirectObject = splitCommand[2];
+        if (splitCommand.length > 3) {
+            parsedCommand.string = splitCommand.slice(3).join(" ");
+            }
+    } else {
+        parsedCommand.string = splitCommand.slice(1).join(" ");
     }
+    console.log(parsedCommand)
     return parsedCommand;
 };
 
