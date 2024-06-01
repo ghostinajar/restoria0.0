@@ -3,7 +3,7 @@ import say from "./say.js";
 import character from "./character.js"
 
 function processCommand(parsedCommand, user) {
-    logger.info(`Processing command: ${JSON.stringify(parsedCommand)}`)
+    //logger.info(`Processing command: ${JSON.stringify(parsedCommand)}`)
     let response;
     switch (parsedCommand.commandWord) {
         case 'say' : {

@@ -1,46 +1,45 @@
 import Character from '../model/classes/Character.js'
+import worldEmitter from '../model/classes/WorldEmitter.js';
 
 async function character(parsedCommand, user) {
-    let myCharacterNames, requestedCharacterName, foundCharacter, response;
-    if (parsedCommand.directObject) {
-        requestedCharacterName = parsedCommand.directObject.toString().toLowerCase();
-        //get a list of user's characters' names
-        myCharacterNames = await Character.find({'_id': { $in: user.characters }}, 'name') 
-          .then(characters => {
-            const names = characters.map(character => character.name);
-            return names;
-          })
-          .catch(err => {
-            console.error(err);
-        });
-        console.log(myCharacterNames)
+    if (!parsedCommand.directObject) {
+        return { emitToUser : `Which character?` };
+    }
 
-        // is user requesting a character they own?
-        if (myCharacterNames.includes(requestedCharacterName)) {
-            //get the character
-            foundCharacter = await Character.findOne({ name: requestedCharacterName});
-            if (foundCharacter) {
-                response = {
-                    emitToUser : `found ${foundCharacter.displayName} in myCharacterNames! 
-                    Switching to character ${character.displayName}...`,
-                    broadcastToRoom : `${user.displayName} becomes translucent and unresponsive.`
-                }
-            } else {
-                response = {
-                    emitToUser : `Couldn't retrieve the character from db.`
-                } 
-            }
-        } else {
-            response = {
-                emitToUser : `You don't own a character named "${parsedCommand.directObject}".`
-            }
-        }
-    } else {
-        response = {
-            emitToUser : `Which character?`
-        }
+    const requestedCharacterName = parsedCommand.directObject.toString().toLowerCase();
+
+    //get a list of user's characters' names
+    const myCharacterNames = await getCharacterNames(user.characters);
+
+    if (!myCharacterNames.includes(requestedCharacterName)) {
+        return { emitToUser : `You don't own a character named "${parsedCommand.directObject}".` };
+    }
+
+    // Add character to characterManager, attach to socket
+    const foundCharacter = await new Promise((resolve) => {
+        worldEmitter.once('characterManagerAddedCharacter', resolve);
+        worldEmitter.emit('characterLoggingIn', requestedCharacterName);
+      });
+
+    if (!foundCharacter) {
+        return { emitToUser : `Couldn't retrieve the character from db.` };
+    }
+
+    return {
+        emitToUser : `found ${foundCharacter.displayName} in myCharacterNames! 
+        Switching to character ${foundCharacter.displayName}...`,
+        broadcastToRoom : `${user.displayName} becomes translucent and unresponsive.`
     };
-    return response;
+}
+
+async function getCharacterNames(characterIds) {
+    try {
+        const characters = await Character.find({'_id': { $in: characterIds }}, 'name');
+        return characters.map(character => character.name);
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
 }
 
 export default character;

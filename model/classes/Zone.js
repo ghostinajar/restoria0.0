@@ -69,12 +69,6 @@ zoneSchema.methods.initRooms = async function () {
 }
 
 zoneSchema.methods.createEntityIn = async function (entityType, entity) {   
-    // OLD WAY:
-    // validate entityType
-    // const validEntityTypes = ['itemBlueprint', 'mobBlueprint', 'room', 'suggestion'];
-    // if (!validEntityTypes.includes(entityType)) {
-    //     throw new Error(`Invalid entity type: ${entityType}. Must be one of ${validEntityTypes.join(', ')}`);
-    // }
 
     if(this[entityType]) {
         try {
