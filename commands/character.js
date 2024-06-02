@@ -12,7 +12,7 @@ async function character(parsedCommand, user) {
         return { emitToUser : `You don't own a character named "${parsedCommand.directObject}".` };
     }
 
-    const foundCharacter = await user.findCharacterByName(requestedCharacterName);
+    const foundCharacter = user.findCharacterByName(requestedCharacterName);
 
     if (!foundCharacter) {
         return { emitToUser : `Couldn't retrieve the character.` };

@@ -141,7 +141,7 @@ userSchema.methods.deleteCharacterByName = async function(name) {
     }
 };
 
-userSchema.methods.findCharacterByName = async function(name) {
+userSchema.methods.findCharacterByName = function(name) {
     for (let [key, character] of this.characters.entries()) {
         if (character.name === name.toLowerCase()) {
             return character;
