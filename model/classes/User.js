@@ -3,8 +3,10 @@ import bcrypt from 'bcrypt';
 import logger from '../../logger.js';
 import locationSchema from './Location.js';
 import descriptionSchema from './Description.js';
-import Character from './Character.js';
+import characterSchema from './Character.js';
 import isValidName from '../../isValidName.js';
+import checkDuplicateName from './checkDuplicateName.js';
+import Name from './Name.js';
 
 const { Schema, model } = mongoose;
 
@@ -27,17 +29,14 @@ const userSchema = new Schema({
         default: Date.now
     },
     lastLoginDate: Date,
+    activeCharacter: {type: Object, default: null},
+    characterState: {type: Boolean, default: false},
     hoursPlayed: { type: Number, default: 0 },
     description: {
         type: descriptionSchema,
         default: () => ({})
     },
-    characters: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Character'
-        }
-    ],
+    characters: [characterSchema],
     students: [
         {
             type: Schema.Types.ObjectId,
@@ -83,14 +82,15 @@ userSchema.methods.createCharacter = async function(characterData) {
         if (this.characters.length >= 12) {
             return `You already have 12 characters. That's the limit!`
         }
-        const userExists = await User.findOne({username: characterData.name.toLowerCase()});
-        const characterExists = await Character.findOne({name: characterData.name.toLowerCase()});
-        if (userExists || characterExists) {
-            return `There's already a character with that name.`
+        // Check for duplicate name
+        const nameIsDuplicate = await checkDuplicateName(characterData.name);
+        if(nameIsDuplicate) {
+            return `That name is taken.`;
         }
-        characterData.author = this._id;
         characterData.displayName = characterData.name;
         characterData.name = characterData.displayName.toLowerCase();
+        const nameToRegister = new Name({ name: characterData.name });
+        await nameToRegister.save();
         characterData.statBlock = {}
         switch (characterData.job) {
             case 'cleric' : {
@@ -113,18 +113,43 @@ userSchema.methods.createCharacter = async function(characterData) {
         }
         //set location to default world_recall
         characterData.location = JSON.parse(process.env.WORLD_RECALL);
-        //create the character
-        const character = await new Character(characterData);
-        await character.save();
-        this.characters.push(character._id);
+        //create the character (objectId will be assigned when user.save())
+        this.characters.push(characterData);
         await this.save();
-        logger.info(`User "${this.name}" created character "${character.name}". That's number ${this.characters.length}!`)
-        return character;
+        logger.info(`User "${this.name}" created character "${characterData.name}". ${this.characters.length}/12`)
+        return characterData;
     } catch (err) {
         logger.error(`Error in userSchema.createCharacter: ${err.message} `)
         throw err;
     }
 };
+
+userSchema.methods.deleteCharacterByName = async function(name) {
+    try {
+        for (let [key, character] of this.characters.entries()) {
+            if (character.name === name) {
+                this.characters.delete(key);
+                break;
+            }
+        }
+        logger.info(`Character deleted from user's characters.`)
+        await Name.deleteOne({ name: name.toLowerCase() });
+        logger.info(`Name deleted from names collection.`)
+    } catch (err) {
+        logger.error(`Error in userSchema.deleteCharacterByName: ${err.message} `)
+        throw err;
+    }
+};
+
+userSchema.methods.findCharacterByName = async function(name) {
+    for (let [key, character] of this.characters.entries()) {
+        if (character.name === name.toLowerCase()) {
+            return character;
+        }
+    }
+    return null;
+}
+
 
 const User = model('User', userSchema);
 export default User;

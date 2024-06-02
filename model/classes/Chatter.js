@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 
 const chatterSchema = new Schema({
     commandWord: String,
-    text: String,
-    //TODO add strings for what is echoed when this chatter targets a character
+    toTarget: String,
+    toRoom: String,
 });
 
 export default chatterSchema;

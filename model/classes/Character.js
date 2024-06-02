@@ -4,7 +4,7 @@ import affixSchema from './Affix.js';
 import statBlockSchema from './StatBlock.js';
 import locationSchema from './Location.js';
 
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
 
 const characterSchema = new Schema({
     name: { type: String, required: true, unique: true },
@@ -187,5 +187,4 @@ characterSchema.pre('findOneAndUpdate', function(next) {
 
 //TODO add loadInventory method, and clearContents method for garbage collection
 
-const Character = model('Character', characterSchema);
-export default Character;
+export default characterSchema;

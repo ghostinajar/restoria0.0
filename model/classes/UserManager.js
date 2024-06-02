@@ -1,6 +1,7 @@
 import logger from '../../logger.js';
 import User from './User.js';
 import worldEmitter from './WorldEmitter.js';
+import Name from './Name.js'
 
 class UserManager {
     constructor() {
@@ -76,6 +77,23 @@ class UserManager {
             logger.error(`Error in removeUserById: ${err.message}`);
             throw err;
         };
+    }
+
+    async deleteUserByName(name) {
+        // Delete from users collection
+        try {
+            await User.deleteOne({ username: name.toLowerCase() });
+            logger.info('User deleted successfully');
+          } catch (error) {
+            logger.error('deleteUserByName encountered an error:', error);
+          }          
+        // Delete from names collection
+        try {
+            await Name.deleteOne({ name: name.toLowerCase() });
+            console.log('Name deleted successfully');
+          } catch (error) {
+            logger.error('deleteUserByName encountered an error:', error);
+          }          
     }
 
     clearContents() {

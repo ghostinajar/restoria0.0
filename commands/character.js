@@ -1,5 +1,4 @@
-import Character from '../model/classes/Character.js'
-import worldEmitter from '../model/classes/WorldEmitter.js';
+import logger from "../logger.js";
 
 async function character(parsedCommand, user) {
     if (!parsedCommand.directObject) {
@@ -7,39 +6,26 @@ async function character(parsedCommand, user) {
     }
 
     const requestedCharacterName = parsedCommand.directObject.toString().toLowerCase();
-
-    //get a list of user's characters' names
-    const myCharacterNames = await getCharacterNames(user.characters);
+    const myCharacterNames = user.characters.map(character => character.name);
 
     if (!myCharacterNames.includes(requestedCharacterName)) {
         return { emitToUser : `You don't own a character named "${parsedCommand.directObject}".` };
     }
 
-    // Add character to characterManager, attach to socket
-    const foundCharacter = await new Promise((resolve) => {
-        worldEmitter.once('characterManagerAddedCharacter', resolve);
-        worldEmitter.emit('characterLoggingIn', requestedCharacterName);
-      });
+    const foundCharacter = await user.findCharacterByName(requestedCharacterName);
 
     if (!foundCharacter) {
-        return { emitToUser : `Couldn't retrieve the character from db.` };
+        return { emitToUser : `Couldn't retrieve the character.` };
     }
+
+    user.activeCharacter = foundCharacter;
+    user.characterState = true;
+    logger.info(`User "${user.name}" made ${user.activeCharacter.name} their active character.`)
 
     return {
-        emitToUser : `found ${foundCharacter.displayName} in myCharacterNames! 
-        Switching to character ${foundCharacter.displayName}...`,
-        broadcastToRoom : `${user.displayName} becomes translucent and unresponsive.`
+        emitToUser : `Switching to character ${foundCharacter.displayName}...`,
+        broadcastToRoom : `${user.displayName} becomes silent and still.`
     };
-}
-
-async function getCharacterNames(characterIds) {
-    try {
-        const characters = await Character.find({'_id': { $in: characterIds }}, 'name');
-        return characters.map(character => character.name);
-    } catch (err) {
-        console.error(err);
-        return [];
-    }
 }
 
 export default character;

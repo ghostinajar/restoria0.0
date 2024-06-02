@@ -4,7 +4,8 @@ import User from './model/classes/User.js';
 import validCommandWords from './constants/validCommandWords.js';
 import logger from './logger.js';
 import isValidName from './isValidName.js';
-import Character from './model/classes/Character.js';
+import checkDuplicateName from './model/classes/checkDuplicateName.js'
+import Name from './model/classes/Name.js'; 
 
 const setupRoutes = (app, __dirname) => {
 
@@ -48,10 +49,12 @@ const setupRoutes = (app, __dirname) => {
     try {
       const { username, password } = req.body;
 
+      // Verify username and password exist
       if (!username || !password) {
         return res.status(400).send('Username and password are required');
       };
 
+      // Validate username string
       if (!isValidName(username)) {
         return res.status(400).send('Username must only contain letters and have a maximum length of 18 characters');
       }
@@ -63,11 +66,12 @@ const setupRoutes = (app, __dirname) => {
       }
 
       // Prevent duplicate usernames
-      const userExists = await User.findOne({ username: username.toLowerCase() });
-      const characterExists = await Character.findOne({ name: username.toLowerCase() })
-      if (userExists || characterExists) {
-        return res.status(400).send(`Error creating user.`);
+      const nameIsTaken = await checkDuplicateName(username);
+      if (nameIsTaken) {
+        return res.status(400).send(`That name is taken.`);
       };
+      const nameToRegister = new Name({ name: username });
+      await nameToRegister.save();
       
       // Hash password
       const salt = await bcrypt.genSalt(10);
