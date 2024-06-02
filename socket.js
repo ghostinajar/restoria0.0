@@ -10,7 +10,7 @@ const setupSocket = (io) => {
   try {
     io.on('connection', async (socket) => {
         
-      // Check for authenticated
+      // Not authenticated? Disconnect.
       if (!socket.request.session.passport || !socket.request.session.passport.user) {
         socket.disconnect();
         return;
@@ -20,12 +20,11 @@ const setupSocket = (io) => {
       const sessionUser = socket.request.session.passport.user;  
       logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
       
-      //check for duplicate user sockets
+      // User multiplaying sockets? Disconnect.
       const isMultiplaying = await new Promise((resolve) => {
         worldEmitter.once('userManagerCheckedMultiplay', resolve);
         worldEmitter.emit('socketCheckingMultiplay', sessionUser._id);
       });
-    
       if (isMultiplaying) {
         logger.warn(`Username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
         socket.emit('redirectToLogin');
@@ -33,18 +32,22 @@ const setupSocket = (io) => {
         return;
       };
 
-      // Add user to userManager, attach to socket
+      // Get user, alert userManager
       const user = await new Promise((resolve) => {
         worldEmitter.once('userManagerAddedUser', resolve);
         worldEmitter.emit('socketConnectingUser', sessionUser._id);
       });
-      socket.user = user;
+
+      // Set authorState
       user.activeCharacter = null;
       user.characterState = false;
 
+      // Add to location's ioRoom on login
+      socket.join(user.location.inRoom.toString());
+
       // Listen for userSentCommands
       socket.on('userSentCommand', async (userInput) => {
-        logger.input(`${socket.user.username} sent command: ${userInput}`);
+        logger.input(`${user.username} sent command: ${userInput}`);
         
         // Sanitize, parse, validate command
         let sanitizedInput = validator.escape(userInput);
@@ -58,7 +61,8 @@ const setupSocket = (io) => {
         const commandResponse = await processCommand(parsedInput, user);
 
         //TODO emit and/or broadcast to appropriate ioRooms
-        io.emit('serverSendingCommandResponse', JSON.stringify(commandResponse));
+        socket.emit('serverSendingCommandResponse', JSON.stringify(commandResponse.emitToUser));
+        socket.to(user.location.inRoom.toString()).emit('serverSendingCommandResponse', JSON.stringify(commandResponse.broadcastToRoom));
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
@@ -71,14 +75,14 @@ const setupSocket = (io) => {
           if (typeof commandResponse == 'string') {
             socket.emit('serverSendingCommandResponse', commandResponse);
           } else {
-            socket.emit('serverSendingCommandResponse', `Character ${character.displayName} the ${character.job} created! You have ${user.characters.length}/12 characters.`)
+            socket.emit('serverSendingCommandResponse', `You created ${character.displayName} the ${character.job}! You have ${user.characters.length}/12 characters. Type 'character ${character.displayName}' to play your new character.`)
           }
       });
 
       socket.on('disconnect', () => {
         try {
         logger.info(`User disconnected: ${user.name}`);
-        //zoneManager listening for:
+        // Alert zoneManager
         worldEmitter.emit('socketDisconnectedUser', user);
         } catch(err) {logger.error(err)};
       });
