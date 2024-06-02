@@ -96,7 +96,7 @@
         if (input.value) {
           parsedCommand = parseCommand(input.value);
           //reject invalid command words
-          if (input.value.toLowerCase() === 'character new') {
+          if (input.value.toLowerCase() === 'create character') {
             characterForm.style.display = 'block';
             input.value = '';
             return;

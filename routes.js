@@ -70,7 +70,7 @@ const setupRoutes = (app, __dirname) => {
       if (nameIsTaken) {
         return res.status(400).send(`That name is taken.`);
       };
-      const nameToRegister = new Name({ name: username });
+      const nameToRegister = new Name({ name: username.toLowerCase() });
       await nameToRegister.save();
       
       // Hash password

@@ -71,7 +71,7 @@ const setupSocket = (io) => {
           if (typeof commandResponse == 'string') {
             socket.emit('serverSendingCommandResponse', commandResponse);
           } else {
-            socket.emit('serverSendingCommandResponse', `Character ${character.displayName} the ${character.job} created! You have ${user.characters.length}/ characters.`)
+            socket.emit('serverSendingCommandResponse', `Character ${character.displayName} the ${character.job} created! You have ${user.characters.length}/12 characters.`)
           }
       });
 
