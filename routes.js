@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import User from './model/classes/User.js';
 import validCommandWords from './constants/validCommandWords.js';
 import logger from './logger.js';
-import isValidName from './isValidName.js';
+import isValidName from './util/isValidName.js';
 import checkDuplicateName from './model/classes/checkDuplicateName.js'
 import Name from './model/classes/Name.js'; 
 

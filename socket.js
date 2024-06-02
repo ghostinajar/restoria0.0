@@ -1,13 +1,13 @@
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import validator from "validator";
-import parseCommand from "./commands/parseCommand.js";
-import isValidCommandWord from "./commands/isValidCommandWord.js";
-import processCommand from "./commands/processCommand.js";
+import parseCommand from "./util/parseCommand.js";
+import isValidCommandWord from "./util/isValidCommandWord.js";
+import processCommand from "./util/processCommand.js";
 import checkDuplicateName from "./model/classes/checkDuplicateName.js";
 
 const setupSocket = (io) => {
-  try {  
+  try {
     io.on('connection', async (socket) => {
         
       // Check for authenticated

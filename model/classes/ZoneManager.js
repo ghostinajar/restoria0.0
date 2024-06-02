@@ -1,53 +1,19 @@
 import logger from '../../logger.js';
 import Zone from './Zone.js';
 import worldEmitter from './WorldEmitter.js';
+import resetPlayerLocation from '../../util/resetPlayerLocation.js';
 
 class ZoneManager {
     constructor() {
-        this.zones = new Map();
-
-        //placing player in location on login
-        const managerAddedPlayerHandler = async (player) => {
-            let {inRoom, inZone} = player.location;
-            if (!inRoom || !inZone) {
-                logger.error('Player location missing, reset to worldRecall.');
-                player.location = {inZone: '664f8ca70cc5ae9b173969a8', inRoom: '66516e71db5355ed8ff39f59'};
-                player.save()
-                inRoom = player.location.inRoom;
-                inZone = player.location.inZone;
-            }
-            let zone;
-            let room;
-            //if zone isn't loaded, load it
-            if (!this.zones.has(inZone.toString())) { 
-                try {
-                    zone = await this.addZoneById(inZone.toString());
-                    //logger.debug(`Finding player location, zone: ${zone}`)
-                } catch (error) {
-                    logger.error('Player location reset to worldRecall, due to error loading zone:', error);
-                    player.location = {inZone: '664f8ca70cc5ae9b173969a8', inRoom: '66516e71db5355ed8ff39f59'};
-                }
-            } else {
-                zone = this.zones.get(inZone.toString());
-                //logger.debug(`Finding player location, zone: ${zone.name}`)
-            }
-            //find room
-            if (zone) {
-                room = zone.rooms.find(room => room._id.toString() == inRoom.toString());
-                //logger.debug(`Finding player location, room: ${room.name}`)
-            }
-            //put player in location, else at world recall
-            if (zone && room) {
-                room.addEntityTo('players', player);
-                //logger.debug(`Player placed in location! Room.players: ${room.players.map(player => player.name)}`);
-            } else {
-                player.location = {inZone: '664f8ca70cc5ae9b173969a8', inRoom: '66516e71db5355ed8ff39f59'};
-                logger.debug('Player location reset to worldRecall, due to failure loading location.');
-            }
+        this.zones = new Map();      
+        
+        const userManagerAddedPlayerHandler = async (player) => {
+            this.placePlayerInLocation(player)
         }
-
+        
         const playerLogoutHandler = async (player) => {
             //logger.debug(`playerLogoutHandler called`)
+            //find player's location on logout
             let {inRoom, inZone} = player.location;
             let zone = this.zones.get(inZone.toString());
             let room = zone.rooms.find(room => room._id.toString() == inRoom.toString());
@@ -56,14 +22,14 @@ class ZoneManager {
             if (zone && room) {
                 //logger.debug(`Room.players before removal: ${room.players.map(player => player.name)}`)
                 room.removeEntityFrom('players', player);
+                worldEmitter.emit('zoneManagerRemovedPlayer', player);
                 //logger.debug(`Player removed from location. Room.players: ${room.players.map(player => player.name)}`);
             } else {
-                logger.error('Player location not found at logout!');
+                resetPlayerLocation(player, 'Player location not found at logout! Reset to world recall.');
             }
-            worldEmitter.emit('zoneManagerRemovedPlayer', player);
         }
         
-        worldEmitter.on('userManagerAddedUser', managerAddedPlayerHandler);
+        worldEmitter.on('userManagerAddedUser', userManagerAddedPlayerHandler);
         worldEmitter.on('socketDisconnectedUser', playerLogoutHandler);
 
     };
@@ -104,6 +70,31 @@ class ZoneManager {
         }
     }
 
+    async placePlayerInLocation(player) {
+        // Missing location? Reset to world recall
+        if (!player.location.inRoom || !player.location.inZone) {
+            player.location = await resetPlayerLocation(player, 'Player location missing, reset to worldRecall.');
+        }
+        // Zone isn't loaded? Load it
+        let zone = this.zones.get(player.location.inZone.toString());
+        // Zone doesn't exist? Reset to world recall.
+        if (!zone) {
+            player.location = await resetPlayerLocation(player, 'Player location zone missing, reset to worldRecall.');
+            zone = this.zones.get(player.location.inZone.toString());
+        }
+        // Find room
+        const room = zone.rooms.find(room => room._id.toString() == player.location.inRoom.toString())
+        // Room doesn't exist? Reset to world recall.
+        if (!room) {
+            player.location = await resetPlayerLocation(player, 'Player location room missing, reset to worldRecall.');
+            zone = this.zones.get(player.location.inZone.toString());
+            room = zone.rooms.find(room => room._id.toString() == player.location.inRoom.toString())
+        }
+        // Place player in room
+        room.addEntityTo('players', player);
+        logger.info(`Player ${player.name} placed in ${room.name}.`)
+    }
+
     async removeZoneById(id) {
         try {
             const zone = this.zones.get(id.toString());
@@ -123,7 +114,7 @@ class ZoneManager {
 
     clearContents() {
         this.zones = [];
-        worldEmitter.off('userManagerAddedUser', managerAddedPlayerHandler);
+        worldEmitter.off('userManagerAddedUser', userManagerAddedPlayerHandler);
         worldEmitter.off('socketDisconnectedUser', playerLogoutHandler);
     }
     

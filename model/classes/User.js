@@ -4,7 +4,7 @@ import logger from '../../logger.js';
 import locationSchema from './Location.js';
 import descriptionSchema from './Description.js';
 import characterSchema from './Character.js';
-import isValidName from '../../isValidName.js';
+import isValidName from '../../util/isValidName.js';
 import checkDuplicateName from './checkDuplicateName.js';
 import Name from './Name.js';
 

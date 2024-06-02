@@ -1,7 +1,7 @@
 import logger from "../logger.js";
-import author from "./author.js";
-import character from "./character.js"
-import say from "./say.js";
+import author from "../commands/author.js";
+import character from "../commands/character.js"
+import say from "../commands/say.js";
 
 async function processCommand(parsedCommand, user) {
     //logger.info(`Processing command: ${JSON.stringify(parsedCommand)}`)
