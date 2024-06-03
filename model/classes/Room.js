@@ -5,6 +5,7 @@ import exitSchema from './Exit.js';
 import mobNodeSchema from './MobNode.js';
 import itemNodeSchema from './ItemNode.js';
 import logger from '../../logger.js';
+import worldEmitter from './WorldEmitter.js';
 
 const { Schema } = mongoose;
 
@@ -132,9 +133,44 @@ roomSchema.methods.removeEntityFrom = function(entityType, instance) {
     }
 };
 
-roomSchema.methods.initiate = function() {
+roomSchema.methods.initiate = async function() {
     this.mobs = [];
-    this.items = [];
+    //add mobs based on mobNodes, signal mobManager
+    this.items = []; 
+    //load items array use itemNodes
+    for (const itemNode of this.itemNodes) {
+        try {
+            //await promise alerting zoneManager to load or get the zone
+            const zone = await new Promise((resolve) => {
+                worldEmitter.once('zoneLoaded', resolve);
+                worldEmitter.emit('zoneRequested', itemNode.fromZoneId);
+            });
+            if (!zone) {
+                logger.error(`Room.initiate couldn't find Zone ${itemNode.fromZoneId}`);
+            }
+
+            //get the blueprint from the zone
+            const blueprint = await zone.itemBlueprints.find(blueprint => blueprint._id.toString() === itemNode.loadsItemBlueprintId.toString());        
+            if(!blueprint) {
+                logger.error(`Room.initiate couldn't find blueprint ${itemNode.loadsItemBlueprintId} in zone ${zone.name}.`)
+            }
+            
+            //repeat for itemNode.quantity
+            for(let i = 0; i < itemNode.quantity; i++) {
+                //await promise alerting itemManager to add new item 
+                const item = await new Promise((resolve) => {
+                    worldEmitter.once('itemManagerAddedItem', resolve);
+                    worldEmitter.emit('newItemRequested', blueprint);
+                  });
+                //add item to this.items
+                this.items.push(item);
+            }
+        } catch(err) {
+            logger.error(`Encountered an error loading an item from itemNode. ${err.message}`);
+            throw(err);
+        }
+    }
+    logger.debug(this.items);
     this.players = [];
 };
 

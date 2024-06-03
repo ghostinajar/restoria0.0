@@ -1,28 +1,37 @@
 import logger from '../../logger.js';
 import Item from './Item.js';
 import worldEmitter from './WorldEmitter.js';
+import mongoose from 'mongoose';
 
 class ItemManager {
     constructor() {
         this.items = new Map();  // Stores all items with their _id.toString() as key
         
-        const loadingItemResponder = async (id) => {
-            logger.info(`worldEmitter received 'loadingItem' and ${id}, checking...`)
+        const loadingItemHandler = async (id) => {
+            //logger.info(`worldEmitter received 'loadingItem' and ${id}, checking...`)
             const item = await this.addItemById(id);
-            logger.info(`worldEmitter sending 'itemManagerAddedItem' and ${item.name}...`)
+            //logger.info(`worldEmitter sending 'itemManagerAddedItem' and ${item.name}...`)
             worldEmitter.emit('itemManagerAddedItem', item);
         };
 
-        const removingItemResponder = (item) => {
-            logger.debug(`removingItemResponder called...`)
-            logger.debug(`Items before removal: ${Array.from(this.items)}`)
+        const newItemRequestedHandler = async (blueprint) => {
+            // Create a copy of the blueprint and give its own unique Id
+            const item = new Item(blueprint);
+            item._id = new mongoose.Types.ObjectId();
+            worldEmitter.emit('itemManagerAddedItem', item);
+        }
+
+        const removingItemHandler = (item) => {
+            //logger.debug(`removingItemHandler called...`)
+            //logger.debug(`Items before removal: ${Array.from(this.items)}`)
             this.removeItemById(item._id.toString());
-            logger.debug(`Items after removal: ${Array.from(this.items)}`)
+            //logger.debug(`Items after removal: ${Array.from(this.items)}`)
 
         };
 
-        worldEmitter.on('loadingItem', loadingItemResponder);
-        worldEmitter.on('removingItem', removingItemResponder);
+        worldEmitter.on('newItemRequested', newItemRequestedHandler)
+        worldEmitter.on('loadingItem', loadingItemHandler);
+        worldEmitter.on('removingItem', removingItemHandler);
     };     
 
     async addItemById(id) {
@@ -76,8 +85,8 @@ class ItemManager {
 
     clearContents() {
         this.items = []
-        worldEmitter.off('loadingItem', loadingItemResponder);
-        worldEmitter.off('removingItem', removingItemResponder);
+        worldEmitter.off('loadingItem', loadingItemHandler);
+        worldEmitter.off('removingItem', removingItemHandler);
     }
 }
 

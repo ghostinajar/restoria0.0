@@ -7,10 +7,6 @@ class ZoneManager {
     constructor() {
         this.zones = new Map();      
         
-        const userManagerAddedPlayerHandler = async (player) => {
-            this.placePlayerInLocation(player)
-        }
-        
         const playerLogoutHandler = async (player) => {
             //logger.debug(`playerLogoutHandler called`)
             //find player's location on logout
@@ -28,17 +24,34 @@ class ZoneManager {
                 resetPlayerLocation(player, 'Player location not found at logout! Reset to world recall.');
             }
         }
+         
+        const userManagerAddedPlayerHandler = async (player) => {
+            this.placePlayerInLocation(player)
+        }
+
+        const zoneRequestedHandler = async (zoneId) => {
+            try {
+                const zone = this.addZoneById(zoneId)
+                worldEmitter.emit(`zoneLoaded`, zone);
+            } catch(err) {
+                logger.error(`zoneRequestedHandler encountered error: ${err.message}`)
+            }
+        }
         
-        worldEmitter.on('userManagerAddedUser', userManagerAddedPlayerHandler);
         worldEmitter.on('socketDisconnectedUser', playerLogoutHandler);
+        worldEmitter.on('userManagerAddedUser', userManagerAddedPlayerHandler);
+        worldEmitter.on('zoneRequested', zoneRequestedHandler);
 
     };
 
     async addZoneById(id) {
         try {
+            if (this.zones.has(id.toString())) {
+                return this.getZoneById(id.toString())
+            }
             const zone = await Zone.findById(id);
             //if zone exists and isn't already in zones map
-            if (zone && !this.zones.has(zone._id.toString())) {  
+            if (zone) {  
                 // add zone to zones map        
                 this.zones.set(zone._id.toString(), zone);
                 logger.info(`zoneManager added ${zone.name} to zones.`);
