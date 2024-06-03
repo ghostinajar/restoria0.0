@@ -69,14 +69,10 @@ const characterSchema = new Schema({
             level: Number
         }],
     },
-    inventory: {
-        type: Map,
-        of: {
+    inventory: [{
           type: Schema.Types.ObjectId,
           ref: 'Item'
-        },
-        default: {}
-    },
+        }],
     equipped: {
         arms: {
             type: Schema.Types.ObjectId,
@@ -184,6 +180,14 @@ characterSchema.pre('findOneAndUpdate', function(next) {
     this._update.name = this._update.displayName.toLowerCase();
     next();
 });
+
+characterSchema.methods.addItem = function(item) {
+    this.inventory.set(item._id.toString(), item._id);
+};
+
+characterSchema.methods.removeItem = function(itemId) {
+    this.inventory.delete(itemId.toString());
+};
 
 //TODO add loadInventory method, and clearContents method for garbage collection
 

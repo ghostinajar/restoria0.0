@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import descriptionSchema from './Description.js';
 import affixSchema from './Affix.js';
+import ITEM_TYPE from '../../constants/ITEM_TYPE.js';
 
 const { Schema, model } = mongoose;
 
@@ -71,14 +72,25 @@ const itemSchema = new Schema({
         type: affixSchema,
         default: () => ({})
     }],
-    inventory: {
-        type: Map,
-        of: {
+    inventory: [{
           type: Schema.Types.ObjectId,
           ref: 'Item'
-        }
-    },
+        }]
 });
+
+itemSchema.methods.addItem = function(item) {
+    if (this.itemType = ITEM_TYPE.CONTAINER) {
+        this.inventory.set(item._id.toString(), item._id);
+        return true
+    } else {return false;}
+};
+
+itemSchema.methods.removeItem = function(itemId) {
+    if (this.itemType = ITEM_TYPE.CONTAINER) {
+        this.inventory.delete(itemId.toString());
+        return true
+    } else {return false;}
+};
 
 const Item = model('Item', itemSchema);
 export default Item;
