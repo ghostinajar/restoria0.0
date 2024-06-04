@@ -24,8 +24,8 @@ class ItemManager {
         }
 
         const removingItemHandler = async (itemId) => {
-            //logger.debug(`removingItemHandler called...`)
-            //logger.debug(`removingItemHandler removing item with id: ${itemId}`)
+            logger.debug(`removingItemHandler called...`)
+            logger.debug(`removingItemHandler removing item with id: ${itemId}`)
             await this.removeItemById(itemId);
             worldEmitter.emit('itemManagerRemovedItem')
         };

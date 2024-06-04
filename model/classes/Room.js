@@ -9,6 +9,7 @@ import worldEmitter from './WorldEmitter.js';
 import initiateInventory from '../../util/initiateInventory.js';
 import destroyInventory from '../../util/destroyInventory.js';
 import initiateMobNodes from '../../util/initiateMobNodes.js';
+import destroyMobs from '../../util/destroyMobs.js';
 
 const { Schema } = mongoose;
 
@@ -142,7 +143,7 @@ roomSchema.methods.initiate = async function() {
     if (this.mobNodes) {
         await initiateMobNodes(this.mobs, this.mobNodes);
     } else {logger.debug(`No mobnodes in ${this.name}.`)}
-    logger.debug(`Mobs in room "${this.name}": ${this.mobs.map(mob => {return mob.name})}`);
+    //logger.debug(`Mobs in room "${this.name}": ${this.mobs.map(mob => {return mob.name})}`);
 
     this.inventory = []; 
     // Initiate inventory array using itemNodes, signal itemManager
@@ -153,6 +154,7 @@ roomSchema.methods.initiate = async function() {
 };
 
 roomSchema.methods.clearContents = async function() {
+    await destroyMobs(this.mobs);
     this.mobs = [];
     await destroyInventory(this.inventory);
     this.inventory = [];
