@@ -3,6 +3,7 @@ import descriptionSchema from './Description.js';
 import affixSchema from './Affix.js';
 import statBlockSchema from './StatBlock.js';
 import locationSchema from './Location.js';
+import worldEmitter from './WorldEmitter.js';
 
 const { Schema } = mongoose;
 
@@ -189,6 +190,18 @@ characterSchema.methods.removeItem = function(itemId) {
     this.inventory.delete(itemId.toString());
 };
 
-//TODO add loadInventory method, and clearContents method for garbage collection
+characterSchema.methods.loadInventory = async function() {
+    try {
+        for (const item of this.inventory) {
+            await new Promise((resolve) => {
+                worldEmitter.once('itemManagerAddedItem', resolve);
+                worldEmitter.emit('characterLoadingItem', item._id);
+                }
+            );
+        };
+    } catch(err) {
+        logger.error(`Error in character.loadInventory: ${err.message}`);
+    }
+}
 
 export default characterSchema;

@@ -8,9 +8,9 @@ class ItemManager {
         this.items = new Map();  // Stores all items with their _id.toString() as key
         
         const loadingItemHandler = async (id) => {
-            //logger.info(`worldEmitter received 'loadingItem' and ${id}, checking...`)
+            logger.info(`worldEmitter received 'loadingItem' and ${id}, checking...`)
             const item = await this.addItemById(id);
-            //logger.info(`worldEmitter sending 'itemManagerAddedItem' and ${item.name}...`)
+            logger.info(`worldEmitter sending 'itemManagerAddedItem' and ${item.name}...`)
             worldEmitter.emit('itemManagerAddedItem', item);
         };
 
@@ -39,19 +39,25 @@ class ItemManager {
     async addItemById(id) {
         try {
             id = id.toString();
+            
+            // Get item
             const item = await Item.findById(id);
-            if (item) {
-                if (!this.items.has(id)) {
-                    this.items.set(item._id, item);
-                    logger.info(`itemManager added ${item.name} to items.`);
-                    return item;
-                } else {
-                    logger.warn(`Item with id ${id} already exists in items.`);
-                    return null;
-                }
-            } else {
-                logger.error(`itemManager couldn't add item with id ${id} to items.`);
+            if (!item) {
+                logger.error(`itemManager couldn't find item with ${id} in db.`);
+                return null;
             }
+
+            // Check for duplicates in game
+            if (this.items.has(id)) {
+                logger.warn(`Item with id ${id} already exists in items.`);
+                return null;
+            }
+            
+            // Add to game
+            this.items.set(item._id.toString(), item);
+            logger.info(`itemManager added ${item.name} to items.`);
+            return item;
+                
         } catch (err) {
             logger.error(`Error in addItemById: ${err.message}`);
             throw err;
