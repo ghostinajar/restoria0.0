@@ -14,24 +14,26 @@ class ItemManager {
             worldEmitter.emit('itemManagerAddedItem', item);
         };
 
-        const inventoryRequestedNewItemHandler = async (blueprint) => {
+        const inventoryRequestingNewItemHandler = async (blueprint) => {
             // Create a copy of the blueprint and give its own unique Id
             const item = new Item(blueprint);
             item._id = new mongoose.Types.ObjectId();
+            this.items.set(item._id.toString(), item);
+            //logger.debug(`itemManager added ${item.name} to items. Items after adding: ${JSON.stringify(Array.from(this.items.values()).map(item => item.name))}`);
             worldEmitter.emit('itemManagerAddedItem', item);
         }
 
-        const removingItemHandler = (item) => {
+        const removingItemHandler = async (itemId) => {
             //logger.debug(`removingItemHandler called...`)
-            //logger.debug(`Items before removal: ${Array.from(this.items)}`)
-            this.removeItemById(item._id.toString());
-            //logger.debug(`Items after removal: ${Array.from(this.items)}`)
-
+            //logger.debug(`removingItemHandler removing item with id: ${itemId}`)
+            await this.removeItemById(itemId);
+            worldEmitter.emit('itemManagerRemovedItem')
         };
 
-        worldEmitter.on('inventoryRequestedNewItem', inventoryRequestedNewItemHandler)
-        worldEmitter.on('loadingItem', loadingItemHandler);
-        worldEmitter.on('removingItem', removingItemHandler);
+        worldEmitter.on('inventoryDestroyingItem', removingItemHandler);
+        worldEmitter.on('inventoryRequestingNewItem', inventoryRequestingNewItemHandler);
+        worldEmitter.on('characterLoadingItem', loadingItemHandler);
+        worldEmitter.on('characterRemovingItem', removingItemHandler);
     };     
 
     async addItemById(id) {
@@ -74,9 +76,14 @@ class ItemManager {
 
     async removeItemById(id) {
         try {
-            id = id.toString
-            this.items.delete(id);
-            logger.info(`Active items: ${JSON.stringify(Array.from(this.items.values()).map(item => item.name))}`)
+            id = id.toString();
+            //logger.debug(`Removing item with id "${id}"`);
+            if (this.items.has(id)) {
+                this.items.delete(id);
+            } else {
+                logger.warn(`Item with id "${id}" does not exist.`);
+            }
+            //logger.info(`Item Removed. Active items remaining: ${JSON.stringify(Array.from(this.items.values()).map(item => item.name))}`)
         } catch(err) {
             logger.error(`Error in removeItemById: ${err.message}`);
             throw err;
@@ -85,9 +92,10 @@ class ItemManager {
 
     clearContents() {
         this.items = []
-        worldEmitter.off('inventoryRequestedNewItem', inventoryRequestedNewItemHandler)
-        worldEmitter.off('loadingItem', loadingItemHandler);
-        worldEmitter.off('removingItem', removingItemHandler);
+        worldEmitter.off('inventoryDestroyingItem', removingItemHandler);
+        worldEmitter.off('inventoryRequestingNewItem', inventoryRequestingNewItemHandler);
+        worldEmitter.off('characterLoadingItem', loadingItemHandler);
+        worldEmitter.off('characterRemovingItem', removingItemHandler);
     }
 }
 

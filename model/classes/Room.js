@@ -6,7 +6,8 @@ import mobNodeSchema from './MobNode.js';
 import itemNodeSchema from './ItemNode.js';
 import logger from '../../logger.js';
 import worldEmitter from './WorldEmitter.js';
-import initiateInventory from '../../util/initiateInventory.js'
+import initiateInventory from '../../util/initiateInventory.js';
+import destroyInventory from '../../util/destroyInventory.js';
 
 const { Schema } = mongoose;
 
@@ -140,13 +141,14 @@ roomSchema.methods.initiate = async function() {
     this.inventory = []; 
     // Initiate inventory array using itemNodes, signal itemManager
     await initiateInventory(this.inventory, this.itemNodes);
-    logger.debug(`Room "${this.name}" inventory: ${this.inventory.map(item => {return item.name})}`);
+    //logger.debug(`Room "${this.name}" inventory: ${this.inventory.map(item => {return item.name})}`);
     this.players = [];
 };
 
-roomSchema.methods.clearContents = function() {
+roomSchema.methods.clearContents = async function() {
     this.mobs = [];
-    this.items = [];
+    await destroyInventory(this.inventory);
+    this.inventory = [];
     this.players = [];
 };
 

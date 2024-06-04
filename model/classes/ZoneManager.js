@@ -112,7 +112,7 @@ class ZoneManager {
         try {
             const zone = this.zones.get(id.toString());
             if (zone) {
-                zone.removeFromWorld()
+                await zone.clearRooms()
                 logger.info(`Removing zone "${zone.name}" from zones...`)
                 this.zones.delete(id.toString());
                 logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
@@ -127,8 +127,9 @@ class ZoneManager {
 
     clearContents() {
         this.zones = [];
-        worldEmitter.off('userManagerAddedUser', userManagerAddedPlayerHandler);
         worldEmitter.off('socketDisconnectedUser', playerLogoutHandler);
+        worldEmitter.off('userManagerAddedUser', userManagerAddedPlayerHandler);
+        worldEmitter.off('zoneRequested', zoneRequestedHandler);
     }
     
 }

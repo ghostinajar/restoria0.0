@@ -99,11 +99,7 @@ async function main() {
   const world = new World();
   logger.info('World instantiated!');
   await world.zoneManager.addZoneById('664f8ca70cc5ae9b173969a8') // load Restoria Town
-  //setTimeout(()=>{}, 5000);
-  //await world.zoneManager.createEntityInZoneId('664f8ca70cc5ae9b173969a8', 'item', muffin);
-  //await world.zoneManager.createEntityInZoneId('664f8ca70cc5ae9b173969a8', 'mob', goblin);
-  //await world.zoneManager.createEntityInZoneId('664f8ca70cc5ae9b173969a8', 'room', testRoom);
-  //await world.zoneManager.createEntityInZoneId('664f8ca70cc5ae9b173969a8', 'suggestion', s1);
+  //setTimeout(()=>{world.zoneManager.removeZoneById('664f8ca70cc5ae9b173969a8');}, 4000);
 
   // Setup socket.io
   io.use((socket, next) => {

@@ -58,85 +58,83 @@ zoneSchema.pre('init', function() {
 zoneSchema.methods.initRooms = async function () {
     try {
         //instantiate room instances
-            this.rooms.forEach(room => {
-                room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
-            });
-            return;
+        for (const room of this.rooms) {
+            await room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
+        }
+        return;
     } catch(err) {
         logger.error(`Error in addRooms: ${err.message}`);
         throw err;
     };
 }
 
-zoneSchema.methods.createEntityIn = async function (entityType, entity) {   
+//TODO update this method now that these entities are all stored in arrays, not maps
+// zoneSchema.methods.createEntityIn = async function (entityType, entity) {   
 
-    if(this[entityType]) {
-        try {
-            // give subdocument an ObjectId
-            const entityId = new mongoose.Types.ObjectId();
-            entity._id = entityId;
+//     if(this[entityType]) {
+//         try {
+//             // give subdocument an ObjectId
+//             const entityId = new mongoose.Types.ObjectId();
+//             entity._id = entityId;
 
-            // function to report creation success
-            const creationReport = () => {
-                logger.info(`Zone "${this.name}" created "${entity.name}" in "${entityType}".`);
-            };
+//             // function to report creation success
+//             const creationReport = () => {
+//                 logger.info(`Zone "${this.name}" created "${entity.name}" in "${entityType}".`);
+//             };
 
-            // create the entity
-            switch (entityType) {
-                case 'itemBlueprints' : {
-                    this.itemBlueprints.set(entity._id.toString(), entity);
-                    creationReport();
-                    break;
-                }
-                case 'mobBlueprints' : {
-                    this.mobBlueprints.set(entity._id.toString(), entity);
-                    creationReport();
-                    break;
-                }
-                case 'rooms' : {
-                    // If newRoomCoords match an existing room's, set new room's coords to [] and notify user
-                    if(entity.mapCoords) {
-                    const newRoomCoords = JSON.stringify(entity.mapCoords);
-                        for (let room of this.rooms.values()) {
-                            if (JSON.stringify(room.mapCoords) === newRoomCoords) {
-                                entity.mapCoords = []
-                                // TODO notify User their new room's duplicate coords were wiped
-                            }
-                        }
-                    };
-                    this.rooms.set(entity._id.toString(), entity);
-                    creationReport();
-                    break;
-                }
-                case 'suggestions' : {
-                    this.suggestions.set(entity._id.toString(), entity);
-                    creationReport();
-                    break;
-                }
-            }
-            return await this.save();
-        } catch(err) {
-            logger.error(`Error in createEntity: ${err.message} for zone "${this.name}"`);
-            throw(err);
-        }
-    }   
-}
+//             // create the entity
+//             switch (entityType) {
+//                 case 'itemBlueprints' : {
+//                     this.itemBlueprints.pu(entity._id.toString(), entity);
+//                     creationReport();
+//                     break;
+//                 }
+//                 case 'mobBlueprints' : {
+//                     this.mobBlueprints.set(entity._id.toString(), entity);
+//                     creationReport();
+//                     break;
+//                 }
+//                 case 'rooms' : {
+//                     // If newRoomCoords match an existing room's, set new room's coords to [] and notify user
+//                     if(entity.mapCoords) {
+//                     const newRoomCoords = JSON.stringify(entity.mapCoords);
+//                         for (let room of this.rooms.values()) {
+//                             if (JSON.stringify(room.mapCoords) === newRoomCoords) {
+//                                 entity.mapCoords = []
+//                                 // TODO notify User their new room's duplicate coords were wiped
+//                             }
+//                         }
+//                     };
+//                     this.rooms.set(entity._id.toString(), entity);
+//                     creationReport();
+//                     break;
+//                 }
+//                 case 'suggestions' : {
+//                     this.suggestions.set(entity._id.toString(), entity);
+//                     creationReport();
+//                     break;
+//                 }
+//             }
+//             return await this.save();
+//         } catch(err) {
+//             logger.error(`Error in createEntity: ${err.message} for zone "${this.name}"`);
+//             throw(err);
+//         }
+//     }   
+// }
 
-zoneSchema.methods.removeFromWorld = function() {
+zoneSchema.methods.clearRooms = async function() {
     try {       
         // Clear each room's contents
-        for (let room of this.rooms.values()) {
+        for (const room of this.rooms.values()) {
             // Assuming each room has a method to clear its contents
-            room.clearContents();
-            // Remove the room from the zone
-            this.rooms.delete(room._id.toString());
+            //logger.debug(`Clearing contents of room "${room.name}"`)
+            await room.clearContents();
         }
-        logger.info(`Active rooms in ${this.name}: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
-
         // Remove all listeners from the zoneEmitter
         this.zoneEmitter.removeAllListeners();
     } catch(err) {
-        logger.error(`Error in zoneSchema.methods.removeFromWorld(): ${err.message}`)
+        logger.error(`Error in zoneSchema.methods.clearRooms(): ${err.message}`)
         throw err;
     }
 };
