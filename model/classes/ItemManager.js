@@ -14,7 +14,7 @@ class ItemManager {
             worldEmitter.emit('itemManagerAddedItem', item);
         };
 
-        const newItemRequestedHandler = async (blueprint) => {
+        const inventoryRequestedNewItemHandler = async (blueprint) => {
             // Create a copy of the blueprint and give its own unique Id
             const item = new Item(blueprint);
             item._id = new mongoose.Types.ObjectId();
@@ -29,7 +29,7 @@ class ItemManager {
 
         };
 
-        worldEmitter.on('newItemRequested', newItemRequestedHandler)
+        worldEmitter.on('inventoryRequestedNewItem', inventoryRequestedNewItemHandler)
         worldEmitter.on('loadingItem', loadingItemHandler);
         worldEmitter.on('removingItem', removingItemHandler);
     };     
@@ -85,6 +85,7 @@ class ItemManager {
 
     clearContents() {
         this.items = []
+        worldEmitter.off('inventoryRequestedNewItem', inventoryRequestedNewItemHandler)
         worldEmitter.off('loadingItem', loadingItemHandler);
         worldEmitter.off('removingItem', removingItemHandler);
     }

@@ -123,10 +123,7 @@ zoneSchema.methods.createEntityIn = async function (entityType, entity) {
 }
 
 zoneSchema.methods.removeFromWorld = function() {
-    try {
-        // Remove all listeners from the zoneEmitter
-        this.zoneEmitter.removeAllListeners();
-       
+    try {       
         // Clear each room's contents
         for (let room of this.rooms.values()) {
             // Assuming each room has a method to clear its contents
@@ -135,6 +132,9 @@ zoneSchema.methods.removeFromWorld = function() {
             this.rooms.delete(room._id.toString());
         }
         logger.info(`Active rooms in ${this.name}: ${JSON.stringify(Array.from(this.rooms.values()).map(room => room.name))}`);
+
+        // Remove all listeners from the zoneEmitter
+        this.zoneEmitter.removeAllListeners();
     } catch(err) {
         logger.error(`Error in zoneSchema.methods.removeFromWorld(): ${err.message}`)
         throw err;

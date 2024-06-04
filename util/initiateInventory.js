@@ -20,7 +20,7 @@ async function initiateInventory(inventory, itemNodes, isNested = false) {
             for(let i = 0; i < itemNode.quantity; i++) {
                 const item = await new Promise((resolve) => {
                     worldEmitter.once('itemManagerAddedItem', resolve);
-                    worldEmitter.emit('newItemRequested', blueprint);
+                    worldEmitter.emit('inventoryRequestedNewItem', blueprint);
                 });
 
                 // If item is a container and we're not in a nested inventory, initiate its inventory recursively
