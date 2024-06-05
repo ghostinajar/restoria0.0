@@ -7,7 +7,7 @@ import itemNodeSchema from './ItemNode.js';
 import logger from '../../logger.js';
 import worldEmitter from './WorldEmitter.js';
 import activateItemNodes from '../../util/activateItemNodes.js';
-import initiateMobNodes from '../../util/initiateMobNodes.js';
+import activateMobNodes from '../../util/activateMobNodes.js';
 import destroyMobs from '../../util/destroyMobs.js';
 
 const { Schema } = mongoose;
@@ -140,7 +140,7 @@ roomSchema.methods.initiate = async function() {
     this.mobs = [];
     // Initiate mobs based on mobNodes, signal mobManager
     if (this.mobNodes) {
-        await initiateMobNodes(this.mobs, this.mobNodes);
+        await activateMobNodes(this.mobNodes, this.mobs);
     } else {logger.debug(`No mobnodes in ${this.name}.`)}
     //logger.debug(`Mobs in room "${this.name}": ${this.mobs.map(mob => {return mob.name})}`);
 

@@ -2,7 +2,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import activateItemNodes from "./activateItemNodes.js";
 
-async function initiateMobNodes(mobArray, mobNodes) {
+async function activateMobNodes(mobNodes, mobArray) {
     for (const mobNode of mobNodes) {
         try {
             const zone = await new Promise((resolve) => {
@@ -10,12 +10,12 @@ async function initiateMobNodes(mobArray, mobNodes) {
                 worldEmitter.emit('zoneRequested', mobNode.fromZoneId);
             });
             if (!zone) {
-                logger.error(`initiateMobNodes couldn't find Zone ${mobNode.fromZoneId}`);
+                logger.error(`activateMobNodes couldn't find Zone ${mobNode.fromZoneId}`);
             }
 
             const blueprint = await zone.mobBlueprints.find(blueprint => blueprint._id.toString() === mobNode.loadsMobBlueprintId.toString());        
             if(!blueprint) {
-                logger.error(`initiateMobNodes couldn't find blueprint ${mobNode.loadsMobBlueprintId} in zone ${zone.name}.`)
+                logger.error(`activateMobNodes couldn't find blueprint ${mobNode.loadsMobBlueprintId} in zone ${zone.name}.`)
             }
             
             for(let i = 0; i < mobNode.quantity; i++) {
@@ -30,10 +30,10 @@ async function initiateMobNodes(mobArray, mobNodes) {
                 await mobArray.push(mob);
             }
         } catch(err) {
-            logger.error(`Error in initiateMobNodes with a mobNode: ${err.message}`);
+            logger.error(`Error in activateMobNodes with a mobNode: ${err.message}`);
             throw(err);
         }
     }
 };
 
-export default initiateMobNodes;
+export default activateMobNodes;
