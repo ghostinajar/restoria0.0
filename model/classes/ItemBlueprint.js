@@ -6,12 +6,9 @@ import itemNodeSchema from './ItemNode.js';
 
 const { Schema } = mongoose;
 
-/*only mobs and items have blueprints, and only because multiple instances 
+/*Only mobs and items have blueprints, and only because multiple instances 
 of them will exist in game simultaneously, and they can't all share the same id.
-Item properties are duplicated so they can be loaded without having to query
-dozens of zones in db to get each item's itemBlueprint properties when a character 
-enters the game. If you change itemBlueprintSchema, please also make the change to 
-itemSchema
+If you change properties in itemBlueprintSchema, please also update itemSchema
 */
 
 const itemBlueprintSchema = new Schema({
@@ -21,13 +18,13 @@ const itemBlueprintSchema = new Schema({
     },
     name: String,
     itemType: String,
-    price: {
+    price: { 
         type: Number,
         default: 0
     },
     capacity: Number,
     levelRestriction: Number,
-    history: {
+    history: { 
         type: historySchema,
         default: () => ({})
     },

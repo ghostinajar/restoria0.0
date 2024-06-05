@@ -1,4 +1,4 @@
-export const validCommandWords = ["author", "character", "say", "telepath"];
+export const validCommandWords = ["author", "auth", "character", "say", "telepath"];
 export const commandsWith1Param = [
 "abbreviate", "affects", "afk", "ambush", "appraise", "ask", 
 "assist", "attack", "autoassist", "autoflee", "backstab", 

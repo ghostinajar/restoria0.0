@@ -8,7 +8,8 @@ async function processCommand(parsedCommand, user) {
     //logger.info(`Processing command: ${JSON.stringify(parsedCommand)}`)
     let response;
     switch (parsedCommand.commandWord) {
-        case 'author' : {
+        case 'author':
+        case 'auth': {
             response = await author(user)
             break;
         }

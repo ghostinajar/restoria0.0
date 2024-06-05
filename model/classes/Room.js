@@ -6,8 +6,7 @@ import mobNodeSchema from './MobNode.js';
 import itemNodeSchema from './ItemNode.js';
 import logger from '../../logger.js';
 import worldEmitter from './WorldEmitter.js';
-import initiateInventory from '../../util/initiateInventory.js';
-import destroyInventory from '../../util/destroyInventory.js';
+import activateItemNodes from '../../util/activateItemNodes.js';
 import initiateMobNodes from '../../util/initiateMobNodes.js';
 import destroyMobs from '../../util/destroyMobs.js';
 
@@ -118,8 +117,8 @@ const roomSchema = new Schema({
 });     
 
 //since there will only ever be one instance of a Room, the Room class will have
-//arrays to store active mobs, items, users, and characters inside the room
-//during gameplay. These are added via methods since they never need to be in db
+//arrays to store active mobs, items, and players inside the room. 
+//These are never saved in db.
 
 //entityType should be a string to indicate which array to use ("mobs", "items", or "players")
 roomSchema.methods.addEntityTo = function(entityType, instance) {
@@ -145,18 +144,15 @@ roomSchema.methods.initiate = async function() {
     } else {logger.debug(`No mobnodes in ${this.name}.`)}
     //logger.debug(`Mobs in room "${this.name}": ${this.mobs.map(mob => {return mob.name})}`);
 
-    this.inventory = []; 
-    // Initiate inventory array using itemNodes, signal itemManager
-    await initiateInventory(this.inventory, this.itemNodes);
-    //logger.debug(`Items in room "${this.name}": ${this.inventory.map(item => {return item.name})}`);
-    
+    this.inventory = [];
+    await activateItemNodes(this.itemNodes, this.inventory);
+    logger.debug(`Items in room "${this.name}": ${JSON.stringify(this.inventory.map(item => item.name))}`);
     this.players = [];
 };
 
 roomSchema.methods.clearContents = async function() {
     await destroyMobs(this.mobs);
     this.mobs = [];
-    await destroyInventory(this.inventory);
     this.inventory = [];
     this.players = [];
 };

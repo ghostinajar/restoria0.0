@@ -1,17 +1,18 @@
 import mongoose from 'mongoose';
 import descriptionSchema from './Description.js';
 import affixSchema from './Affix.js';
-import ITEM_TYPE from '../../constants/ITEM_TYPE.js';
 
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
 
-//each item's properties are duplicated to avoid having to query
-//dozens of zones in db to get their data when a character logs in.
-//This way they can also persist even if a zone or its itemBlueprints are deleted.
-//Items have their own collection in db because:
-//-mongodb says Data used together should be stored together (character and its inventory)
-//-there will be thousands and thousands
-//-and they need to change location quickly and often
+/* each item's properties are duplicated to avoid having to query
+dozens of zones in db to get their data when a character logs in.
+This way it can  persist even if its zone/blueprint is deleted.
+Items are saved as subdocuments in a character document, either
+    -as a property of a character's worn location slot
+    -in the inventory or storage array
+because mongodb says Data used together should be stored together,
+(items are only ever loaded/saved from db attached to a character).
+*/
 
 const itemSchema = new Schema({
     itemBlueprint: {
@@ -72,25 +73,10 @@ const itemSchema = new Schema({
         type: affixSchema,
         default: () => ({})
     }],
-    inventory: [{
-          type: Schema.Types.ObjectId,
-          ref: 'Item'
-        }]
+    inventory: {
+        type: [Schema.Types.Mixed],
+        default: []
+    }
 });
 
-itemSchema.methods.addItem = function(item) {
-    if (this.itemType = ITEM_TYPE.CONTAINER) {
-        this.inventory.set(item._id.toString(), item._id);
-        return true
-    } else {return false;}
-};
-
-itemSchema.methods.removeItem = function(itemId) {
-    if (this.itemType = ITEM_TYPE.CONTAINER) {
-        this.inventory.delete(itemId.toString());
-        return true
-    } else {return false;}
-};
-
-const Item = model('Item', itemSchema);
-export default Item;
+export default itemSchema;

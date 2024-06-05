@@ -3,7 +3,7 @@ import descriptionSchema from './Description.js';
 import affixSchema from './Affix.js';
 import statBlockSchema from './StatBlock.js';
 import locationSchema from './Location.js';
-import worldEmitter from './WorldEmitter.js';
+import itemSchema from './Item.js';
 
 const { Schema } = mongoose;
 
@@ -70,101 +70,81 @@ const characterSchema = new Schema({
             level: Number
         }],
     },
-    inventory: [{
-          type: Schema.Types.ObjectId,
-          ref: 'Item'
-        }],
+    inventory: [itemSchema],
+    storage: [itemSchema],
     equipped: {
         arms: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         body: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         ears: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         feet: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         finger1: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         finger2: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         hands: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         head: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         held: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         legs: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         neck: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         shield: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         shoulders: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         waist: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         wrist1: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         wrist2: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         weapon1: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
         },
         weapon2: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item',
+            type: itemSchema,
             default: null
-        },               
+        }     
     },
     affixes: [{
         type: affixSchema,
@@ -181,27 +161,5 @@ characterSchema.pre('findOneAndUpdate', function(next) {
     this._update.name = this._update.displayName.toLowerCase();
     next();
 });
-
-characterSchema.methods.addItem = function(item) {
-    this.inventory.set(item._id.toString(), item._id);
-};
-
-characterSchema.methods.removeItem = function(itemId) {
-    this.inventory.delete(itemId.toString());
-};
-
-characterSchema.methods.loadInventory = async function() {
-    try {
-        for (const item of this.inventory) {
-            await new Promise((resolve) => {
-                worldEmitter.once('itemManagerAddedItem', resolve);
-                worldEmitter.emit('characterLoadingItem', item._id);
-                }
-            );
-        };
-    } catch(err) {
-        logger.error(`Error in character.loadInventory: ${err.message}`);
-    }
-}
 
 export default characterSchema;

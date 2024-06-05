@@ -1,6 +1,6 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
-import initiateInventory from "./initiateInventory.js";
+import activateItemNodes from "./activateItemNodes.js";
 
 async function initiateMobNodes(mobArray, mobNodes) {
     for (const mobNode of mobNodes) {
@@ -24,8 +24,9 @@ async function initiateMobNodes(mobArray, mobNodes) {
                     worldEmitter.emit('roomRequestingNewMob', blueprint);
                 });
                 //TODO initiate mob inventory
-                await initiateInventory(mob.inventory, blueprint.itemNodes);
-                //logger.debug(`Items in mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
+                mob.inventory = []
+                await activateItemNodes(blueprint.itemNodes, mob.inventory);
+                logger.debug(`Items in mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
                 await mobArray.push(mob);
             }
         } catch(err) {
