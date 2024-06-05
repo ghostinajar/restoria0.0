@@ -7,16 +7,16 @@ class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
         const socketCheckingMultiplayHandler = (id) => {
-            //logger.info(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`)
+            //logger.debug(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`)
             const isDuplicate = this.users.has(id.toString());
-            //logger.info(`worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`)
+            //logger.debug(`worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`)
             worldEmitter.emit('userManagerCheckedMultiplay', isDuplicate);
         };
 
         const socketConnectingUserHandler = async (id) => {
-            //logger.info(`worldEmitter received 'socketConnectingUser' and ${id}, checking...`)
+            //logger.debug(`worldEmitter received 'socketConnectingUser' and ${id}, checking...`)
             const user = await this.addUserById(id.toString());
-            //logger.info(`worldEmitter sending 'userManagerAddedUser' and ${user.username}...`)
+            //logger.debug(`worldEmitter sending 'userManagerAddedUser' and ${user.username}...`)
             worldEmitter.emit('userManagerAddedUser', user);
         };
 
@@ -83,16 +83,16 @@ class UserManager {
         // Delete from users collection
         try {
             await User.deleteOne({ username: name.toLowerCase() });
-            logger.info('User deleted successfully');
+            logger.info(`User ${name} deleted successfully.`);
           } catch (error) {
-            logger.error('deleteUserByName encountered an error:', error);
+            logger.error('Error in deleteUserByName:', error);
           }          
         // Delete from names collection
         try {
             await Name.deleteOne({ name: name.toLowerCase() });
-            console.log('Name deleted successfully');
+            console.log(`Name ${name} deleted successfully.`);
           } catch (error) {
-            logger.error('deleteUserByName encountered an error:', error);
+            logger.error('Error in deleteUserByName:', error);
           }          
     }
 

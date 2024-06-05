@@ -10,7 +10,7 @@ async function checkDuplicateName(name) {
         }
         return nameIsDuplicate;
     } catch (err) {
-        logger.error(`checkDuplicateName encountered an error: ${err.message}`);
+        logger.error(`Error in checkDuplicateName: ${err.message}`);
         throw err;
     }
 }

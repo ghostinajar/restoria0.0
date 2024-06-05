@@ -26,7 +26,7 @@ async function initiateInventory(inventory, itemNodes, isNested = false) {
                 // If item is a container and we're not in a nested inventory, initiate its inventory recursively
                 if (item.itemType == 'container' && !isNested) {
                     await initiateInventory(item.inventory, blueprint.itemNodes, true);
-                    //logger.debug(`Container "${item.name}" inventory: ${item.inventory.map(item => {return item.name})}`);
+                    //logger.debug(`Items in container "${item.name}": ${item.inventory.map(item => {return item.name})}`);
                 } else if (item.itemType == 'container' && isNested) {
                     logger.error(`Skipping container "${item.name}" because it is nested.`);
                     continue;
@@ -35,7 +35,7 @@ async function initiateInventory(inventory, itemNodes, isNested = false) {
                 inventory.push(item);
             }
         } catch(err) {
-            logger.error(`Encountered an error loading an item from itemNode. ${err.message}`);
+            logger.error(`Error in initiateInventory with an itemNode: ${err.message}`);
             throw(err);
         }
     }

@@ -16,7 +16,6 @@ import dotenv from 'dotenv';
 import logger from './logger.js';
 import User from './model/classes/User.js';
 import World from './model/classes/World.js';
-import { } from './sampleData.js';
 
 dotenv.config(); // Load environment variables from a .env file into process.env
 const mongodb_uri = process.env.MONGODB_URI;

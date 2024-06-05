@@ -92,7 +92,7 @@ const setupRoutes = (app, __dirname) => {
         _id: newUser._id,
         username: newUser.username
       };
-      logger.debug(`sessionUser: ${JSON.stringify(sessionUser)}`)
+      //logger.debug(`sessionUser: ${JSON.stringify(sessionUser)}`)
 
       req.login(sessionUser, function(err) {
         if (err) { return next(err); }

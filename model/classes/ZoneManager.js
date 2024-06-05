@@ -34,7 +34,7 @@ class ZoneManager {
                 const zone = this.addZoneById(zoneId)
                 worldEmitter.emit(`zoneLoaded`, zone);
             } catch(err) {
-                logger.error(`zoneRequestedHandler encountered error: ${err.message}`)
+                logger.error(`Error in zoneRequestedHandler: ${err.message}`)
             }
         }
         
@@ -55,7 +55,8 @@ class ZoneManager {
                 // add zone to zones map        
                 this.zones.set(zone._id.toString(), zone);
                 logger.info(`zoneManager added ${zone.name} to zones.`);
-                logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
+                logger.loadout(`Rooms in zone "${zone.name}": ${zone.rooms.map(room => room.name)}.`);
+                logger.loadout(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
                 await zone.initRooms();
                 return zone;
             } else {
@@ -74,7 +75,7 @@ class ZoneManager {
             if (zone) {
                 return zone;
             } else {
-                logger.info(`zoneManager can't find zone with id: ${id}.`);
+                logger.error(`zoneManager can't find zone with id: ${id}.`);
                 return null;
             };
         } catch(err) {
@@ -113,9 +114,9 @@ class ZoneManager {
             const zone = this.zones.get(id.toString());
             if (zone) {
                 await zone.clearRooms()
-                logger.info(`Removing zone "${zone.name}" from zones...`)
+                //logger.debug(`Removing zone "${zone.name}" from zones...`)
                 this.zones.delete(id.toString());
-                logger.info(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
+                //logger.debug(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
             } else {
                 logger.warn(`Zone with id ${id} does not exist in zones.`);
             }

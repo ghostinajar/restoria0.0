@@ -25,11 +25,11 @@ async function initiateMobNodes(mobArray, mobNodes) {
                 });
                 //TODO initiate mob inventory
                 await initiateInventory(mob.inventory, blueprint.itemNodes);
-                //logger.debug(`Inventory for mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
+                //logger.debug(`Items in mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
                 await mobArray.push(mob);
             }
         } catch(err) {
-            logger.error(`Encountered an error loading a mob from mobNode. ${err.message}`);
+            logger.error(`Error in initiateMobNodes with a mobNode: ${err.message}`);
             throw(err);
         }
     }

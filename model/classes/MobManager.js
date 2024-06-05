@@ -12,13 +12,13 @@ class MobManager {
             const mob = new Mob(blueprint);
             mob._id = new mongoose.Types.ObjectId();
             this.mobs.set(mob._id.toString(), mob);
-            //logger.debug(`mobManager added ${mob.name} to mobs. Mobs after adding: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`);
+            logger.loadout(`mobManager added ${mob.name} to mobs. Mobs after adding: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`);
             worldEmitter.emit('mobManagerAddedMob', mob);
         }
 
         const removingMobHandler = async (mobId) => {
-            logger.debug(`removingMobHandler called...`)
-            logger.debug(`removingMobHandler removing mob with id: ${mobId}`)
+            //logger.debug(`removingMobHandler called...`)
+            //logger.debug(`removingMobHandler removing mob with id: ${mobId}`)
             await this.removeMobById(mobId);
             worldEmitter.emit('mobManagerRemovedMob')
         };
@@ -52,7 +52,7 @@ class MobManager {
             } else {
                 logger.warn(`Mob with id "${id}" does not exist.`);
             }
-            logger.info(`Mob Removed. Active mobs remaining: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`)
+            //logger.info(`Mob Removed. Active mobs remaining: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`)
         } catch(err) {
             logger.error(`Error in removeMobById: ${err.message}`);
             throw err;

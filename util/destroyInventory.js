@@ -19,6 +19,7 @@ async function destroyInventory(inventory) {
             throw(err);
         }
     }
+    inventory = [];
 };
 
 export default destroyInventory;

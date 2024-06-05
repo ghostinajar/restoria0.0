@@ -19,13 +19,13 @@ class ItemManager {
             const item = new Item(blueprint);
             item._id = new mongoose.Types.ObjectId();
             this.items.set(item._id.toString(), item);
-            //logger.debug(`itemManager added ${item.name} to items. Items after adding: ${JSON.stringify(Array.from(this.items.values()).map(item => item.name))}`);
+            logger.loadout(`itemManager added ${item.name} to items. Items after adding: ${JSON.stringify(Array.from(this.items.values()).map(item => item.name))}`);
             worldEmitter.emit('itemManagerAddedItem', item);
         }
 
         const removingItemHandler = async (itemId) => {
-            logger.debug(`removingItemHandler called...`)
-            logger.debug(`removingItemHandler removing item with id: ${itemId}`)
+            //logger.debug(`removingItemHandler called...`)
+            //logger.debug(`removingItemHandler removing item with id: ${itemId}`)
             await this.removeItemById(itemId);
             worldEmitter.emit('itemManagerRemovedItem')
         };
@@ -55,7 +55,7 @@ class ItemManager {
             
             // Add to game
             this.items.set(item._id.toString(), item);
-            logger.info(`itemManager added ${item.name} to items.`);
+            //logger.debug(`itemManager added ${item.name} to items.`);
             return item;
                 
         } catch (err) {

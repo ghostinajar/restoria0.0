@@ -19,6 +19,7 @@ const colors = {
     comms: 'blue',
     loot: 'magenta',
     input: 'white',
+    loadout: 'gray',
 };
 winston.addColors(colors);
 
@@ -37,6 +38,7 @@ const logLevels = {
   comms: 4,
   loot: 5,
   input: 6,
+  loadout: 7,
 };
 
 // Create a logger
