@@ -49,9 +49,9 @@ const setupSocket = (io) => {
       socket.on('userSentCommand', async (userInput) => {
         logger.input(`${user.username} sent command: ${userInput}`);
         
-        // Sanitize, parse, validate command
-        let sanitizedInput = validator.escape(userInput);
-        let parsedInput = parseCommand(sanitizedInput);
+        // Sanitize, parse,  validate command
+        //let sanitizedInput = validator.escape(userInput);
+        let parsedInput = parseCommand(userInput);
         if (!isValidCommandWord(parsedInput.commandWord)) {
           //TODO If invalid command word log IP (suspicious because client should prevent this)
           socket.emit('redirectToLogin', `Server rejected command.`)
@@ -61,8 +61,8 @@ const setupSocket = (io) => {
         const commandResponse = await processCommand(parsedInput, user);
 
         //TODO emit and/or broadcast to appropriate ioRooms
-        socket.emit('serverSendingCommandResponse', JSON.stringify(commandResponse.emitToUser));
-        socket.to(user.location.inRoom.toString()).emit('serverSendingCommandResponse', JSON.stringify(commandResponse.broadcastToRoom));
+        socket.emit('serverSendingCommandResponse', (commandResponse.emitToUser));
+        socket.to(user.location.inRoom.toString()).emit('serverSendingCommandResponse', (commandResponse.broadcastToRoom));
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
