@@ -17,7 +17,8 @@ async function processCommand(parsedCommand, user) {
             response = say(parsedCommand, user)
             break;
         }
-        case 'character' : {
+        case 'character' : 
+        case 'char' : {
             response = character(parsedCommand, user)
             break;
         }

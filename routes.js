@@ -4,7 +4,6 @@ import User from './model/classes/User.js';
 import validCommandWords from './constants/validCommandWords.js';
 import logger from './logger.js';
 import isValidName from './util/isValidName.js';
-import checkDuplicateName from './model/classes/checkDuplicateName.js'
 import Name from './model/classes/Name.js'; 
 
 const setupRoutes = (app, __dirname) => {
@@ -66,7 +65,7 @@ const setupRoutes = (app, __dirname) => {
       }
 
       // Prevent duplicate usernames
-      const nameIsTaken = await checkDuplicateName(username);
+      let nameIsTaken = await Name.findOne({ name: username.toLowerCase() });      
       if (nameIsTaken) {
         return res.status(400).send(`That name is taken.`);
       };

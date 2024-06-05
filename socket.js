@@ -4,7 +4,7 @@ import validator from "validator";
 import parseCommand from "./util/parseCommand.js";
 import isValidCommandWord from "./util/isValidCommandWord.js";
 import processCommand from "./util/processCommand.js";
-import checkDuplicateName from "./model/classes/checkDuplicateName.js";
+import Name from "./model/classes/Name.js";
 
 const setupSocket = (io) => {
   try {
@@ -75,8 +75,8 @@ const setupSocket = (io) => {
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
-          const nameIsDuplicate = await checkDuplicateName(character.name);
-          if(nameIsDuplicate) {
+        let nameIsTaken = await Name.findOne({ name: username.toLowerCase() });      
+        if(nameIsTaken) {
             socket.emit('serverSendingCommandResponse', `That name is taken.`)
             return;
           }

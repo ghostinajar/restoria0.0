@@ -5,7 +5,6 @@ import locationSchema from './Location.js';
 import descriptionSchema from './Description.js';
 import characterSchema from './Character.js';
 import isValidName from '../../util/isValidName.js';
-import checkDuplicateName from './checkDuplicateName.js';
 import Name from './Name.js';
 
 const { Schema, model } = mongoose;
@@ -83,8 +82,8 @@ userSchema.methods.createCharacter = async function(characterData) {
             return `You already have 12 characters. That's the limit!`
         }
         // Check for duplicate name
-        const nameIsDuplicate = await checkDuplicateName(characterData.name);
-        if(nameIsDuplicate) {
+        let nameIsTaken = await Name.findOne({ name: username.toLowerCase() });      
+        if(nameIsTaken) {
             return `That name is taken.`;
         }
         characterData.displayName = characterData.name;

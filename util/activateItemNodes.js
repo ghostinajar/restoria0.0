@@ -27,7 +27,7 @@ async function activateItemNodes(itemNodes, inventory, isNested = false) {
                         item.inventory = [];
                     }
                     await activateItemNodes(blueprint.itemNodes, item.inventory, true);
-                    logger.debug(`Items in container "${item.name}": ${item.inventory.map(item => {return item.name})}`);
+                    //logger.debug(`Items in container "${item.name}": ${item.inventory.map(item => {return item.name})}`);
                 } else if (item.itemType == 'container' && isNested) {
                     logger.error(`Skipping container "${item.name}" because it is nested.`);
                     continue;

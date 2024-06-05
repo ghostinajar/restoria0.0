@@ -1,8 +1,8 @@
-export const validCommandWords = ["author", "auth", "character", "say", "telepath"];
+export const validCommandWords = ["author", "auth", "character", "char", "say", "telepath"];
 export const commandsWith1Param = [
 "abbreviate", "affects", "afk", "ambush", "appraise", "ask", 
 "assist", "attack", "autoassist", "autoflee", "backstab", 
-"bash", "block", "brief", "bs", "character", "close", "consider", 
+"bash", "block", "brief", "bs", "character", "char", "close", "consider", 
 "count", "delete", "deposit", "disarm", "donate", "drink", 
 "drop", "eat", "edit", "enter", "examine", "fight", "follow", 
 "guildenroll", "guildremove", "help", "ignore", "invite", 

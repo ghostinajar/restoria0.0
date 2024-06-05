@@ -146,7 +146,7 @@ roomSchema.methods.initiate = async function() {
 
     this.inventory = [];
     await activateItemNodes(this.itemNodes, this.inventory);
-    logger.debug(`Items in room "${this.name}": ${JSON.stringify(this.inventory.map(item => item.name))}`);
+    //logger.debug(`Items in room "${this.name}": ${JSON.stringify(this.inventory.map(item => item.name))}`);
     this.players = [];
 };
 

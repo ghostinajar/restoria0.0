@@ -26,7 +26,7 @@ async function initiateMobNodes(mobArray, mobNodes) {
                 //TODO initiate mob inventory
                 mob.inventory = []
                 await activateItemNodes(blueprint.itemNodes, mob.inventory);
-                logger.debug(`Items in mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
+                //logger.debug(`Items in mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
                 await mobArray.push(mob);
             }
         } catch(err) {
