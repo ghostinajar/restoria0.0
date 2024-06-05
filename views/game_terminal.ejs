@@ -124,11 +124,8 @@
         characterForm.style.display = 'none'; // Hide the form after submission
       });
 
-      socket.on('serverSendingCommandResponse', (message) => {
-        const item = document.createElement('li');
-        item.textContent = `${message}`;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+      socket.on('invalid', (rejectionString) => {
+        appendStringToTerminal('Server says invalid command.');
       });
 
       socket.on('redirectToLogin', () => {
@@ -136,8 +133,18 @@
         window.location.href = '/login';
       });
 
-      socket.on('invalid', (rejectionString) => {
-        appendStringToTerminal('Server says invalid command.');
+      socket.on('serverSendingCommandResponse', (message) => {
+        const item = document.createElement('li');
+        item.textContent = `${message}`;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      socket.on('telepath', (message) => {
+        const item = document.createElement('li');
+        item.textContent = `${message}`;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
       });
 
     </script>

@@ -9,7 +9,7 @@ import checkDuplicateName from "./model/classes/checkDuplicateName.js";
 const setupSocket = (io) => {
   try {
     io.on('connection', async (socket) => {
-        
+
       // Not authenticated? Disconnect.
       if (!socket.request.session.passport || !socket.request.session.passport.user) {
         socket.disconnect();
@@ -17,9 +17,9 @@ const setupSocket = (io) => {
       }
 
       // Log username and _id on session (NB: not User object)
-      const sessionUser = socket.request.session.passport.user;  
+      const sessionUser = socket.request.session.passport.user;
       logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
-      
+
       // User multiplaying sockets? Disconnect.
       const isMultiplaying = await new Promise((resolve) => {
         worldEmitter.once('userManagerCheckedMultiplay', resolve);
@@ -45,6 +45,12 @@ const setupSocket = (io) => {
       // Add to location's ioRoom on login
       socket.join(user.location.inRoom.toString());
 
+      const telepathHandler = async (string) => {
+        //logger.debug(`${user.name}'s socket received event telepathTo${user.name}, containing "${string}" tried telapathHandler`);
+        socket.emit('telepath', string);
+      }
+      worldEmitter.on(`telepathTo${user.name}`, telepathHandler);
+
       // Listen for userSentCommands
       socket.on('userSentCommand', async (userInput) => {
         logger.input(`${user.username} sent command: ${userInput}`);
@@ -62,13 +68,16 @@ const setupSocket = (io) => {
 
         //TODO emit and/or broadcast to appropriate ioRooms
         socket.emit('serverSendingCommandResponse', (commandResponse.emitToUser));
-        socket.to(user.location.inRoom.toString()).emit('serverSendingCommandResponse', (commandResponse.broadcastToRoom));
+        if (commandResponse.broadcastToRoom) {
+          socket.to(user.location.inRoom.toString())
+            .emit('serverSendingCommandResponse', (commandResponse.broadcastToRoom));
+        }
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
           const nameIsDuplicate = await checkDuplicateName(character.name);
           if(nameIsDuplicate) {
-            socket.emit(`That name is taken.`)
+            socket.emit('serverSendingCommandResponse', `That name is taken.`)
             return;
           }
           const commandResponse = await user.createCharacter(character);
@@ -90,5 +99,5 @@ const setupSocket = (io) => {
     })
   } catch(err) {throw err};
 };
-  
+
 export default setupSocket;

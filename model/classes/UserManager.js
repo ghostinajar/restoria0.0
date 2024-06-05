@@ -6,6 +6,14 @@ import Name from './Name.js'
 class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
+        
+        const requestingUserHandler = (username) => {
+            //logger.debug(`worldEmitter received 'requestingUser' and ${username}, checking...`
+            const user = this.getUserByName(username);
+            //logger.debug(`worldEmitter sending userManagerReturningUser with value ${user}...`)
+            worldEmitter.emit('userManagerReturningUser', user);
+        };
+        
         const socketCheckingMultiplayHandler = (id) => {
             //logger.debug(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`)
             const isDuplicate = this.users.has(id.toString());
@@ -28,6 +36,7 @@ class UserManager {
 
         };
 
+        worldEmitter.on(`requestingUser`, requestingUserHandler);
         worldEmitter.on('socketCheckingMultiplay', socketCheckingMultiplayHandler);
         worldEmitter.on('socketConnectingUser', socketConnectingUserHandler);
         worldEmitter.on('zoneManagerRemovedPlayer', logoutUserHandler);
@@ -69,6 +78,19 @@ class UserManager {
         }
     }
 
+    async getUserByName(name) {
+        try {
+            for (let user of this.users.values()) {
+                if (user.name === name.toLowerCase()) {
+                    return user;
+                }
+            }
+            return null;
+        } catch(err) {
+            logger.error(`Error in getUserByName: ${err.message}`)
+        }
+    }         
+
     async removeUserById(id) {
         try {
             this.users.delete(id.toString());
@@ -98,6 +120,7 @@ class UserManager {
 
     clearContents() {
         this.users = []
+        worldEmitter.on(`requestingUser`, requestingUserHandler);
         worldEmitter.off('socketCheckingMultiplay', socketCheckingMultiplayHandler);
         worldEmitter.off('socketConnectingUser', socketConnectingUserHandler);
         worldEmitter.off('zoneManagerRemovedPlayer', logoutUserHandler);
