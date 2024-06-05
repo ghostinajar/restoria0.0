@@ -75,7 +75,8 @@ const setupSocket = (io) => {
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
-        let nameIsTaken = await Name.findOne({ name: username.toLowerCase() });      
+        logger.debug(`userSubmittedNewCharacter ${character.name}`);
+        let nameIsTaken = await Name.findOne({ name: character.name.toLowerCase() });      
         if(nameIsTaken) {
             socket.emit('serverSendingCommandResponse', `That name is taken.`)
             return;

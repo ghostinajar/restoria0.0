@@ -82,7 +82,7 @@ userSchema.methods.createCharacter = async function(characterData) {
             return `You already have 12 characters. That's the limit!`
         }
         // Check for duplicate name
-        let nameIsTaken = await Name.findOne({ name: username.toLowerCase() });      
+        let nameIsTaken = await Name.findOne({ name: characterData.name.toLowerCase() });      
         if(nameIsTaken) {
             return `That name is taken.`;
         }
