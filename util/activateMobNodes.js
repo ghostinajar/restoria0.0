@@ -1,17 +1,12 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import activateItemNodes from "./activateItemNodes.js";
+import getZoneById from "./getZoneById.js";
 
 async function activateMobNodes(mobNodes, mobArray) {
     for (const mobNode of mobNodes) {
         try {
-            const zone = await new Promise((resolve) => {
-                worldEmitter.once('zoneLoaded', resolve);
-                worldEmitter.emit('zoneRequested', mobNode.fromZoneId);
-            });
-            if (!zone) {
-                logger.error(`activateMobNodes couldn't find Zone ${mobNode.fromZoneId}`);
-            }
+            const zone = await getZoneById(mobNode.fromZoneId); 
 
             const blueprint = await zone.mobBlueprints.find(blueprint => blueprint._id.toString() === mobNode.loadsMobBlueprintId.toString());        
             if(!blueprint) {
