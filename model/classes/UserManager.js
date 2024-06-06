@@ -7,12 +7,43 @@ class UserManager {
     constructor() {
         this.users = new Map();  // Stores all users with their _id.toString() as key
         
+        const logoutUserHandler = (user) => {
+            //logger.debug(`logoutUserHandler called`)
+            //logger.debug(`Users before removal: ${Array.from(this.users)}`)
+            this.removeUserById(user._id);
+            //logger.debug(`Users after removal: ${Array.from(this.users)}`)
+
+        };
+
         const requestingUserHandler = (username) => {
             //logger.debug(`worldEmitter received 'requestingUser' and ${username}, checking...`
             const user = this.getUserByName(username);
             //logger.debug(`worldEmitter sending userManagerReturningUser with value ${user}...`)
             worldEmitter.emit('userManagerReturningUser', user);
         };
+
+        const requestingWhoArrayHandler = async () => {
+            let whoArray = []
+            // Populate array with all online players's level, job, name 
+            for (let user of this.users.values()) {
+                let whoObject;
+                if (user.characterState) {
+                    whoObject = {
+                        level: user.activeCharacter.level,
+                        job: user.activeCharacter.job,
+                        name: user.activeCharacter.displayName
+                    };
+                } else {
+                    whoObject = {
+                        level: 125,
+                        job: "author",
+                        name: user.displayName
+                    };
+                }
+                whoArray.push(whoObject);
+            }
+            worldEmitter.emit('userManagerReturningWhoArray', whoArray);
+        }
         
         const socketCheckingMultiplayHandler = (id) => {
             //logger.debug(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`)
@@ -28,15 +59,8 @@ class UserManager {
             worldEmitter.emit('userManagerAddedUser', user);
         };
 
-        const logoutUserHandler = (user) => {
-            //logger.debug(`logoutUserHandler called`)
-            //logger.debug(`Users before removal: ${Array.from(this.users)}`)
-            this.removeUserById(user._id);
-            //logger.debug(`Users after removal: ${Array.from(this.users)}`)
-
-        };
-
         worldEmitter.on(`requestingUser`, requestingUserHandler);
+        worldEmitter.on(`requestingWhoArray`, requestingWhoArrayHandler);
         worldEmitter.on('socketCheckingMultiplay', socketCheckingMultiplayHandler);
         worldEmitter.on('socketConnectingUser', socketConnectingUserHandler);
         worldEmitter.on('zoneManagerRemovedPlayer', logoutUserHandler);
@@ -49,6 +73,7 @@ class UserManager {
                 if (!this.users.has(id.toString())) {
                     this.users.set(user._id.toString(), user);
                     //logger.info(`userManager added ${user.username} to users.`);
+                    //logger.info(`active users: ${Array.from(this.users).toString()}`);
                     return user;
                 } else {
                     logger.warn(`User with id ${id} already exists in users.`);
@@ -91,6 +116,18 @@ class UserManager {
         }
     }         
 
+    isNameOnline(name) {
+        for (let user of this.users.values()) {
+            if (user.name === name.toLowerCase()) {
+                return true;
+            }
+            if (user.activeCharacter && user.activeCharacter.name === name.toLowerCase()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     async removeUserById(id) {
         try {
             this.users.delete(id.toString());
@@ -120,7 +157,8 @@ class UserManager {
 
     clearContents() {
         this.users = []
-        worldEmitter.on(`requestingUser`, requestingUserHandler);
+        worldEmitter.off(`requestingUser`, requestingUserHandler);
+        worldEmitter.off(`requestingWhoArray`, requestingWhoArrayHandler);
         worldEmitter.off('socketCheckingMultiplay', socketCheckingMultiplayHandler);
         worldEmitter.off('socketConnectingUser', socketConnectingUserHandler);
         worldEmitter.off('zoneManagerRemovedPlayer', logoutUserHandler);

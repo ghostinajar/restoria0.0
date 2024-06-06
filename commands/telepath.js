@@ -9,12 +9,14 @@ async function telepath(parsedCommand, user) {
 
     if (!target) {
         const response = {
+            style : `telepath`,
             emitToUser : `${parsedCommand.directObject} is not online.`,
         };
         return response;
     }
 
     const response = {
+        style : `telepath`,
         emitToUser : `You telepath ${target.displayName}, "${parsedCommand.string}".`,
         emitToTarget : `${user.displayName} telepaths you, "${parsedCommand.string}".`
     };

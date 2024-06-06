@@ -5,6 +5,7 @@ async function author(user) {
     user.characterState = false;
     await user.save();
     return {
+        style: `author`,
         emitToUser: `Your character's consciousness returns to its author, ${user.displayName}.`,
         broadcastToRoom: `A character's consciousness returns to its author.`
     }

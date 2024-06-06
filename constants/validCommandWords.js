@@ -1,4 +1,4 @@
-export const validCommandWords = ["author", "auth", "character", "char", "say", "telepath"];
+export const validCommandWords = ["author", "auth", "character", "char", "say", "telepath", "who"];
 export const commandsWith1Param = [
 "abbreviate", "affects", "afk", "ambush", "appraise", "ask", 
 "assist", "attack", "autoassist", "autoflee", "backstab", 
@@ -12,7 +12,7 @@ export const commandsWith1Param = [
 "score", "search", "sell", "setjunk", "setparty", "setphase", 
 "setrescue", "setsummon", "solo", "sort", "split", "store", 
 "study", "target", "telepath", "tell", "throw", "track", "train", 
-"trip", "unparty", "wake", "where", "whisper", "who", "wield", 
+"trip", "unparty", "wake", "where", "whisper", "wield", 
 "withdraw", "zoneinfo", "zonelist"
 ]
 export const commandsWith2Params = [

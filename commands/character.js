@@ -23,6 +23,7 @@ async function character(parsedCommand, user) {
     logger.info(`User "${user.name}" made ${user.activeCharacter.name} their active character.`)
 
     return {
+        style: `character`,
         emitToUser : `Switching to character ${foundCharacter.displayName}...`,
         broadcastToRoom : `${user.displayName} becomes silent and still.`
     };
