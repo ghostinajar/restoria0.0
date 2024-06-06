@@ -44,6 +44,7 @@ const setupSocket = (io) => {
 
       // Add to location's ioRoom on login
       socket.join(user.location.inRoom.toString());
+      socket.join(user.location.inZone.toString());
 
       const telepathHandler = async (string) => {
         //logger.debug(`${user.name}'s socket received event telepathTo${user.name}, containing "${string}" tried telapathHandler`);
@@ -71,6 +72,10 @@ const setupSocket = (io) => {
         if (commandResponse.broadcastToRoom) {
           socket.to(user.location.inRoom.toString())
             .emit('serverSendingCommandResponse', (commandResponse.broadcastToRoom));
+        };
+        if (commandResponse.broadcastToZone) {
+          socket.to(user.location.inZone.toString())
+            .emit('serverSendingCommandResponse', (commandResponse.broadcastToZone));
         }
       });
 
