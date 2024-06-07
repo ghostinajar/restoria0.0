@@ -22,7 +22,7 @@ const mongodb_uri = process.env.MONGODB_URI;
 const port = process.env.PORT || 3000;
 const app = express() // Express app
 const server = createServer(app); // HTTP server
-const io = new Server(server); // Socket.io server
+export const io = new Server(server); // Socket.io server
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Get the directory name of the current module
 logger.level = process.env.LOG_LEVEL;
 
