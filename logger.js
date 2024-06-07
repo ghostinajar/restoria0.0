@@ -15,10 +15,10 @@ const colors = {
     error: 'red',
     warn: 'red',
     info: 'green',
-    debug: 'cyan',
     comms: 'blue',
     loot: 'magenta',
     input: 'white',
+    debug: 'cyan',
     loadout: 'gray',
 };
 winston.addColors(colors);
@@ -34,10 +34,10 @@ const logLevels = {
   error: 0,
   warn: 1,
   info: 2,
-  debug: 3,
-  comms: 4,
-  loot: 5,
-  input: 6,
+  comms: 3,
+  loot: 4,
+  input: 5,
+  debug: 6,
   loadout: 7,
 };
 

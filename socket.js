@@ -1,3 +1,5 @@
+// socket.js
+
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import validator from "validator";
@@ -6,45 +8,86 @@ import isValidCommandWord from "./util/isValidCommandWord.js";
 import processCommand from "./util/processCommand.js";
 import Name from "./model/classes/Name.js";
 
+const authenticateSessionUser = (socket) => {
+  try {
+    // Not authenticated? Disconnect.
+    if (!socket.request.session.passport || !socket.request.session.passport.user) {
+      socket.emit('redirectToLogin'); 
+      socket.disconnect();
+      return;
+    }
+
+    // Log username and _id on session (NB: not User object)
+    const sessionUser = socket.request.session.passport.user;
+    logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
+    return sessionUser
+  } catch(err) {
+    logger.error(`Error in putUserOnSocket: ${err.message}`)
+    throw(err);
+  }
+}
+
+const disconnectMultiplayer = async (socket, sessionUser) => {
+  try {
+    // User multiplaying sockets? Disconnect.
+    const isMultiplaying = await new Promise((resolve) => {
+      worldEmitter.once('userManagerCheckedMultiplay', resolve);
+      worldEmitter.emit('socketCheckingMultiplay', sessionUser._id);
+    });
+    if (isMultiplaying) {
+      logger.warn(`Username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
+      socket.emit('redirectToLogin');
+      socket.disconnect();
+      return true;
+    };
+    return false;
+  } catch (err) {
+    logger.error(`Error in disconnectMultiplayer: ${err.message}`)
+    throw(err);
+  }
+}
+
+const setupUser = async (sessionUser, socket) => {
+  try {
+    // Get user, alert userManager
+    const user = await new Promise((resolve) => {
+      worldEmitter.once('userManagerAddedUser', resolve);
+      worldEmitter.emit('socketConnectingUser', sessionUser._id);
+    });
+
+    if(!user) {
+      socket.emit('redirectToLogin');
+      socket.disconnect();
+      return;
+    }
+
+    // Set authorState
+    user.activeCharacter = null;
+    user.characterState = false;
+
+    // Add to location's ioRoom on login
+    socket.join(user.location.inRoom.toString());
+    socket.join(user.location.inZone.toString());
+
+    return user;
+  } catch (err) {
+    logger.error(`Error in setupUser: ${err.message}`)
+  }
+}
+
 const setupSocket = (io) => {
   try {
     io.on('connection', async (socket) => {
 
-      // Not authenticated? Disconnect.
-      if (!socket.request.session.passport || !socket.request.session.passport.user) {
-        socket.disconnect();
+      const sessionUser = authenticateSessionUser(socket);
+      if (!sessionUser) {
         return;
       }
-
-      // Log username and _id on session (NB: not User object)
-      const sessionUser = socket.request.session.passport.user;
-      logger.info(`User socket connected: ${sessionUser.username}, id: ${sessionUser._id}`);
-
-      // User multiplaying sockets? Disconnect.
-      const isMultiplaying = await new Promise((resolve) => {
-        worldEmitter.once('userManagerCheckedMultiplay', resolve);
-        worldEmitter.emit('socketCheckingMultiplay', sessionUser._id);
-      });
-      if (isMultiplaying) {
-        logger.warn(`Username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
-        socket.emit('redirectToLogin');
-        socket.disconnect();
+      if (await disconnectMultiplayer(socket, sessionUser)) {
         return;
-      };
-
-      // Get user, alert userManager
-      const user = await new Promise((resolve) => {
-        worldEmitter.once('userManagerAddedUser', resolve);
-        worldEmitter.emit('socketConnectingUser', sessionUser._id);
-      });
-
-      // Set authorState
-      user.activeCharacter = null;
-      user.characterState = false;
-
-      // Add to location's ioRoom on login
-      socket.join(user.location.inRoom.toString());
-      socket.join(user.location.inZone.toString());
+      }
+      const user = await setupUser(sessionUser, socket);
+      if(!user) {return};
 
       const telepathHandler = async (string) => {
         //logger.debug(`${user.name}'s socket received event telepathTo${user.name}, containing "${string}" tried telapathHandler`);
