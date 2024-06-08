@@ -56,6 +56,7 @@ class UserManager {
             //logger.debug(`worldEmitter received 'socketConnectingUser' and ${id}, checking...`)
             const user = await this.addUserById(id.toString());
             //logger.debug(`worldEmitter sending 'userManagerAddedUser' and ${user.username}...`)
+            if (!user) {return};            
             worldEmitter.emit('userManagerAddedUser', user);
         };
 

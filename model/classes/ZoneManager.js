@@ -86,6 +86,10 @@ class ZoneManager {
 
     async placePlayerInLocation(player) {
         // Missing location? Reset to world recall
+        if (!player) {
+            logger.error(`placePlayerInLocation received an undefined player`)
+            return;
+        };
         if (!player.location.inRoom || !player.location.inZone) {
             player.location = await resetPlayerLocation(player, 'Player location missing, reset to worldRecall.');
         }
