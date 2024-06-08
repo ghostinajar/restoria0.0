@@ -37,7 +37,7 @@ async function processCommand(parsedCommand, user) {
             break;
         }
         case 'who' : {
-            response = who();
+            response = who(user);
             break;
         }
         default : {response = {echoToUser : `Command couldn't be processed.`}};
