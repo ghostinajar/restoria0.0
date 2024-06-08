@@ -140,9 +140,9 @@
         window.scrollTo(0, document.body.scrollHeight);
       });
 
-      socket.on('telepath', (message) => {
+      socket.on('message', (message) => {
         const item = document.createElement('li');
-        item.textContent = `${message}`;
+        item.textContent = `${message.content}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });

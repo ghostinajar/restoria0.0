@@ -13,28 +13,31 @@ async function processCommand(parsedCommand, user) {
     switch (parsedCommand.commandWord) {
         case 'author':
         case 'auth': {
-            response = await author(user)
+            response = await author(user);
             break;
         }
         case 'say' : {
-            response = say(parsedCommand, user)
+            response = say(parsedCommand, user);
             break;
         }
         case 'character' : 
         case 'char' : {
-            response = character(parsedCommand, user)
+            response = character(parsedCommand, user);
             break;
         }
         case 'shout' : {
-            response = shout(parsedCommand, user)
+            response = shout(parsedCommand, user);
             break;
         }
-        case 'telepath' : {
-            response = telepath(parsedCommand, user)
+        case 't' :
+        case 'tel' :
+        case 'telepath' :
+        case 'tell' : {
+            response = telepath(parsedCommand, user);
             break;
         }
         case 'who' : {
-            response = who()
+            response = who();
             break;
         }
         default : {response = {echoToUser : `Command couldn't be processed.`}};

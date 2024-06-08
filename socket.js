@@ -89,11 +89,13 @@ const setupSocket = (io) => {
       const user = await setupUser(sessionUser, socket);
       if(!user) {return};
 
-      const telepathHandler = async (string) => {
-        //logger.debug(`${user.name}'s socket received event telepathTo${user.name}, containing "${string}" tried telapathHandler`);
-        socket.emit('telepath', string);
+      let player = user;
+
+      const messageForPlayerHandler = async (messageObject) => {
+        //logger.debug(`${player.name}'s socket received event `messageFor${player.name}`. Emitting ${JSON.stringify(messageObject)}.`);
+        socket.emit('message', messageObject);
       }
-      worldEmitter.on(`telepathTo${user.name}`, telepathHandler);
+      worldEmitter.on(`messageFor${player.name}`, messageForPlayerHandler);
 
       // Listen for userSentCommands
       socket.on('userSentCommand', async (userInput) => {

@@ -1,32 +1,40 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 
-async function telepath(parsedCommand, user) {
+async function telepath(parsedCommand, player) {
     const target = await new Promise ((resolve) => {
+        //TODO emit requestingPlayer, playerManager handles/emits
         worldEmitter.once(`userManagerReturningUser`, resolve);
         worldEmitter.emit(`requestingUser`, parsedCommand.directObject);
     });
 
-    if (!target) {
-        const response = {
-            style : `telepath`,
-            emitToUser : `${parsedCommand.directObject} is not online.`,
-        };
-        return response;
+    const message = {
+        userGen: true,
+        type : `telepath`,
+        content : `no message`,
     }
 
-    const response = {
-        style : `telepath`,
-        emitToUser : `You telepath ${target.displayName}, "${parsedCommand.string}".`,
-        emitToTarget : `${user.displayName} telepaths you, "${parsedCommand.string}".`
+    if (!parsedCommand.string) {
+        message.content  = `Telepath what?`
+        worldEmitter.emit(`messageFor${player.name}`, message);
+        return;
     };
-    //logger.debug(JSON.stringify(response));
 
-    const eventName = `telepathTo${target.name.toLowerCase()}`;
-    //logger.debug(eventName);
-    worldEmitter.emit(eventName, response.emitToTarget);
-    logger.comms(`${user._id} (${user.name}) telepathed ${target.name}, "${parsedCommand.string}".`)
-    return response;
+    if (!target) {
+        message.content  = `${parsedCommand.directObject} is not online.`
+        worldEmitter.emit(`messageFor${player.name}`, message);
+        return;
+    }
+
+    message.content  = `You telepath ${target.displayName}, "${parsedCommand.string}".`
+    worldEmitter.emit(`messageFor${player.name}`, message);
+
+    message.content  = `${player.displayName} telepaths you, "${parsedCommand.string}".`
+    worldEmitter.emit(`messageFor${target.name}`, message);
+
+    logger.comms(`${player._id} (${player.name}) telepathed ${target.name}, "${parsedCommand.string}".`)
+    //TODO: when all commands are updated, delete return `.`;
+    return `.`;
 }
 
 export default telepath;
