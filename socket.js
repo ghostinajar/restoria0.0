@@ -90,16 +90,19 @@ const setupSocket = (io) => {
       if(!user) {return};
 
       const messageForPlayerHandler = async (messageObject) => {
-        //logger.debug(`${user.player.name}'s socket received event `messageFor${user.player.name}`. Emitting ${JSON.stringify(messageObject)}.`);
         socket.emit('message', messageObject);
       }
       worldEmitter.on(`messageFor${user.name}`, messageForPlayerHandler);
 
       const messageForPlayersRoomHandler = async (messageObject) => {
-        //logger.debug(`${user.player.name}'s socket received event `messageFor${user.player.name}`. Emitting ${JSON.stringify(messageObject)}.`);
         socket.to(user.location.inRoom.toString()).emit('message', messageObject);
       }
       worldEmitter.on(`messageFor${user.name}sRoom`, messageForPlayersRoomHandler);
+
+      const messageForPlayersZoneHandler = async (messageObject) => {
+        socket.to(user.location.inZone.toString()).emit('message', messageObject);
+      }
+      worldEmitter.on(`messageFor${user.name}sZone`, messageForPlayersZoneHandler);
 
       // Listen for userSentCommands
       socket.on('userSentCommand', async (userInput) => {
