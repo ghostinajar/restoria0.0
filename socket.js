@@ -7,6 +7,7 @@ import parseCommand from "./util/parseCommand.js";
 import isValidCommandWord from "./util/isValidCommandWord.js";
 import processCommand from "./util/processCommand.js";
 import Name from "./model/classes/Name.js";
+import createCharacter from "./commands/createCharacter.js";
 
 const authenticateSessionUser = (socket) => {
   try {
@@ -119,18 +120,7 @@ const setupSocket = (io) => {
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
-        logger.debug(`userSubmittedNewCharacter ${character.name}`);
-        let nameIsTaken = await Name.findOne({ name: character.name.toLowerCase() });      
-        if(nameIsTaken) {
-            socket.emit('serverSendingCommandResponse', `That name is taken.`)
-            return;
-          }
-          const commandResponse = await user.createCharacter(character);
-          if (typeof commandResponse == 'string') {
-            socket.emit('serverSendingCommandResponse', commandResponse);
-          } else {
-            socket.emit('serverSendingCommandResponse', `You created ${character.displayName} the ${character.job}! You have ${user.characters.length}/12 characters. Type 'character ${character.displayName}' to play your new character.`)
-          }
+        createCharacter(character, user);
       });
 
       socket.on('disconnect', () => {
