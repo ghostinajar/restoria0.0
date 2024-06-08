@@ -89,13 +89,17 @@ const setupSocket = (io) => {
       const user = await setupUser(sessionUser, socket);
       if(!user) {return};
 
-      let player = user;
-
       const messageForPlayerHandler = async (messageObject) => {
-        //logger.debug(`${player.name}'s socket received event `messageFor${player.name}`. Emitting ${JSON.stringify(messageObject)}.`);
+        //logger.debug(`${user.player.name}'s socket received event `messageFor${user.player.name}`. Emitting ${JSON.stringify(messageObject)}.`);
         socket.emit('message', messageObject);
       }
-      worldEmitter.on(`messageFor${player.name}`, messageForPlayerHandler);
+      worldEmitter.on(`messageFor${user.name}`, messageForPlayerHandler);
+
+      const messageForPlayersRoomHandler = async (messageObject) => {
+        //logger.debug(`${user.player.name}'s socket received event `messageFor${user.player.name}`. Emitting ${JSON.stringify(messageObject)}.`);
+        socket.to(user.location.inRoom.toString()).emit('message', messageObject);
+      }
+      worldEmitter.on(`messageFor${user.name}sRoom`, messageForPlayersRoomHandler);
 
       // Listen for userSentCommands
       socket.on('userSentCommand', async (userInput) => {
@@ -107,20 +111,6 @@ const setupSocket = (io) => {
         if (!isValidCommandWord(parsedInput.commandWord)) {
           //TODO If invalid command word log IP (suspicious because client should prevent this)
           socket.emit('redirectToLogin', `Server rejected command.`)
-        }
-
-        //Process command and await response
-        const commandResponse = await processCommand(parsedInput, user);
-
-        //TODO emit and/or broadcast to appropriate ioRooms
-        socket.emit('serverSendingCommandResponse', (commandResponse.emitToUser));
-        if (commandResponse.broadcastToRoom) {
-          socket.to(user.location.inRoom.toString())
-            .emit('serverSendingCommandResponse', (commandResponse.broadcastToRoom));
-        };
-        if (commandResponse.broadcastToZone) {
-          socket.to(user.location.inZone.toString())
-            .emit('serverSendingCommandResponse', (commandResponse.broadcastToZone));
         }
       });
 

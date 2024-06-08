@@ -33,8 +33,6 @@ async function telepath(parsedCommand, player) {
     worldEmitter.emit(`messageFor${target.name}`, message);
 
     logger.comms(`${player._id} (${player.name}) telepathed ${target.name}, "${parsedCommand.string}".`)
-    //TODO: when all commands are updated, delete return `.`;
-    return `.`;
 }
 
 export default telepath;
