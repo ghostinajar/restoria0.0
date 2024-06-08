@@ -112,6 +112,7 @@ const setupSocket = (io) => {
           //TODO If invalid command word log IP (suspicious because client should prevent this)
           socket.emit('redirectToLogin', `Server rejected command.`)
         }
+        await processCommand(parsedInput, user);
       });
 
       socket.on('userSubmittedNewCharacter', async (character) => {
