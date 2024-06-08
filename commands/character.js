@@ -49,10 +49,9 @@ async function character(parsedCommand, user) {
 
     message.content = `${user.displayName} becomes silent and still.`
     worldEmitter.emit(`messageFor${user.name}sRoom`, message);
+    user.activeCharacter = foundCharacter;
+    user.characterState = true;
+    logger.info(`User "${user.name}" made ${user.activeCharacter.name} their active character.`)
 }
-
-user.activeCharacter = foundCharacter;
-user.characterState = true;
-logger.info(`User "${user.name}" made ${user.activeCharacter.name} their active character.`)
 
 export default character;
