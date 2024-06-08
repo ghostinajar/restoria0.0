@@ -2,10 +2,10 @@
 
 import logger from "../logger.js";
 import worldEmitter from '../model/classes/WorldEmitter.js';
-import Message from "../model/classes/Message.js";
+import makeMessage from "../types/makeMessage.js";
 
 function shout(parsedCommand, user) {
-    let message = new Message(true, 'shout', ``);
+    let message = makeMessage(true, 'shout', ``);
     
     if(!parsedCommand.string) {
         message.content = `Shout what?`

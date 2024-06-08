@@ -1,5 +1,5 @@
 // createCharacter.js
-import Message from "../model/classes/Message.js";
+import makeMessage from "../types/makeMessage.js"; 
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 
@@ -10,7 +10,7 @@ async function createCharacter (characterData, user) {
         if (!character) {
             logger.error(`Error in createCharacter with ${characterData}.`)
         }
-        const message = new Message(
+        let message = makeMessage(
             false, 
             'createCharacter', 
             `You created ${character.displayName} the ${character.job}! You have ${user.characters.length}/12 characters. Type 'character ${character.displayName}' to play your new character.`

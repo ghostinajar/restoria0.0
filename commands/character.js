@@ -2,7 +2,7 @@
 
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import Message from "../model/classes/Message.js";
+import makeMessage from "../types/makeMessage.js";
 
 const userOwnsCharacter = (name, user) => {
     const requestedCharacterName = name.toString().toLowerCase();
@@ -15,7 +15,7 @@ const userOwnsCharacter = (name, user) => {
 
 async function character(parsedCommand, user) {
     //logger.debug(`Character command function initiated with ${user.displayName}`);
-    let message = new Message(false, 'character', ``);
+    let message = makeMessage(false, 'character', ``);
 
     
     if (!parsedCommand.directObject) {

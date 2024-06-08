@@ -2,7 +2,7 @@
 
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
-import Message from "../model/classes/Message.js";
+import makeMessage from "../types/makeMessage.js";
 
 async function telepath(parsedCommand, player) {
     const target = await new Promise ((resolve) => {
@@ -11,7 +11,7 @@ async function telepath(parsedCommand, player) {
         worldEmitter.emit(`requestingUser`, parsedCommand.directObject);
     });
 
-    let message = new Message(true, 'telepath', ``);
+    let message = makeMessage(true, 'telepath', ``);
 
     if (!parsedCommand.string) {
         message.content  = `Telepath what?`
