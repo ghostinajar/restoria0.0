@@ -1,5 +1,8 @@
+// who.js
+
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import Message from "../model/classes/Message.js";
 
 async function who(user) {
     logger.debug(`Who command initiated`)
@@ -12,11 +15,8 @@ async function who(user) {
         return;
     }
 
-    let message = {
-        userGen: false,
-        type: 'who',
-        content: JSON.stringify(whoArray)
-    }
+    let message = new Message(false, 'who', JSON.stringify(whoArray));
+
     worldEmitter.emit(`messageFor${user.name}`, message)
 };
 

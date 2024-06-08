@@ -1,13 +1,12 @@
+// shout.js
+
 import logger from "../logger.js";
 import worldEmitter from '../model/classes/WorldEmitter.js';
+import Message from "../model/classes/Message.js";
 
 function shout(parsedCommand, user) {
-    let message = {
-        userGen : true,
-        type : `shout`,
-        content : ``
-    };
-     
+    let message = new Message(true, 'shout', ``);
+    
     if(!parsedCommand.string) {
         message.content = `Shout what?`
         worldEmitter.emit(`messageFor${user.name}`, message)

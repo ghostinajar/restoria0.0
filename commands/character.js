@@ -2,6 +2,7 @@
 
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import Message from "../model/classes/Message.js";
 
 const userOwnsCharacter = (name, user) => {
     const requestedCharacterName = name.toString().toLowerCase();
@@ -14,11 +15,8 @@ const userOwnsCharacter = (name, user) => {
 
 async function character(parsedCommand, user) {
     //logger.debug(`Character command function initiated with ${user.displayName}`);
-    let message = {
-        userGen : false,
-        type: 'character',
-        content: ``
-    }
+    let message = new Message(false, 'character', ``);
+
     
     if (!parsedCommand.directObject) {
         message.content = `What character?`;

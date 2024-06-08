@@ -1,13 +1,11 @@
+// say.js
+
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import Message from "../model/classes/Message.js";
 
 function say(parsedCommand, user) {
-    
-    let message = {
-        userGen: true,
-        type: 'say',
-        content: ``
-    };
+    let message = new Message(true, 'say', ``);
 
     if (!parsedCommand.string) {
         message.content = `Say what?`;
