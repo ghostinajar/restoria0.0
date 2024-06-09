@@ -1,14 +1,73 @@
 import mongoose from 'mongoose';
-import descriptionSchema from './Description.js';
-import affixSchema from './Affix.js';
-import statBlockSchema from './StatBlock.js';
-import locationSchema from './Location.js';
-import itemSchema from './Item.js';
+import descriptionSchema, { IDescription } from './Description.js';
+import affixSchema, { IAffix } from './Affix.js';
+import statBlockSchema, { IStatBlock } from './StatBlock.js';
+import locationSchema, { ILocation } from './Location.js';
+import itemSchema, { IItem } from './Item.js';
+
 const { Schema } = mongoose;
-;
-;
-;
-const characterSchema = new Schema({
+
+export interface IJobLevels {
+    cleric: number;
+    mage: number;
+    thief: number;
+    warrior: number;
+};
+
+export interface ITrainedProp {
+    name: string;
+    level: number;
+}
+
+export interface ITrained {
+    passives: Array<ITrainedProp>;
+    spells: Array<ITrainedProp>;
+};
+
+export interface IEquipped {
+    arms: IItem | null;
+    body: IItem | null;
+    ears: IItem | null;
+    feet: IItem | null;
+    finger1: IItem | null;
+    finger2: IItem | null;
+    hands: IItem | null;
+    head: IItem | null;
+    held: IItem | null;
+    legs: IItem | null;
+    neck: IItem | null;
+    shield: IItem | null;
+    shoulders: IItem | null;
+    waist: IItem | null;
+    wrist1: IItem | null;
+    wrist2: IItem | null;
+    weapon1: IItem | null;
+    weapon2: IItem | null;
+};
+
+export interface ICharacter {
+    name: string;
+    displayName: string;
+    pronouns: number;
+    location: ILocation;
+    creationDate: Date;
+    hoursPlayed: number;
+    job: string;
+    statBlock: IStatBlock;
+    goldHeld: number;
+    goldBanked: number;
+    trainingPoints: number;
+    jobLevels: IJobLevels;
+    description: IDescription;
+    //may change when training is implemented
+    trained: ITrained;
+    inventory: Array<IItem>;
+    storage: Array<IItem>;
+    equipped: IEquipped;
+    affixes: Array<IAffix>;
+}
+
+const characterSchema = new Schema<ICharacter>({
     name: { type: String, required: true, unique: true },
     displayName: { type: String, required: true, unique: true },
     pronouns: Number, // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
@@ -22,8 +81,8 @@ const characterSchema = new Schema({
     hoursPlayed: Number,
     job: String,
     statBlock: {
-        type: statBlockSchema,
-        default: () => ({})
+    type: statBlockSchema,
+    default: () => ({})
     },
     goldHeld: {
         type: Number,
@@ -62,13 +121,13 @@ const characterSchema = new Schema({
     //may change when training is implemented
     trained: {
         passives: [{
-                name: String,
-                level: Number
-            }],
+            name: String,
+            level: Number
+        }],
         spells: [{
-                name: String,
-                level: Number
-            }],
+            name: String,
+            level: Number
+        }],
     },
     inventory: [itemSchema],
     storage: [itemSchema],
@@ -144,11 +203,12 @@ const characterSchema = new Schema({
         weapon2: {
             type: itemSchema,
             default: null
-        }
+        }     
     },
     affixes: [{
-            type: affixSchema,
-            default: () => ({})
-        }],
+        type: affixSchema,
+        default: () => ({})
+    }],
 });
+
 export default characterSchema;
