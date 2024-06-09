@@ -1,7 +1,7 @@
 // makeMessage.ts
-import Message from "./Message.js";
+import IMessage from "./Message.js";
 
-function makeMessage(userGen : boolean, type : string, content : string | Array<string>) : Message {
+function makeMessage(userGen : boolean, type : string, content : string | Array<string>) : IMessage {
     let message = {
         userGen : userGen,
         type : type,

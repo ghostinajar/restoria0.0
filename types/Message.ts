@@ -1,9 +1,9 @@
 // message.ts
 
-interface Message {
+interface IMessage {
     userGen : boolean;
     type : string;
     content : string | Array<string>;
 }
 
-export default Message; 
+export default IMessage; 

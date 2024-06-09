@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
+
 const { Schema } = mongoose;
-const locationSchema = new Schema({
+
+export interface ILocation {
+    inZone: mongoose.Schema.Types.ObjectId,
+    inRoom: mongoose.Schema.Types.ObjectId,
+}
+
+const locationSchema = new Schema<ILocation>({
     inZone: {
         type: Schema.Types.ObjectId,
         ref: 'Zone'
@@ -10,4 +17,5 @@ const locationSchema = new Schema({
         ref: 'Room'
     }
 }, { _id: false });
+
 export default locationSchema;
