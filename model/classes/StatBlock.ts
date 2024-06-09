@@ -1,48 +1,60 @@
 import mongoose from 'mongoose';
+
 const { Schema } = mongoose;
-;
-const statBlockSchema = new Schema({
-    strength: {
+
+export interface IStatBlock {
+    strength: number;
+    dexterity: number;
+    constitution: number;
+    intelligence: number;
+    wisdom: number;
+    charisma: number;
+    spirit: number
+};
+
+const statBlockSchema = new Schema<IStatBlock>({
+    strength: { 
         type: Number,
         default: 12,
         min: [4, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [18, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
-    dexterity: {
+    dexterity: { 
         type: Number,
         default: 12,
         min: [4, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [18, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
-    constitution: {
+    constitution: { 
         type: Number,
         default: 12,
         min: [4, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [18, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
-    intelligence: {
+    intelligence: { 
         type: Number,
         default: 12,
         min: [4, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [18, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
-    wisdom: {
+    wisdom: { 
         type: Number,
         default: 12,
         min: [4, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [18, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
-    charisma: {
+    charisma: { 
         type: Number,
         default: 12,
         min: [4, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [18, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
-    spirit: {
+    spirit: { 
         type: Number,
         default: 0,
         min: [-1000, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [1000, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
 }, { _id: false });
+
 export default statBlockSchema;

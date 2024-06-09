@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
+
 const { Schema } = mongoose;
-const affixSchema = new Schema({
+
+export interface IAffix {
+  affixType: string;
+  value: number;
+  currentTweak?: number;
+  secondsRemaining?: number;
+}
+
+const affixSchema = new Schema<IAffix>({
   affixType: {
     type: String,
     required: true,
@@ -12,4 +21,5 @@ const affixSchema = new Schema({
   currentTweak: Number,
   secondsRemaining: Number,
 });
+
 export default affixSchema;
