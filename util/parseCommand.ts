@@ -1,7 +1,7 @@
 // parseCommand
 import { commandsWith1Param, commandsWith2Params } from "../constants/validCommandWords.js";
   
-interface IParsedCommand {
+export interface IParsedCommand {
     commandWord : string;
     directObject? : string;
     indirectObject? : string;

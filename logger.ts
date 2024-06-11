@@ -1,3 +1,5 @@
+// logger
+
 import winston from 'winston';
 import 'winston-daily-rotate-file';
 
@@ -67,6 +69,7 @@ const logger = winston.createLogger({
   rejectionHandlers: [
     new winston.transports.File({ filename: './logs/rejections.log' }),
   ],
+
 });
 
 export default logger;
