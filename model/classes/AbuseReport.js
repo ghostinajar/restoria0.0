@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
-
-const { Schema, model } = mongoose;
-
+const { Schema, Types, model } = mongoose;
 const abuseReportSchema = new Schema({
     reportingUser: {
         type: Schema.Types.ObjectId,
@@ -12,7 +10,6 @@ const abuseReportSchema = new Schema({
         ref: 'User'
     },
     body: String,
-  });
-
+});
 const AbuseReport = model('AbuseReport', abuseReportSchema);
 export default AbuseReport;
