@@ -1,154 +1,101 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
-import logger from '../../logger.js';
-import locationSchema from './Location.js';
-import descriptionSchema from './Description.js';
-import characterSchema from './Character.js';
-import isValidName from '../../util/isValidName.js';
-import Name from './Name.js';
-
-const { Schema, model } = mongoose;
-
-// the user (aka "Author") lacks most of the data/methods of a character, 
-// but is playable, and stores the user's auth info
+// User
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import affixSchema from "./Affix.js";
+import itemSchema from "./Item.js";
+import descriptionSchema from "./Description.js";
+import locationSchema from "./Location.js";
+import statBlockSchema from "./StatBlock.js";
+const { Schema, Types, model } = mongoose;
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
-    displayName: { type: String, required: true, unique: true },
+    name: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash
     salt: { type: String, required: true },
-    isAdmin: { type: Boolean, default: false },
-    isTeacher: { type: Boolean, default: false },
+    isAdmin: { type: Boolean, required: true, default: false },
+    isTeacher: { type: Boolean, required: true, default: false },
+    isAuthor: { type: Boolean, required: true, default: false },
     location: {
         type: locationSchema,
-        default: () => {}
+        required: true,
+        default: {
+            inZone: new Types.ObjectId(process.env.WORLD_RECALL_ZONEID),
+            inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
+        },
     },
-    pronouns: Number, // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
-    creationDate: {
-        type: Date,
-        default: Date.now
+    // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
+    pronouns: { type: Number, required: true, default: 3 },
+    creationDate: { type: Date, required: true, default: Date.now },
+    hoursPlayed: { type: Number, required: true, default: 0 },
+    job: { type: String, required: true, default: "cleric" },
+    level: { type: Number, required: true, default: 1 },
+    statBlock: { type: statBlockSchema, required: true, default: () => ({}) },
+    goldHeld: { type: Number, required: true, default: 0 },
+    goldBanked: { type: Number, required: true, default: 0 },
+    trainingPoints: { type: Number, required: true, default: 0 },
+    jobLevels: {
+        type: {
+            cleric: { type: Number, required: true, default: 0 },
+            mage: { type: Number, required: true, default: 0 },
+            rogue: { type: Number, required: true, default: 0 },
+            warrior: { type: Number, required: true, default: 0 },
+        },
+        required: true,
     },
-    lastLoginDate: Date,
-    activeCharacter: {type: Object, default: null},
-    characterState: {type: Boolean, default: false},
-    hoursPlayed: { type: Number, default: 0 },
-    description: {
-        type: descriptionSchema,
-        default: () => ({})
+    description: { type: descriptionSchema, required: true, default: () => ({}) },
+    characters: {
+        type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        required: true,
+        default: () => [],
     },
-    characters: [characterSchema],
-    students: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
+    students: {
+        type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        required: true,
+        default: () => [],
+    },
+    trained: {
+        type: [{ name: String, level: Number }],
+        required: true,
+        default: () => [],
+    },
+    inventory: { type: [itemSchema], required: true, default: () => [] },
+    storage: { type: [itemSchema], required: true, default: () => [] },
+    equipped: {
+        type: {
+            arms: { type: itemSchema, default: null },
+            body: { type: itemSchema, default: null },
+            ears: { type: itemSchema, default: null },
+            feet: { type: itemSchema, default: null },
+            finger1: { type: itemSchema, default: null },
+            finger2: { type: itemSchema, default: null },
+            hands: { type: itemSchema, default: null },
+            head: { type: itemSchema, default: null },
+            held: { type: itemSchema, default: null },
+            legs: { type: itemSchema, default: null },
+            neck: { type: itemSchema, default: null },
+            shield: { type: itemSchema, default: null },
+            shoulders: { type: itemSchema, default: null },
+            waist: { type: itemSchema, default: null },
+            wrist1: { type: itemSchema, default: null },
+            wrist2: { type: itemSchema, default: null },
+            weapon1: { type: itemSchema, default: null },
+            weapon2: { type: itemSchema, default: null },
+        },
+        required: true,
+    },
+    affixes: {
+        type: [{ type: affixSchema, required: true, default: () => ({}) }],
+        required: true,
+        default: () => [],
+    },
 });
-
-userSchema.pre('save', function(next) {
-    this.username = this.displayName.toLowerCase();
-    next();
-});
-  
-userSchema.pre('findOneAndUpdate', function(next) {
-    this._update.username = this._update.displayName.toLowerCase();
-    next();
-});
-
-userSchema.virtual('name')
-    .get(function() {
-        return this.username;
-    })
-    .set(function(name) {
-        this.username = name;
-    });
-
-userSchema.set('toJSON', { virtuals: true });
-userSchema.set('toObject', { virtuals: true });
-
-userSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
     try {
         return await bcrypt.compare(candidatePassword, this.password);
-    } catch (err) {
+    }
+    catch (err) {
         throw err;
     }
 };
-
-userSchema.methods.createCharacter = async function(characterData) {
-    try {
-        if (!isValidName(characterData.name)) {
-            return `${characterData.name} is not a valid name.`
-        }
-        if (this.characters.length >= 12) {
-            return `You already have 12 characters. That's the limit!`
-        }
-        // Check for duplicate name
-        let nameIsTaken = await Name.findOne({ name: characterData.name.toLowerCase() });      
-        if(nameIsTaken) {
-            return `That name is taken.`;
-        }
-        characterData.displayName = characterData.name;
-        characterData.name = characterData.displayName.toLowerCase();
-        const nameToRegister = new Name({ name: characterData.name });
-        await nameToRegister.save();
-        characterData.statBlock = {}
-        switch (characterData.job) {
-            case 'cleric' : {
-                characterData.statBlock.wisdom = 14;
-                break;
-            }
-            case 'mage' : {
-                characterData.statBlock.intelligence = 14;
-                break;
-            }
-            case 'rogue' : {
-                characterData.statBlock.dexterity = 14;
-                break;
-            }
-            case 'warrior' : {
-                characterData.statBlock.strength = 14;
-                break;
-            }
-            default : break
-        }
-        //set location to default world_recall
-        characterData.location = JSON.parse(process.env.WORLD_RECALL);
-        //create the character (objectId will be assigned when user.save())
-        this.characters.push(characterData);
-        await this.save();
-        logger.info(`User "${this.name}" created character "${characterData.name}". ${this.characters.length}/12`)
-        return characterData;
-    } catch (err) {
-        logger.error(`Error in userSchema.createCharacter: ${err.message} `)
-        throw err;
-    }
-};
-
-userSchema.methods.deleteCharacterByName = async function(name) {
-    try {
-        for (let [key, character] of this.characters.entries()) {
-            if (character.name === name) {
-                this.characters.delete(key);
-                break;
-            }
-        }
-        logger.info(`Character deleted from user's characters.`)
-        await Name.deleteOne({ name: name.toLowerCase() });
-        logger.info(`Name deleted from names collection.`)
-    } catch (err) {
-        logger.error(`Error in userSchema.deleteCharacterByName: ${err.message} `)
-        throw err;
-    }
-};
-
-userSchema.methods.findCharacterByName = function(name) {
-    for (let [key, character] of this.characters.entries()) {
-        if (character.name === name.toLowerCase()) {
-            return character;
-        }
-    }
-    return null;
-}
-
-
-const User = model('User', userSchema);
+const User = model("User", userSchema);
 export default User;

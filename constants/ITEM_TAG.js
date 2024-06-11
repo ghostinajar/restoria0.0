@@ -16,7 +16,7 @@ const ITEM_TAG = {
     OFFHAND: 'offhand',
     REACH: 'reach',
     TEMPORARY: 'temporary',
-    THIEF: 'thief',
+    ROGUE: 'rogue',
     THROWN: 'thrown',
     TWO_HAND: 'two-hand',
     WARRIOR: 'warrior',

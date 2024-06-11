@@ -17,7 +17,7 @@ async function who(user) {
 
     let message = makeMessage(false, 'who', JSON.stringify(whoArray));
 
-    worldEmitter.emit(`messageFor${user.name}`, message)
+    worldEmitter.emit(`messageFor${user.username}`, message)
 };
 
 export default who;

@@ -1,4 +1,4 @@
-// say.js
+// say
 
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -9,14 +9,14 @@ function say(parsedCommand, user) {
 
     if (!parsedCommand.string) {
         message.content = `Say what?`;
-        worldEmitter.emit(`messageFor${user.name}`, message);
+        worldEmitter.emit(`messageFor${user.username}`, message);
         return;
     };
         
     message.content = `You say, "${parsedCommand.string}".`;
-    worldEmitter.emit(`messageFor${user.name}`, message);
-    message.content = `${user.displayName} says, "${parsedCommand.string}".`;
-    worldEmitter.emit(`messageFor${user.name}sRoom`, message);
+    worldEmitter.emit(`messageFor${user.username}`, message);
+    message.content = `${user.name} says, "${parsedCommand.string}".`;
+    worldEmitter.emit(`messageFor${user.username}sRoom`, message);
     logger.comms(`${user._id} ${user.name} said, "${parsedCommand.string}".`)
 }
 

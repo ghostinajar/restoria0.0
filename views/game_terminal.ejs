@@ -1,45 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>Restoria 0.0.1</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <nav class="nav">
-        <h1>Restoria 0.0.1</h1>
-          <form action="/logout" method="post">
-            <button class="logout" type="submit">Sign out</button>
-          </form>
+      <h1>Restoria 0.0.1</h1>
+      <form action="/logout" method="post">
+        <button class="logout" type="submit">Sign out</button>
+      </form>
     </nav>
 
-    <form id="characterForm" style="display: none;">
-      <label for="characterName">Name:</label>
-      <input id="characterName" type="text" required />
-      
-      <label for="pronouns">Pronouns:</label>
-      <select id="pronouns" required>
-        <option value=0>He/Him</option>
-        <option value=1>It/It</option>
-        <option value=2>She/Her</option>
-        <option value=3>They/Them</option>
-      </select>
-
-      <label for="job">Job:</label>
-      <select id="job" required>
-        <option value="cleric">Cleric</option>
-        <option value="mage">Mage</option>
-        <option value="rogue">Rogue</option>
-        <option value="warrior">Warrior</option>
-      </select>
-      
+    <form id="createUserForm" style="display: none">
+      <section>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required />
+      </section>
+      <section>
+        <label for="new-password">Password</label>
+        <input
+          id="new-password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          required
+        />
+      </section>
+      <section>
+        <label for="pronouns">Pronouns:</label>
+        <select id="pronouns" name="pronouns" required>
+          <option value="0">He/Him</option>
+          <option value="1">It/It</option>
+          <option value="2">She/Her</option>
+          <option value="3">They/Them</option>
+        </select>
+      </section>
+      <section>
+        <label for="job">Job:</label>
+        <select id="job" name="job" required>
+          <option value="cleric">Cleric</option>
+          <option value="mage">Mage</option>
+          <option value="rogue">Rogue</option>
+          <option value="warrior">Warrior</option>
+        </select>
+      </section>
       <button type="submit">Create Character</button>
-      <button type="button" id="cancelCharacterForm">Cancel</button>
+      <button type="button" id="cancelCreateUserForm">Cancel</button>
     </form>
-    
+
     <ul id="messages"></ul>
 
     <form id="commandForm" action="">
@@ -51,103 +63,102 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io(); // no URL needed for now; defaults to host that serves the page
-      const validCommandWords = '<%- JSON.stringify(validCommandWords) %>';
-      const commandForm = document.getElementById('commandForm');
-      const characterForm = document.getElementById('characterForm');
-      const characterName = document.getElementById('characterName');
-      const input = document.getElementById('input');
-      const messages = document.getElementById('messages');
+      const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
+      const commandForm = document.getElementById("commandForm");
+      const createUserForm = document.getElementById("createUserForm");
+      const name = document.getElementById("name");
+      const password = document.getElementById("new-password");
+      const input = document.getElementById("input");
+      const messages = document.getElementById("messages");
 
       //methods definitions (validation and parsing are client version)
-      function isValidCommandWord (commandWord) {
-          if (!validCommandWords.includes(commandWord.toLowerCase())) {
-            return false;
-          }
-          return true;
-      };
-      function parseCommand (command) {
-          const parsedCommand = {};
-          const splitCommand = command.split(" ");
-          parsedCommand.commandWord = splitCommand[0];
-          if (splitCommand.length > 1) {
+      function isValidCommandWord(commandWord) {
+        if (!validCommandWords.includes(commandWord.toLowerCase())) {
+          return false;
+        }
+        return true;
+      }
+      function parseCommand(command) {
+        const parsedCommand = {};
+        const splitCommand = command.split(" ");
+        parsedCommand.commandWord = splitCommand[0];
+        if (splitCommand.length > 1) {
           parsedCommand.string = splitCommand.slice(1).join(" ");
-          }
+        }
 
-          return parsedCommand;
-      };
-      function appendStringToTerminal (message) {
+        return parsedCommand;
+      }
+      function appendMessageToTerminal(message) {
         //TODO unpack string and class (for style) from message object
-          const item = document.createElement('li');
-          item.textContent = message;
-          messages.appendChild(item);
-          window.scrollTo(0, document.body.scrollHeight);
-      };
+        const item = document.createElement("li");
+        item.textContent = message;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      }
 
       /*TODO write appendSafeStringToTerminal function to 
       unpack and display emits that don't include user-gen content, 
       allowing inner html for multi-color lines */
 
-      document.getElementById('cancelCharacterForm').addEventListener('click', function() {
-        characterForm.style.display = 'none';
-      });
-      
-      commandForm.addEventListener('submit', (e) => {
+      document
+        .getElementById("cancelCreateUserForm")
+        .addEventListener("click", function () {
+          createUserForm.style.display = "none";
+        });
+
+      commandForm.addEventListener("submit", (e) => {
         e.preventDefault();
         if (input.value) {
           parsedCommand = parseCommand(input.value);
           //reject invalid command words
-          if (input.value.toLowerCase() === 'create character') {
-            characterForm.style.display = 'block';
-            input.value = '';
+          if (input.value.toLowerCase() === "create character") {
+            createUserForm.style.display = "block";
+            input.value = "";
             return;
           }
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
-            appendStringToTerminal(`Sorry, '${shortenedCommand}' is not a valid command word.`);
-            input.value = '';
+            appendMessageToTerminal(
+              `Sorry, '${shortenedCommand}' is not a valid command word.`
+            );
+            input.value = "";
             return;
           }
-          socket.emit('userSentCommand', input.value);
-          input.value = '';
+          socket.emit("userSentCommand", input.value);
+          input.value = "";
         }
       });
 
-      characterForm.addEventListener('submit', (e) => {
+      createUserForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const character = {
-          name: document.getElementById('characterName').value,
-          pronouns: document.getElementById('pronouns').value,
-          job: document.getElementById('job').value,
+        const userData = {
+          name: document.getElementById("name").value,
+          username: document.getElementById("name").value.toLowerCase(),
+          password: document.getElementById("password").value,
+          pronouns: document.getElementById("pronouns").value,
+          job: document.getElementById("job").value,
         };
-        socket.emit('userSubmittedNewCharacter', character);
-        characterName.value = '';
-        characterForm.style.display = 'none'; // Hide the form after submission
+        socket.emit("userSubmittedNewCharacter", userData);
+        name.value = "";
+        password.value = "";
+        createUserForm.style.display = "none"; // Hide the form after submission
       });
 
-      socket.on('invalid', (rejectionString) => {
-        appendStringToTerminal('Server says invalid command.');
+      socket.on("invalid", (rejectionString) => {
+        appendMessageToTerminal("Server says invalid command.");
       });
 
-      socket.on('redirectToLogin', () => {
+      socket.on("redirectToLogin", () => {
         // Redirect to /login
-        window.location.href = '/login';
+        window.location.href = "/login";
       });
 
-      socket.on('serverSendingCommandResponse', (message) => {
-        const item = document.createElement('li');
-        item.textContent = `${message}`;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      });
-
-      socket.on('message', (message) => {
-        const item = document.createElement('li');
+      socket.on("message", (message) => {
+        const item = document.createElement("li");
         item.textContent = `${message.content}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
-
     </script>
   </body>
-
 </html>

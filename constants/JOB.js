@@ -1,7 +1,7 @@
 const JOB = {
     CLERIC: 'cleric',
     MAGE: 'mage',
-    THIEF: 'thief',
+    ROGUE: 'rogue',
     WARRIOR: 'warrior'
 };
 

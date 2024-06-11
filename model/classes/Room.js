@@ -5,7 +5,6 @@ import exitSchema from './Exit.js';
 import mobNodeSchema from './MobNode.js';
 import itemNodeSchema from './ItemNode.js';
 import logger from '../../logger.js';
-import worldEmitter from './WorldEmitter.js';
 import activateItemNodes from '../../util/activateItemNodes.js';
 import activateMobNodes from '../../util/activateMobNodes.js';
 import destroyMobs from '../../util/destroyMobs.js';
@@ -117,10 +116,10 @@ const roomSchema = new Schema({
 });     
 
 //since there will only ever be one instance of a Room, the Room class will have
-//arrays to store active mobs, items, and players inside the room. 
+//arrays to store active mobs, items, and users inside the room. 
 //These are never saved in db.
 
-//entityType should be a string to indicate which array to use ("mobs", "items", or "players")
+//entityType should be a string to indicate which array to use ("mobs", "items", or "users")
 roomSchema.methods.addEntityTo = function(entityType, instance) {
     //if the array exists, and the instance doesn't already exist in the array, add it
     if (this[entityType] && !this[entityType].find(el => el._id.toString() === instance._id.toString())) {
@@ -147,14 +146,14 @@ roomSchema.methods.initiate = async function() {
     this.inventory = [];
     await activateItemNodes(this.itemNodes, this.inventory);
     //logger.debug(`Items in room "${this.name}": ${JSON.stringify(this.inventory.map(item => item.name))}`);
-    this.players = [];
+    this.users = [];
 };
 
 roomSchema.methods.clearContents = async function() {
     await destroyMobs(this.mobs);
     this.mobs = [];
     this.inventory = [];
-    this.players = [];
+    this.users = [];
 };
 
 export default roomSchema;

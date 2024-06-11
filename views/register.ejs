@@ -1,33 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>Restoria 0.0.1</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
-			<ul id="messages">
-        <li>Restoria 0.0.1</li>
-        <li>Log in</li>
-        <li>
-          <form action="/register" method="post">
-            <section>
-              <label for="username">Username</label>
-              <input id="username" name="username" type="text" autocomplete="username" required>
-            </section>
-            <section>
-              <label for="new-password">Password</label>
-              <input id="new-password" name="password" type="password" autocomplete="new-password" required>
-            </section>
-            <button class="button" type="submit">Register</button>
-          </form>
-        </li>
-        <li>Already have an account? <a href="/login">Log in</a></li>
-        <li>Or go <a href="/">home.</a></li>
-      </ul>
-	</body>
-
+    <ul id="messages">
+      <li>Restoria 0.0.1</li>
+      <li>
+        <form action="/register" method="post">
+          <section>
+            <label for="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+            />
+          </section>
+          <section>
+            <label for="new-password">Password</label>
+            <input
+              id="new-password"
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              required
+            />
+          </section>
+          <section>
+            <label for="pronouns">Pronouns:</label>
+            <select id="pronouns" name="pronouns" required>
+              <option value="0">He/Him</option>
+              <option value="1">It/It</option>
+              <option value="2">She/Her</option>
+              <option value="3">They/Them</option>
+            </select>
+          </section>
+          <section>
+            <label for="job">Job:</label>
+            <select id="job" name="job" required>
+              <option value="cleric">Cleric</option>
+              <option value="mage">Mage</option>
+              <option value="rogue">Rogue</option>
+              <option value="warrior">Warrior</option>
+            </select>
+          </section>          
+          <button class="button" type="submit">Register</button>
+        </form>
+      </li>
+      <li>Already have an account? <a href="/login">Log in</a></li>
+      <li>Or go <a href="/">home.</a></li>
+    </ul>
+  </body>
 </html>

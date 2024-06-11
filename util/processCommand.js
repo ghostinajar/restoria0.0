@@ -1,48 +1,33 @@
 import logger from "../logger.js";
-import author from "../commands/author.js";
-import character from "../commands/character.js"
 import say from "../commands/say.js";
 import shout from "../commands/shout.js";
 import telepath from "../commands/telepath.js";
 import who from "../commands/who.js";
 
-
 async function processCommand(parsedCommand, user) {
-    //logger.info(`Processing command: ${JSON.stringify(parsedCommand)}`)
-    let response;
+    logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`)
     switch (parsedCommand.commandWord) {
-        case 'author':
-        case 'auth': {
-            response = await author(user);
+        case `say` : {
+            say(parsedCommand, user);
             break;
         }
-        case 'say' : {
-            response = say(parsedCommand, user);
+        case `shout` : {
+            shout(parsedCommand, user);
             break;
         }
-        case 'character' : 
-        case 'char' : {
-            response = character(parsedCommand, user);
+        case `t` :
+        case `tel` :
+        case `telepath` :
+        case `tell` : {
+            telepath(parsedCommand, user);
             break;
         }
-        case 'shout' : {
-            response = shout(parsedCommand, user);
+        case `who` : {
+            who(user);
             break;
         }
-        case 't' :
-        case 'tel' :
-        case 'telepath' :
-        case 'tell' : {
-            response = telepath(parsedCommand, user);
-            break;
-        }
-        case 'who' : {
-            response = who(user);
-            break;
-        }
-        default : {response = {echoToUser : `Command couldn't be processed.`}};
+        default : {logger.error(`Command couldn't be processed.`)};
     }
-    return response;
 }
 
 export default processCommand;

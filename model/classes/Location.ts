@@ -2,11 +2,11 @@
 
 import mongoose from 'mongoose';
 
-const { Schema } = mongoose;
+import { Schema, Types } from 'mongoose';
 
 export interface ILocation {
-    inZone: mongoose.Schema.Types.ObjectId,
-    inRoom: mongoose.Schema.Types.ObjectId,
+    inZone: Types.ObjectId;
+    inRoom: Types.ObjectId;
 }
 
 const locationSchema = new Schema<ILocation>({

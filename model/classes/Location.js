@@ -1,6 +1,5 @@
-// Location.ts
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
+// Location
+import { Schema } from 'mongoose';
 const locationSchema = new Schema({
     inZone: {
         type: Schema.Types.ObjectId,

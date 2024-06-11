@@ -23,7 +23,9 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/mongoose": "^5.11.97",
+    "@types/winston": "^2.4.4",
     "nodemon": "^3.1.0"
   }
 }

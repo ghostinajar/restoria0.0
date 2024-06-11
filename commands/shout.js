@@ -1,4 +1,4 @@
-// shout.js
+// shout
 
 import logger from "../logger.js";
 import worldEmitter from '../model/classes/WorldEmitter.js';
@@ -9,14 +9,14 @@ function shout(parsedCommand, user) {
     
     if(!parsedCommand.string) {
         message.content = `Shout what?`
-        worldEmitter.emit(`messageFor${user.name}`, message)
+        worldEmitter.emit(`messageFor${user.username}`, message)
         return;
     }
 
     message.content = `You shout, "${parsedCommand.string}".`;
-    worldEmitter.emit(`messageFor${user.name}`, message);
-    message.content = `${user.displayName} shouts, "${parsedCommand.string}".`;
-    worldEmitter.emit(`messageFor${user.name}sZone`, message);
+    worldEmitter.emit(`messageFor${user.username}`, message);
+    message.content = `${user.name} shouts, "${parsedCommand.string}".`;
+    worldEmitter.emit(`messageFor${user.username}sZone`, message);
     logger.comms(`${user._id} ${user.name} shouted, "${parsedCommand.string}".`)
 }
 

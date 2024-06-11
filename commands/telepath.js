@@ -4,34 +4,38 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import makeMessage from "../types/makeMessage.js";
 
-async function telepath(parsedCommand, player) {
-    const target = await new Promise ((resolve) => {
-        //TODO emit requestingPlayer, playerManager handles/emits
-        worldEmitter.once(`userManagerReturningUser`, resolve);
-        worldEmitter.emit(`requestingUser`, parsedCommand.directObject);
-    });
-
+async function telepath(parsedCommand, user) {
     let message = makeMessage(true, 'telepath', ``);
-
-    if (!parsedCommand.string) {
-        message.content  = `Telepath what?`
-        worldEmitter.emit(`messageFor${player.name}`, message);
+    
+    if (!parsedCommand.directObject) {
+        message.content  = `Telepath who?`
+        worldEmitter.emit(`messageFor${user.username}`, message);
         return;
     };
 
+    if (!parsedCommand.string) {
+        message.content  = `Telepath what?`
+        worldEmitter.emit(`messageFor${user.username}`, message);
+        return;
+    };
+
+    const target = await new Promise ((resolve) => {
+        worldEmitter.once(`userManagerReturningUser`, resolve);
+        worldEmitter.emit(`requestingUser`, parsedCommand.directObject);
+    });
     if (!target) {
         message.content  = `${parsedCommand.directObject} is not online.`
-        worldEmitter.emit(`messageFor${player.name}`, message);
+        worldEmitter.emit(`messageFor${user.username}`, message);
         return;
     }
 
-    message.content  = `You telepath ${target.displayName}, "${parsedCommand.string}".`
-    worldEmitter.emit(`messageFor${player.name}`, message);
+    message.content  = `You telepath ${target.name}, "${parsedCommand.string}".`
+    worldEmitter.emit(`messageFor${user.username}`, message);
 
-    message.content  = `${player.displayName} telepaths you, "${parsedCommand.string}".`
-    worldEmitter.emit(`messageFor${target.name}`, message);
+    message.content  = `${user.name} telepaths you, "${parsedCommand.string}".`
+    worldEmitter.emit(`messageFor${target.username}`, message);
 
-    logger.comms(`${player._id} (${player.name}) telepathed ${target.name}, "${parsedCommand.string}".`)
+    logger.comms(`${user._id} (${user.name}) telepathed ${target.name}, "${parsedCommand.string}".`)
 }
 
 export default telepath;
