@@ -1,8 +1,8 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
-async function getZoneById(id) {
-    try {
-        const zone = await new Promise((resolve) => {
+
+async function getZoneById(id : string) {
+    try {const zone = await new Promise((resolve) => {
             worldEmitter.once('zoneLoaded', resolve);
             worldEmitter.emit('zoneRequested', id);
         });
@@ -11,9 +11,9 @@ async function getZoneById(id) {
             return null;
         }
         return zone;
-    }
-    catch (err) {
+    } catch(err : any) {
         logger.log(`error`, `Error in getZoneById: ${err.message}`);
     }
 }
+
 export default getZoneById;
