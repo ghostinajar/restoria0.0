@@ -9,9 +9,9 @@ class UserManager {
 
     const logoutUserHandler = (user) => {
       logger.debug(`logoutUserHandler called`)
-      logger.debug(`Users before removal: ${Array.from(this.users).map(user => user.username)}`)
+      logger.debug(`Users before removal: ${Array.from(this.users.values()).map(user => user.username)}`)
       this.removeUserById(user._id);
-      logger.debug(`Users after removal: ${Array.from(this.users).map(user => user.username)}`)
+      logger.debug(`Users after removal: ${Array.from(this.users.values()).map(user => user.username)}`)
     };
 
     const requestingUserHandler = (username) => {
@@ -67,7 +67,7 @@ class UserManager {
         if (!this.users.has(id.toString())) {
           this.users.set(user._id.toString(), user);
           logger.debug(`userManager added ${user.name} to users.`);
-          logger.debug(`active users: ${Array.from(this.users).map(user => user.name)}`);
+          logger.debug(`Active users: ${JSON.stringify(Array.from(this.users.values()).map((user) => user.name))}`);
           return user;
         } else {
           logger.warn(`User with id ${id} already exists in users.`);
