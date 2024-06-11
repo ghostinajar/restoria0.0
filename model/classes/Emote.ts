@@ -2,16 +2,16 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-export interface IChatter {
+export interface IEmote {
     commandWord: String;
     toTarget: String;
     toRoom: String;
 }
 
-const chatterSchema = new Schema<IChatter>({
+const emoteSchema = new Schema<IEmote>({
     commandWord: String,
     toTarget: String,
-    toRoom: String,
+    toRoom: String
 });
 
-export default chatterSchema;
+export default emoteSchema;
