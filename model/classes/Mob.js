@@ -1,5 +1,5 @@
 class Mob {
-    constructor (blueprint) {
+    constructor(blueprint) {
         this.author = blueprint.author;
         this.name = blueprint.name;
         this.pronouns = blueprint.pronouns;
@@ -18,7 +18,26 @@ class Mob {
         this.chatters = blueprint.chatters;
         this.emotes = blueprint.emotes;
         this.inventory = [];
-    };
-};
-
+    }
+    ;
+    author;
+    name;
+    pronouns;
+    level;
+    job;
+    statBlock;
+    goldHeld;
+    isUnique;
+    isMount;
+    isAggressive;
+    chattersToPlayer;
+    emotesToPlayer;
+    description;
+    keywords;
+    affixes;
+    chatters;
+    emotes;
+    inventory;
+}
+;
 export default Mob;
