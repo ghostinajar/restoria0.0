@@ -21,4 +21,5 @@ const ITEM_TAG = {
     TWO_HAND: 'two-hand',
     WARRIOR: 'warrior',
 };
+
 export default ITEM_TAG;

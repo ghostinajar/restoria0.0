@@ -4,4 +4,5 @@ const JOB = {
     ROGUE: 'rogue',
     WARRIOR: 'warrior'
 };
+
 export default JOB;

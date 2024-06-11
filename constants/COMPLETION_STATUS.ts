@@ -5,4 +5,5 @@ const COMPLETION_STATUS = {
     PUBLISHED: 'published',
     ARCHIVED: 'archived',
 };
+
 export default COMPLETION_STATUS;

@@ -19,4 +19,5 @@ const AFFIX_TYPE = {
     STRENGTH: 'strength',
     WISDOM: 'wisdom'
 };
+
 export default AFFIX_TYPE;

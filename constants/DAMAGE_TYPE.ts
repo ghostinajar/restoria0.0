@@ -6,4 +6,5 @@ const DAMAGE_TYPE = {
     FIRE: 'fire',
     ELECTRICITY: 'electricity'
 };
+
 export default DAMAGE_TYPE;

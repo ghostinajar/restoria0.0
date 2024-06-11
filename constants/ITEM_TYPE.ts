@@ -15,4 +15,5 @@ const ITEM_TYPE = {
     WEAPON: 'weapon',
     FISHING_ROD: 'fishing_rod'
 };
+
 export default ITEM_TYPE;
