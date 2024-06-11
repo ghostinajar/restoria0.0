@@ -1,7 +1,24 @@
 // Exit
 import mongoose from 'mongoose';
-import echoSchema from './Echo.js';
+import echoSchema, { IEcho } from './Echo.js';
+
 const { Schema } = mongoose;
+
+export interface IExit {
+    desinationZone: mongoose.Schema.Types.ObjectId;
+    desinationRoom: mongoose.Schema.Types.ObjectId;
+    isHidden: Boolean;
+    isClosed: Boolean;
+    isLocked: Boolean;
+    keyItemBlueprint: mongoose.Schema.Types.ObjectId;
+    keyItemZone: mongoose.Schema.Types.ObjectId;
+    echoes: {
+        unlock : IEcho;
+        open : IEcho;
+        close : IEcho;
+    }
+}
+
 const exitSchema = new Schema({
     destinationZone: {
         type: Schema.Types.ObjectId,
@@ -37,4 +54,5 @@ const exitSchema = new Schema({
         },
     },
 }, { _id: false });
+
 export default exitSchema;
