@@ -8,6 +8,7 @@ import locationSchema from "./Location.js";
 import statBlockSchema from "./StatBlock.js";
 const { Schema, Types, model } = mongoose;
 const userSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     username: { type: String, required: true, unique: true },
     name: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // as a salted hash

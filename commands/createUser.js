@@ -7,6 +7,7 @@ import User from "../model/classes/User.js";
 import isValidName from "../util/isValidName.js";
 import Name from "../model/classes/Name.js";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 // Return a user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
@@ -51,6 +52,7 @@ async function createUser(userFormData, author) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(userFormData.password, salt);
         let newUserData = {
+            _id: new mongoose.Types.ObjectId,
             username: userFormData.username.toLowerCase(),
             name: userFormData.name,
             password: hashedPassword,

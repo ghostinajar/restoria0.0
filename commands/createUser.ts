@@ -8,6 +8,7 @@ import isValidName from "../util/isValidName.js";
 import IMessage from "../types/Message.js";
 import Name from "../model/classes/Name.js";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 export interface IUserData {
   username: string;
@@ -63,6 +64,7 @@ async function createUser(userFormData: IUserData, author?: IUser): Promise<IUse
     const hashedPassword = await bcrypt.hash(userFormData.password, salt);
 
     let newUserData: IUser = {
+      _id: new mongoose.Types.ObjectId,
       username: userFormData.username.toLowerCase(),
       name: userFormData.name,
       password: hashedPassword,

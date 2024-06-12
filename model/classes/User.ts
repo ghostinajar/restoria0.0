@@ -43,7 +43,7 @@ export interface IEquipped {
 }
 
 export interface IUser {
-  _id?: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
   username: string;
   name: string;
   password: string;
@@ -75,6 +75,7 @@ export interface IUser {
 }
 
 const userSchema = new Schema<IUser>({
+  _id: Schema.Types.ObjectId,
   username: { type: String, required: true, unique: true },
   name: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // as a salted hash
