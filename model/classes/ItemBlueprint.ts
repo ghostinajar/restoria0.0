@@ -8,6 +8,7 @@ import { ISpellCharges, IWeaponStats } from './Item.js';
 const { Schema } = mongoose;
 
 export interface IItemBlueprint {
+    _id: mongoose.Types.ObjectId;
     author: mongoose.Types.ObjectId;
     name: string;
     itemType: string;
@@ -32,6 +33,7 @@ If you change properties in itemBlueprintSchema, please also update itemSchema
 */
 
 const itemBlueprintSchema = new Schema<IItemBlueprint>({
+    _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

@@ -14,6 +14,7 @@ There is no Mob.js schema since mobs are never saved, only their blueprints
 */
 
 export interface IMobBlueprint {
+    _id: mongoose.Types.ObjectId;
     author: mongoose.Types.ObjectId;
     name: string;
     pronouns: number;
@@ -36,6 +37,7 @@ export interface IMobBlueprint {
 }
 
 const mobBlueprintSchema = new Schema<IMobBlueprint>({
+    _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

@@ -8,6 +8,7 @@ import emoteSchema from './Emote.js';
 import itemNodeSchema from './ItemNode.js';
 const { Schema } = mongoose;
 const mobBlueprintSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

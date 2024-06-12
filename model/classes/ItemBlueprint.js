@@ -9,6 +9,7 @@ of them will exist in game simultaneously, and they can't all share the same id.
 If you change properties in itemBlueprintSchema, please also update itemSchema
 */
 const itemBlueprintSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

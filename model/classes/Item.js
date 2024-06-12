@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 ;
 ;
 const itemSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     itemBlueprint: {
         type: Schema.Types.ObjectId,
         ref: 'ItemBlueprint'
