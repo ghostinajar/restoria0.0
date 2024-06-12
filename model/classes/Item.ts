@@ -27,9 +27,9 @@ export interface ISpellCharges {
 }
 
 export interface IItem {
-    itemBlueprint: mongoose.Schema.Types.ObjectId;
-    fromZone: mongoose.Schema.Types.ObjectId;
-    author: mongoose.Schema.Types.ObjectId;
+    itemBlueprint: mongoose.Types.ObjectId;
+    fromZone: mongoose.Types.ObjectId;
+    author: mongoose.Types.ObjectId;
     name: String;
     itemType: String;
     price: Number;

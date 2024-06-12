@@ -4,10 +4,10 @@ import historySchema, { IHistory } from './History.js';
 const { Schema } = mongoose;
 
 export interface ISuggestion {
-    author: mongoose.Schema.Types.ObjectId;
-    refersToRoom: mongoose.Schema.Types.ObjectId;
-    refersToMobBlueprint: mongoose.Schema.Types.ObjectId;
-    refersToItemBlueprint: mongoose.Schema.Types.ObjectId;
+    author: mongoose.Types.ObjectId;
+    refersToRoom: mongoose.Types.ObjectId;
+    refersToMobBlueprint: mongoose.Types.ObjectId;
+    refersToItemBlueprint: mongoose.Types.ObjectId;
     body: string;
     history: IHistory
 }

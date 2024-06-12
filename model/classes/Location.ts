@@ -1,7 +1,5 @@
 // Location
 
-import mongoose from 'mongoose';
-
 import { Schema, Types } from 'mongoose';
 
 export interface ILocation {

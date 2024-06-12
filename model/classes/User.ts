@@ -43,7 +43,7 @@ export interface IEquipped {
 }
 
 export interface IUser {
-  _id?: mongoose.Schema.Types.ObjectId;
+  _id?: mongoose.Types.ObjectId;
   username: string;
   name: string;
   password: string;
@@ -51,7 +51,7 @@ export interface IUser {
   isAdmin: boolean;
   isTeacher: boolean;
   isAuthor: boolean;
-  author: mongoose.Schema.Types.ObjectId | null;
+  author: mongoose.Types.ObjectId | null;
   location: ILocation;
   pronouns: number;
   creationDate: Date;
@@ -64,8 +64,8 @@ export interface IUser {
   trainingPoints: number;
   jobLevels: IJobLevels;
   description: IDescription;
-  characters: Array<mongoose.Schema.Types.ObjectId>;
-  students?: Array<mongoose.Schema.Types.ObjectId>;
+  characters: Array<mongoose.Types.ObjectId>;
+  students?: Array<mongoose.Types.ObjectId>;
   //may change when training is implemented
   trained: Array<ITrained>;
   inventory: Array<IItem>;

@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 const { Schema, Types, model } = mongoose;
 
 export interface IAbuseReport {
-    reportingUser: mongoose.Schema.Types.ObjectId;
-    reportedUser: mongoose.Schema.Types.ObjectId;
+    reportingUser: mongoose.Types.ObjectId;
+    reportedUser: mongoose.Types.ObjectId;
     body: string;
 }
 

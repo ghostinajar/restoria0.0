@@ -5,13 +5,13 @@ import echoSchema, { IEcho } from './Echo.js';
 const { Schema } = mongoose;
 
 export interface IExit {
-    desinationZone: mongoose.Schema.Types.ObjectId;
-    desinationRoom: mongoose.Schema.Types.ObjectId;
+    desinationZone: mongoose.Types.ObjectId;
+    desinationRoom: mongoose.Types.ObjectId;
     isHidden: Boolean;
     isClosed: Boolean;
     isLocked: Boolean;
-    keyItemBlueprint: mongoose.Schema.Types.ObjectId;
-    keyItemZone: mongoose.Schema.Types.ObjectId;
+    keyItemBlueprint: mongoose.Types.ObjectId;
+    keyItemZone: mongoose.Types.ObjectId;
     echoes: {
         unlock : IEcho;
         open : IEcho;

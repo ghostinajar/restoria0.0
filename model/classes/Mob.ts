@@ -5,10 +5,11 @@ import { IEmote } from "./Emote";
 import { IItem } from "./Item";
 import { IMobBlueprint } from "./MobBlueprint";
 import { IStatBlock } from "./StatBlock";
-import mongoose from "mongoose";
+import mongoose, {Types} from "mongoose";
 
 export interface IMob {
-    author: mongoose.Schema.Types.ObjectId;
+    _id: mongoose.Types.ObjectId;
+    author: mongoose.Types.ObjectId;
     name: string;
     pronouns: number;
     level: number;
@@ -30,6 +31,7 @@ export interface IMob {
 
 class Mob implements IMob {
     constructor (blueprint : IMobBlueprint) {
+        this._id = new mongoose.Types.ObjectId()
         this.author = blueprint.author;
         this.name = blueprint.name;
         this.pronouns = blueprint.pronouns;
@@ -49,7 +51,8 @@ class Mob implements IMob {
         this.emotes = blueprint.emotes;
         this.inventory = [];
     };
-    author: mongoose.Schema.Types.ObjectId;
+    _id: mongoose.Types.ObjectId;
+    author: mongoose.Types.ObjectId;
     name: string;
     pronouns: number;
     level: number;

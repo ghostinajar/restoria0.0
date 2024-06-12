@@ -8,7 +8,7 @@ import { ISpellCharges, IWeaponStats } from './Item.js';
 const { Schema } = mongoose;
 
 export interface IItemBlueprint {
-    author: mongoose.Schema.Types.ObjectId;
+    author: mongoose.Types.ObjectId;
     name: string;
     itemType: string;
     price: number;

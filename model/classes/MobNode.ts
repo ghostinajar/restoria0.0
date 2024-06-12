@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 export interface IMobNode {
-    loadsMobBlueprintId: mongoose.Schema.Types.ObjectId;
-    fromZoneId: mongoose.Schema.Types.ObjectId;
+    loadsMobBlueprintId: mongoose.Types.ObjectId;
+    fromZoneId: mongoose.Types.ObjectId;
     quantity: number;
 }
 

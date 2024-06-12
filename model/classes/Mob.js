@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 class Mob {
     constructor(blueprint) {
+        this._id = new mongoose.Types.ObjectId();
         this.author = blueprint.author;
         this.name = blueprint.name;
         this.pronouns = blueprint.pronouns;
@@ -20,6 +22,7 @@ class Mob {
         this.inventory = [];
     }
     ;
+    _id;
     author;
     name;
     pronouns;
