@@ -1,3 +1,4 @@
+// activateItemNodes
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import createItemFromBlueprint from "./createItemFromBlueprint.js";

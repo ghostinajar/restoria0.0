@@ -1,3 +1,4 @@
+// activateMobNodes
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import activateItemNodes from "./activateItemNodes.js";
