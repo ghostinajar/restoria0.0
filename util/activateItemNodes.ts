@@ -1,10 +1,11 @@
+// activateItemNodes
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import createItemFromBlueprint from "./createItemFromBlueprint.js";
 import { IItemNode } from "../model/classes/ItemNode.js";
 import { IItem } from "../model/classes/Item.js";
 import { IZone } from "../model/classes/Zone.js";
-import mongoose from "mongoose";
+import { IItemBlueprint } from "../model/classes/ItemBlueprint.js";
 
 async function activateItemNodes(
   itemNodes: Array<IItemNode>,
@@ -13,7 +14,7 @@ async function activateItemNodes(
 ) {
   for (const itemNode of itemNodes) {
     try {
-      const zone: any = await new Promise((resolve) => {
+      const zone: IZone = await new Promise((resolve) => {
         worldEmitter.once(`zoneLoaded`, resolve);
         worldEmitter.emit(`zoneRequested`, itemNode.fromZoneId.toString());
       });
@@ -22,8 +23,8 @@ async function activateItemNodes(
         return null;
       }
 
-      const blueprint: any = await zone.itemBlueprints.find(
-        (blueprint: any) =>
+      const blueprint: IItemBlueprint | undefined = await zone.itemBlueprints.find(
+        (blueprint) =>
           blueprint._id.toString() === itemNode.loadsItemBlueprintId.toString()
       );
       if (!blueprint) {
@@ -44,7 +45,7 @@ async function activateItemNodes(
           await activateItemNodes(blueprint.itemNodes, item.inventory, true);
           logger.debug(
             `Items in container "${item.name}": ${item.inventory.map(
-              (item: any) => {
+              (item: IItem) => {
                 return item.name;
               }
             )}`

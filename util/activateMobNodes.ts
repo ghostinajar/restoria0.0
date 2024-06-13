@@ -1,9 +1,11 @@
+// activateMobNodes
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import activateItemNodes from "./activateItemNodes.js";
 import { IMobNode } from "../model/classes/MobNode.js";
 import { IMob } from "../model/classes/Mob.js";
 import { IMobBlueprint } from "../model/classes/MobBlueprint.js";
+import { IZone } from "../model/classes/Zone.js";
 
 async function activateMobNodes(
   mobNodes: Array<IMobNode>,
@@ -11,7 +13,7 @@ async function activateMobNodes(
 ) {
   for (const mobNode of mobNodes) {
     try {
-      const zone: any = await new Promise((resolve) => {
+      const zone: IZone = await new Promise((resolve) => {
         worldEmitter.once(`zoneLoaded`, resolve);
         worldEmitter.emit(`zoneRequested`, mobNode.fromZoneId.toString());
       });
