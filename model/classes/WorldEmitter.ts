@@ -1,6 +1,7 @@
+// WorldEmitter
 import { EventEmitter } from 'events';
 
-class WorldEmitter extends EventEmitter {}
+export class WorldEmitter extends EventEmitter {}
 
 const worldEmitter = new WorldEmitter();
 
