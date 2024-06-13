@@ -10,6 +10,7 @@ import logger from '../../logger.js';
 const { Schema } = mongoose;  
 
 export interface IZone {
+    _id: mongoose.Types.ObjectId;
     author: mongoose.Types.ObjectId;
     name: string;
     history: IHistory;
@@ -22,6 +23,7 @@ export interface IZone {
 }
 
 const zoneSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

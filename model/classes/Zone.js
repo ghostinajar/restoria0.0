@@ -8,6 +8,7 @@ import suggestionSchema from './Suggestion.js';
 import logger from '../../logger.js';
 const { Schema } = mongoose;
 const zoneSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
