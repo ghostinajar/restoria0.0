@@ -1,37 +1,37 @@
 import logger from "../../logger.js";
 import Zone from "./Zone.js";
 import worldEmitter from "./WorldEmitter.js";
-import resetPlayerLocation from "../../util/resetPlayerLocation.js";
+import resetUserLocation from "../../util/resetUserLocation.js";
 class ZoneManager {
     constructor() {
         this.zones = new Map();
-        worldEmitter.on("socketDisconnectedUser", this.playerLogoutHandler);
-        worldEmitter.on("userManagerAddedUser", this.userManagerAddedPlayerHandler);
+        worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
+        worldEmitter.on("userManagerAddedUser", this.userManagerAddedUserHandler);
         worldEmitter.on("zoneRequested", this.zoneRequestedHandler);
     }
     zones;
-    playerLogoutHandler = async (player) => {
-        logger.debug(`playerLogoutHandler called`);
-        // find (or reset) player's location on logout
-        let { inRoom, inZone } = player.location;
+    userLogoutHandler = async (user) => {
+        logger.debug(`userLogoutHandler called`);
+        // find (or reset) user's location on logout
+        let { inRoom, inZone } = user.location;
         let zone = this.zones.get(inZone.toString());
         if (!zone) {
-            resetPlayerLocation(player, "Player location not found at logout! Reset to world recall.");
+            resetUserLocation(user, "User location not found at logout! Reset to world recall.");
             return;
         }
-        logger.debug(`playerLogoutHandler has zone ${zone.name}`);
+        logger.debug(`userLogoutHandler has zone ${zone.name}`);
         let room = zone.rooms.find((room) => room._id.toString() == inRoom.toString());
         if (!room) {
-            resetPlayerLocation(player, "Player location not found at logout! Reset to world recall.");
+            resetUserLocation(user, "User location not found at logout! Reset to world recall.");
             return;
         }
-        logger.debug(`playerLogoutHandler has room ${room.name}`);
-        //remove player from location
-        room.removeEntityFrom("users", player);
-        worldEmitter.emit("zoneManagerRemovedPlayer", player);
+        logger.debug(`userLogoutHandler has room ${room.name}`);
+        //remove user from location
+        room.removeEntityFrom("users", user);
+        worldEmitter.emit("zoneManagerRemovedUser", user);
     };
-    userManagerAddedPlayerHandler = async (player) => {
-        this.placePlayerInLocation(player);
+    userManagerAddedUserHandler = async (user) => {
+        this.placeUserInLocation(user);
     };
     zoneRequestedHandler = async (zoneId) => {
         try {
@@ -83,41 +83,41 @@ class ZoneManager {
             throw err;
         }
     }
-    async placePlayerInLocation(player) {
+    async placeUserInLocation(user) {
         // Missing location? Reset to world recall
-        if (!player) {
-            logger.error(`placePlayerInLocation received an undefined player`);
+        if (!user) {
+            logger.error(`placeUserInLocation received an undefined user`);
             return;
         }
-        if (!player.location.inRoom || !player.location.inZone) {
-            player.location = await resetPlayerLocation(player, "Player location missing, reset to worldRecall.");
+        if (!user.location.inRoom || !user.location.inZone) {
+            user.location = await resetUserLocation(user, "User location missing, reset to worldRecall.");
         }
         // Zone isn't loaded? Load it
-        let zone = this.zones.get(player.location.inZone.toString());
+        let zone = this.zones.get(user.location.inZone.toString());
         // Zone doesn't exist? Reset to world recall.
         if (!zone) {
-            player.location = await resetPlayerLocation(player, "Player location zone missing, reset to worldRecall.");
-            zone = this.zones.get(player.location.inZone.toString());
+            user.location = await resetUserLocation(user, "User location zone missing, reset to worldRecall.");
+            zone = this.zones.get(user.location.inZone.toString());
         }
         if (!zone) {
             logger.error(`Couldn't reset user location. Failed to place user.`);
             return;
         }
         // Find room
-        let room = zone.rooms.find((room) => room._id.toString() == player.location.inRoom.toString());
+        let room = zone.rooms.find((room) => room._id.toString() == user.location.inRoom.toString());
         // Room doesn't exist? Reset to world recall.
         if (!room) {
-            player.location = await resetPlayerLocation(player, "Player location room missing, reset to worldRecall.");
-            zone = this.zones.get(player.location.inZone.toString());
+            user.location = await resetUserLocation(user, "User location room missing, reset to worldRecall.");
+            zone = this.zones.get(user.location.inZone.toString());
             if (!room || !zone) {
                 logger.error(`Couldn't reset user location. Failed to place user.`);
                 return;
             }
-            room = zone.rooms.find((room) => room._id.toString() == player.location.inRoom.toString());
+            room = zone.rooms.find((room) => room._id.toString() == user.location.inRoom.toString());
         }
-        // Place player in room
-        room.addEntityTo("players", player);
-        logger.info(`Player ${player.name} placed in ${room.name}.`);
+        // Place user in room
+        room.addEntityTo("users", user);
+        logger.info(`User ${user.name} placed in ${room.name}.`);
     }
     async removeZoneById(id) {
         try {
@@ -140,8 +140,8 @@ class ZoneManager {
     }
     clearContents() {
         this.zones.clear();
-        worldEmitter.off("socketDisconnectedUser", this.playerLogoutHandler);
-        worldEmitter.off("userManagerAddedUser", this.userManagerAddedPlayerHandler);
+        worldEmitter.off("socketDisconnectedUser", this.userLogoutHandler);
+        worldEmitter.off("userManagerAddedUser", this.userManagerAddedUserHandler);
         worldEmitter.off("zoneRequested", this.zoneRequestedHandler);
     }
 }

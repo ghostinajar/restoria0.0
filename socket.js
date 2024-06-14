@@ -114,7 +114,7 @@ const setupSocket = (io) => {
                 logger.debug(`userSubmittedNewCharacter heard by socket with ${characterData}`);
                 const newUser = await createUser(characterData, user);
                 if ('content' in newUser) {
-                    socket.emit(`message`, newUser);
+                    //createUser handles emit failure message to socket
                     return;
                 }
                 let message = makeMessage(true, `createCharacter`, `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`);
