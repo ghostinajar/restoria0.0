@@ -34,7 +34,7 @@ const disconnectMultiplayer = async (socket, sessionUser) => {
             worldEmitter.emit(`socketCheckingMultiplay`, sessionUser._id);
         });
         if (isMultiplaying) {
-            logger.warn(`username ${sessionUser.username} connected on more than one socket. Disconnecting.`);
+            logger.warn(`username ${sessionUser.name} connected on more than one socket. Disconnecting.`);
             socket.emit(`redirectToLogin`);
             socket.disconnect();
             return true;
@@ -113,7 +113,7 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedNewCharacter`, async (characterData) => {
                 logger.debug(`userSubmittedNewCharacter heard by socket with ${characterData}`);
                 const newUser = await createUser(characterData, user);
-                if ('content' in newUser) {
+                if ("content" in newUser) {
                     //createUser handles emit failure message to socket
                     return;
                 }

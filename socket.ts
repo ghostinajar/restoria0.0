@@ -32,13 +32,13 @@ const authenticateSessionUser = (socket: any) => {
       `User socket connected: ${sessionUser.name}, id: ${sessionUser._id}`
     );
     return sessionUser;
-  } catch (err : any) {
+  } catch (err: any) {
     logger.error(`Error in authenticateSessionUser: ${err.message}`);
     throw err;
   }
 };
 
-const disconnectMultiplayer = async (socket : any, sessionUser : any) => {
+const disconnectMultiplayer = async (socket: any, sessionUser: any) => {
   try {
     // User multiplaying sockets? Disconnect.
     const isMultiplaying = await new Promise((resolve) => {
@@ -47,23 +47,23 @@ const disconnectMultiplayer = async (socket : any, sessionUser : any) => {
     });
     if (isMultiplaying) {
       logger.warn(
-        `username ${sessionUser.username} connected on more than one socket. Disconnecting.`
+        `username ${sessionUser.name} connected on more than one socket. Disconnecting.`
       );
       socket.emit(`redirectToLogin`);
       socket.disconnect();
       return true;
     }
     return false;
-  } catch (err : any) {
+  } catch (err: any) {
     logger.error(`Error in disconnectMultiplayer: ${err.message}`);
     throw err;
   }
 };
 
-const setupUser = async (sessionUser : any, socket : any) => {
+const setupUser = async (sessionUser: any, socket: any) => {
   try {
     // Get user, alert userManager
-    const user : IUser = await new Promise((resolve) => {
+    const user: IUser = await new Promise((resolve) => {
       worldEmitter.once(`userManagerAddedUser`, resolve);
       worldEmitter.emit(`socketConnectingUser`, sessionUser._id);
     });
@@ -80,14 +80,14 @@ const setupUser = async (sessionUser : any, socket : any) => {
     socket.join(user.location.inZone.toString());
 
     return user;
-  } catch (err : any) {
+  } catch (err: any) {
     logger.error(`Error in setupUser: ${err.message}`);
   }
 };
 
 const setupSocket = (io: any) => {
   try {
-    io.on(`connection`, async (socket : any) => {
+    io.on(`connection`, async (socket: any) => {
       const sessionUser = authenticateSessionUser(socket);
       if (!sessionUser) {
         return;
@@ -100,12 +100,12 @@ const setupSocket = (io: any) => {
         return;
       }
 
-      const messageForUserHandler = async (messageObject : IMessage) => {
+      const messageForUserHandler = async (messageObject: IMessage) => {
         socket.emit(`message`, messageObject);
       };
       worldEmitter.on(`messageFor${user.username}`, messageForUserHandler);
 
-      const messageForUsersRoomHandler = async (messageObject : IMessage) => {
+      const messageForUsersRoomHandler = async (messageObject: IMessage) => {
         socket
           .to(user.location.inRoom.toString())
           .emit(`message`, messageObject);
@@ -115,7 +115,7 @@ const setupSocket = (io: any) => {
         messageForUsersRoomHandler
       );
 
-      const messageForUsersZoneHandler = async (messageObject : IMessage) => {
+      const messageForUsersZoneHandler = async (messageObject: IMessage) => {
         socket
           .to(user.location.inZone.toString())
           .emit(`message`, messageObject);
@@ -126,7 +126,7 @@ const setupSocket = (io: any) => {
       );
 
       // Listen for userSentCommands
-      socket.on(`userSentCommand`, async (userInput : string) => {
+      socket.on(`userSentCommand`, async (userInput: string) => {
         logger.input(`${user.name} sent command: ${userInput}`);
 
         // Sanitize, parse, validate command
@@ -139,16 +139,25 @@ const setupSocket = (io: any) => {
         await processCommand(parsedInput, user);
       });
 
-      socket.on(`userSubmittedNewCharacter`, async (characterData : IUserData) => {
-        logger.debug(`userSubmittedNewCharacter heard by socket with ${characterData}`)
-        const newUser = await createUser(characterData, user);
-        if ('content' in newUser) {
-          //createUser handles emit failure message to socket
-          return;
+      socket.on(
+        `userSubmittedNewCharacter`,
+        async (characterData: IUserData) => {
+          logger.debug(
+            `userSubmittedNewCharacter heard by socket with ${characterData}`
+          );
+          const newUser = await createUser(characterData, user);
+          if ("content" in newUser) {
+            //createUser handles emit failure message to socket
+            return;
+          }
+          let message = makeMessage(
+            true,
+            `createCharacter`,
+            `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`
+          );
+          socket.emit(`createCharacter`, message);
         }
-        let message = makeMessage(true, `createCharacter`, `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`)
-        socket.emit(`createCharacter`, message);
-      });
+      );
 
       socket.on(`disconnect`, () => {
         try {
