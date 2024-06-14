@@ -7,6 +7,7 @@ import processCommand from "./util/processCommand.js";
 import createUser, { IUserData } from "./commands/createUser.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
+import makeMessage from "./types/makeMessage.js";
 
 const authenticateSessionUser = (socket: any) => {
   try {
@@ -139,7 +140,14 @@ const setupSocket = (io: any) => {
       });
 
       socket.on(`userSubmittedNewCharacter`, async (characterData : IUserData) => {
-        await createUser(characterData, user);
+        logger.debug(`userSubmittedNewCharacter heard by socket with ${characterData}`)
+        const newUser = await createUser(characterData, user);
+        if ('content' in newUser) {
+          //createUser handles emit failure message to socket
+          return;
+        }
+        let message = makeMessage(true, `createCharacter`, `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`)
+        socket.emit(`createCharacter`, message);
       });
 
       socket.on(`disconnect`, () => {

@@ -60,7 +60,7 @@ async function createUser(userFormData, author) {
             isAdmin: false,
             isTeacher: false,
             isAuthor: false,
-            author: null,
+            author: author?._id || null,
             location: {
                 inZone: new Types.ObjectId(process.env.WORLD_RECALL_ZONEID),
                 inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
@@ -166,7 +166,10 @@ async function createUser(userFormData, author) {
         }
         if (author) {
             logger.info(`Author "${author.name}" created character "${newUser.name}".`);
-            message.content = `You created ${newUser.name} the ${newUser.job}! Log out to sign in to your new character.`;
+            message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new character.`;
+            if (newUser.author) {
+                logger.info(`Author ${author.name} is the author of ${newUser.name}.`);
+            }
             worldEmitter.emit(`messageFor${author.username}`, message);
         }
         else {

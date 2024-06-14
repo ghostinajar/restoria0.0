@@ -16,6 +16,10 @@ const userSchema = new Schema({
     isAdmin: { type: Boolean, required: true, default: false },
     isTeacher: { type: Boolean, required: true, default: false },
     isAuthor: { type: Boolean, required: true, default: false },
+    author: {
+        type: Schema.Types.ObjectId,
+        default: null,
+    },
     location: {
         type: locationSchema,
         required: true,

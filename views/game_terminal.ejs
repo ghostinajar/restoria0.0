@@ -130,11 +130,11 @@
       });
 
       createUserForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         const userData = {
-          name: document.getElementById("name").value,
           username: document.getElementById("name").value.toLowerCase(),
-          password: document.getElementById("password").value,
+          name: document.getElementById("name").value,
+          password: document.getElementById("new-password").value,
           pronouns: document.getElementById("pronouns").value,
           job: document.getElementById("job").value,
         };

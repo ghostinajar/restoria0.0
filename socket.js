@@ -5,6 +5,7 @@ import parseCommand from "./util/parseCommand.js";
 import isValidCommandWord from "./util/isValidCommandWord.js";
 import processCommand from "./util/processCommand.js";
 import createUser from "./commands/createUser.js";
+import makeMessage from "./types/makeMessage.js";
 const authenticateSessionUser = (socket) => {
     try {
         // Not authenticated? Disconnect.
@@ -110,7 +111,14 @@ const setupSocket = (io) => {
                 await processCommand(parsedInput, user);
             });
             socket.on(`userSubmittedNewCharacter`, async (characterData) => {
-                await createUser(characterData, user);
+                logger.debug(`userSubmittedNewCharacter heard by socket with ${characterData}`);
+                const newUser = await createUser(characterData, user);
+                if ('content' in newUser) {
+                    socket.emit(`message`, newUser);
+                    return;
+                }
+                let message = makeMessage(true, `createCharacter`, `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`);
+                socket.emit(`createCharacter`, message);
             });
             socket.on(`disconnect`, () => {
                 try {
