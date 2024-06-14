@@ -1,29 +1,30 @@
-import mongoose from 'mongoose';
-import historySchema from './History.js';
-import descriptionSchema from './Description.js';
-import exitSchema from './Exit.js';
-import mobNodeSchema from './MobNode.js';
-import itemNodeSchema from './ItemNode.js';
-import logger from '../../logger.js';
-import activateItemNodes from '../../util/activateItemNodes.js';
-import activateMobNodes from '../../util/activateMobNodes.js';
-import destroyMobs from '../../util/destroyMobs.js';
+// Room
+import mongoose from "mongoose";
+import historySchema from "./History.js";
+import descriptionSchema from "./Description.js";
+import exitSchema from "./Exit.js";
+import mobNodeSchema from "./MobNode.js";
+import itemNodeSchema from "./ItemNode.js";
+import logger from "../../logger.js";
+import activateItemNodes from "../../util/activateItemNodes.js";
+import activateMobNodes from "../../util/activateMobNodes.js";
+import destroyMobs from "../../util/destroyMobs.js";
 const { Schema } = mongoose;
 const roomSchema = new Schema({
     _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User",
     },
     fromZoneId: {
         type: Schema.Types.ObjectId,
-        ref: 'Zone'
+        ref: "Zone",
     },
     roomType: String,
     name: String,
     history: {
         type: historySchema,
-        default: () => ({})
+        default: () => ({}),
     },
     playerCap: Number,
     mobCap: Number,
@@ -36,26 +37,30 @@ const roomSchema = new Schema({
     blocksMobs: Boolean,
     blocksCasting: Boolean,
     blocksCombat: Boolean,
-    itemsForSale: [{
+    itemsForSale: [
+        {
             itemBlueprint: {
                 type: Schema.Types.ObjectId,
-                ref: 'ItemBlueprint'
+                ref: "ItemBlueprint",
             },
             fromZone: {
                 type: Schema.Types.ObjectId,
-                ref: 'Zone'
-            }
-        }],
-    mountIdForSale: [{
+                ref: "Zone",
+            },
+        },
+    ],
+    mountIdForSale: [
+        {
             mobBlueprint: {
                 type: Schema.Types.ObjectId,
-                ref: 'MobBlueprint'
+                ref: "MobBlueprint",
             },
             fromZone: {
                 type: Schema.Types.ObjectId,
-                ref: 'Zone'
-            }
-        }],
+                ref: "Zone",
+            },
+        },
+    ],
     mapCoords: {
         type: [Number],
         validate: {
@@ -71,55 +76,60 @@ const roomSchema = new Schema({
                 }
                 return true;
             },
-            message: 'Array should contain exactly 3 elements. The first and second elements should be between 0 and 79 (inclusive), and the third element should be between -10 and 10 (inclusive).'
-        }
+            message: "Array should contain exactly 3 elements. The first and second elements should be between 0 and 79 (inclusive), and the third element should be between -10 and 10 (inclusive).",
+        },
     },
     description: {
         type: descriptionSchema,
-        default: () => ({})
+        default: () => ({}),
     },
     exits: {
         north: {
             type: exitSchema,
-            default: () => ({})
+            default: () => ({}),
         },
         south: {
             type: exitSchema,
-            default: () => ({})
+            default: () => ({}),
         },
         east: {
             type: exitSchema,
-            default: () => ({})
+            default: () => ({}),
         },
         west: {
             type: exitSchema,
-            default: () => ({})
+            default: () => ({}),
         },
         up: {
             type: exitSchema,
-            default: () => ({})
+            default: () => ({}),
         },
         down: {
             type: exitSchema,
-            default: () => ({})
+            default: () => ({}),
         },
     },
-    mobNodes: [{
+    mobNodes: [
+        {
             type: mobNodeSchema,
-            default: () => ({})
-        }],
-    itemNodes: [{
+            default: () => ({}),
+        },
+    ],
+    itemNodes: [
+        {
             type: itemNodeSchema,
-            default: () => ({})
-        }],
+            default: () => ({}),
+        },
+    ],
 });
 //since there will only ever be one instance of a Room, the Room class will have
-//arrays to store active mobs, items, and users inside the room. 
+//arrays to store active mobs, items, and users inside the room.
 //These are never saved in db.
 //entityType should be a string to indicate which array to use ("mobs", "items", or "users")
 roomSchema.methods.addEntityTo = function (entityType, instance) {
     //if the array exists, and the instance doesn't already exist in the array, add it
-    if (this[entityType] && !this[entityType].find((el) => el._id.toString() === instance._id.toString())) {
+    if (this[entityType] &&
+        !this[entityType].find((el) => el._id.toString() === instance._id.toString())) {
         this[entityType].push(instance);
     }
 };

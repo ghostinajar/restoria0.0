@@ -1,49 +1,63 @@
-import mongoose from 'mongoose';
-import historySchema from './History.js';
-import descriptionSchema from './Description.js';
-import roomSchema from './Room.js';
-import mobBlueprintSchema from './MobBlueprint.js';
-import itemBlueprintSchema from './ItemBlueprint.js';
-import suggestionSchema from './Suggestion.js';
-import logger from '../../logger.js';
+import mongoose from "mongoose";
+import historySchema from "./History.js";
+import descriptionSchema from "./Description.js";
+import roomSchema from "./Room.js";
+import mobBlueprintSchema from "./MobBlueprint.js";
+import itemBlueprintSchema from "./ItemBlueprint.js";
+import suggestionSchema from "./Suggestion.js";
+import logger from "../../logger.js";
 const { Schema } = mongoose;
 const zoneSchema = new Schema({
     _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User",
     },
     name: String,
     history: {
         type: historySchema,
-        default: () => ({})
+        default: () => ({}),
     },
     description: {
         type: descriptionSchema,
-        default: () => ({})
+        default: () => ({}),
     },
-    rooms: [{
+    rooms: [
+        {
             type: roomSchema,
-            default: () => ([])
-        }],
-    mobBlueprints: [{
+            default: () => [],
+        },
+    ],
+    mobBlueprints: [
+        {
             type: mobBlueprintSchema,
-            default: () => ([])
-        }],
-    itemBlueprints: [{
+            default: () => [],
+        },
+    ],
+    itemBlueprints: [
+        {
             type: itemBlueprintSchema,
-            default: () => ([])
-        }],
-    suggestions: [{
+            default: () => [],
+        },
+    ],
+    suggestions: [
+        {
             type: suggestionSchema,
-            default: () => ({})
-        }],
+            default: () => ({}),
+        },
+    ],
     minutesToRepop: {
         type: Number,
         default: 15,
-        min: [5, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
-        max: [120, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
-    }
+        min: [
+            5,
+            "The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.",
+        ],
+        max: [
+            120,
+            "The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.",
+        ],
+    },
 });
 zoneSchema.methods.initRooms = async function () {
     try {
@@ -57,10 +71,9 @@ zoneSchema.methods.initRooms = async function () {
         logger.error(`Error in addRooms: ${err.message}`);
         throw err;
     }
-    ;
 };
 //TODO update this method now that these entities are all stored in arrays, not maps
-// zoneSchema.methods.createEntityIn = async function (entityType, entity) {   
+// zoneSchema.methods.createEntityIn = async function (entityType, entity) {
 //     if(this[entityType]) {
 //         try {
 //             // give subdocument an ObjectId
@@ -108,7 +121,7 @@ zoneSchema.methods.initRooms = async function () {
 //             logger.error(`Error in createEntity: ${err.message} for zone "${this.name}"`);
 //             throw(err);
 //         }
-//     }   
+//     }
 // }
 zoneSchema.methods.clearRooms = async function () {
     try {
@@ -124,5 +137,5 @@ zoneSchema.methods.clearRooms = async function () {
         throw err;
     }
 };
-const Zone = mongoose.model('Zone', zoneSchema);
+const Zone = mongoose.model("Zone", zoneSchema);
 export default Zone;

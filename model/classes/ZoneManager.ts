@@ -1,9 +1,11 @@
+//zoneManager
 import logger from "../../logger.js";
 import Zone, { IZone } from "./Zone.js";
 import worldEmitter from "./WorldEmitter.js";
 import resetUserLocation from "../../util/resetUserLocation.js";
 import { IUser } from "./User.js";
 import mongoose from "mongoose";
+import { IRoom } from "./Room.js";
 
 class ZoneManager {
   constructor() {
@@ -30,7 +32,7 @@ class ZoneManager {
     }
     logger.debug(`userLogoutHandler has zone ${zone.name}`);
 
-    let room = zone.rooms.find(
+    let room: IRoom = zone.rooms.find(
       (room) => room._id.toString() == inRoom.toString()
     );
     if (!room) {
@@ -136,8 +138,8 @@ class ZoneManager {
       return;
     }
     // Find room
-    let room = zone.rooms.find(
-      (room) => room._id.toString() == user.location.inRoom.toString()
+    let room: IRoom = zone.rooms.find(
+      (room: IRoom) => room._id.toString() == user.location.inRoom.toString()
     );
     // Room doesn't exist? Reset to world recall.
     if (!room) {
@@ -151,7 +153,7 @@ class ZoneManager {
         return;
       }
       room = zone.rooms.find(
-        (room) => room._id.toString() == user.location.inRoom.toString()
+        (room: IRoom) => room._id.toString() == user.location.inRoom.toString()
       );
     }
     // Place user in room
@@ -184,10 +186,7 @@ class ZoneManager {
   clearContents() {
     this.zones.clear();
     worldEmitter.off("socketDisconnectedUser", this.userLogoutHandler);
-    worldEmitter.off(
-      "userManagerAddedUser",
-      this.userManagerAddedUserHandler
-    );
+    worldEmitter.off("userManagerAddedUser", this.userManagerAddedUserHandler);
     worldEmitter.off("zoneRequested", this.zoneRequestedHandler);
   }
 }
