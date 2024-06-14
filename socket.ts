@@ -8,6 +8,7 @@ import createUser, { IUserData } from "./commands/createUser.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import makeMessage from "./types/makeMessage.js";
+import mongoose from "mongoose";
 
 const authenticateSessionUser = (socket: any) => {
   try {
@@ -50,7 +51,6 @@ const disconnectMultiplayer = async (socket: any, sessionUser: any) => {
         `username ${sessionUser.name} connected on more than one socket. Disconnecting.`
       );
       socket.emit(`redirectToLogin`);
-      socket.disconnect();
       return true;
     }
     return false;
@@ -63,7 +63,7 @@ const disconnectMultiplayer = async (socket: any, sessionUser: any) => {
 const setupUser = async (sessionUser: any, socket: any) => {
   try {
     // Get user, alert userManager
-    const user: IUser = await new Promise((resolve) => {
+    const user: IUser & mongoose.Document = await new Promise((resolve) => {
       worldEmitter.once(`userManagerAddedUser`, resolve);
       worldEmitter.emit(`socketConnectingUser`, sessionUser._id);
     });
@@ -95,7 +95,10 @@ const setupSocket = (io: any) => {
       if (await disconnectMultiplayer(socket, sessionUser)) {
         return;
       }
-      const user = await setupUser(sessionUser, socket);
+      const user: (IUser & mongoose.Document) | undefined = await setupUser(
+        sessionUser,
+        socket
+      );
       if (!user) {
         return;
       }
@@ -123,6 +126,17 @@ const setupSocket = (io: any) => {
       worldEmitter.on(
         `messageFor${user.username}sZone`,
         messageForUsersZoneHandler
+      );
+
+      const userXLeavingGameHandler = async (user: IUser) => {
+        logger.debug(
+          `socket received user${user.name}LeavingGame event. Disconnecting.`
+        );
+        socket.emit(`redirectToLogin`, `User ${user.name} left the game.`);
+      };
+      worldEmitter.on(
+        `user${user.username}LeavingGame`,
+        userXLeavingGameHandler
       );
 
       // Listen for userSentCommands
@@ -159,10 +173,17 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(`disconnect`, () => {
+      socket.on(`disconnect`, async () => {
         try {
-          logger.info(`User disconnected: ${user.name}`);
-          // Alert zoneManager
+          let message: IMessage = makeMessage(
+            false,
+            "quit",
+            `${user.username} left the game.`
+          );
+          worldEmitter.emit(`messageFor${user.username}sRoom`, message);
+          logger.info(`User socket disconnected: ${user.name}`);
+          // Alert zoneManager, which will remove user from their location's room.users array
+          // Then, zonemanager will alert userManager to remove user from users map
           worldEmitter.emit(`socketDisconnectedUser`, user);
         } catch (err) {
           logger.error(err);

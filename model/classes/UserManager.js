@@ -8,7 +8,7 @@ class UserManager {
         worldEmitter.on(`requestingWhoArray`, this.requestingWhoArrayHandler);
         worldEmitter.on(`socketCheckingMultiplay`, this.socketCheckingMultiplayHandler);
         worldEmitter.on(`socketConnectingUser`, this.socketConnectingUserHandler);
-        worldEmitter.on(`zoneManagerRemovedPlayer`, this.logoutUserHandler);
+        worldEmitter.on(`zoneManagerRemovedUser`, this.logoutUserHandler);
     }
     users;
     logoutUserHandler = (user) => {

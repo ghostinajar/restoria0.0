@@ -36,7 +36,6 @@ const disconnectMultiplayer = async (socket, sessionUser) => {
         if (isMultiplaying) {
             logger.warn(`username ${sessionUser.name} connected on more than one socket. Disconnecting.`);
             socket.emit(`redirectToLogin`);
-            socket.disconnect();
             return true;
         }
         return false;
@@ -98,6 +97,11 @@ const setupSocket = (io) => {
                     .emit(`message`, messageObject);
             };
             worldEmitter.on(`messageFor${user.username}sZone`, messageForUsersZoneHandler);
+            const userXLeavingGameHandler = async (user) => {
+                logger.debug(`socket received user${user.name}LeavingGame event. Disconnecting.`);
+                socket.emit(`redirectToLogin`, `User ${user.name} left the game.`);
+            };
+            worldEmitter.on(`user${user.username}LeavingGame`, userXLeavingGameHandler);
             // Listen for userSentCommands
             socket.on(`userSentCommand`, async (userInput) => {
                 logger.input(`${user.name} sent command: ${userInput}`);
@@ -120,10 +124,13 @@ const setupSocket = (io) => {
                 let message = makeMessage(true, `createCharacter`, `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`);
                 socket.emit(`createCharacter`, message);
             });
-            socket.on(`disconnect`, () => {
+            socket.on(`disconnect`, async () => {
                 try {
-                    logger.info(`User disconnected: ${user.name}`);
-                    // Alert zoneManager
+                    let message = makeMessage(false, "quit", `${user.username} left the game.`);
+                    worldEmitter.emit(`messageFor${user.username}sRoom`, message);
+                    logger.info(`User socket disconnected: ${user.name}`);
+                    // Alert zoneManager, which will remove user from their location's room.users array
+                    // Then, zonemanager will alert userManager to remove user from users map
                     worldEmitter.emit(`socketDisconnectedUser`, user);
                 }
                 catch (err) {

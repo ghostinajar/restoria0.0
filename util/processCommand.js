@@ -1,4 +1,5 @@
 import logger from "../logger.js";
+import quit from "../commands/quit.js";
 import say from "../commands/say.js";
 import shout from "../commands/shout.js";
 import telepath from "../commands/telepath.js";
@@ -6,6 +7,10 @@ import who from "../commands/who.js";
 async function processCommand(parsedCommand, user) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
+        case `quit`: {
+            quit(user);
+            break;
+        }
         case `say`: {
             say(parsedCommand, user);
             break;

@@ -14,7 +14,7 @@ class UserManager {
       this.socketCheckingMultiplayHandler
     );
     worldEmitter.on(`socketConnectingUser`, this.socketConnectingUserHandler);
-    worldEmitter.on(`zoneManagerRemovedPlayer`, this.logoutUserHandler);
+    worldEmitter.on(`zoneManagerRemovedUser`, this.logoutUserHandler);
   }
 
   users: Map<string, IUser>;
