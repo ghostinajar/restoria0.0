@@ -32,7 +32,7 @@ class ZoneManager {
     }
     logger.debug(`userLogoutHandler has zone ${zone.name}`);
 
-    let room: IRoom = zone.rooms.find(
+    let room: IRoom | undefined = zone.rooms.find(
       (room) => room._id.toString() == inRoom.toString()
     );
     if (!room) {
@@ -112,54 +112,49 @@ class ZoneManager {
   }
 
   async placeUserInLocation(user: IUser & mongoose.Document) {
-    // Missing location? Reset to world recall
     if (!user) {
       logger.error(`placeUserInLocation received an undefined user`);
       return;
     }
+  
+    // Reset user location if necessary
     if (!user.location.inRoom || !user.location.inZone) {
-      user.location = await resetUserLocation(
-        user,
-        "User location missing, reset to worldRecall."
-      );
+      user.location = await resetUserLocation(user, "User location missing, reset to worldRecall.");
     }
-    // Zone isn't loaded? Load it
+  
+    // Load zone if necessary
     let zone = this.zones.get(user.location.inZone.toString());
-    // Zone doesn't exist? Reset to world recall.
     if (!zone) {
-      user.location = await resetUserLocation(
-        user,
-        "User location zone missing, reset to worldRecall."
-      );
+      user.location = await resetUserLocation(user, "User location zone missing, reset to worldRecall.");
       zone = this.zones.get(user.location.inZone.toString());
     }
+  
+    // If zone still doesn't exist, log error and return
     if (!zone) {
       logger.error(`Couldn't reset user location. Failed to place user.`);
       return;
     }
-    // Find room
-    let room: IRoom = zone.rooms.find(
-      (room: IRoom) => room._id.toString() == user.location.inRoom.toString()
-    );
-    // Room doesn't exist? Reset to world recall.
+  
+    // Find room in the zone
+    let room: IRoom | undefined = zone.rooms.find(room => room._id.toString() == user.location.inRoom.toString());
+  
+    // If room doesn't exist, reset user location and try to find the room again
     if (!room) {
-      user.location = await resetUserLocation(
-        user,
-        "User location room missing, reset to worldRecall."
-      );
+      user.location = await resetUserLocation(user, "User location room missing, reset to worldRecall.");
       zone = this.zones.get(user.location.inZone.toString());
-      if (!room || !zone) {
-        logger.error(`Couldn't reset user location. Failed to place user.`);
-        return;
-      }
-      room = zone.rooms.find(
-        (room: IRoom) => room._id.toString() == user.location.inRoom.toString()
-      );
+      room = zone?.rooms.find(room => room._id.toString() == user.location.inRoom.toString());
     }
+  
+    // If room or zone still doesn't exist, log error and return
+    if (!room || !zone) {
+      logger.error(`Couldn't reset user location. Failed to place user.`);
+      return;
+    }
+  
     // Place user in room
     room.addEntityTo("users", user);
     logger.info(`User ${user.name} placed in ${room.name}.`);
-  }
+  }  
 
   async removeZoneById(id: mongoose.Types.ObjectId) {
     try {
