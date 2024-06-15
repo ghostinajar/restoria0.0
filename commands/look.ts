@@ -46,6 +46,7 @@ async function look(user: IUser) {
       `userIsHere`,
       `${userInRoom.name} is here.`
     );
+    if (userInRoom.name !== user.name)
     lookArray.push(message);
   }
 

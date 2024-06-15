@@ -28,7 +28,8 @@ async function look(user) {
     //push a message for each user's name + `is here.` into lookArray
     for (let userInRoom of room.users) {
         const message = makeMessage(false, `userIsHere`, `${userInRoom.name} is here.`);
-        lookArray.push(message);
+        if (userInRoom.name !== user.name)
+            lookArray.push(message);
     }
     logger.debug(`lookArray gathered: ${JSON.stringify(lookArray)}`);
     worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);

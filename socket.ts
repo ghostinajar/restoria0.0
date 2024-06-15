@@ -9,6 +9,7 @@ import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import makeMessage from "./types/makeMessage.js";
 import mongoose from "mongoose";
+import look from "./commands/look.js";
 
 const authenticateSessionUser = (socket: any) => {
   try {
@@ -78,7 +79,6 @@ const setupUser = async (sessionUser: any, socket: any) => {
     // Add to location's ioRoom on login
     socket.join(user.location.inRoom.toString());
     socket.join(user.location.inZone.toString());
-
     return user;
   } catch (err: any) {
     logger.error(`Error in setupUser: ${err.message}`);
@@ -180,12 +180,16 @@ const setupSocket = (io: any) => {
         }
       );
 
+      let message = makeMessage(false, `userArrived`, `${user.name} entered Restoria.`)
+      worldEmitter.emit(`messageFor${user.username}sRoom`, message);
+      look(user);
+
       socket.on(`disconnect`, async () => {
         try {
           let message: IMessage = makeMessage(
             false,
             "quit",
-            `${user.username} left the game.`
+            `${user.name} left Restoria.`
           );
           worldEmitter.emit(`messageFor${user.username}sRoom`, message);
           logger.info(`User socket disconnected: ${user.name}`);

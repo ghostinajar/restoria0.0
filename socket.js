@@ -6,6 +6,7 @@ import isValidCommandWord from "./util/isValidCommandWord.js";
 import processCommand from "./util/processCommand.js";
 import createUser from "./commands/createUser.js";
 import makeMessage from "./types/makeMessage.js";
+import look from "./commands/look.js";
 const authenticateSessionUser = (socket) => {
     try {
         // Not authenticated? Disconnect.
@@ -130,9 +131,12 @@ const setupSocket = (io) => {
                 let message = makeMessage(true, `createCharacter`, `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`);
                 socket.emit(`createCharacter`, message);
             });
+            let message = makeMessage(false, `userArrived`, `${user.name} entered Restoria.`);
+            worldEmitter.emit(`messageFor${user.username}sRoom`, message);
+            look(user);
             socket.on(`disconnect`, async () => {
                 try {
-                    let message = makeMessage(false, "quit", `${user.username} left the game.`);
+                    let message = makeMessage(false, "quit", `${user.name} left Restoria.`);
                     worldEmitter.emit(`messageFor${user.username}sRoom`, message);
                     logger.info(`User socket disconnected: ${user.name}`);
                     // Alert zoneManager, which will remove user from their location's room.users array
