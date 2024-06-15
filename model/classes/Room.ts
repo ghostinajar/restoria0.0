@@ -52,6 +52,9 @@ export interface IRoom {
   };
   mobNodes: Array<IMobNode>;
   itemNodes: Array<IItemNode>;
+  items: Array<IItem>;
+  mobs: Array<IMob>;
+  users: Array<IUser>;
 
   addEntityTo(entityType: string, instance: IMob | IItem | IUser): void;
   removeEntityFrom(entityType: string, instance: IMob | IItem | IUser): void;
@@ -169,6 +172,9 @@ const roomSchema = new Schema<IRoom>({
       default: () => ({}),
     },
   ],
+  items: [],
+  mobs: [],
+  users: [],
 });
 
 //since there will only ever be one instance of a Room, the Room class will have
@@ -206,20 +212,40 @@ roomSchema.methods.removeEntityFrom = function (
 };
 
 roomSchema.methods.initiate = async function () {
+  //loadout mobs array
   this.mobs = [];
-  // Initiate mobs based on mobNodes, signal mobManager
   if (this.mobNodes) {
     await activateMobNodes(this.mobNodes, this.mobs);
   } else {
-    logger.debug(`No mobnodes in ${this.name}.`);
+    logger.log(`loadout`, `No mobnodes in ${this.name}.`);
   }
-  //logger.debug(`Mobs in room "${this.name}": ${this.mobs.map(mob => {return mob.name})}`);
+  logger.log(
+    `loadout`,
+    `Mobs in room "${this.name}": ${this.mobs.map((mob: IMob) => {
+      return mob.name;
+    })}`
+  );
 
+  //loadout items array
   this.inventory = [];
   await activateItemNodes(this.itemNodes, this.inventory);
-  //logger.debug(`Items in room "${this.name}": ${JSON.stringify(this.inventory.map(item => item.name))}`);
+  logger.log(
+    `loadout`,
+    `Items in room "${this.name}": ${JSON.stringify(
+      this.inventory.map((item: IItem) => item.name)
+    )}`
+  );
+
+  //open users array
   this.users = [];
 };
+
+roomSchema.pre("save", function (next) {
+  this.items = [];
+  this.mobs = [];
+  this.users = [];
+  next();
+});
 
 roomSchema.methods.clearContents = async function () {
   await destroyMobs(this.mobs);

@@ -121,6 +121,9 @@ const roomSchema = new Schema({
             default: () => ({}),
         },
     ],
+    items: [],
+    mobs: [],
+    users: [],
 });
 //since there will only ever be one instance of a Room, the Room class will have
 //arrays to store active mobs, items, and users inside the room.
@@ -141,20 +144,30 @@ roomSchema.methods.removeEntityFrom = function (entityType, instance) {
     }
 };
 roomSchema.methods.initiate = async function () {
+    //loadout mobs array
     this.mobs = [];
-    // Initiate mobs based on mobNodes, signal mobManager
     if (this.mobNodes) {
         await activateMobNodes(this.mobNodes, this.mobs);
     }
     else {
-        logger.debug(`No mobnodes in ${this.name}.`);
+        logger.log(`loadout`, `No mobnodes in ${this.name}.`);
     }
-    //logger.debug(`Mobs in room "${this.name}": ${this.mobs.map(mob => {return mob.name})}`);
+    logger.log(`loadout`, `Mobs in room "${this.name}": ${this.mobs.map((mob) => {
+        return mob.name;
+    })}`);
+    //loadout items array
     this.inventory = [];
     await activateItemNodes(this.itemNodes, this.inventory);
-    //logger.debug(`Items in room "${this.name}": ${JSON.stringify(this.inventory.map(item => item.name))}`);
+    logger.log(`loadout`, `Items in room "${this.name}": ${JSON.stringify(this.inventory.map((item) => item.name))}`);
+    //open users array
     this.users = [];
 };
+roomSchema.pre("save", function (next) {
+    this.items = [];
+    this.mobs = [];
+    this.users = [];
+    next();
+});
 roomSchema.methods.clearContents = async function () {
     await destroyMobs(this.mobs);
     this.mobs = [];

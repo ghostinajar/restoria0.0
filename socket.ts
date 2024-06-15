@@ -103,6 +103,13 @@ const setupSocket = (io: any) => {
         return;
       }
 
+      const messageArrayForUserHandler = async (messageArray: Array<IMessage>) => {
+        for (let message of messageArray) {
+          socket.emit(`message`, message);
+        }
+      };
+      worldEmitter.on(`messageArrayFor${user.username}`, messageArrayForUserHandler)
+
       const messageForUserHandler = async (messageObject: IMessage) => {
         socket.emit(`message`, messageObject);
       };

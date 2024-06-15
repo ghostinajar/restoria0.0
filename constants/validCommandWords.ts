@@ -1,5 +1,6 @@
 // validCommandWords
 export const validCommandWords = [
+  "look",
   "quit",
   "say",
   "shout",

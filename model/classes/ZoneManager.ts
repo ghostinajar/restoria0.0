@@ -11,13 +11,28 @@ import { ILocation } from "./Location.js";
 class ZoneManager {
   constructor() {
     this.zones = new Map();
-
+    
+    worldEmitter.on("roomRequested", this.roomRequestedHandler);
     worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
     worldEmitter.on("userManagerAddedUser", this.userManagerAddedUserHandler);
     worldEmitter.on("zoneRequested", this.zoneRequestedHandler);
   }
 
   zones: Map<string, IZone>;
+
+  roomRequestedHandler = (userLocation: ILocation) => {
+    logger.debug(`roomRequestedHandler called, with ${userLocation}`);
+    //get the room
+    const zone = this.getZoneById(userLocation.inZone);
+    logger.debug(`roomRequestedHandler found ${zone?.name}`);
+    logger.debug(`looking for room id ${userLocation.inRoom.toString()}`);
+    const room = zone?.rooms.find(room => room._id.toString() === userLocation.inRoom.toString());
+    if (!room) {
+      logger.error(`lookArrayRequestedHandler got an undefined room`);
+      return;
+    }
+    worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);
+  }
 
   userLogoutHandler = async (user: mongoose.Document & IUser) => {
     logger.debug(`userLogoutHandler called`);
@@ -97,7 +112,7 @@ class ZoneManager {
     }
   }
 
-  async getZoneById(id: mongoose.Types.ObjectId) {
+  getZoneById(id: mongoose.Types.ObjectId) {
     try {
       const zone = this.zones.get(id.toString());
       if (zone) {

@@ -6,11 +6,25 @@ import resetUserLocation from "../../util/resetUserLocation.js";
 class ZoneManager {
     constructor() {
         this.zones = new Map();
+        worldEmitter.on("roomRequested", this.roomRequestedHandler);
         worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
         worldEmitter.on("userManagerAddedUser", this.userManagerAddedUserHandler);
         worldEmitter.on("zoneRequested", this.zoneRequestedHandler);
     }
     zones;
+    roomRequestedHandler = (userLocation) => {
+        logger.debug(`roomRequestedHandler called, with ${userLocation}`);
+        //get the room
+        const zone = this.getZoneById(userLocation.inZone);
+        logger.debug(`roomRequestedHandler found ${zone?.name}`);
+        logger.debug(`looking for room id ${userLocation.inRoom.toString()}`);
+        const room = zone?.rooms.find(room => room._id.toString() === userLocation.inRoom.toString());
+        if (!room) {
+            logger.error(`lookArrayRequestedHandler got an undefined room`);
+            return;
+        }
+        worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);
+    };
     userLogoutHandler = async (user) => {
         logger.debug(`userLogoutHandler called`);
         // find (or reset) user's location on logout
@@ -68,7 +82,7 @@ class ZoneManager {
             throw err;
         }
     }
-    async getZoneById(id) {
+    getZoneById(id) {
         try {
             const zone = this.zones.get(id.toString());
             if (zone) {
