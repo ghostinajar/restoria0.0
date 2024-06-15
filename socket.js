@@ -126,7 +126,7 @@ const setupSocket = (io) => {
             });
             socket.on(`disconnect`, async () => {
                 try {
-                    let message = makeMessage(false, "quit", `${user.name} left the game.`);
+                    let message = makeMessage(false, "quit", `${user.username} left the game.`);
                     worldEmitter.emit(`messageFor${user.username}sRoom`, message);
                     logger.info(`User socket disconnected: ${user.name}`);
                     // Alert zoneManager, which will remove user from their location's room.users array

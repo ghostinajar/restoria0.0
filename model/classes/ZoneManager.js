@@ -91,12 +91,18 @@ class ZoneManager {
         }
         // Reset user location if necessary
         if (!user.location.inRoom || !user.location.inZone) {
-            user.location = await resetUserLocation(user, "User location missing, reset to worldRecall.");
+            let resetLoc = await resetUserLocation(user, "User location missing, reset to worldRecall.");
+            if (resetLoc) {
+                user.location = resetLoc;
+            }
         }
         // Load zone if necessary
         let zone = this.zones.get(user.location.inZone.toString());
         if (!zone) {
-            user.location = await resetUserLocation(user, "User location zone missing, reset to worldRecall.");
+            let resetLoc = await resetUserLocation(user, "User location missing, reset to worldRecall.");
+            if (resetLoc) {
+                user.location = resetLoc;
+            }
             zone = this.zones.get(user.location.inZone.toString());
         }
         // If zone still doesn't exist, log error and return
@@ -105,12 +111,15 @@ class ZoneManager {
             return;
         }
         // Find room in the zone
-        let room = zone.rooms.find(room => room._id.toString() == user.location.inRoom.toString());
+        let room = zone.rooms.find((room) => room._id.toString() == user.location.inRoom.toString());
         // If room doesn't exist, reset user location and try to find the room again
         if (!room) {
-            user.location = await resetUserLocation(user, "User location room missing, reset to worldRecall.");
+            let resetLoc = await resetUserLocation(user, "User location missing, reset to worldRecall.");
+            if (resetLoc) {
+                user.location = resetLoc;
+            }
             zone = this.zones.get(user.location.inZone.toString());
-            room = zone?.rooms.find(room => room._id.toString() == user.location.inRoom.toString());
+            room = zone?.rooms.find((room) => room._id.toString() == user.location.inRoom.toString());
         }
         // If room or zone still doesn't exist, log error and return
         if (!room || !zone) {
