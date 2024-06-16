@@ -1,76 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
 :root {
-    --black: #000000;
-    --almost_black: #1E1E1E;
-    --grey: #808080;
-    --light_grey: #D4D4D4;
-    --white: #FFFFFF;
-    --light_purple: #a3a6f4;
-    --purple: #646695;
-    --dark_purple: #260080;
-    --light_blue: #4FC1FF;
-    --blue: #569CD6;
-    --dark_blue: #000080;
-    --light_green: #b5cea8;
-    --green: #6A9955;
-    --dark_green: #415d34;
-    --light_yellow: #DCDCAA;
-    --yellow: #FFD700;
-    --light_orange: #CE9178;
-    --orange: #cd6b45;
-    --dark_orange: #973a15;
-    --light_red: #ee8888;
-    --red: #F44747;
-    --dark_red: #5f1a1a;
-    --pink: #C586BB;
-    --brown: #784502;
-    --aqua: #4EC9B0;
-    --magenta: #DA70CB;
-    --cyan: #9CDCFE;
+  --black: #000;
+  --grey_dark: #1e1e1e;
+  --grey: #999;
+  --grey_light: #d4d4d4;
+  --white: #fff;
+  --purple_light: #a3a6f4;
+  --purple: #646695;
+  --purple_dark: #260080;
+  --blue_light: #4fc1ff;
+  --blue: #569cd6;
+  --blue_dark: #008;
+  --green_light: #b5cea8;
+  --green: #6a9955;
+  --green_dark: #415d34;
+  --yellow_light: #dcdcaa;
+  --yellow: #ffd700;
+  --orange_light: #ce9178;
+  --orange: #cd6b45;
+  --orange_dark: #973a15;
+  --red_light: #e88;
+  --red: #f44747;
+  --red_dark: #5f1a1a;
+  --pink: #c586bb;
+  --brown: #784502;
+  --aqua: #4ec9b0;
+  --magenta: #da70cb;
+  --cyan: #9cdcfe;
 }
 
 html,
 body {
-    margin: 0;
-    padding-bottom: 3rem;
-    font-family: 'Roboto Mono', monospace;
-    overflow-wrap: break-word;
+  margin: 0;
+  padding-bottom: 3rem;
+  font-family: "Roboto Mono", monospace;
+  overflow-wrap: break-word;
+  background: var(--grey_dark);
+  color: var(--grey);
 }
 
 #commandForm {
-    background: rgba(0, 0, 0, 0.15);
-    padding: 0.1rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    height: 2rem;
-    box-sizing: border-box;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.15);
+  padding: 0.1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 2rem;
+  box-sizing: border-box;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 #input {
-    border: none;
-    padding: 0 .5rem;
-    flex-grow: 1;
-    border-radius: 2rem;
-    margin: 0.25rem;
+  border: none;
+  padding: 0 0.5rem;
+  flex-grow: 1;
+  border-radius: 2rem;
+  margin: 0.25rem;
 }
 
 #input:focus {
-    outline: none;
+  outline: none;
 }
 
 #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0.1rem;
+  list-style-type: none;
+  margin: 0;
+  padding: 0.1rem;
 }
 
 #messages > li {
-    padding: 0 .5rem;
-    overflow-wrap: break-word;
+  padding: 0 0.5rem;
+  overflow-wrap: break-word;
 }
