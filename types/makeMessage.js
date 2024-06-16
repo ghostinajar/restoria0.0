@@ -1,6 +1,5 @@
-function makeMessage(userGen, type, content) {
+function makeMessage(type, content) {
     let message = {
-        userGen: userGen,
         type: type,
         content: content
     };

@@ -7,7 +7,7 @@ import { IParsedCommand } from "../util/parseCommand.js";
 import { IUser } from "../model/classes/User.js";
 
 function say(parsedCommand : IParsedCommand, user : IUser) {
-    let message = makeMessage(true, 'say', ``);
+    let message = makeMessage('say', ``);
 
     if (!parsedCommand.string) {
         message.content = `Say what?`;

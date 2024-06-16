@@ -6,7 +6,7 @@ import resetUserLocation from "../util/resetUserLocation.js";
 import mongoose from "mongoose";
 
 async function quit (user: IUser & mongoose.Document) {
-  let message = makeMessage(true, `quit`, `Bye bye, ${user.name}!`)
+  let message = makeMessage(`quit`, `Bye bye, ${user.name}!`)
   worldEmitter.emit(`messageFor${user.username}`, message)
   await user.save();
   resetUserLocation(user, `${user.name} used quit, resetting location.`)

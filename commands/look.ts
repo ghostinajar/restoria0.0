@@ -14,7 +14,7 @@ function pushTargetEquipped(
   targetObject: IUser | IMob,
   lookArray: Array<IMessage>
 ) {
-  lookArray.push(makeMessage(false, `heading`, `Equipped:`));
+  lookArray.push(makeMessage(`heading`, `Equipped:`));
   // for every item in target's IEquipped object, push a message with its .name to lookArray
   for (let [key, value] of Object.entries(targetObject.equipped)) {
     if (
@@ -26,11 +26,7 @@ function pushTargetEquipped(
       key !== "$_id" &&
       key !== "_doc"
     ) {
-      let message = makeMessage(
-        true,
-        `equippedItemName`,
-        `${key}: ${value.name}`
-      );
+      let message = makeMessage(`equippedItemName`, `${key}: ${value.name}`);
       lookArray.push(message);
     }
   }
@@ -40,11 +36,11 @@ function pushTargetInventory(
   targetObject: IUser | IMob | IItem,
   lookArray: Array<IMessage>
 ) {
-  lookArray.push(makeMessage(false, `heading`, `Inventory:`));
+  lookArray.push(makeMessage(`heading`, `Inventory:`));
   // for every item in target's inventory array, push a message with its .name to lookArray
   if (targetObject.inventory) {
     for (let item of targetObject.inventory) {
-      let message = makeMessage(true, `itemName`, item.name);
+      let message = makeMessage(`itemName`, item.name);
       lookArray.push(message);
     }
   }
@@ -67,15 +63,11 @@ function lookTarget(
   targetObject = room.users.find((user) => user.username === target);
   if (targetObject) {
     // push a message for the target.name into lookArray
-    lookArray.push(makeMessage(true, `userName`, `Name: ${targetObject.name}`));
+    lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
     if (targetObject.description.examine) {
       lookArray.push(
-        makeMessage(
-          true,
-          `userDescription`,
-          `${targetObject.description.examine}`
-        )
+        makeMessage(`userDescription`, `${targetObject.description.examine}`)
       );
     }
     pushTargetEquipped(targetObject, lookArray);
@@ -92,10 +84,10 @@ function lookTarget(
   targetObject = room.mobs.find((mob) => mob.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
-    lookArray.push(makeMessage(true, `mobName`, `Name: ${targetObject.name}`));
+    lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
     lookArray.push(
-      makeMessage(true, `mobDescription`, `${targetObject.description.examine}`)
+      makeMessage(`mobDescription`, `${targetObject.description.examine}`)
     );
     pushTargetEquipped(targetObject, lookArray);
     pushTargetInventory(targetObject, lookArray);
@@ -111,14 +103,10 @@ function lookTarget(
   targetObject = room.items.find((item) => item.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
-    lookArray.push(makeMessage(true, `itemName`, `Name: ${targetObject.name}`));
+    lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
     lookArray.push(
-      makeMessage(
-        true,
-        `itemDescription`,
-        `${targetObject.description.examine}`
-      )
+      makeMessage(`itemDescription`, `${targetObject.description.examine}`)
     );
     if (
       targetObject.itemType === "container" ||
@@ -131,46 +119,33 @@ function lookTarget(
 
   // If no target found, push a message saying target not found
   lookArray.push(
-    makeMessage(false, `targetNotFound`, `No '${target}' found in the room.`)
+    makeMessage(`rejected`, `No '${target}' found in the room.`)
   );
 }
 
 function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
   //push a message for the room's name into look Array
-  let roomNameMessage = makeMessage(true, `roomName`, `${room.name}`);
+  let roomNameMessage = makeMessage(`header`, `${room.name}`);
   lookArray.push(roomNameMessage);
   //push a message for the room's description.look into look Array
   let roomDescriptionMessage = makeMessage(
-    true,
     `roomDescription`,
     `${room.description.look}`
   );
   lookArray.push(roomDescriptionMessage);
   //push a message for each item's description.look into lookArray
   for (let itemInRoom of room.items) {
-    const message = makeMessage(
-      true,
-      `itemIsHere`,
-      `${itemInRoom.description.look}`
-    );
+    const message = makeMessage(`itemIsHere`, `${itemInRoom.description.look}`);
     lookArray.push(message);
   }
   //push a message for each mob's description.look into lookArray
   for (let mobInRoom of room.mobs) {
-    const message = makeMessage(
-      true,
-      `mobIsHere`,
-      `${mobInRoom.description.look}`
-    );
+    const message = makeMessage(`mobIsHere`, `${mobInRoom.description.look}`);
     lookArray.push(message);
   }
   //push a message for each user's name + `is here.` into lookArray
   for (let userInRoom of room.users) {
-    const message = makeMessage(
-      false,
-      `userIsHere`,
-      `${userInRoom.name} is here.`
-    );
+    const message = makeMessage(`userIsHere`, `${userInRoom.name} is here.`);
     if (userInRoom.name !== user.name) lookArray.push(message);
   }
 }

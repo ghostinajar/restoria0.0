@@ -7,7 +7,7 @@ import { IParsedCommand } from "../util/parseCommand.js";
 import { IUser } from "../model/classes/User.js";
 
 function shout(parsedCommand: IParsedCommand, user: IUser) {
-    let message = makeMessage(true, 'shout', ``);
+    let message = makeMessage('shout', ``);
     
     if(!parsedCommand.string) {
         message.content = `Shout what?`

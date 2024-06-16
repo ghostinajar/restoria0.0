@@ -3,31 +3,38 @@
 :root {
   --black: #000;
   --grey_dark: #1e1e1e;
-  --grey: #999;
-  --grey_light: #d4d4d4;
+  --grey: #7f7f7f;
+  --grey_light: #e5e5e5;
   --white: #fff;
-  --purple_light: #a3a6f4;
-  --purple: #646695;
-  --purple_dark: #260080;
-  --blue_light: #4fc1ff;
-  --blue: #569cd6;
-  --blue_dark: #008;
-  --green_light: #b5cea8;
-  --green: #6a9955;
-  --green_dark: #415d34;
-  --yellow_light: #dcdcaa;
-  --yellow: #ffd700;
-  --orange_light: #ce9178;
-  --orange: #cd6b45;
-  --orange_dark: #973a15;
-  --red_light: #e88;
-  --red: #f44747;
-  --red_dark: #5f1a1a;
-  --pink: #c586bb;
-  --brown: #784502;
-  --aqua: #4ec9b0;
-  --magenta: #da70cb;
-  --cyan: #9cdcfe;
+  --purple_light: #d191ff;
+  --purple: #ae3cff;
+  --purple_dark: #7700cb;
+  --blue_light: #a5bdff;
+  --blue: #5c5cff;
+  --blue_dark: #2626fc;
+  --cyan_light: #a2ffff;
+  --cyan: #00ffff;
+  --cyan_dark: #00cdcd;
+  --green_light: #a0ffa0;
+  --green: #00ff00;
+  --green_dark: #00cd00;
+  --yellow_light: #ffffae;
+  --yellow: #ffff00;
+  --yellow_dark: #cdcd00;
+  --orange_light: #ffb192;
+  --orange: #ff8859;
+  --orange_dark: #bc4a1d;
+  --red_light: #f88181;
+  --red: #ff0000;
+  --red_dark: #cd0000;
+  --magenta_light: #ffa3ff;
+  --magenta: #ff00ff;
+  --magenta_dark: #cd00cd;
+  --brown: #977447;
+}
+
+* {
+  overflow-wrap: break-word;
 }
 
 html,
@@ -35,7 +42,6 @@ body {
   margin: 0;
   padding-bottom: 3rem;
   font-family: "Roboto Mono", monospace;
-  overflow-wrap: break-word;
   background: var(--grey_dark);
   color: var(--grey);
 }
@@ -74,5 +80,61 @@ body {
 
 #messages > li {
   padding: 0 0.5rem;
-  overflow-wrap: break-word;
+}
+
+.quit,
+.rejection {
+  color: var(--grey);
+}
+
+.exit {
+  color: var(--blue_dark);
+}
+
+.equippedItemName,
+.itemName,
+.itemIsHere {
+  color: var(--blue_light);
+}
+
+.say {
+  color: var(--cyan);
+}
+
+.mobIsHere {
+  color: var(--green_light);
+}
+
+.userArrived,
+.userIsHere,
+.createCharacter {
+  color: var(--yellow);
+}
+
+.userName,
+.mobName,
+.roomName,
+.heading,
+.who {
+  color: var(--yellow_light);
+}
+
+.userDescription,
+.mobDescription,
+.itemDescription,
+.roomDescription {
+  color: var(--orange_light);
+}
+
+.shout {
+  color: var(--red_dark);
+}
+
+.telepath {
+  color: var(--red_light);
+}
+
+a:link,
+a:visited {
+  color: var(--white);
 }

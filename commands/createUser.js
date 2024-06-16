@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 async function createUser(userFormData, author) {
     try {
         logger.debug(`Trying to create character ${userFormData.name}`);
-        let message = makeMessage(true, "rejection", ``);
+        let message = makeMessage("rejection", ``);
         // Validate new name
         if (!isValidName(userFormData.username)) {
             message.content = `Names must be fewer than 18 letters only.`;

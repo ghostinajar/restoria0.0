@@ -3,7 +3,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import makeMessage from "../types/makeMessage.js";
 async function telepath(parsedCommand, user) {
-    let message = makeMessage(true, 'telepath', ``);
+    let message = makeMessage('telepath', ``);
     if (!parsedCommand.directObject) {
         message.content = `Telepath who?`;
         worldEmitter.emit(`messageFor${user.username}`, message);

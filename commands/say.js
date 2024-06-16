@@ -3,7 +3,7 @@ import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 function say(parsedCommand, user) {
-    let message = makeMessage(true, 'say', ``);
+    let message = makeMessage('say', ``);
     if (!parsedCommand.string) {
         message.content = `Say what?`;
         worldEmitter.emit(`messageFor${user.username}`, message);

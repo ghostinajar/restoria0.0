@@ -7,7 +7,7 @@ import { IParsedCommand } from "../util/parseCommand.js";
 import { IUser } from "../model/classes/User.js";
 
 async function telepath(parsedCommand : IParsedCommand, user : IUser) {
-    let message = makeMessage(true, 'telepath', ``);
+    let message = makeMessage('telepath', ``);
     
     if (!parsedCommand.directObject) {
         message.content  = `Telepath who?`

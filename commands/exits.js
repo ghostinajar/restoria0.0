@@ -58,7 +58,7 @@ async function exits(parsedCommand, user) {
             //create message with room name
             if (room) {
                 logger.debug(`exits command found room ${room.name}, creating message...`);
-                let message = makeMessage(true, `exit`, `${direction} ${room?.name}`);
+                let message = makeMessage(`exit`, `${direction} ${room?.name}`);
                 exitsArray.push(message);
             }
         }

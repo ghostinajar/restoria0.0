@@ -1,7 +1,5 @@
-// message.ts
-
+// message
 interface IMessage {
-    userGen : boolean;
     type : string;
     content : string | Array<string>;
 }

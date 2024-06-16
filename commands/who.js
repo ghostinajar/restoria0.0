@@ -12,7 +12,7 @@ async function who(user) {
         logger.error(`Error in who command.`);
         return;
     }
-    let message = makeMessage(false, 'who', JSON.stringify(whoArray));
+    let message = makeMessage('who', JSON.stringify(whoArray));
     worldEmitter.emit(`messageFor${user.username}`, message);
 }
 ;

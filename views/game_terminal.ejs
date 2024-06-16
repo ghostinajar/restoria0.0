@@ -85,21 +85,16 @@
         if (splitCommand.length > 1) {
           parsedCommand.string = splitCommand.slice(1).join(" ");
         }
-
         return parsedCommand;
       }
       function appendMessageToTerminal(message) {
-        //TODO unpack string and class (for style) from message object
         const item = document.createElement("li");
-        item.style.whiteSpace = 'pre'; // This line preserves white space
-        item.textContent = message;
+        item.style.whiteSpace = 'pre';
+        item.textContent = message.content;
+        item.classList.add(message.type);
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       }
-
-      /*TODO write appendSafeStringToTerminal function to
-      unpack and display emits that don't include user-gen content,
-      allowing inner html for multi-color lines */
 
       document
         .getElementById("cancelCreateUserForm")
@@ -120,7 +115,7 @@
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
             appendMessageToTerminal(
-              `Sorry, '${shortenedCommand}' is not a valid command word.`
+              {type: "rejection", content: `Sorry, '${shortenedCommand}' is not a valid command word.`}
             );
             input.value = "";
             return;
@@ -146,17 +141,27 @@
       });
 
       socket.on("invalid", (rejectionString) => {
-        appendMessageToTerminal("Server says invalid command.");
+        appendMessageToTerminal({type: "rejection", content: "Server says invalid command."});
       });
 
       socket.on("redirectToLogin", () => {
         // Redirect to /login
+        socket.disconnect();
         window.location.href = "/login";
       });
 
       socket.on("message", (message) => {
-        appendMessageToTerminal(message.content)
+        appendMessageToTerminal(message);
       });
+
+      window.addEventListener('beforeunload', function (event) {
+        socket.disconnect();
+      });
+
+      document.querySelector('.logout').addEventListener('click', function (event) {
+        socket.disconnect();
+      });
+
     </script>
   </body>
 </html>

@@ -52,6 +52,7 @@ const disconnectMultiplayer = async (socket: any, sessionUser: any) => {
         `username ${sessionUser.name} connected on more than one socket. Disconnecting.`
       );
       socket.emit(`redirectToLogin`);
+      socket.disconnect;
       return true;
     }
     return false;
@@ -103,12 +104,17 @@ const setupSocket = (io: any) => {
         return;
       }
 
-      const messageArrayForUserHandler = async (messageArray: Array<IMessage>) => {
+      const messageArrayForUserHandler = async (
+        messageArray: Array<IMessage>
+      ) => {
         for (let message of messageArray) {
           socket.emit(`message`, message);
         }
       };
-      worldEmitter.on(`messageArrayFor${user.username}`, messageArrayForUserHandler)
+      worldEmitter.on(
+        `messageArrayFor${user.username}`,
+        messageArrayForUserHandler
+      );
 
       const messageForUserHandler = async (messageObject: IMessage) => {
         socket.emit(`message`, messageObject);
@@ -171,14 +177,16 @@ const setupSocket = (io: any) => {
         }
       );
 
-      let message = makeMessage(false, `userArrived`, `${user.name} entered Restoria.`)
+      let message = makeMessage(
+        `userArrived`,
+        `${user.name} entered Restoria.`
+      );
       worldEmitter.emit(`messageFor${user.username}sRoom`, message);
-      look({commandWord : `look`}, user);
+      look({ commandWord: `look` }, user);
 
       socket.on(`disconnect`, async () => {
         try {
           let message: IMessage = makeMessage(
-            false,
             "quit",
             `${user.name} left Restoria.`
           );

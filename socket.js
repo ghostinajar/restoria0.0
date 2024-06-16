@@ -37,6 +37,7 @@ const disconnectMultiplayer = async (socket, sessionUser) => {
         if (isMultiplaying) {
             logger.warn(`username ${sessionUser.name} connected on more than one socket. Disconnecting.`);
             socket.emit(`redirectToLogin`);
+            socket.disconnect;
             return true;
         }
         return false;
@@ -126,12 +127,12 @@ const setupSocket = (io) => {
                 const newUser = await createUser(characterData, user);
                 //(createUser handles emit message to socket)
             });
-            let message = makeMessage(false, `userArrived`, `${user.name} entered Restoria.`);
+            let message = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
             worldEmitter.emit(`messageFor${user.username}sRoom`, message);
             look({ commandWord: `look` }, user);
             socket.on(`disconnect`, async () => {
                 try {
-                    let message = makeMessage(false, "quit", `${user.name} left Restoria.`);
+                    let message = makeMessage("quit", `${user.name} left Restoria.`);
                     worldEmitter.emit(`messageFor${user.username}sRoom`, message);
                     logger.info(`User socket disconnected: ${user.name}`);
                     // Alert zoneManager, which will remove user from their location's room.users array
