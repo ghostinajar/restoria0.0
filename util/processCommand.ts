@@ -1,4 +1,5 @@
 import logger from "../logger.js";
+import exits from "../commands/exits.js";
 import look from "../commands/look.js";
 import quit from "../commands/quit.js";
 import say from "../commands/say.js";
@@ -12,6 +13,12 @@ import mongoose from "mongoose";
 async function processCommand(parsedCommand: IParsedCommand, user: IUser & mongoose.Document) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`)
     switch (parsedCommand.commandWord) {
+        case `ex`:
+        case `exit`:
+        case `exits`: {
+            exits(parsedCommand, user);
+            break;
+        }
         case `exa`:
         case `examine`:
         case `look` : {

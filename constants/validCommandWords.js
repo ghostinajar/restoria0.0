@@ -1,7 +1,11 @@
 // validCommandWords
 export const validCommandWords = [
+    "ex",
+    "exit",
+    "exits",
     "exa",
     "examine",
+    "l",
     "look",
     "quit",
     "say",

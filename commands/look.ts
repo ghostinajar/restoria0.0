@@ -8,16 +8,29 @@ import IMessage from "../types/Message.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import { IMob } from "../model/classes/Mob.js";
 import { IItem } from "../model/classes/Item.js";
+import getRoomOfUser from "../util/getRoomOfUser.js";
 
 function pushTargetEquipped(
   targetObject: IUser | IMob,
   lookArray: Array<IMessage>
 ) {
-  lookArray.push(makeMessage(false, `heading`, `Equipped:`))
+  lookArray.push(makeMessage(false, `heading`, `Equipped:`));
   // for every item in target's IEquipped object, push a message with its .name to lookArray
   for (let [key, value] of Object.entries(targetObject.equipped)) {
-    if (value && key !== '$__parent' && key !== '$__' && key !== '$isNew' && key !== '_doc') {
-      let message = makeMessage(true, `equippedItemName`, `${key}: ${value.name}`);
+    if (
+      value &&
+      key !== "$__parent" &&
+      key !== "$__" &&
+      key !== "$isNew" &&
+      key !== "$__v" &&
+      key !== "$_id" &&
+      key !== "_doc"
+    ) {
+      let message = makeMessage(
+        true,
+        `equippedItemName`,
+        `${key}: ${value.name}`
+      );
       lookArray.push(message);
     }
   }
@@ -27,7 +40,7 @@ function pushTargetInventory(
   targetObject: IUser | IMob | IItem,
   lookArray: Array<IMessage>
 ) {
-  lookArray.push(makeMessage(false, `heading`, `Inventory:`))
+  lookArray.push(makeMessage(false, `heading`, `Inventory:`));
   // for every item in target's inventory array, push a message with its .name to lookArray
   if (targetObject.inventory) {
     for (let item of targetObject.inventory) {
@@ -46,22 +59,36 @@ function lookTarget(
   let targetObject: IUser | IMob | IItem | undefined;
 
   // if users names include target
-  logger.debug(`Checking users array ${JSON.stringify(room.users.map(user => user.username))} for ${target}`);
+  logger.debug(
+    `Checking users array ${JSON.stringify(
+      room.users.map((user) => user.username)
+    )} for ${target}`
+  );
   targetObject = room.users.find((user) => user.username === target);
   if (targetObject) {
     // push a message for the target.name into lookArray
     lookArray.push(makeMessage(true, `userName`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
-    if (targetObject.description.examine) {lookArray.push(
-      makeMessage(true, `userDescription`, `${targetObject.description.examine}`)
-    );}
+    if (targetObject.description.examine) {
+      lookArray.push(
+        makeMessage(
+          true,
+          `userDescription`,
+          `${targetObject.description.examine}`
+        )
+      );
+    }
     pushTargetEquipped(targetObject, lookArray);
     pushTargetInventory(targetObject, lookArray);
     return;
   }
 
   // if mobs names includes target
-  logger.debug(`Checking mobs array ${JSON.stringify(room.mobs.map(mob => mob.name))} for ${target}`);
+  logger.debug(
+    `Checking mobs array ${JSON.stringify(
+      room.mobs.map((mob) => mob.name)
+    )} for ${target}`
+  );
   targetObject = room.mobs.find((mob) => mob.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
@@ -76,16 +103,29 @@ function lookTarget(
   }
 
   // if items names includes target
-  logger.debug(`Checking items ${JSON.stringify(room.items.map(item => item.name))} array for ${target}`);
+  logger.debug(
+    `Checking items ${JSON.stringify(
+      room.items.map((item) => item.name)
+    )} array for ${target}`
+  );
   targetObject = room.items.find((item) => item.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
     lookArray.push(makeMessage(true, `itemName`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
     lookArray.push(
-      makeMessage(true, `itemDescription`, `${targetObject.description.examine}`)
+      makeMessage(
+        true,
+        `itemDescription`,
+        `${targetObject.description.examine}`
+      )
     );
-    if (targetObject.itemType === 'container' || targetObject.itemType === 'liquid_container') {pushTargetInventory(targetObject, lookArray);}
+    if (
+      targetObject.itemType === "container" ||
+      targetObject.itemType === "liquid_container"
+    ) {
+      pushTargetInventory(targetObject, lookArray);
+    }
     return;
   }
 
@@ -137,17 +177,11 @@ function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
 
 async function look(parsedCommand: IParsedCommand, user: IUser) {
   logger.debug(`look command initiated`);
-  const room: IRoom = await new Promise((resolve) => {
-    worldEmitter.once(
-      `zoneManagerReturningRoom${user.location.inRoom.toString()}`,
-      resolve
-    );
-    worldEmitter.emit("roomRequested", user.location);
-  });
+  const room: IRoom = await getRoomOfUser(user);
   let lookArray: Array<IMessage> = [];
 
   if (parsedCommand.directObject) {
-    logger.debug(`look command targeting ${parsedCommand.directObject}`)
+    logger.debug(`look command targeting ${parsedCommand.directObject}`);
     lookTarget(parsedCommand.directObject.toLowerCase(), room, user, lookArray);
     logger.debug(`lookArray gathered: ${JSON.stringify(lookArray)}`);
     worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);

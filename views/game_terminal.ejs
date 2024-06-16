@@ -91,13 +91,14 @@
       function appendMessageToTerminal(message) {
         //TODO unpack string and class (for style) from message object
         const item = document.createElement("li");
+        item.style.whiteSpace = 'pre'; // This line preserves white space
         item.textContent = message;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       }
 
-      /*TODO write appendSafeStringToTerminal function to 
-      unpack and display emits that don't include user-gen content, 
+      /*TODO write appendSafeStringToTerminal function to
+      unpack and display emits that don't include user-gen content,
       allowing inner html for multi-color lines */
 
       document
@@ -130,7 +131,7 @@
       });
 
       createUserForm.addEventListener("submit", (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         const userData = {
           username: document.getElementById("name").value.toLowerCase(),
           name: document.getElementById("name").value,
@@ -154,10 +155,7 @@
       });
 
       socket.on("message", (message) => {
-        const item = document.createElement("li");
-        item.textContent = `${message.content}`;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+        appendMessageToTerminal(message.content)
       });
     </script>
   </body>

@@ -11,6 +11,7 @@ const exitSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Room'
     },
+    toExternalZone: Boolean,
     isHidden: Boolean,
     isClosed: Boolean,
     isLocked: Boolean,

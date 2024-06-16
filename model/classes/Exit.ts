@@ -5,11 +5,12 @@ import echoSchema, { IEcho } from './Echo.js';
 const { Schema } = mongoose;
 
 export interface IExit {
-    desinationZone: mongoose.Types.ObjectId;
-    desinationRoom: mongoose.Types.ObjectId;
-    isHidden: Boolean;
-    isClosed: Boolean;
-    isLocked: Boolean;
+    destinationZone: mongoose.Types.ObjectId;
+    destinationRoom: mongoose.Types.ObjectId;
+    toExternalZone: boolean;
+    isHidden: boolean;
+    isClosed: boolean;
+    isLocked: boolean;
     keyItemBlueprint: mongoose.Types.ObjectId;
     keyItemZone: mongoose.Types.ObjectId;
     echoes: {
@@ -28,6 +29,7 @@ const exitSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Room'
     },
+    toExternalZone: Boolean,
     isHidden: Boolean,
     isClosed: Boolean,
     isLocked: Boolean,
