@@ -133,7 +133,7 @@ const setupSocket = (io) => {
             });
             let message = makeMessage(false, `userArrived`, `${user.name} entered Restoria.`);
             worldEmitter.emit(`messageFor${user.username}sRoom`, message);
-            look(user);
+            look({ commandWord: `look` }, user);
             socket.on(`disconnect`, async () => {
                 try {
                     let message = makeMessage(false, "quit", `${user.name} left Restoria.`);

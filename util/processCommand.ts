@@ -13,7 +13,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser & mongo
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`)
     switch (parsedCommand.commandWord) {
         case `look` : {
-            look(user);
+            look(parsedCommand, user);
             break;
         }
         case `quit` : {

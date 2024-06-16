@@ -17,11 +17,30 @@ class Mob {
         this.description = blueprint.description;
         this.keywords = blueprint.keywords;
         this.affixes = blueprint.affixes;
-        this.chatters = blueprint.chatters;
+        (this.equipped = {
+            arms: null,
+            body: null,
+            ears: null,
+            feet: null,
+            finger1: null,
+            finger2: null,
+            hands: null,
+            head: null,
+            held: null,
+            legs: null,
+            neck: null,
+            shield: null,
+            shoulders: null,
+            waist: null,
+            wrist1: null,
+            wrist2: null,
+            weapon1: null,
+            weapon2: null,
+        }),
+            (this.chatters = blueprint.chatters);
         this.emotes = blueprint.emotes;
         this.inventory = [];
     }
-    ;
     _id;
     author;
     name;
@@ -38,9 +57,9 @@ class Mob {
     description;
     keywords;
     affixes;
+    equipped;
     chatters;
     emotes;
     inventory;
 }
-;
 export default Mob;

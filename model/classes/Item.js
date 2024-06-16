@@ -64,8 +64,10 @@ const itemSchema = new Schema({
             type: affixSchema,
             default: () => ({})
         }],
+});
+itemSchema.add({
     inventory: {
-        type: [Schema.Types.Mixed],
+        type: [itemSchema],
         default: []
     }
 });

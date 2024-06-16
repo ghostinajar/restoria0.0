@@ -31,11 +31,11 @@ export interface IItem {
     itemBlueprint: mongoose.Types.ObjectId;
     fromZone: mongoose.Types.ObjectId;
     author: mongoose.Types.ObjectId;
-    name: String;
-    itemType: String;
-    price: Number;
-    capacity: Number;
-    levelRestriction: Number;
+    name: string;
+    itemType: string;
+    price: number;
+    capacity: number;
+    levelRestriction: number;
     description: IDescription;
     weaponStats: IWeaponStats;
     spellCharges: ISpellCharges;
@@ -51,10 +51,10 @@ export interface IItem {
     isPrecious: boolean;
     dubCode: string;
     affixes: Array<IAffix>;
-    inventory: Array<mongoose.Schema.Types.Mixed>;
+    inventory?: Array<IItem>;
 };
 
-const itemSchema = new Schema({
+const itemSchema = new Schema<IItem>({
     _id: Schema.Types.ObjectId,
     itemBlueprint: {
         type: Schema.Types.ObjectId,
@@ -114,8 +114,11 @@ const itemSchema = new Schema({
         type: affixSchema,
         default: () => ({})
     }],
+});
+
+itemSchema.add({
     inventory: {
-        type: [Schema.Types.Mixed],
+        type: [itemSchema],
         default: []
     }
 });

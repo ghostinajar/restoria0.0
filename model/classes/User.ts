@@ -162,11 +162,13 @@ const userSchema = new Schema<IUser>({
   },
 });
 
-userSchema.methods.comparePassword = async function (candidatePassword: string) {
+userSchema.methods.comparePassword = async function (
+  candidatePassword: string
+) {
   try {
     return await bcrypt.compare(candidatePassword, this.password);
   } catch (err) {
-    throw err; 
+    throw err;
   }
 };
 

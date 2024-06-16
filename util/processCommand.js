@@ -9,7 +9,7 @@ async function processCommand(parsedCommand, user) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
         case `look`: {
-            look(user);
+            look(parsedCommand, user);
             break;
         }
         case `quit`: {
