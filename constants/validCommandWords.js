@@ -1,5 +1,7 @@
 // validCommandWords
 export const validCommandWords = [
+    "exa",
+    "examine",
     "look",
     "quit",
     "say",
@@ -38,6 +40,7 @@ export const commandsWith1Param = [
     "eat",
     "edit",
     "enter",
+    "exa",
     "examine",
     "fight",
     "follow",

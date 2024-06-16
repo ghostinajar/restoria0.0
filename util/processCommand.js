@@ -8,6 +8,8 @@ import who from "../commands/who.js";
 async function processCommand(parsedCommand, user) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
+        case `exa`:
+        case `examine`:
         case `look`: {
             look(parsedCommand, user);
             break;
@@ -37,7 +39,7 @@ async function processCommand(parsedCommand, user) {
         }
         default:
             {
-                logger.error(`Command couldn't be processed.`);
+                logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`);
             }
             ;
     }

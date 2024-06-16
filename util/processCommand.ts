@@ -12,6 +12,8 @@ import mongoose from "mongoose";
 async function processCommand(parsedCommand: IParsedCommand, user: IUser & mongoose.Document) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`)
     switch (parsedCommand.commandWord) {
+        case `exa`:
+        case `examine`:
         case `look` : {
             look(parsedCommand, user);
             break;
@@ -39,7 +41,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser & mongo
             who(user);
             break;
         }
-        default : {logger.error(`Command couldn't be processed.`)};
+        default : {logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`)};
     }
 }
 
