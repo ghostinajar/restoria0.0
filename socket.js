@@ -124,12 +124,7 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedNewCharacter`, async (characterData) => {
                 logger.debug(`userSubmittedNewCharacter heard by socket with ${characterData}`);
                 const newUser = await createUser(characterData, user);
-                if ("content" in newUser) {
-                    //createUser handles emit failure message to socket
-                    return;
-                }
-                let message = makeMessage(true, `createCharacter`, `You created a character named ${newUser.name}. You can sign out, then sign in as your new character.`);
-                socket.emit(`createCharacter`, message);
+                //(createUser handles emit message to socket)
             });
             let message = makeMessage(false, `userArrived`, `${user.name} entered Restoria.`);
             worldEmitter.emit(`messageFor${user.username}sRoom`, message);

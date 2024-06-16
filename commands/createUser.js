@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 async function createUser(userFormData, author) {
     try {
         logger.debug(`Trying to create character ${userFormData.name}`);
-        let message = makeMessage(true, "createUser", ``);
+        let message = makeMessage(true, "rejection", ``);
         // Validate new name
         if (!isValidName(userFormData.username)) {
             message.content = `Names must be fewer than 18 letters only.`;
@@ -166,6 +166,7 @@ async function createUser(userFormData, author) {
         }
         if (author) {
             logger.info(`Author "${author.name}" created character "${newUser.name}".`);
+            message.type = 'createUser';
             message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new character.`;
             if (newUser.author) {
                 logger.info(`Author ${author.name} is the author of ${newUser.name}.`);
