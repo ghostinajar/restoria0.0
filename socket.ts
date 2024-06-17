@@ -38,6 +38,13 @@ const setupSocket = (io: any) => {
         return;
       }
 
+      // Remove existing event listeners for the user before adding new ones
+      worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
+      worldEmitter.removeAllListeners(`messageFor${user.username}`);
+      worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
+      worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
+      worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
+
       const messageArrayForUserHandler = async (
         messageArray: Array<IMessage>
       ) => {
@@ -104,14 +111,19 @@ const setupSocket = (io: any) => {
 
       socket.on(`disconnect`, async () => {
         try {
-          let room = await getRoomOfUser(user);
-          logger.debug(`users in room ${room.users.map(user => user.name)}`);
+          
           let message = makeMessage("quit", `${user.name} left Restoria.`);
           worldEmitter.emit(`messageFor${user.username}sRoom`, message);
           logger.info(`User socket disconnected: ${user.name}`);
           // Alert zoneManager, which will remove user from their location's room.users array
           // Then, zonemanager will alert userManager to remove user from users map
           worldEmitter.emit(`socketDisconnectedUser`, user);
+          // Remove existing event listeners for user
+          worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
+          worldEmitter.removeAllListeners(`messageFor${user.username}`);
+          worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
+          worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
+          worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
         } catch (err) {
           logger.error(err);
         }
