@@ -94,6 +94,16 @@ const userSchema = new Schema({
         default: () => [],
     },
 });
+userSchema.pre('save', function (next) {
+    // Temporarily store the runtimeProps
+    const runtimeProps = this.runtimeProps;
+    // Set runtimeProps to null
+    this.runtimeProps = undefined;
+    // Call the next middleware or save function
+    next();
+    // Restore the runtimeProps
+    this.runtimeProps = runtimeProps;
+});
 userSchema.methods.comparePassword = async function (candidatePassword) {
     try {
         return await bcrypt.compare(candidatePassword, this.password);
@@ -101,6 +111,52 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     catch (err) {
         throw err;
     }
+};
+userSchema.methods.calculateMaxHp = function () {
+    // Implement your logic to calculate max Hp
+    let maxHp = 10; // Base HP
+    maxHp += ((this.constitution - 10) / 2) * this.level; // Add constitution bonus * level
+    if (this.job === "cleric") {
+        maxHp += this.level * 10; // Increase by level
+    }
+    if (this.job === "mage") {
+        maxHp += this.level * 8; // Increase by level
+    }
+    if (this.job === "thief") {
+        maxHp += this.level * 10; // Increase by level
+    }
+    if (this.job === "warrior") {
+        maxHp += this.level * 12; // Increase by level
+    }
+    // TODO Add HP from equipped items
+    return maxHp;
+};
+userSchema.methods.calculateMaxMp = function () {
+    // Implement your logic to calculate max Hp
+    let maxMp = 10; // Base Hp
+    if (this.job === "cleric") {
+        maxMp += this.level * 10; // Increase by level
+        maxMp += ((this.wisdom - 10)) * this.level; // Add wisdom bonus * level
+    }
+    if (this.job === "mage") {
+        maxMp += this.level * 12; // Increase by level
+        maxMp += ((this.intelligence - 10)) * this.level; // Add intelligence bonus * level
+    }
+    if (this.job === "thief") {
+        maxMp += this.level * 10; // Increase by level
+    }
+    if (this.job === "warrior") {
+        maxMp += this.level * 8; // Increase by level
+    }
+    // Add Mp from equipped items
+    return maxMp;
+};
+userSchema.methods.calculateMaxMv = function () {
+    let MaxMv = 10; // Base Mv
+    MaxMv += this.level * 10; // Increase by level
+    MaxMv += ((this.con - 10) / 2) * this.level; // Add constitution bonus * level
+    // TODO Add Mv from equipped items
+    return MaxMv;
 };
 const User = model("User", userSchema);
 export default User;
