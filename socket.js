@@ -1,86 +1,30 @@
 // socket
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
-import parseCommand from "./util/parseCommand.js";
-import isValidCommandWord from "./util/isValidCommandWord.js";
-import processCommand from "./util/processCommand.js";
 import createUser from "./commands/createUser.js";
 import makeMessage from "./types/makeMessage.js";
 import look from "./commands/look.js";
-const authenticateSessionUser = (socket) => {
-    try {
-        // Not authenticated? Disconnect.
-        if (!socket.request.session.passport ||
-            !socket.request.session.passport.user) {
-            socket.emit(`redirectToLogin`);
-            socket.disconnect();
-            return;
-        }
-        // Log username and _id on session (NB: not User object)
-        const sessionUser = socket.request.session.passport.user;
-        logger.debug(`looked in socket.request.session.passport.user and found ${JSON.stringify(sessionUser)}`);
-        logger.info(`User socket connected: ${sessionUser.name}, id: ${sessionUser._id}`);
-        return sessionUser;
-    }
-    catch (err) {
-        logger.error(`Error in authenticateSessionUser: ${err.message}`);
-        throw err;
-    }
-};
-const disconnectMultiplayer = async (socket, sessionUser) => {
-    try {
-        // User multiplaying sockets? Disconnect.
-        const isMultiplaying = await new Promise((resolve) => {
-            worldEmitter.once(`userManagerCheckedMultiplay`, resolve);
-            worldEmitter.emit(`socketCheckingMultiplay`, sessionUser._id);
-        });
-        if (isMultiplaying) {
-            logger.warn(`username ${sessionUser.name} connected on more than one socket. Disconnecting.`);
-            socket.emit(`redirectToLogin`);
-            socket.disconnect;
-            return true;
-        }
-        return false;
-    }
-    catch (err) {
-        logger.error(`Error in disconnectMultiplayer: ${err.message}`);
-        throw err;
-    }
-};
-const setupUser = async (sessionUser, socket) => {
-    try {
-        // Get user, alert userManager
-        const user = await new Promise((resolve) => {
-            worldEmitter.once(`userManagerAddedUser`, resolve);
-            worldEmitter.emit(`socketConnectingUser`, sessionUser._id);
-        });
-        if (!user) {
-            logger.error(`socket couldn't setupUser`);
-            socket.emit(`redirectToLogin`);
-            socket.disconnect();
-            return;
-        }
-        // Add to location's ioRoom on login
-        socket.join(user.location.inRoom.toString());
-        socket.join(user.location.inZone.toString());
-        return user;
-    }
-    catch (err) {
-        logger.error(`Error in setupUser: ${err.message}`);
-    }
-};
+import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSocket.js";
+import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
+import setupUserOnSocket from "./util/setupUserOnSocket.js";
+import userSentCommandHandler from "./util/userSentCommandHandler.js";
+import getRoomOfUser from "./util/getRoomOfUser.js";
 const setupSocket = (io) => {
+    let connectedSockets = [];
     try {
         io.on(`connection`, async (socket) => {
-            const sessionUser = authenticateSessionUser(socket);
-            if (!sessionUser) {
+            connectedSockets.push(socket);
+            console.log(`${connectedSockets.count} connectedSockets:` + connectedSockets);
+            authenticateSessionUserOnSocket(socket);
+            if (!authenticateSessionUserOnSocket(socket)) {
                 return;
             }
-            if (await disconnectMultiplayer(socket, sessionUser)) {
+            if (await disconnectMultiplayerOnSocket(socket)) {
                 return;
             }
-            const user = await setupUser(sessionUser, socket);
+            const user = await setupUserOnSocket(socket);
             if (!user) {
+                socket.disconnect;
                 return;
             }
             const messageArrayForUserHandler = async (messageArray) => {
@@ -89,49 +33,38 @@ const setupSocket = (io) => {
                 }
             };
             worldEmitter.on(`messageArrayFor${user.username}`, messageArrayForUserHandler);
-            const messageForUserHandler = async (messageObject) => {
-                socket.emit(`message`, messageObject);
+            const messageForUserHandler = async (message) => {
+                socket.emit(`message`, message);
             };
             worldEmitter.on(`messageFor${user.username}`, messageForUserHandler);
-            const messageForUsersRoomHandler = async (messageObject) => {
-                socket
-                    .to(user.location.inRoom.toString())
-                    .emit(`message`, messageObject);
+            const messageForUsersRoomHandler = async (message) => {
+                socket.to(user.location.inRoom.toString()).emit(`message`, message);
             };
             worldEmitter.on(`messageFor${user.username}sRoom`, messageForUsersRoomHandler);
-            const messageForUsersZoneHandler = async (messageObject) => {
-                socket
-                    .to(user.location.inZone.toString())
-                    .emit(`message`, messageObject);
+            const messageForUsersZoneHandler = async (message) => {
+                socket.to(user.location.inZone.toString()).emit(`message`, message);
             };
             worldEmitter.on(`messageFor${user.username}sZone`, messageForUsersZoneHandler);
             const userXLeavingGameHandler = async (user) => {
                 logger.debug(`socket received user${user.name}LeavingGame event. Disconnecting.`);
                 socket.emit(`redirectToLogin`, `User ${user.name} left the game.`);
+                socket.disconnect;
             };
             worldEmitter.on(`user${user.username}LeavingGame`, userXLeavingGameHandler);
             // Listen for userSentCommands
             socket.on(`userSentCommand`, async (userInput) => {
-                logger.input(`${user.name} sent command: ${userInput}`);
-                // Sanitize, parse, validate command
-                // TODO sanitize command
-                let parsedInput = parseCommand(userInput);
-                if (!isValidCommandWord(parsedInput.commandWord)) {
-                    //TODO If invalid command word log IP (suspicious because client should prevent this)
-                    socket.emit(`redirectToLogin`, `Server rejected command.`);
-                }
-                await processCommand(parsedInput, user);
+                userSentCommandHandler(socket, userInput, user);
             });
             socket.on(`userSubmittedNewCharacter`, async (characterData) => {
-                logger.debug(`userSubmittedNewCharacter heard by socket with ${characterData}`);
                 const newUser = await createUser(characterData, user);
-                //(createUser handles emit message to socket)
             });
-            let message = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
-            worldEmitter.emit(`messageFor${user.username}sRoom`, message);
+            let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
+            worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);
             look({ commandWord: `look` }, user);
             socket.on(`disconnect`, async () => {
                 try {
+                    let room = await getRoomOfUser(user);
+                    logger.debug(`users in room ${room.users.map(user => user.name)}`);
                     let message = makeMessage("quit", `${user.name} left Restoria.`);
                     worldEmitter.emit(`messageFor${user.username}sRoom`, message);
                     logger.info(`User socket disconnected: ${user.name}`);
@@ -142,6 +75,8 @@ const setupSocket = (io) => {
                 catch (err) {
                     logger.error(err);
                 }
+                connectedSockets = connectedSockets.filter((s) => s !== socket);
+                console.log(`connectedSockets:` + connectedSockets);
             });
         });
     }
