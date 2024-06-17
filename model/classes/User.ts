@@ -6,7 +6,6 @@ import itemSchema, { IItem } from "./Item.js";
 import descriptionSchema, { IDescription } from "./Description.js";
 import locationSchema, { ILocation } from "./Location.js";
 import statBlockSchema, { IStatBlock } from "./StatBlock.js";
-import logger from "../../logger.js";
 
 const { Schema, Types, model } = mongoose;
 export interface IJobLevels {
@@ -170,6 +169,17 @@ userSchema.methods.comparePassword = async function (
   } catch (err) {
     throw err;
   }
+};
+
+userSchema.methods.calculateMaxHp = function () {
+  // Implement your logic to calculate max HP
+  let maxHp = 12; // Base HP
+  if (this.job === "warrior") {
+    maxHp += this.level * 12; // Increase by level
+    maxHp += (this.con -10) /2 * this.level; // Add constitution bonus * level
+  }
+  // Add HP from equipped items
+  return maxHp;
 };
 
 const User = model<IUser>("User", userSchema);
