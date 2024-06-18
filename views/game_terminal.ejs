@@ -89,7 +89,7 @@
       }
       function appendMessageToTerminal(message) {
         const item = document.createElement("li");
-        item.style.whiteSpace = 'pre';
+        item.classList.add('message-item'); // Add message-item class
         item.textContent = message.content;
         item.classList.add(message.type);
         messages.appendChild(item);

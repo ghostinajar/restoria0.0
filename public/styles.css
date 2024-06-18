@@ -76,10 +76,17 @@ body {
   list-style-type: none;
   margin: 0;
   padding: 0.1rem;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
 }
 
+.message-item {
+  white-space: pre-wrap; /* Ensure that white spaces are preserved and lines break as needed */
+}
+
+/* Ensure no unusual spaces in form-related list items */
 #messages > li {
-  padding: 0 0.5rem;
+  white-space: normal;
 }
 
 .quit,

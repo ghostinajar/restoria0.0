@@ -9,11 +9,8 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 const setupSocket = (io) => {
-    let connectedSockets = [];
     try {
         io.on(`connection`, async (socket) => {
-            connectedSockets.push(socket);
-            console.log(`${connectedSockets.count} connectedSockets:` + connectedSockets);
             authenticateSessionUserOnSocket(socket);
             if (!authenticateSessionUserOnSocket(socket)) {
                 return;
@@ -84,8 +81,6 @@ const setupSocket = (io) => {
                 catch (err) {
                     logger.error(err);
                 }
-                connectedSockets = connectedSockets.filter((s) => s !== socket);
-                console.log(`connectedSockets:` + connectedSockets);
             });
         });
     }
