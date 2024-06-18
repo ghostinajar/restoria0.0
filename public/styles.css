@@ -1,3 +1,4 @@
+/* styles.css */
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
 :root {
@@ -40,41 +41,44 @@
 html,
 body {
   margin: 0;
-  padding-bottom: 3rem;
+  padding-bottom: 1.2rem;
   font-family: "Roboto Mono", monospace;
   background: var(--grey_dark);
   color: var(--grey);
 }
 
-#commandForm {
-  background: rgba(0, 0, 0, 0.15);
-  padding: 0.1rem;
+#formContainer {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  height: 2rem;
-  box-sizing: border-box;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  width: 100%;
+  background-color: var(--grey_dark);
+  padding: 8px;
+  box-shadow: 0 -.5px 2px var(--black);
 }
 
-#input {
+#form {
+  width: calc(100% - 20px); /* Adjust width to account for the margins */
+  display: flex;
+  flex-direction: row; /* Ensure items are in a row */
+  align-items: center; /* Center items vertically */
+  padding: 0 10px; /* Add padding to ensure 10px spacing from left and right */
+  box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+#input, #name, #new-password, #pronouns, #job {
   border: none;
-  padding: 0 0.5rem;
   flex-grow: 1;
   border-radius: 2rem;
-  margin: 0.25rem;
+  margin-right: 10px; /* Ensure 10px margin between input and button */
 }
 
-#input:focus {
-  outline: none;
+#button {
+  flex-shrink: 0; /* Ensure the button doesn't shrink */
 }
 
 #messages {
   list-style-type: none;
-  margin: 0;
+  margin: 10px;
   padding: 0.1rem;
   overflow-wrap: anywhere;
   word-wrap: break-word;

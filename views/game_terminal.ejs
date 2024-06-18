@@ -1,3 +1,4 @@
+<! -- game_terminal.ejs -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,12 +16,18 @@
       </form>
     </nav>
 
-    <form id="createUserForm" style="display: none">
-      <section>
+    <ul id="messages"></ul>
+
+    <div id="formContainer">
+      <form id="commandForm" action="">
+        <label for="input"></label>
+        <input id="input" autocomplete="off" />
+        <button type="submit">Send</button>
+      </form>
+
+      <form id="createUserForm" style="display: none">
         <label for="name">Name</label>
         <input id="name" name="name" type="text" autocomplete="name" required />
-      </section>
-      <section>
         <label for="new-password">Password</label>
         <input
           id="new-password"
@@ -29,8 +36,6 @@
           autocomplete="new-password"
           required
         />
-      </section>
-      <section>
         <label for="pronouns">Pronouns:</label>
         <select id="pronouns" name="pronouns" required>
           <option value="0">He/Him</option>
@@ -38,8 +43,6 @@
           <option value="2">She/Her</option>
           <option value="3">They/Them</option>
         </select>
-      </section>
-      <section>
         <label for="job">Job:</label>
         <select id="job" name="job" required>
           <option value="cleric">Cleric</option>
@@ -47,18 +50,10 @@
           <option value="rogue">Rogue</option>
           <option value="warrior">Warrior</option>
         </select>
-      </section>
-      <button type="submit">Create Character</button>
-      <button type="button" id="cancelCreateUserForm">Cancel</button>
-    </form>
-
-    <ul id="messages"></ul>
-
-    <form id="commandForm" action="">
-      <label for="input"></label>
-      <input id="input" autocomplete="off" />
-      <button type="submit">Send</button>
-    </form>
+        <button type="submit">Create Character</button>
+        <button type="button" id="cancelCreateUserForm">Cancel</button>
+      </form>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -100,15 +95,17 @@
         .getElementById("cancelCreateUserForm")
         .addEventListener("click", function () {
           createUserForm.style.display = "none";
+          commandForm.style.display = "block"; // Show the command form again
         });
 
       commandForm.addEventListener("submit", (e) => {
         e.preventDefault();
         if (input.value) {
-          parsedCommand = parseCommand(input.value);
+          const parsedCommand = parseCommand(input.value);
           //reject invalid command words
           if (input.value.toLowerCase() === "create character") {
             createUserForm.style.display = "block";
+            commandForm.style.display = "none"; // Hide the command form
             input.value = "";
             return;
           }
@@ -138,6 +135,7 @@
         name.value = "";
         password.value = "";
         createUserForm.style.display = "none"; // Hide the form after submission
+        commandForm.style.display = "block"; // Show the command form again
       });
 
       socket.on("invalid", (rejectionString) => {
@@ -161,7 +159,6 @@
       document.querySelector('.logout').addEventListener('click', function (event) {
         socket.disconnect();
       });
-
     </script>
   </body>
 </html>
