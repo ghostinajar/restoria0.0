@@ -10,9 +10,6 @@ export interface IStatBlock {
     wisdom: number;
     charisma: number;
     spirit: number;
-    maxHp: number;
-    maxMp: number;
-    maxMv: number;
 };
 
 const statBlockSchema = new Schema<IStatBlock>({
@@ -58,9 +55,6 @@ const statBlockSchema = new Schema<IStatBlock>({
         min: [-1000, 'The value of `{PATH}` (`{VALUE}`) is beneath the limit of `{MIN}`.'],
         max: [1000, 'The value of `{PATH}` (`{VALUE}`) exceeds the limit of `{MAX}`.']
     },
-    maxHp: Number,
-    maxMp: Number,
-    maxMv: Number
 }, { _id: false });
 
 export default statBlockSchema;

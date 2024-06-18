@@ -58,18 +58,15 @@ class UserManager {
     };
     async addUserById(id) {
         try {
+            if (this.users.has(id.toString())) {
+                return this.users.get(id.toString());
+            }
             const user = await User.findById(id);
             if (user) {
-                if (!this.users.has(id.toString())) {
-                    this.users.set(user._id.toString(), user);
-                    logger.debug(`userManager added ${user.name} to users.`);
-                    logger.debug(`Active users: ${JSON.stringify(Array.from(this.users.values()).map((user) => user.name))}`);
-                    return user;
-                }
-                else {
-                    logger.warn(`User with id ${id} already exists in users.`);
-                    return null;
-                }
+                this.users.set(user._id.toString(), user);
+                logger.debug(`userManager added ${user.name} to users.`);
+                logger.debug(`Active users: ${JSON.stringify(Array.from(this.users.values()).map((user) => user.name))}`);
+                return user;
             }
             else {
                 logger.error(`userManager couldn't add user with id ${id} to users.`);

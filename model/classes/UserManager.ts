@@ -39,9 +39,11 @@ class UserManager {
       `worldEmitter received 'requestingUser' and ${username}, checking...`
     );
     const user = this.getUserByUserName(username);
-    if (!user){
-      logger.error(`requestingUserHandler was returned a null or undefined user object for ${username}`);
-      return
+    if (!user) {
+      logger.error(
+        `requestingUserHandler was returned a null or undefined user object for ${username}`
+      );
+      return;
     }
     logger.debug(
       `worldEmitter sending userManagerReturningUser with User promise for ${username}...`
@@ -63,7 +65,7 @@ class UserManager {
     worldEmitter.emit(`userManagerReturningWhoArray`, whoArray);
   };
 
-  socketCheckingMultiplayHandler = (id : mongoose.Types.ObjectId) => {
+  socketCheckingMultiplayHandler = (id: mongoose.Types.ObjectId) => {
     logger.debug(
       `worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`
     );
@@ -74,7 +76,7 @@ class UserManager {
     worldEmitter.emit(`userManagerCheckedMultiplay`, isDuplicate);
   };
 
-  socketConnectingUserHandler = async (id : mongoose.Types.ObjectId) => {
+  socketConnectingUserHandler = async (id: mongoose.Types.ObjectId) => {
     logger.debug(
       `worldEmitter received 'socketConnectingUser' and ${id}, checking...`
     );
@@ -89,33 +91,31 @@ class UserManager {
     worldEmitter.emit(`userManagerAddedUser`, user);
   };
 
-  async addUserById(id : mongoose.Types.ObjectId) {
+  async addUserById(id: mongoose.Types.ObjectId) {
     try {
+      if (this.users.has(id.toString())) {
+        return this.users.get(id.toString());
+      }
       const user = await User.findById(id);
       if (user) {
-        if (!this.users.has(id.toString())) {
-          this.users.set(user._id.toString(), user);
-          logger.debug(`userManager added ${user.name} to users.`);
-          logger.debug(
-            `Active users: ${JSON.stringify(
-              Array.from(this.users.values()).map((user) => user.name)
-            )}`
-          );
-          return user;
-        } else {
-          logger.warn(`User with id ${id} already exists in users.`);
-          return null;
-        }
+        this.users.set(user._id.toString(), user);
+        logger.debug(`userManager added ${user.name} to users.`);
+        logger.debug(
+          `Active users: ${JSON.stringify(
+            Array.from(this.users.values()).map((user) => user.name)
+          )}`
+        );
+        return user;
       } else {
         logger.error(`userManager couldn't add user with id ${id} to users.`);
       }
-    } catch (err : any) {
+    } catch (err: any) {
       logger.error(`Error in addUserById: ${err.message}`);
       throw err;
     }
   }
 
-  async getUserByUserName(username : string) {
+  async getUserByUserName(username: string) {
     try {
       for (let user of this.users.values()) {
         if (user.username === username.toLowerCase()) {
@@ -124,12 +124,12 @@ class UserManager {
       }
       logger.warn(`No user in userManager.users by the name ${username}.`);
       return null;
-    } catch (err : any) {
+    } catch (err: any) {
       logger.error(`Error in getUserByUserName: ${err.message}`);
     }
   }
 
-  async removeUserById(id : mongoose.Types.ObjectId) {
+  async removeUserById(id: mongoose.Types.ObjectId) {
     try {
       this.users.delete(id.toString());
       logger.info(
