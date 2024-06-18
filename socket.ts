@@ -17,12 +17,9 @@ import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 
 const setupSocket = (io: any) => {
-  let connectedSockets : any = [];
 
   try {
     io.on(`connection`, async (socket: any) => {
-      connectedSockets.push(socket);
-      console.log(`${connectedSockets.count} connectedSockets:` + connectedSockets);
 
       authenticateSessionUserOnSocket(socket);
       if (!authenticateSessionUserOnSocket(socket)) {
@@ -127,8 +124,6 @@ const setupSocket = (io: any) => {
         } catch (err) {
           logger.error(err);
         }
-        connectedSockets = connectedSockets.filter((s : any) => s !== socket);
-        console.log(`connectedSockets:` + connectedSockets);
       });
     });
   } catch (err) {
