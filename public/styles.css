@@ -34,20 +34,19 @@
   --brown: #977447;
 }
 
-* {
-  overflow-wrap: break-word;
-}
-
 html,
 body {
   margin: 0;
-  padding-bottom: 1.2rem;
   font-family: "Roboto Mono", monospace;
   background: var(--grey_dark);
   color: var(--grey);
 }
 
-#formContainer {
+label {
+  white-space: pre-wrap;
+}
+
+#commandFormContainer {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -56,7 +55,7 @@ body {
   box-shadow: 0 -.5px 2px var(--black);
 }
 
-#form {
+#commandForm {
   width: calc(100% - 20px); /* Adjust width to account for the margins */
   display: flex;
   flex-direction: row; /* Ensure items are in a row */
@@ -65,15 +64,32 @@ body {
   box-sizing: border-box; /* Include padding in the width calculation */
 }
 
-#input, #name, #new-password, #pronouns, #job {
+#newUserForm {
+  width: 20%;
+  position: fixed;
+  right: 10;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.logout {
+  position: fixed;
+  top: 10px;   /* Adjust the value as needed for spacing */
+  right: 10px; /* Adjust the value as needed for spacing */
+  z-index: 1000; /* Ensure it stays above other elements */
+}
+
+#commandForm input, #newUserForm #name, #newUserForm #new-password, #newUserForm #pronouns, #newUserForm #job {
   border: none;
   flex-grow: 1;
   border-radius: 2rem;
   margin-right: 10px; /* Ensure 10px margin between input and button */
 }
 
-#button {
+button, input, select {
   flex-shrink: 0; /* Ensure the button doesn't shrink */
+  font-family: "Roboto Mono", monospace;
 }
 
 #messages {
@@ -81,16 +97,10 @@ body {
   margin: 10px;
   padding: 0.1rem;
   overflow-wrap: anywhere;
-  word-wrap: break-word;
 }
 
 .message-item {
   white-space: pre-wrap; /* Ensure that white spaces are preserved and lines break as needed */
-}
-
-/* Ensure no unusual spaces in form-related list items */
-#messages > li {
-  white-space: normal;
 }
 
 .quit,
