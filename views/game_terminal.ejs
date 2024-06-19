@@ -16,48 +16,52 @@
       </form>
     </nav>
 
-    <div id="messagesContainer">
-    <ul id="messages"></ul>
-    </div>
+    <div>
+      <div id="messagesContainer">
+      <ul id="messages"></ul>
+      </div>
 
-    <div id="sideFormContainer">
       <form id="createUserForm" style="display: none">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" autocomplete="name" required />
-        <label for="new-password">Password</label>
-        <input
-          id="new-password"
-          name="password"
-          type="password"
-          autocomplete="new-password"
-          required
-        />
-        <label for="pronouns">Pronouns:</label>
-        <select id="pronouns" name="pronouns" required>
-          <option value="0">He/Him</option>
-          <option value="1">It/It</option>
-          <option value="2">She/Her</option>
-          <option value="3">They/Them</option>
-        </select>
-        <label for="job">Job:</label>
-        <select id="job" name="job" required>
-          <option value="cleric">Cleric</option>
-          <option value="mage">Mage</option>
-          <option value="rogue">Rogue</option>
-          <option value="warrior">Warrior</option>
-        </select>
+        <section>
+          <label for="name">Name:    </label>
+          <input id="name" name="name" type="text" autocomplete="name" required />
+        </section>
+          <label for="new-password">Password:</label>
+          <input
+            id="new-password"
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            required
+          />
+        <section>
+          <label for="pronouns">Pronouns:</label>
+          <select id="pronouns" name="pronouns" required>
+            <option value="0">He/Him</option>
+            <option value="1">It/It</option>
+            <option value="2">She/Her</option>
+            <option value="3">They/Them</option>
+          </select>
+        </section>
+        <section>
+          <label for="job">Job:     </label>
+          <select id="job" name="job" required>
+            <option value="cleric">Cleric</option>
+            <option value="mage">Mage</option>
+            <option value="rogue">Rogue</option>
+            <option value="warrior">Warrior</option>
+          </select>
+        </section>        
         <button type="submit">Create Character</button>
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
-    </div>
+   </div>
 
-    <div id="commandFormContainer">
-      <form id="commandForm" action="">
-        <label for="commandInput"></label>
-        <input id="commandInput" autocomplete="off" />
-        <button type="submit">Send</button>
-      </form>
-    </div>
+    <form id="commandForm" action="">
+      <label for="commandInput"></label>
+      <input id="commandInput" autocomplete="off" />
+      <button type="submit">Send</button>
+    </form>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -68,6 +72,7 @@
       const name = document.getElementById("name");
       const password = document.getElementById("new-password");
       const input= document.getElementById("commandInput");
+      const messagesContainer= document.getElementById("messagesContainer");
       const messages = document.getElementById("messages");
 
       //methods definitions (validation and parsing are client version)
@@ -98,6 +103,7 @@
       document
         .getElementById("cancelCreateUserForm")
         .addEventListener("click", function () {
+          messagesContainer.classList.remove("makeRoom");
           createUserForm.style.display = "none";
         });
 
@@ -108,6 +114,7 @@
           //reject invalid command words
           if (input.value.toLowerCase() === "create character") {
             createUserForm.style.display = "block";
+            messagesContainer.classList.add("makeRoom");
             input.value = "";
             return;
           }
@@ -134,10 +141,9 @@
           job: document.getElementById("job").value,
         };
         socket.emit("userSubmittedNewCharacter", userData);
-        name.value = "";
-        password.value = "";
+        createUserForm.reset();
         createUserForm.style.display = "none"; // Hide the form after submission
-        commandForm.style.display = "block"; // Show the command form again
+        messagesContainer.classList.remove("makeRoom");
       });
 
       socket.on("invalid", (rejectionString) => {
