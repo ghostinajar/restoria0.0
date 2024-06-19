@@ -2,11 +2,11 @@ import { IAffix } from "./Affix";
 import { IChatter } from "./Chatter";
 import { IDescription } from "./Description";
 import { IEmote } from "./Emote";
-import itemSchema, { IItem } from "./Item.js";
+import { IItem } from "./Item.js";
 import { IMobBlueprint } from "./MobBlueprint";
 import { IStatBlock } from "./StatBlock";
-import mongoose, { Types } from "mongoose";
-import { IEquipped } from "./User";
+import mongoose from "mongoose";
+import IEquipped from "../../types/Equipped";
 
 export interface IMob {
   _id: mongoose.Types.ObjectId;

@@ -1,11 +1,9 @@
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import IMessage from "../types/Message.js";
 import makeMessage from "../types/makeMessage.js";
 import resetUserLocation from "../util/resetUserLocation.js";
-import mongoose from "mongoose";
 
-async function quit (user: IUser & mongoose.Document) {
+async function quit (user: IUser) {
   let message = makeMessage(`quit`, `Bye bye, ${user.name}!`)
   worldEmitter.emit(`messageFor${user.username}`, message)
   await user.save();

@@ -6,17 +6,10 @@ import itemSchema, { IItem } from "./Item.js";
 import descriptionSchema, { IDescription } from "./Description.js";
 import locationSchema, { ILocation } from "./Location.js";
 import statBlockSchema, { IStatBlock } from "./StatBlock.js";
+import IRuntimeProps from "../../types/RuntimeProps.js";
+import IEquipped from "../../types/Equipped.js";
 
 const { Schema, Types, model } = mongoose;
-
-export interface IRuntimeProps {
-  currentHp : number;
-  maxHp : number;
-  currentMp : number;
-  maxMp : number;
-  currentMv : number;
-  maxMv : number;
-}
 
 export interface IJobLevels {
   cleric: number;
@@ -30,28 +23,7 @@ export interface ITrained {
   level: number;
 }
 
-export interface IEquipped {
-  arms: IItem | null;
-  body: IItem | null;
-  ears: IItem | null;
-  feet: IItem | null;
-  finger1: IItem | null;
-  finger2: IItem | null;
-  hands: IItem | null;
-  head: IItem | null;
-  held: IItem | null;
-  legs: IItem | null;
-  neck: IItem | null;
-  shield: IItem | null;
-  shoulders: IItem | null;
-  waist: IItem | null;
-  wrist1: IItem | null;
-  wrist2: IItem | null;
-  weapon1: IItem | null;
-  weapon2: IItem | null;
-}
-
-export interface IUser {
+export interface IUser extends mongoose.Document {
   _id: mongoose.Types.ObjectId;
   username: string;
   name: string;
@@ -82,9 +54,13 @@ export interface IUser {
   equipped: IEquipped;
   affixes: Array<IAffix>;
   runtimeProps?: IRuntimeProps
+  comparePassword(candidatePassword: string): Promise<boolean>;
+  calculateMaxHp(): number;
+  calculateMaxMp(): number;
+  calculateMaxMv(): number;
 }
 
-const userSchema = new Schema<IUser>({
+export const userSchema = new Schema<IUser>({
   _id: Schema.Types.ObjectId,
   username: { type: String, required: true, unique: true },
   name: { type: String, required: true, unique: true },

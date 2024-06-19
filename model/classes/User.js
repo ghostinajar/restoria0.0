@@ -7,7 +7,7 @@ import descriptionSchema from "./Description.js";
 import locationSchema from "./Location.js";
 import statBlockSchema from "./StatBlock.js";
 const { Schema, Types, model } = mongoose;
-const userSchema = new Schema({
+export const userSchema = new Schema({
     _id: Schema.Types.ObjectId,
     username: { type: String, required: true, unique: true },
     name: { type: String, required: true, unique: true },
@@ -95,13 +95,11 @@ const userSchema = new Schema({
     },
 });
 userSchema.pre('save', function (next) {
-    // Temporarily store the runtimeProps
+    // Prevent runtimeProps from being stored in DB
+    // Temporarily store the runtimeProps to restore after saving
     const runtimeProps = this.runtimeProps;
-    // Set runtimeProps to null
     this.runtimeProps = undefined;
-    // Call the next middleware or save function
     next();
-    // Restore the runtimeProps
     this.runtimeProps = runtimeProps;
 });
 userSchema.methods.comparePassword = async function (candidatePassword) {

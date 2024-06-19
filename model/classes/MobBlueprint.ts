@@ -10,7 +10,6 @@ import itemNodeSchema, { IItemNode } from './ItemNode.js';
 const { Schema } = mongoose;
 /*only mobs and items have blueprints, and only because multiple instances 
 of them will exist in game simultaneously, and they can't all share the same id
-There is no Mob.js schema since mobs are never saved, only their blueprints
 */
 
 export interface IMobBlueprint {

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema, Types, model } = mongoose;
 
-export interface IAbuseReport {
+export interface IAbuseReport extends mongoose.Document {
     reportingUser: mongoose.Types.ObjectId;
     reportedUser: mongoose.Types.ObjectId;
     body: string;

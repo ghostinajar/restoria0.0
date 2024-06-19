@@ -9,7 +9,7 @@ import logger from "../../logger.js";
 
 const { Schema } = mongoose;
 
-export interface IZone {
+export interface IZone extends mongoose.Document {
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
   name: string;

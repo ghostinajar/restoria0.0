@@ -1,11 +1,10 @@
-import mongoose from "mongoose";
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import isValidCommandWord from "./isValidCommandWord.js";
 import parseCommand from "./parseCommand.js";
 import processCommand from "./processCommand.js";
 
-async function userSentCommandHandler (socket : any, userInput: string, user : IUser & mongoose.Document) {
+async function userSentCommandHandler (socket : any, userInput: string, user : IUser) {
   logger.input(`${user.name} sent command: ${userInput}`);
   // Sanitize, parse, validate command
   // TODO sanitize command

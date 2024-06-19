@@ -1,6 +1,5 @@
 import logger from '../../logger.js';
 import worldEmitter from './WorldEmitter.js';
-import mongoose from 'mongoose';
 import Mob, { IMob } from './Mob.js';
 import { IMobBlueprint } from './MobBlueprint.js';
 

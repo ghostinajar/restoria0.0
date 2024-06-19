@@ -8,9 +8,9 @@ import telepath from "../commands/telepath.js";
 import who from "../commands/who.js";
 import { IParsedCommand } from "./parseCommand.js";
 import { IUser } from "../model/classes/User.js";
-import mongoose from "mongoose";
+import stats from "../commands/stats.js";
 
-async function processCommand(parsedCommand: IParsedCommand, user: IUser & mongoose.Document) {
+async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`)
     switch (parsedCommand.commandWord) {
         case `ex`:
@@ -35,6 +35,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser & mongo
         }
         case `shout` : {
             shout(parsedCommand, user);
+            break;
+        }
+        case `stats`: {
+            stats(parsedCommand, user);
             break;
         }
         case `t` :

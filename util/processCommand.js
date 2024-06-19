@@ -6,6 +6,7 @@ import say from "../commands/say.js";
 import shout from "../commands/shout.js";
 import telepath from "../commands/telepath.js";
 import who from "../commands/who.js";
+import stats from "../commands/stats.js";
 async function processCommand(parsedCommand, user) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
@@ -31,6 +32,10 @@ async function processCommand(parsedCommand, user) {
         }
         case `shout`: {
             shout(parsedCommand, user);
+            break;
+        }
+        case `stats`: {
+            stats(parsedCommand, user);
             break;
         }
         case `t`:

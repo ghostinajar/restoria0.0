@@ -65,7 +65,7 @@ class ZoneManager {
     worldEmitter.emit("zoneManagerRemovedUser", user);
   };
 
-  userManagerAddedUserHandler = async (user: IUser & mongoose.Document) => {
+  userManagerAddedUserHandler = async (user: IUser) => {
     this.placeUserInLocation(user);
   };
 
@@ -127,7 +127,7 @@ class ZoneManager {
     }
   }
 
-  async placeUserInLocation(user: IUser & mongoose.Document) {
+  async placeUserInLocation(user: IUser) {
     if (!user) {
       logger.error(`placeUserInLocation received an undefined user`);
       return;

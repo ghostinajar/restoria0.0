@@ -1,14 +1,10 @@
 // socket
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
-import parseCommand, { IParsedCommand } from "./util/parseCommand.js";
-import isValidCommandWord from "./util/isValidCommandWord.js";
-import processCommand from "./util/processCommand.js";
 import createUser, { IUserData } from "./commands/createUser.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import makeMessage from "./types/makeMessage.js";
-import mongoose from "mongoose";
 import look from "./commands/look.js";
 import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSocket.js";
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
@@ -27,7 +23,7 @@ const setupSocket = (io: any) => {
       if (await disconnectMultiplayerOnSocket(socket)) {
         return;
       }
-      const user: (IUser & mongoose.Document) | undefined =
+      const user: (IUser) | undefined =
         await setupUserOnSocket(socket);
       if (!user) {
         socket.disconnect;

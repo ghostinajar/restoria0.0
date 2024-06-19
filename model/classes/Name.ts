@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-export interface IName {
+export interface IName extends mongoose.Document {
   name: string;
 }
 

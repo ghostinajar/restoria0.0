@@ -10,6 +10,7 @@ class UserManager {
         worldEmitter.on(`socketConnectingUser`, this.socketConnectingUserHandler);
         worldEmitter.on(`zoneManagerRemovedUser`, this.logoutUserHandler);
     }
+    //key is user's _id.toString()
     users;
     logoutUserHandler = (user) => {
         logger.debug(`logoutUserHandler called`);

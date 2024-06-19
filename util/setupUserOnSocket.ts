@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
@@ -6,7 +5,7 @@ import logger from "../logger.js";
 async function setupUserOnSocket (socket: any) {
   try {
     // Get user, alert userManager
-    const user: IUser & mongoose.Document = await new Promise((resolve) => {
+    const user: IUser = await new Promise((resolve) => {
       worldEmitter.once(`userManagerAddedUser`, resolve);
       worldEmitter.emit(`socketConnectingUser`, socket.request.session.passport.user._id);
     });

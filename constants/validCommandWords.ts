@@ -10,6 +10,7 @@ export const validCommandWords = [
   "quit",
   "say",
   "shout",
+  "stats",
   "t",
   "tel",
   "telepath",

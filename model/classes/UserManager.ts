@@ -9,14 +9,12 @@ class UserManager {
 
     worldEmitter.on(`requestingUser`, this.requestingUserHandler);
     worldEmitter.on(`requestingWhoArray`, this.requestingWhoArrayHandler);
-    worldEmitter.on(
-      `socketCheckingMultiplay`,
-      this.socketCheckingMultiplayHandler
-    );
+    worldEmitter.on(`socketCheckingMultiplay`, this.socketCheckingMultiplayHandler);
     worldEmitter.on(`socketConnectingUser`, this.socketConnectingUserHandler);
     worldEmitter.on(`zoneManagerRemovedUser`, this.logoutUserHandler);
   }
 
+  //key is user's _id.toString()
   users: Map<string, IUser>;
 
   logoutUserHandler = (user: IUser) => {

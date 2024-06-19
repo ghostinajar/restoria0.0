@@ -1,5 +1,5 @@
 // createUser
-import { Schema, Types } from "mongoose";
+import { Types } from "mongoose";
 import makeMessage from "../types/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
@@ -63,7 +63,7 @@ async function createUser(userFormData: IUserData, author?: IUser): Promise<IUse
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(userFormData.password, salt);
 
-    let newUserData: IUser = {
+    let newUserData: any = {
       _id: new mongoose.Types.ObjectId,
       username: userFormData.username.toLowerCase(),
       name: userFormData.name,
