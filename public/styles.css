@@ -63,15 +63,38 @@ label {
 #createUserForm {
   width: 34%;
   position: fixed;
-  bottom: 60px;
+  top: 60px;
   right: 10px;
-  /* display: flex; */
-  /* flex-direction: column; */
   padding: 10px;
   background-color: var(--grey_dark);
-  padding: 10px;
   box-shadow: 0 0.5px 2px var(--black);
   display: none; /* Initially hidden */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#createUserForm section {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add space between the label and input */
+  margin-bottom: 2px;
+}
+
+#createUserForm label {
+  flex-shrink: 0; /* Prevent labels from shrinking */
+}
+
+#createUserForm input, #createUserForm select {
+  flex-grow: 1; /* Allow inputs to grow to fill the available space */
+  border: none;
+  border-radius: 2rem;
+  padding: 5px 10px; /* Add padding for better spacing */
+  margin: 0; /* Remove default margin */
+}
+
+#createUserForm button {
+  margin-top: 10px; /* Add some space above the buttons */
 }
 
 .logout {
@@ -81,7 +104,10 @@ label {
   z-index: 1000; /* Ensure it stays above other elements */
 }
 
-#commandForm input, #createUserForm #name, #createUserForm #new-password, #createUserForm #pronouns, #createUserForm #job {
+#commandForm input, #name, #new-password,  #createUserForm #pronouns, #createUserForm #job {
+  border-radius: 2rem;
+  padding: 5px 10px; /* Add padding for better spacing */
+  margin: 0; /* Remove default margin */  
   border: none;
   flex-grow: 1;
   border-radius: 2rem;
@@ -101,8 +127,7 @@ button, input, select {
 }
 
 #messagesContainer.makeRoom {
-  width: 66%;
-  padding-right: 10px;
+  width: 64%;
 }
 
 #messages {

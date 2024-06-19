@@ -23,17 +23,13 @@
 
       <form id="createUserForm" style="display: none">
         <section>
-          <label for="name">Name:    </label>
+          <label for="name">Name:</label>
           <input id="name" name="name" type="text" autocomplete="name" required />
         </section>
+        <section>
           <label for="new-password">Password:</label>
-          <input
-            id="new-password"
-            name="password"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
+          <input id="new-password" name="password" type="password" autocomplete="new-password" required />
+        </section>
         <section>
           <label for="pronouns">Pronouns:</label>
           <select id="pronouns" name="pronouns" required>
@@ -44,14 +40,14 @@
           </select>
         </section>
         <section>
-          <label for="job">Job:     </label>
+          <label for="job">Job:</label>
           <select id="job" name="job" required>
             <option value="cleric">Cleric</option>
             <option value="mage">Mage</option>
             <option value="rogue">Rogue</option>
             <option value="warrior">Warrior</option>
           </select>
-        </section>        
+        </section>
         <button type="submit">Create Character</button>
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
