@@ -8,7 +8,7 @@ import isValidName from "../util/isValidName.js";
 import Name from "../model/classes/Name.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-// Return a user, or a message explaining failure (if by author, emit message to their socket)
+// Return user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
         logger.debug(`Trying to create character ${userFormData.name}`);
@@ -52,7 +52,7 @@ async function createUser(userFormData, author) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(userFormData.password, salt);
         let newUserData = {
-            _id: new mongoose.Types.ObjectId,
+            _id: new mongoose.Types.ObjectId(),
             username: userFormData.username.toLowerCase(),
             name: userFormData.name,
             password: hashedPassword,
@@ -166,7 +166,7 @@ async function createUser(userFormData, author) {
         }
         if (author) {
             logger.info(`Author "${author.name}" created character "${newUser.name}".`);
-            message.type = 'createUser';
+            message.type = "createUser";
             message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new character.`;
             if (newUser.author) {
                 logger.info(`Author ${author.name} is the author of ${newUser.name}.`);

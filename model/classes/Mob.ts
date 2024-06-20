@@ -49,7 +49,7 @@ class Mob implements IMob {
     this.description = blueprint.description;
     this.keywords = blueprint.keywords;
     this.affixes = blueprint.affixes;
-    (this.equipped = {
+    this.equipped = {
       arms: null,
       body: null,
       ears: null,
@@ -68,8 +68,8 @@ class Mob implements IMob {
       wrist2: null,
       weapon1: null,
       weapon2: null,
-    }),
-      (this.chatters = blueprint.chatters);
+    },
+    this.chatters = blueprint.chatters;
     this.emotes = blueprint.emotes;
     this.inventory = [];
   }

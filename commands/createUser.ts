@@ -18,8 +18,11 @@ export interface IUserData {
   job: string;
 }
 
-// Return a user, or a message explaining failure (if by author, emit message to their socket)
-async function createUser(userFormData: IUserData, author?: IUser): Promise<IUser | IMessage> {
+// Return user, or a message explaining failure (if by author, emit message to their socket)
+async function createUser(
+  userFormData: IUserData,
+  author?: IUser
+): Promise<IUser | IMessage> {
   try {
     logger.debug(`Trying to create character ${userFormData.name}`);
     let message = makeMessage("rejection", ``);
@@ -64,7 +67,7 @@ async function createUser(userFormData: IUserData, author?: IUser): Promise<IUse
     const hashedPassword = await bcrypt.hash(userFormData.password, salt);
 
     let newUserData: any = {
-      _id: new mongoose.Types.ObjectId,
+      _id: new mongoose.Types.ObjectId(),
       username: userFormData.username.toLowerCase(),
       name: userFormData.name,
       password: hashedPassword,
@@ -171,7 +174,7 @@ async function createUser(userFormData: IUserData, author?: IUser): Promise<IUse
       newUserData.author = author._id;
     }
     await newUser.save();
-    
+
     const nameToRegister = new Name({ name: newUser.username });
     const nameSaved = await nameToRegister.save();
     if (!nameSaved) {
@@ -181,11 +184,13 @@ async function createUser(userFormData: IUserData, author?: IUser): Promise<IUse
     }
 
     if (author) {
-      logger.info(`Author "${author.name}" created character "${newUser.name}".`);
-      message.type = 'createUser'
+      logger.info(
+        `Author "${author.name}" created character "${newUser.name}".`
+      );
+      message.type = "createUser";
       message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new character.`;
       if (newUser.author) {
-        logger.info(`Author ${author.name} is the author of ${newUser.name}.`)
+        logger.info(`Author ${author.name} is the author of ${newUser.name}.`);
       }
       worldEmitter.emit(`messageFor${author.username}`, message);
     } else {

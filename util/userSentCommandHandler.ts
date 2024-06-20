@@ -4,7 +4,11 @@ import isValidCommandWord from "./isValidCommandWord.js";
 import parseCommand from "./parseCommand.js";
 import processCommand from "./processCommand.js";
 
-async function userSentCommandHandler (socket : any, userInput: string, user : IUser) {
+async function userSentCommandHandler(
+  socket: any,
+  userInput: string,
+  user: IUser
+) {
   logger.input(`${user.name} sent command: ${userInput}`);
   // Sanitize, parse, validate command
   // TODO sanitize command
@@ -17,4 +21,3 @@ async function userSentCommandHandler (socket : any, userInput: string, user : I
 }
 
 export default userSentCommandHandler;
-

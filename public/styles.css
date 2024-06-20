@@ -56,7 +56,7 @@ label {
   padding: 10px; /* Add padding to ensure 10px spacing from left and right */
   box-sizing: border-box; /* Include padding in the width calculation */
   background-color: var(--grey_dark);
-  box-shadow: 0 -.5px 2px var(--black);
+  box-shadow: 0 -0.5px 2px var(--black);
   z-index: 1000; /* Ensure it stays above other elements */
 }
 
@@ -85,7 +85,8 @@ label {
   flex-shrink: 0; /* Prevent labels from shrinking */
 }
 
-#createUserForm input, #createUserForm select {
+#createUserForm input,
+#createUserForm select {
   flex-grow: 1; /* Allow inputs to grow to fill the available space */
   border: none;
   border-radius: 2rem;
@@ -99,25 +100,31 @@ label {
 
 .logout {
   position: fixed;
-  top: 10px;   /* Adjust the value as needed for spacing */
+  top: 10px; /* Adjust the value as needed for spacing */
   right: 10px; /* Adjust the value as needed for spacing */
   z-index: 1000; /* Ensure it stays above other elements */
 }
 
-#commandForm input, #name, #new-password,  #createUserForm #pronouns, #createUserForm #job {
+#commandForm input,
+#name,
+#new-password,
+#createUserForm #pronouns,
+#createUserForm #job {
   border-radius: 2rem;
   padding: 5px 10px; /* Add padding for better spacing */
-  margin: 0; /* Remove default margin */  
+  margin: 0; /* Remove default margin */
   border: none;
   flex-grow: 1;
   border-radius: 2rem;
   margin-right: 10px; /* Ensure 10px margin between input and button */
 }
 
-button, input, select {
+button,
+input,
+select {
   flex-shrink: 0; /* Ensure the button doesn't shrink */
   font-family: "Roboto Mono", monospace;
-  margin: 4px 0px
+  margin: 4px 0px;
 }
 
 #messagesContainer {

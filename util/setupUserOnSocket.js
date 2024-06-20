@@ -22,5 +22,4 @@ async function setupUserOnSocket(socket) {
         logger.error(`Error in setupUserOnSocket: ${err.message}`);
     }
 }
-;
 export default setupUserOnSocket;
