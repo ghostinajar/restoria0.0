@@ -3,7 +3,7 @@ import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
-async function exits(parsedCommand, user) {
+async function exits(user) {
     logger.debug(`exits command called, getting user's room...`);
     //get room
     const room = await getRoomOfUser(user);

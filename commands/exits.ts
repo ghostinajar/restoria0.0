@@ -2,14 +2,13 @@
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
-import { IParsedCommand } from "../util/parseCommand.js";
 import { IUser } from "../model/classes/User.js";
 import { IRoom } from "../model/classes/Room.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import IMessage from "../types/Message.js";
 import { IZone } from "../model/classes/Zone.js";
 
-async function exits(parsedCommand: IParsedCommand, user: IUser) {
+async function exits(user: IUser) {
   logger.debug(`exits command called, getting user's room...`);
   //get room
   const room: IRoom = await getRoomOfUser(user);

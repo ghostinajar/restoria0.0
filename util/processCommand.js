@@ -1,3 +1,4 @@
+// processCommand
 import logger from "../logger.js";
 import exits from "../commands/exits.js";
 import look from "../commands/look.js";
@@ -13,41 +14,41 @@ async function processCommand(parsedCommand, user) {
         case `ex`:
         case `exit`:
         case `exits`: {
-            exits(parsedCommand, user);
+            await exits(user);
             break;
         }
         case `exa`:
         case `examine`:
         case `look`: {
-            look(parsedCommand, user);
+            await look(parsedCommand, user);
             break;
         }
         case `quit`: {
-            quit(user);
+            await quit(user);
             break;
         }
         case `say`: {
-            say(parsedCommand, user);
+            await say(parsedCommand, user);
             break;
         }
         case `shout`: {
-            shout(parsedCommand, user);
+            await shout(parsedCommand, user);
             break;
         }
         case `stat`:
         case `stats`: {
-            stats(parsedCommand, user);
+            await stats(user);
             break;
         }
         case `t`:
         case `tel`:
         case `telepath`:
         case `tell`: {
-            telepath(parsedCommand, user);
+            await telepath(parsedCommand, user);
             break;
         }
         case `who`: {
-            who(user);
+            await who(user);
             break;
         }
         default:
@@ -55,6 +56,9 @@ async function processCommand(parsedCommand, user) {
                 logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`);
             }
             ;
+    }
+    if (parsedCommand.commandWord !== `stats`) {
+        stats(user);
     }
 }
 export default processCommand;

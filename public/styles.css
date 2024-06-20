@@ -157,6 +157,10 @@ select {
   color: var(--blue_dark);
 }
 
+.stats {
+  color: var(--blue)
+}
+
 .equippedItemName,
 .itemName,
 .itemIsHere {
