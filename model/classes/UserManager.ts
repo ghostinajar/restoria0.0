@@ -1,4 +1,5 @@
 import logger from "../../logger.js";
+import initRuntimePropsForAgent from "../../util/initRuntimePropsForAgent.js";
 import User, { IUser } from "./User.js";
 import worldEmitter from "./WorldEmitter.js";
 import mongoose from "mongoose";
@@ -96,6 +97,8 @@ class UserManager {
       }
       const user = await User.findById(id);
       if (user) {
+        initRuntimePropsForAgent(user);
+        logger.debug(`User's runtime props on init: ${JSON.stringify(user.runtimeProps)}`);
         this.users.set(user._id.toString(), user);
         logger.debug(`userManager added ${user.name} to users.`);
         logger.debug(

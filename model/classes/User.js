@@ -113,7 +113,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 userSchema.methods.calculateMaxHp = function () {
     // Implement your logic to calculate max Hp
     let maxHp = 10; // Base HP
-    maxHp += ((this.constitution - 10) / 2) * this.level; // Add constitution bonus * level
+    maxHp += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
     if (this.job === "cleric") {
         maxHp += this.level * 10; // Increase by level
     }
@@ -134,11 +134,11 @@ userSchema.methods.calculateMaxMp = function () {
     let maxMp = 10; // Base Hp
     if (this.job === "cleric") {
         maxMp += this.level * 10; // Increase by level
-        maxMp += (this.wisdom - 10) * this.level; // Add wisdom bonus * level
+        maxMp += (this.statBlock.wisdom - 10) * this.level; // Add wisdom bonus * level
     }
     if (this.job === "mage") {
         maxMp += this.level * 12; // Increase by level
-        maxMp += (this.intelligence - 10) * this.level; // Add intelligence bonus * level
+        maxMp += (this.statBlock.intelligence - 10) * this.level; // Add intelligence bonus * level
     }
     if (this.job === "thief") {
         maxMp += this.level * 10; // Increase by level
@@ -152,7 +152,7 @@ userSchema.methods.calculateMaxMp = function () {
 userSchema.methods.calculateMaxMv = function () {
     let MaxMv = 10; // Base Mv
     MaxMv += this.level * 10; // Increase by level
-    MaxMv += ((this.con - 10) / 2) * this.level; // Add constitution bonus * level
+    MaxMv += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
     // TODO Add Mv from equipped items
     return MaxMv;
 };

@@ -1,4 +1,5 @@
 import logger from "../../logger.js";
+import initRuntimePropsForAgent from "../../util/initRuntimePropsForAgent.js";
 import User from "./User.js";
 import worldEmitter from "./WorldEmitter.js";
 class UserManager {
@@ -64,6 +65,8 @@ class UserManager {
             }
             const user = await User.findById(id);
             if (user) {
+                initRuntimePropsForAgent(user);
+                logger.debug(`User's runtime props on init: ${JSON.stringify(user.runtimeProps)}`);
                 this.users.set(user._id.toString(), user);
                 logger.debug(`userManager added ${user.name} to users.`);
                 logger.debug(`Active users: ${JSON.stringify(Array.from(this.users.values()).map((user) => user.name))}`);
