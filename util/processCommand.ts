@@ -37,6 +37,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
             shout(parsedCommand, user);
             break;
         }
+        case `stat`:
         case `stats`: {
             stats(parsedCommand, user);
             break;

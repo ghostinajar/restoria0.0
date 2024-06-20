@@ -72,7 +72,7 @@ zoneSchema.methods.initRooms = async function () {
         throw err;
     }
 };
-//TODO update this method now that these entities are all stored in arrays, not maps
+//TODO update this method now that these entities are all stored in arrays, not maps?
 // zoneSchema.methods.createEntityIn = async function (entityType, entity) {
 //     if(this[entityType]) {
 //         try {

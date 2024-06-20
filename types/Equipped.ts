@@ -1,6 +1,6 @@
+// Equipped
 import { IItem } from "../model/classes/Item";
 
-// Equipped
 interface IEquipped {
   arms: IItem | null;
   body: IItem | null;
@@ -22,4 +22,4 @@ interface IEquipped {
   weapon2: IItem | null;
 }
 
-export default IEquipped
+export default IEquipped;

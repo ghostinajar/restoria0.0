@@ -12,10 +12,8 @@ import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 
 const setupSocket = (io: any) => {
-
   try {
     io.on(`connection`, async (socket: any) => {
-
       authenticateSessionUserOnSocket(socket);
       if (!authenticateSessionUserOnSocket(socket)) {
         return;
@@ -23,8 +21,7 @@ const setupSocket = (io: any) => {
       if (await disconnectMultiplayerOnSocket(socket)) {
         return;
       }
-      const user: (IUser) | undefined =
-        await setupUserOnSocket(socket);
+      const user: IUser | undefined = await setupUserOnSocket(socket);
       if (!user) {
         socket.disconnect;
         return;
@@ -103,7 +100,6 @@ const setupSocket = (io: any) => {
 
       socket.on(`disconnect`, async () => {
         try {
-          
           let message = makeMessage("quit", `${user.name} left Restoria.`);
           worldEmitter.emit(`messageFor${user.username}sRoom`, message);
           logger.info(`User socket disconnected: ${user.name}`);

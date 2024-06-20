@@ -1,3 +1,5 @@
+// Name
+// exists to store unique names in db for duplicate checking across users, mobs, etc.
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 

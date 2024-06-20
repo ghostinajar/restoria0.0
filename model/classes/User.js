@@ -94,7 +94,7 @@ export const userSchema = new Schema({
         default: () => [],
     },
 });
-userSchema.pre('save', function (next) {
+userSchema.pre("save", function (next) {
     // Prevent runtimeProps from being stored in DB
     // Temporarily store the runtimeProps to restore after saving
     const runtimeProps = this.runtimeProps;
@@ -134,11 +134,11 @@ userSchema.methods.calculateMaxMp = function () {
     let maxMp = 10; // Base Hp
     if (this.job === "cleric") {
         maxMp += this.level * 10; // Increase by level
-        maxMp += ((this.wisdom - 10)) * this.level; // Add wisdom bonus * level
+        maxMp += (this.wisdom - 10) * this.level; // Add wisdom bonus * level
     }
     if (this.job === "mage") {
         maxMp += this.level * 12; // Increase by level
-        maxMp += ((this.intelligence - 10)) * this.level; // Add intelligence bonus * level
+        maxMp += (this.intelligence - 10) * this.level; // Add intelligence bonus * level
     }
     if (this.job === "thief") {
         maxMp += this.level * 10; // Increase by level

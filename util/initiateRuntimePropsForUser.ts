@@ -14,7 +14,7 @@ function initiateRuntimePropsForUser(user: IUser) {
     };
     user.runtimeProps = runtimeProps;
   } catch (err) {
-    logger.error(`initiateRuntimeProps failed for user ${user.name}`);
+    logger.error(`initiateRuntimeProps failed in user ${user.name}`);
   }
 }
 

@@ -1,23 +1,21 @@
 // Item
-import mongoose from 'mongoose';
-import descriptionSchema from './Description.js';
-import affixSchema from './Affix.js';
+import mongoose from "mongoose";
+import descriptionSchema from "./Description.js";
+import affixSchema from "./Affix.js";
 const { Schema } = mongoose;
-;
-;
 const itemSchema = new Schema({
     _id: Schema.Types.ObjectId,
     itemBlueprint: {
         type: Schema.Types.ObjectId,
-        ref: 'ItemBlueprint'
+        ref: "ItemBlueprint",
     },
     fromZone: {
         type: Schema.Types.ObjectId,
-        ref: 'Zone'
+        ref: "Zone",
     },
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User",
     },
     name: String,
     itemType: String,
@@ -26,25 +24,25 @@ const itemSchema = new Schema({
     levelRestriction: Number,
     description: {
         type: descriptionSchema,
-        default: () => ({})
+        default: () => ({}),
     },
     weaponStats: {
         damageDieSides: Number,
         damageDieQuantity: Number,
         damageType: String,
-        isRanged: Boolean
+        isRanged: Boolean,
     },
     spellCharges: {
         name: String,
         level: Number,
-        maxCharges: Number
+        maxCharges: Number,
     },
     tags: [String],
     keywords: [String],
     wearableLocations: [String],
     creationDate: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     expiryDate: {
         type: Date,
@@ -59,17 +57,19 @@ const itemSchema = new Schema({
     isPrecious: Boolean,
     dubCode: {
         type: String,
-        maxLength: 10
+        maxLength: 10,
     },
-    affixes: [{
+    affixes: [
+        {
             type: affixSchema,
-            default: () => ({})
-        }],
+            default: () => ({}),
+        },
+    ],
 });
 itemSchema.add({
     inventory: {
         type: [itemSchema],
-        default: []
-    }
+        default: [],
+    },
 });
 export default itemSchema;
