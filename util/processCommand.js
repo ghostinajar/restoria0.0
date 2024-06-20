@@ -8,6 +8,7 @@ import shout from "../commands/shout.js";
 import telepath from "../commands/telepath.js";
 import who from "../commands/who.js";
 import stats from "../commands/stats.js";
+import move from "../commands/move.js";
 async function processCommand(parsedCommand, user) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
@@ -21,6 +22,21 @@ async function processCommand(parsedCommand, user) {
         case `examine`:
         case `look`: {
             await look(parsedCommand, user);
+            break;
+        }
+        case `n`:
+        case `north`:
+        case `e`:
+        case `east`:
+        case `s`:
+        case `south`:
+        case `w`:
+        case `west`:
+        case `u`:
+        case `up`:
+        case `d`:
+        case `down`: {
+            await move(parsedCommand, user);
             break;
         }
         case `quit`: {
@@ -51,11 +67,9 @@ async function processCommand(parsedCommand, user) {
             await who(user);
             break;
         }
-        default:
-            {
-                logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`);
-            }
-            ;
+        default: {
+            logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`);
+        }
     }
     if (parsedCommand.commandWord !== `stats`) {
         stats(user);

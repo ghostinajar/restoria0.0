@@ -30,12 +30,12 @@ async function exits(user: IUser) {
       logger.debug(`exits command finding zone for ${key} exit...`);
       let zone: IZone = await new Promise((resolve) => {
         worldEmitter.once(`zoneLoaded`, resolve);
-        worldEmitter.emit(`zoneRequested`, value.destinationZone);
+        worldEmitter.emit(`zoneRequested`, value.destinationLocation.inZone);
       });
       //get room
       logger.debug(`exits command found zone ${zone.name}, finding room for ${key} exit...`);
       const room = zone.rooms.find(
-        (room) => room._id.toString() === value.destinationRoom.toString()
+        (room) => room._id.toString() === value.destinationLocation.inRoom.toString()
       );
 
       let direction: string = ``

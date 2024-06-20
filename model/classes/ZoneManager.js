@@ -12,13 +12,13 @@ class ZoneManager {
         worldEmitter.on("zoneRequested", this.zoneRequestedHandler);
     }
     zones;
-    roomRequestedHandler = (userLocation) => {
-        logger.debug(`roomRequestedHandler called, with ${userLocation}`);
+    roomRequestedHandler = (agentLocation) => {
+        logger.debug(`roomRequestedHandler called, with ${agentLocation}`);
         //get the room
-        const zone = this.getZoneById(userLocation.inZone);
-        logger.debug(`roomRequestedHandler found ${zone?.name}`);
-        logger.debug(`looking for room id ${userLocation.inRoom.toString()}`);
-        const room = zone?.rooms.find(room => room._id.toString() === userLocation.inRoom.toString());
+        const zone = this.getZoneById(agentLocation.inZone);
+        logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
+        logger.debug(`looking for room id ${agentLocation.inRoom.toString()}`);
+        const room = zone?.rooms.find(room => room._id.toString() === agentLocation.inRoom.toString());
         if (!room) {
             logger.error(`lookArrayRequestedHandler got an undefined room`);
             return;

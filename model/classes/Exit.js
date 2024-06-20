@@ -1,15 +1,17 @@
 // Exit
-import mongoose from 'mongoose';
-import echoSchema from './Echo.js';
+import mongoose from "mongoose";
+import echoSchema from "./Echo.js";
 const { Schema } = mongoose;
 const exitSchema = new Schema({
-    destinationZone: {
-        type: Schema.Types.ObjectId,
-        ref: 'Zone'
-    },
-    destinationRoom: {
-        type: Schema.Types.ObjectId,
-        ref: 'Room'
+    destinationLocation: {
+        inZone: {
+            type: Schema.Types.ObjectId,
+            ref: "Room",
+        },
+        inRoom: {
+            type: Schema.Types.ObjectId,
+            ref: "Room",
+        },
     },
     toExternalZone: Boolean,
     isHidden: Boolean,
@@ -17,24 +19,24 @@ const exitSchema = new Schema({
     isLocked: Boolean,
     keyItemBlueprint: {
         type: Schema.Types.ObjectId,
-        ref: 'ItemBlueprint'
+        ref: "ItemBlueprint",
     },
     keyItemZone: {
         type: Schema.Types.ObjectId,
-        ref: 'Zone'
+        ref: "Zone",
     },
     echoes: {
         unlock: {
             type: echoSchema,
-            default: () => ({})
+            default: () => ({}),
         },
         open: {
             type: echoSchema,
-            default: () => ({})
+            default: () => ({}),
         },
         close: {
             type: echoSchema,
-            default: () => ({})
+            default: () => ({}),
         },
     },
 }, { _id: false });
