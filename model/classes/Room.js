@@ -86,27 +86,27 @@ const roomSchema = new Schema({
     exits: {
         north: {
             type: exitSchema,
-            default: () => ({}),
+            default: null,
         },
         south: {
             type: exitSchema,
-            default: () => ({}),
+            default: null,
         },
         east: {
             type: exitSchema,
-            default: () => ({}),
+            default: null,
         },
         west: {
             type: exitSchema,
-            default: () => ({}),
+            default: null,
         },
         up: {
             type: exitSchema,
-            default: () => ({}),
+            default: null,
         },
         down: {
             type: exitSchema,
-            default: () => ({}),
+            default: null,
         },
     },
     mobNodes: [

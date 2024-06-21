@@ -43,12 +43,12 @@ export interface IRoom {
   mapCoords: Array<number>;
   description: IDescription;
   exits: {
-    north: IExit;
-    south: IExit;
-    east: IExit;
-    west: IExit;
-    up: IExit;
-    down: IExit;
+    north?: IExit;
+    south?: IExit;
+    east?: IExit;
+    west?: IExit;
+    up?: IExit;
+    down?: IExit;
   };
   mobNodes: Array<IMobNode>;
   itemNodes: Array<IItemNode>;
@@ -137,27 +137,27 @@ const roomSchema = new Schema<IRoom>({
   exits: {
     north: {
       type: exitSchema,
-      default: () => ({}),
+      default: null,
     },
     south: {
       type: exitSchema,
-      default: () => ({}),
+      default: null,
     },
     east: {
       type: exitSchema,
-      default: () => ({}),
+      default: null,
     },
     west: {
       type: exitSchema,
-      default: () => ({}),
+      default: null,
     },
     up: {
       type: exitSchema,
-      default: () => ({}),
+      default: null,
     },
     down: {
       type: exitSchema,
-      default: () => ({}),
+      default: null,
     },
   },
   mobNodes: [

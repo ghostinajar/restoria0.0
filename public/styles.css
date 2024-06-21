@@ -171,12 +171,14 @@ select {
   color: var(--cyan);
 }
 
-.mobIsHere {
+.mobIsHere,
+.mobMove {
   color: var(--green_light);
 }
 
 .userArrived,
 .userIsHere,
+.userMove,
 .createCharacter {
   color: var(--yellow);
 }

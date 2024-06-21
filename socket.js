@@ -25,16 +25,22 @@ const setupSocket = (io) => {
             }
             // Remove existing event listeners for the user before adding new ones
             worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
+            worldEmitter.removeAllListeners(`messageForRoomId`);
             worldEmitter.removeAllListeners(`messageFor${user.username}`);
             worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
             worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
             worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
+            worldEmitter.removeAllListeners(`userChangingRooms`);
             const messageArrayForUserHandler = async (messageArray) => {
                 for (let message of messageArray) {
                     socket.emit(`message`, message);
                 }
             };
             worldEmitter.on(`messageArrayFor${user.username}`, messageArrayForUserHandler);
+            const messageForRoomIdHandler = async (roomId, message) => {
+                io.to(roomId).emit(`message`, message);
+            };
+            worldEmitter.on(`messageForRoomId`, messageForRoomIdHandler);
             const messageForUserHandler = async (message) => {
                 socket.emit(`message`, message);
             };
@@ -53,6 +59,15 @@ const setupSocket = (io) => {
                 socket.disconnect;
             };
             worldEmitter.on(`user${user.username}LeavingGame`, userXLeavingGameHandler);
+            const userChangingRoomsHandler = async (originRoomId, originZoneId, destinationRoomId, destinationZoneId) => {
+                socket.leave(originRoomId);
+                socket.join(destinationRoomId);
+                if (originZoneId !== destinationZoneId) {
+                    socket.leave(originZoneId);
+                    socket.join(destinationZoneId);
+                }
+            };
+            worldEmitter.on(`userChangingRooms`, userChangingRoomsHandler);
             // Listen for userSentCommands
             socket.on(`userSentCommand`, async (userInput) => {
                 userSentCommandHandler(socket, userInput, user);
@@ -73,10 +88,12 @@ const setupSocket = (io) => {
                     worldEmitter.emit(`socketDisconnectedUser`, user);
                     // Remove existing event listeners for user
                     worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
+                    worldEmitter.removeAllListeners(`messageForRoomId`);
                     worldEmitter.removeAllListeners(`messageFor${user.username}`);
                     worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
                     worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
                     worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
+                    worldEmitter.removeAllListeners(`userChangingRooms`);
                 }
                 catch (err) {
                     logger.error(err);

@@ -29,10 +29,12 @@ const setupSocket = (io: any) => {
 
       // Remove existing event listeners for the user before adding new ones
       worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
+      worldEmitter.removeAllListeners(`messageForRoomId`);
       worldEmitter.removeAllListeners(`messageFor${user.username}`);
       worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
       worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
       worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
+      worldEmitter.removeAllListeners(`userChangingRooms`);
 
       const messageArrayForUserHandler = async (
         messageArray: Array<IMessage>
@@ -45,6 +47,14 @@ const setupSocket = (io: any) => {
         `messageArrayFor${user.username}`,
         messageArrayForUserHandler
       );
+
+      const messageForRoomIdHandler = async (
+        roomId: string,
+        message: IMessage
+      ) => {
+        io.to(roomId).emit(`message`, message);
+      };
+      worldEmitter.on(`messageForRoomId`, messageForRoomIdHandler);
 
       const messageForUserHandler = async (message: IMessage) => {
         socket.emit(`message`, message);
@@ -79,6 +89,21 @@ const setupSocket = (io: any) => {
         userXLeavingGameHandler
       );
 
+      const userChangingRoomsHandler = async (
+        originRoomId: string,
+        originZoneId: string,
+        destinationRoomId: string,
+        destinationZoneId: string
+      ) => {
+        socket.leave(originRoomId);
+        socket.join(destinationRoomId);
+        if (originZoneId !== destinationZoneId) {
+          socket.leave(originZoneId);
+          socket.join(destinationZoneId);
+        }
+      };
+      worldEmitter.on(`userChangingRooms`, userChangingRoomsHandler);
+
       // Listen for userSentCommands
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
@@ -108,10 +133,12 @@ const setupSocket = (io: any) => {
           worldEmitter.emit(`socketDisconnectedUser`, user);
           // Remove existing event listeners for user
           worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
+          worldEmitter.removeAllListeners(`messageForRoomId`);
           worldEmitter.removeAllListeners(`messageFor${user.username}`);
           worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
           worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
           worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
+          worldEmitter.removeAllListeners(`userChangingRooms`);
         } catch (err) {
           logger.error(err);
         }

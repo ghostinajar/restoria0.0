@@ -12,10 +12,10 @@ class ZoneManager {
         worldEmitter.on("zoneRequested", this.zoneRequestedHandler);
     }
     zones;
-    roomRequestedHandler = (agentLocation) => {
+    roomRequestedHandler = async (agentLocation) => {
         logger.debug(`roomRequestedHandler called, with ${agentLocation}`);
         //get the room
-        const zone = this.getZoneById(agentLocation.inZone);
+        let zone = this.getZoneById(agentLocation.inZone) || await this.addZoneById(agentLocation.inZone);
         logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
         logger.debug(`looking for room id ${agentLocation.inRoom.toString()}`);
         const room = zone?.rooms.find(room => room._id.toString() === agentLocation.inRoom.toString());
@@ -73,7 +73,6 @@ class ZoneManager {
             logger.info(`zoneManager added ${zone.name} to zones.`);
             logger.log(`loadout`, `Rooms in zone "${zone.name}": ${zone.rooms.map((room) => room.name)}.`);
             logger.log(`loadout`, `Active zones: ${JSON.stringify(Array.from(this.zones.values()).map((zone) => zone.name))}`);
-            //TODO how to declare .initRooms() in IZone interface? or should I run this some other way? Is initRooms(zoneToInit) its own function?
             await zone.initRooms();
             return zone;
         }
