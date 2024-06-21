@@ -20,13 +20,13 @@ class ZoneManager {
 
   zones: Map<string, IZone>;
 
-  roomRequestedHandler = async (agentLocation: ILocation) => {
-    logger.debug(`roomRequestedHandler called, with ${agentLocation}`);
+  roomRequestedHandler = async (location: ILocation) => {
+    logger.debug(`roomRequestedHandler called, with ${JSON.stringify(location)}`);
     //get the room
-    let zone = this.getZoneById(agentLocation.inZone) || await this.addZoneById(agentLocation.inZone);
+    let zone = this.getZoneById(location.inZone) || await this.addZoneById(location.inZone);
     logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
-    logger.debug(`looking for room id ${agentLocation.inRoom.toString()}`);
-    const room = zone?.rooms.find(room => room._id.toString() === agentLocation.inRoom.toString());
+    logger.debug(`looking for room id ${location.inRoom.toString()}`);
+    const room = zone?.rooms.find(room => room._id.toString() === location.inRoom.toString());
     if (!room) {
       logger.error(`lookArrayRequestedHandler got an undefined room`);
       return;

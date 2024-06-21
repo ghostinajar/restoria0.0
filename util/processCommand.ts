@@ -23,6 +23,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
     }
     case `exa`:
     case `examine`:
+    case `l`: 
     case `look`: {
       await look(parsedCommand, user);
       break;
@@ -47,7 +48,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       break;
     }
     case `say`: {
-      await say(parsedCommand, user);
+      say(parsedCommand, user);
       break;
     }
     case `shout`: {

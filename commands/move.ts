@@ -4,23 +4,19 @@ import { IRoom } from "../model/classes/Room";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
+import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import look from "./look.js";
 
-async function move(parsedCommand: IParsedCommand, agent: IUser) {
+async function move(parsedCommand: IParsedCommand, user: IUser) {
   let requestedDirection = parsedCommand.commandWord;
+  logger.debug(`move command says ${user.name}'s location is ${JSON.stringify(user.location)}`)
 
-  // Get origin room of agent
-  const originRoom: IRoom = await new Promise((resolve) => {
-    worldEmitter.once(
-      `zoneManagerReturningRoom${agent.location.inRoom.toString()}`,
-      resolve
-    );
-    worldEmitter.emit(`roomRequested`, agent.location);
-  });
+  // Get origin room of user
+  const originRoom: IRoom = await getRoomOfUser(user);
   if (!originRoom) {
     logger.error(
-      `Error in move, couldn't find origin room for agent ${agent.name}`
+      `Error in move, couldn't find origin room for user ${user.name}`
     );
     return;
   }
@@ -59,16 +55,14 @@ async function move(parsedCommand: IParsedCommand, agent: IUser) {
   // Check if the exit is defined
   const exit = originRoom.exits[direction];
   logger.debug(
-    `move command verifying ${JSON.stringify(exit)} exit in originRoom`
+    `move command verifying ${JSON.stringify(direction)} exit in originRoom..`
   );
   if (!exit || !originRoom.exits || !originRoom.exits[direction]) {
     logger.debug(`no exit!`);
-    if (agent.username) {
-      worldEmitter.emit(
-        `messageFor${agent.username}`,
-        makeMessage(`rejection`, `There's no exit in that direction.`)
-      );
-    }
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(`rejection`, `There's no exit in that direction.`)
+    );
     return;
   }
 
@@ -89,106 +83,65 @@ async function move(parsedCommand: IParsedCommand, agent: IUser) {
     logger.error(
       `no room attached to exit ${direction} from ${originRoom.name}!`
     );
-    if (agent.username) {
-      worldEmitter.emit(
-        `messageFor${agent.username}`,
-        makeMessage(`rejection`, `A mysterious force blocks your way.`)
-      );
-    }
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(`rejection`, `A mysterious force blocks your way.`)
+    );
     return;
   }
   logger.debug(`move command got destination room ${destinationRoom.name}`);
 
-  // Remove user from users or mobs array in originRoom
-  if (agent.username) {
-    originRoom.removeEntityFrom(`users`, agent);
-    logger.debug(
-      `User ${agent.name} removed from ${
-        originRoom.name
-      }. Users remaining: ${originRoom.users.map((user) => user.name)}`
-    );
-  } else {
-    originRoom.removeEntityFrom(`mobs`, agent);
-    logger.debug(
-      `Mob ${agent.name} removed from ${
-        originRoom.name
-      }. Mobs remaining: ${originRoom.mobs.map((mob) => mob.name)}`
-    );
-  }
-  // Alert destination room to add user to users or mobs array
-  if (agent.username) {
-    destinationRoom.addEntityTo(`users`, agent);
-    logger.debug(
-      `User ${agent.name} added to ${
-        destinationRoom.name
-      }. Users in room: ${destinationRoom.users.map((user) => user.name)}`
-    );
-  } else {
-    destinationRoom.addEntityTo(`mobs`, agent);
-    logger.debug(
-      `Mob ${agent.name} added to ${
-        destinationRoom.name
-      }. Mobs in room: ${destinationRoom.mobs.map((mob) => mob.name)}`
-    );
-  }
-
-  //Alert socket to update User's ioRoom
-  if (agent.username) {
-    worldEmitter.emit(
-      `userChangingRooms`,
-      originRoom._id.toString(),
-      originRoom.fromZoneId.toString(),
-      destinationRoom._id.toString(),
-      destinationRoom.fromZoneId.toString()
-    );
-  }
-
-  // Update agent.location
-  agent.location.inRoom = destinationRoom._id;
-  agent.location.inZone = destinationRoom.fromZoneId;
+  // Remove user from originRoom users array
+  originRoom.removeEntityFrom(`users`, user);
   logger.debug(
-    `agent ${agent.name}'s location changed to ${JSON.stringify(
-      agent.location
-    )}`
+    `User ${user.name} removed from ${
+      originRoom.name
+    }. Users remaining: ${originRoom.users.map((user) => user.name)}`
   );
 
-  // message agent's origin room
-  if (agent.username) {
-    worldEmitter.emit(
-      `messageForRoomId`,
-      originRoom._id.toString(),
-      makeMessage(`userMove`, `${agent.name} went ${direction}.`)
-    );
-  } else {
-    worldEmitter.emit(
-      `messageForRoomId`,
-      originRoom._id.toString(),
-      makeMessage(`mobMove`, `${agent.name} went ${direction}.`)
-    );
-  }
+  // Add user to destinationRoom users array
+  destinationRoom.addEntityTo(`users`, user);
+  logger.debug(
+    `User ${user.name} added to ${
+      destinationRoom.name
+    }. Users in room: ${destinationRoom.users.map((user) => user.name)}`
+  );
 
-  // Message user and user's room
-  if (agent.username) {
-    worldEmitter.emit(
-      `messageFor${agent.username}`,
-      makeMessage(`userMove`, `You move ${requestedDirection}.`)
-    );
-    worldEmitter.emit(
-      `messageForRoomId`,
-      destinationRoom._id.toString(),
-      makeMessage(`userMove`, `${agent.name} has arrived.`)
-    );
-  } else {
-    worldEmitter.emit(
-      `messageForRoomId`,
-      destinationRoom._id.toString(),
-      makeMessage(`mobMove`, `${agent.name} has arrived.`)
-    );
-  }
+  // Message user's origin room
+  worldEmitter.emit(
+    `messageFor${user.username}sRoom`,
+    makeMessage(`userMove`, `${user.name} went ${direction}.`)
+  );
 
-  if (agent.username) {
-    look({ commandWord: `look` }, agent);
-  }
+  // Update user.location
+  user.location.inRoom = destinationRoom._id;
+  user.location.inZone = destinationRoom.fromZoneId;
+  logger.debug(
+    `move command says ${user.name}'s location changed to ${JSON.stringify(user.location)}`
+  );
+
+  // Alert socket to update User's ioRoom
+  worldEmitter.emit(
+    `user${user.username}ChangingRooms`,
+    originRoom._id.toString(),
+    originRoom.fromZoneId.toString(),
+    destinationRoom._id.toString(),
+    destinationRoom.fromZoneId.toString()
+  );
+
+  // Message user's destination room
+  worldEmitter.emit(
+    `messageFor${user.username}sRoom`,
+    makeMessage(`userMove`, `${user.name} arrived.`)
+  );
+
+  // Message user
+  worldEmitter.emit(
+    `messageFor${user.username}`,
+    makeMessage(`userMove`, `You move ${requestedDirection}.`)
+  );
+
+  look({ commandWord: `look` }, user);
 }
 
 export default move;
