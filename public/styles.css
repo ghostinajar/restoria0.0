@@ -59,7 +59,7 @@ label {
   z-index: 1000; /* Ensure it stays above other elements */
 }
 
-#createUserForm {
+.sideForm {
   width: 34%;
   position: fixed;
   top: 60px;
@@ -73,19 +73,19 @@ label {
   gap: 10px;
 }
 
-#createUserForm section {
+.sideForm section {
   display: flex;
   align-items: center;
   gap: 10px; /* Add space between the label and input */
   margin-bottom: 2px;
 }
 
-#createUserForm label {
+.sideForm label {
   flex-shrink: 0; /* Prevent labels from shrinking */
 }
 
-#createUserForm input,
-#createUserForm select {
+.sideForm input,
+.sideForm select {
   flex-grow: 1; /* Allow inputs to grow to fill the available space */
   border: none;
   border-radius: 2rem;
@@ -93,7 +93,7 @@ label {
   margin: 0; /* Remove default margin */
 }
 
-#createUserForm button {
+.sideForm button {
   margin-top: 10px; /* Add some space above the buttons */
 }
 
@@ -107,8 +107,8 @@ label {
 #commandForm input,
 #name,
 #new-password,
-#createUserForm #pronouns,
-#createUserForm #job {
+.sideForm #pronouns,
+.sideForm #job {
   border-radius: 2rem;
   padding: 5px 10px; /* Add padding for better spacing */
   margin: 0; /* Remove default margin */

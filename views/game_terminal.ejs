@@ -18,17 +18,29 @@
 
     <div>
       <div id="messagesContainer">
-      <ul id="messages"></ul>
+        <ul id="messages"></ul>
       </div>
 
-      <form id="createUserForm" style="display: none">
+      <form id="createUserForm" class="sideForm" style="display: none">
         <section>
           <label for="name">Name:</label>
-          <input id="name" name="name" type="text" autocomplete="name" required />
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+          />
         </section>
         <section>
           <label for="new-password">Password:</label>
-          <input id="new-password" name="password" type="password" autocomplete="new-password" required />
+          <input
+            id="new-password"
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            required
+          />
         </section>
         <section>
           <label for="pronouns">Pronouns:</label>
@@ -52,37 +64,47 @@
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
 
-      <form id="editUserForm" style="display: none">
+      <form id="editUserForm" class="sideForm" style="display: none">
         <section>
           <label for="lookUser">Look:</label>
-          <input id="lookUser" name="lookUser" type="text" autocomplete="lookUser" />
+          <textarea
+            id="lookUser"
+            name="lookUser"
+            type="text"
+            autocomplete="lookUser"
+          ></textarea>
         </section>
         <section>
           <label for="examineUser">Examine:</label>
-          <input
+          <textarea
             id="examineUser"
             name="examineUser"
             type="text"
             autocomplete="examineUser"
-          />
+          ></textarea>
         </section>
         <section>
           <label for="studyUser">Study:</label>
-          <input id="studyUser" name="studyUser" type="text" autocomplete="studyUser" />
+          <textarea
+            id="studyUser"
+            name="studyUser"
+            type="text"
+            autocomplete="studyUser"
+          ></textarea>
         </section>
         <section>
           <label for="researchUser">Research:</label>
-          <input
+          <textarea
             id="researchUser"
             name="researchUser"
             type="text"
             autocomplete="researchUser"
-          />
+          ></textarea>
         </section>
         <button type="submit">Update Description</button>
         <button type="button" id="cancelEditUserForm">Cancel</button>
       </form>
-   </div>
+    </div>
 
     <form id="commandForm" action="">
       <label for="commandInput"></label>
