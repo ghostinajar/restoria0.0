@@ -51,6 +51,37 @@
         <button type="submit">Create Character</button>
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
+
+      <form id="editUserForm" style="display: none">
+        <section>
+          <label for="lookUser">Look:</label>
+          <input id="lookUser" name="lookUser" type="text" autocomplete="lookUser" />
+        </section>
+        <section>
+          <label for="examineUser">Examine:</label>
+          <input
+            id="examineUser"
+            name="examineUser"
+            type="text"
+            autocomplete="examineUser"
+          />
+        </section>
+        <section>
+          <label for="studyUser">Study:</label>
+          <input id="studyUser" name="studyUser" type="text" autocomplete="studyUser" />
+        </section>
+        <section>
+          <label for="researchUser">Research:</label>
+          <input
+            id="researchUser"
+            name="researchUser"
+            type="text"
+            autocomplete="researchUser"
+          />
+        </section>
+        <button type="submit">Update Description</button>
+        <button type="button" id="cancelEditUserForm">Cancel</button>
+      </form>
    </div>
 
     <form id="commandForm" action="">
@@ -65,6 +96,7 @@
       const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
       const commandForm = document.getElementById("commandForm");
       const createUserForm = document.getElementById("createUserForm");
+      const editUserForm = document.getElementById("editUserForm");
       const name = document.getElementById("name");
       const password = document.getElementById("new-password");
       const input= document.getElementById("commandInput");
@@ -102,18 +134,40 @@
           messagesContainer.classList.remove("makeRoom");
           createUserForm.style.display = "none";
         });
+      document
+        .getElementById("cancelEditUserForm")
+        .addEventListener("click", function () {
+          messagesContainer.classList.remove("makeRoom");
+          editUserForm.style.display = "none";
+      });
+
+      let activeForm = editUserForm;
 
       commandForm.addEventListener("submit", (e) => {
         e.preventDefault();
         if (input.value) {
           const parsedCommand = parseCommand(input.value);
           //reject invalid command words
+
           if (input.value.toLowerCase() === "create character") {
-            createUserForm.style.display = "block";
+            activeForm.reset();
+            activeForm.style.display = "none";
+            activeForm = createUserForm;
+            activeForm.style.display = "block";
             messagesContainer.classList.add("makeRoom");
             input.value = "";
             return;
           }
+          if (input.value.toLowerCase() === "edit character") {
+            activeForm.reset();
+            activeForm.style.display = "none";
+            activeForm = editUserForm;
+            activeForm.style.display = "block";
+            messagesContainer.classList.add("makeRoom");
+            input.value = "";
+            return;
+          }
+
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
             appendMessageToTerminal(
@@ -139,6 +193,20 @@
         socket.emit("userSubmittedNewCharacter", userData);
         createUserForm.reset();
         createUserForm.style.display = "none"; // Hide the form after submission
+        messagesContainer.classList.remove("makeRoom");
+      });
+
+      editUserForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const userDescription = {
+          look: document.getElementById("lookUser").value,
+          examine: document.getElementById("examineUser").value,
+          study: document.getElementById("studyUser").value,
+          research: document.getElementById("researchUser").value,
+        };
+        socket.emit("userSubmittedUserDescription", userDescription);
+        editUserForm.reset();
+        editUserForm.style.display = "none"; // Hide the form after submission
         messagesContainer.classList.remove("makeRoom");
       });
 

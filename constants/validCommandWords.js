@@ -2,6 +2,7 @@
 export const validCommandWords = [
     "e",
     "east",
+    "edit",
     "ex",
     "exit",
     "exits",

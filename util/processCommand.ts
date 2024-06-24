@@ -11,10 +11,15 @@ import { IParsedCommand } from "./parseCommand.js";
 import { IUser } from "../model/classes/User.js";
 import stats from "../commands/stats.js";
 import move from "../commands/move.js";
+import edit from "../commands/edit.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
   switch (parsedCommand.commandWord) {
+    case `edit`: {
+      await edit(parsedCommand, user);
+      break;
+    }
     case `ex`:
     case `exit`:
     case `exits`: {

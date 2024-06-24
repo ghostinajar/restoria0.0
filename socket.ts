@@ -10,6 +10,8 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
+import { IDescription } from "./model/classes/Description.js";
+import editUser from "./commands/editUser.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -111,6 +113,13 @@ const setupSocket = (io: any) => {
         `userSubmittedNewCharacter`,
         async (characterData: IUserData) => {
           const newUser = await createUser(characterData, user);
+        }
+      );
+
+      socket.on(
+        `userSubmittedUserDescription`,
+        async (userDescription: IDescription) => {
+          await editUser(user, userDescription);
         }
       );
 

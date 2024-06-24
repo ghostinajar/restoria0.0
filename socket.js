@@ -8,6 +8,7 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
+import editUser from "./commands/editUser.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -57,7 +58,7 @@ const setupSocket = (io) => {
             worldEmitter.on(`user${user.username}LeavingGame`, userXLeavingGameHandler);
             const userXChangingRoomsHandler = (originRoomId, originZoneId, destinationRoomId, destinationZoneId) => {
                 logger.debug(`userChangingRoomsHandler called with ${originRoomId},${originZoneId},${destinationRoomId},${destinationZoneId}`);
-                logger.warn(`${user.name}'s socket is in rooms: ${Array.from(socket.rooms)}`);
+                logger.debug(`${user.name}'s socket is in rooms: ${Array.from(socket.rooms)}`);
                 socket.leave(originRoomId);
                 socket.join(destinationRoomId);
                 if (originZoneId !== destinationZoneId) {
@@ -65,7 +66,7 @@ const setupSocket = (io) => {
                     socket.leave(originZoneId);
                     socket.join(destinationZoneId);
                 }
-                logger.warn(`${user.name}'s socket is now in rooms: ${Array.from(socket.rooms)}`);
+                logger.debug(`${user.name}'s socket is now in rooms: ${Array.from(socket.rooms)}`);
             };
             worldEmitter.on(`user${user.username}ChangingRooms`, userXChangingRoomsHandler);
             // Listen for userSentCommands
@@ -74,6 +75,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedNewCharacter`, async (characterData) => {
                 const newUser = await createUser(characterData, user);
+            });
+            socket.on(`userSubmittedUserDescription`, async (userDescription) => {
+                await editUser(user, userDescription);
             });
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
             worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);

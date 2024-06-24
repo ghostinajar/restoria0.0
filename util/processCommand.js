@@ -9,9 +9,14 @@ import telepath from "../commands/telepath.js";
 import who from "../commands/who.js";
 import stats from "../commands/stats.js";
 import move from "../commands/move.js";
+import edit from "../commands/edit.js";
 async function processCommand(parsedCommand, user) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
+        case `edit`: {
+            await edit(parsedCommand, user);
+            break;
+        }
         case `ex`:
         case `exit`:
         case `exits`: {
