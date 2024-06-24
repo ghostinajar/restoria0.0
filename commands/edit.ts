@@ -14,6 +14,9 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
   }
 
   switch (target) {
+    case `user`: {
+      // TODO alert client to open editUserForm and inject user description content
+    }
     default: {
       worldEmitter.emit(
         `messageFor${user.username}`,

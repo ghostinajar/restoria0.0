@@ -12,6 +12,15 @@ import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
+import {
+  messageArrayForUserHandler,
+  messageForUserHandler,
+  messageForUsersRoomHandler,
+  messageForUsersZoneHandler,
+  userXChangingRoomsHandler,
+  userXLeavingGameHandler,
+} from "./socketHandlers.js";
+import stats from "./commands/stats.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -37,84 +46,69 @@ const setupSocket = (io: any) => {
       worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
       worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
 
-      const messageArrayForUserHandler = async (
-        messageArray: Array<IMessage>
-      ) => {
-        for (let message of messageArray) {
-          socket.emit(`message`, message);
-        }
-      };
+      // Listen for game events
       worldEmitter.on(
         `messageArrayFor${user.username}`,
-        messageArrayForUserHandler
+        async (messageArray: Array<IMessage>) => {
+          messageArrayForUserHandler(messageArray, socket);
+        }
       );
 
-      const messageForUserHandler = async (message: IMessage) => {
-        socket.emit(`message`, message);
-      };
-      worldEmitter.on(`messageFor${user.username}`, messageForUserHandler);
+      worldEmitter.on(
+        `messageFor${user.username}`,
+        async (message: IMessage) => {
+          messageForUserHandler(message, socket);
+        }
+      );
 
-      const messageForUsersRoomHandler = async (message: IMessage) => {
-        logger.debug(`socket says ${user.name}'s location is ${JSON.stringify(user.location)}`)
-        socket.to(user.location.inRoom.toString()).emit(`message`, message);
-      };
       worldEmitter.on(
         `messageFor${user.username}sRoom`,
-        messageForUsersRoomHandler
+        async (message: IMessage) => {
+          messageForUsersRoomHandler(message, socket, user);
+        }
       );
 
-      const messageForUsersZoneHandler = async (message: IMessage) => {
-        socket.to(user.location.inZone.toString()).emit(`message`, message);
-      };
       worldEmitter.on(
         `messageFor${user.username}sZone`,
-        messageForUsersZoneHandler
+        async (message: IMessage) => {
+          messageForUsersZoneHandler(message, socket, user);
+        }
       );
 
-      const userXLeavingGameHandler = async (user: IUser) => {
-        logger.debug(
-          `socket received user${user.name}LeavingGame event. Disconnecting.`
-        );
-        socket.emit(`redirectToLogin`, `User ${user.name} left the game.`);
-        socket.disconnect;
-      };
       worldEmitter.on(
         `user${user.username}LeavingGame`,
-        userXLeavingGameHandler
+        async (user: IUser) => {
+          userXLeavingGameHandler(user, socket);
+        }
       );
 
-      const userXChangingRoomsHandler = (
-        originRoomId: string,
-        originZoneId: string,
-        destinationRoomId: string,
-        destinationZoneId: string
-      ) => {
-        logger.debug(
-          `userChangingRoomsHandler called with ${originRoomId},${originZoneId},${destinationRoomId},${destinationZoneId}`
-        );
-        logger.debug(`${user.name}'s socket is in rooms: ${Array.from(socket.rooms)}`)
-        socket.leave(originRoomId);
-        socket.join(destinationRoomId);
-        if (originZoneId !== destinationZoneId) {
-          logger.debug(`userChangingRoomsHandler changing users's ioZone to ${destinationZoneId}`)
-          socket.leave(originZoneId);
-          socket.join(destinationZoneId);
+      worldEmitter.on(
+        `user${user.username}ChangingRooms`,
+        async (
+          originRoomId: string,
+          originZoneId: string,
+          destinationRoomId: string,
+          destinationZoneId: string
+        ) => {
+          userXChangingRoomsHandler(
+            originRoomId,
+            originZoneId,
+            destinationRoomId,
+            destinationZoneId,
+            socket,
+            user
+          );
         }
-        logger.debug(`${user.name}'s socket is now in rooms: ${Array.from(socket.rooms)}`)
-      };
-      worldEmitter.on(`user${user.username}ChangingRooms`, userXChangingRoomsHandler);
+      );
 
-      // Listen for userSentCommands
+      // Listen for client events
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
       });
 
-      socket.on(
-        `userSubmittedNewUser`,
-        async (userData: IUserData) => {
-          const newUser = await createUser(userData, user);
-        }
-      );
+      socket.on(`userSubmittedNewUser`, async (userData: IUserData) => {
+        const newUser = await createUser(userData, user);
+      });
 
       socket.on(
         `userSubmittedUserDescription`,
@@ -123,12 +117,14 @@ const setupSocket = (io: any) => {
         }
       );
 
+      // On connection, alert room and look
       let userArrivedMessage = makeMessage(
         `userArrived`,
         `${user.name} entered Restoria.`
       );
       worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);
-      look({ commandWord: `look` }, user);
+      await look({ commandWord: `look` }, user);
+      stats(user);
 
       socket.on(`disconnect`, async () => {
         try {

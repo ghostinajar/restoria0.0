@@ -7,6 +7,9 @@ async function edit(parsedCommand, user) {
         return;
     }
     switch (target) {
+        case `user`: {
+            // TODO alert client to open editUserForm and inject user description content
+        }
         default: {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Edit what?`));
             return;
