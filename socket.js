@@ -27,6 +27,7 @@ const setupSocket = (io) => {
                 return;
             }
             // Remove existing event listeners for the user before adding new ones
+            worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
             worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
             worldEmitter.removeAllListeners(`messageFor${user.username}`);
             worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
@@ -79,6 +80,7 @@ const setupSocket = (io) => {
                     // Then, zonemanager will alert userManager to remove user from users map
                     worldEmitter.emit(`socketDisconnectedUser`, user);
                     // Remove existing event listeners for user
+                    worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
                     worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
                     worldEmitter.removeAllListeners(`messageFor${user.username}`);
                     worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);

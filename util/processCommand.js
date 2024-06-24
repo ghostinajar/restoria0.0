@@ -10,9 +10,14 @@ import who from "../commands/who.js";
 import stats from "../commands/stats.js";
 import move from "../commands/move.js";
 import edit from "../commands/edit.js";
+import create from "../commands/create.js";
 async function processCommand(parsedCommand, user) {
     logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
+        case `create`: {
+            await create(parsedCommand, user);
+            break;
+        }
         case `edit`: {
             await edit(parsedCommand, user);
             break;

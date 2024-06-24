@@ -161,16 +161,6 @@
         if (input.value) {
           const parsedCommand = parseCommand(input.value);
           //reject invalid command words
-
-          if (input.value.toLowerCase() === "create user") {
-            activeForm.reset();
-            activeForm.style.display = "none";
-            activeForm = createUserForm;
-            activeForm.style.display = "block";
-            messagesContainer.classList.add("makeRoom");
-            input.value = "";
-            return;
-          }
           
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
@@ -212,6 +202,15 @@
         editUserForm.style.display = "none"; // Hide the form after submission
         messagesContainer.classList.remove("makeRoom");
       });
+
+      socket.on("openCreateUserForm", () => {
+            activeForm.reset();
+            activeForm.style.display = "none";
+            activeForm = createUserForm;
+            activeForm.style.display = "block";
+            messagesContainer.classList.add("makeRoom");
+            input.value = "";
+      })
 
       socket.on("openEditUserForm", (formData) => {
         activeForm.reset();

@@ -7,7 +7,12 @@ export const formPromptForUserHandler = async (
   socket : any,
 ) => {
   if (formData.form === 'editUserForm') {
-    socket.emit(`openEditUserForm`, formData)
+    socket.emit(`openEditUserForm`, formData);
+    return;
+  }
+  if (formData.form === 'createUserForm') {
+    socket.emit(`openCreateUserForm`);
+    return;
   }
 }
 
