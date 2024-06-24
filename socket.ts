@@ -35,7 +35,7 @@ const setupSocket = (io: any) => {
       worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
       worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
       worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
-      worldEmitter.removeAllListeners(`userChangingRooms`);
+      worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
 
       const messageArrayForUserHandler = async (
         messageArray: Array<IMessage>
@@ -144,7 +144,7 @@ const setupSocket = (io: any) => {
           worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
           worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
           worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
-          worldEmitter.removeAllListeners(`userChangingRooms`);
+          worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
         } catch (err) {
           logger.error(err);
         }
