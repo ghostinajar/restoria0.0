@@ -84,11 +84,12 @@ label {
   flex-shrink: 0; /* Prevent labels from shrinking */
 }
 
+.sideForm textarea,
 .sideForm input,
 .sideForm select {
   flex-grow: 1; /* Allow inputs to grow to fill the available space */
   border: none;
-  border-radius: 2rem;
+  border-radius: 6px;
   padding: 5px 10px; /* Add padding for better spacing */
   margin: 0; /* Remove default margin */
 }
@@ -109,15 +110,15 @@ label {
 #new-password,
 .sideForm #pronouns,
 .sideForm #job {
-  border-radius: 2rem;
+  border-radius: 6px;
   padding: 5px 10px; /* Add padding for better spacing */
   margin: 0; /* Remove default margin */
   border: none;
   flex-grow: 1;
-  border-radius: 2rem;
   margin-right: 10px; /* Ensure 10px margin between input and button */
 }
 
+textarea,
 button,
 input,
 select {
