@@ -82,7 +82,7 @@ zoneSchema.methods.initRooms = async function () {
   try {
     //instantiate room instances
     for (const room of this.rooms) {
-      await room.initiate(); //setup room's contents arrays (items, mobs, characters, users)
+      await room.initiate(); //setup room's contents arrays (inventory, mobs, users)
     }
     return;
   } catch (err: any) {

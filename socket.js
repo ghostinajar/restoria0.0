@@ -73,8 +73,8 @@ const setupSocket = (io) => {
             socket.on(`userSentCommand`, async (userInput) => {
                 userSentCommandHandler(socket, userInput, user);
             });
-            socket.on(`userSubmittedNewCharacter`, async (characterData) => {
-                const newUser = await createUser(characterData, user);
+            socket.on(`userSubmittedNewUser`, async (userData) => {
+                const newUser = await createUser(userData, user);
             });
             socket.on(`userSubmittedUserDescription`, async (userDescription) => {
                 await editUser(user, userDescription);

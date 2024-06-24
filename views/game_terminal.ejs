@@ -60,7 +60,7 @@
             <option value="warrior">Warrior</option>
           </select>
         </section>
-        <button type="submit">Create Character</button>
+        <button type="submit">Create User</button>
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
 
@@ -162,7 +162,7 @@
           const parsedCommand = parseCommand(input.value);
           //reject invalid command words
 
-          if (input.value.toLowerCase() === "create character") {
+          if (input.value.toLowerCase() === "create user") {
             activeForm.reset();
             activeForm.style.display = "none";
             activeForm = createUserForm;
@@ -171,7 +171,7 @@
             input.value = "";
             return;
           }
-          if (input.value.toLowerCase() === "edit character") {
+          if (input.value.toLowerCase() === "edit user") {
             activeForm.reset();
             activeForm.style.display = "none";
             activeForm = editUserForm;
@@ -203,7 +203,7 @@
           pronouns: document.getElementById("pronouns").value,
           job: document.getElementById("job").value,
         };
-        socket.emit("userSubmittedNewCharacter", userData);
+        socket.emit("userSubmittedNewUser", userData);
         createUserForm.reset();
         createUserForm.style.display = "none"; // Hide the form after submission
         messagesContainer.classList.remove("makeRoom");

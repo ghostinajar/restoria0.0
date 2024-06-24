@@ -45,7 +45,7 @@ export interface IUser extends mongoose.Document {
   trainingPoints: number;
   jobLevels: IJobLevels;
   description: IDescription;
-  characters: Array<mongoose.Types.ObjectId>;
+  users: Array<mongoose.Types.ObjectId>;
   students?: Array<mongoose.Types.ObjectId>;
   //may change when training is implemented
   trained: Array<ITrained>;
@@ -101,7 +101,7 @@ export const userSchema = new Schema<IUser>({
     required: true,
   },
   description: { type: descriptionSchema, required: true, default: () => ({}) },
-  characters: {
+  users: {
     type: [{ type: Schema.Types.ObjectId, ref: "User" }],
     required: true,
     default: () => [],

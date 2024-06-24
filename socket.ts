@@ -110,9 +110,9 @@ const setupSocket = (io: any) => {
       });
 
       socket.on(
-        `userSubmittedNewCharacter`,
-        async (characterData: IUserData) => {
-          const newUser = await createUser(characterData, user);
+        `userSubmittedNewUser`,
+        async (userData: IUserData) => {
+          const newUser = await createUser(userData, user);
         }
       );
 

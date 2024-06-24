@@ -6,13 +6,13 @@ import affixSchema, { IAffix } from "./Affix.js";
 const { Schema } = mongoose;
 
 // Each item's properties are duplicated to avoid having to query
-// dozens of zones in db to get their data when a character logs in.
+// dozens of zones in db to get their data when a user logs in.
 // This way it can persist even if its zone/blueprint is deleted.
-// Items are saved as subdocuments in a character document, either
-//     -as a property of a character's worn location slot
+// Items are saved as subdocuments in a user document, either
+//     -as a property of a user's worn location slot
 //     -in the inventory or storage array
 // because mongodb says Data used together should be stored together,
-// (items are only ever loaded/saved from db attached to a character).
+// (items are only ever loaded/saved from db attached to a user).
 
 export interface IWeaponStats {
   damageDieSides: number;

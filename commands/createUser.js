@@ -11,7 +11,7 @@ import mongoose from "mongoose";
 // Return user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
-        logger.debug(`Trying to create character ${userFormData.name}`);
+        logger.debug(`Trying to create user ${userFormData.name}`);
         let message = makeMessage("rejection", ``);
         // Validate new name
         if (!isValidName(userFormData.username)) {
@@ -21,9 +21,9 @@ async function createUser(userFormData, author) {
             }
             return message;
         }
-        // Validate character limit per author
-        if (author && author.characters.length >= 12) {
-            message.content = `You already have 12 characters. That's the limit!`;
+        // Validate user limit per author
+        if (author && author.users.length >= 12) {
+            message.content = `You already have 12 users. That's the limit!`;
             worldEmitter.emit(`messageFor${author.username}`, message);
             return message;
         }
@@ -94,7 +94,7 @@ async function createUser(userFormData, author) {
                 study: ``,
                 research: ``,
             },
-            characters: [],
+            users: [],
             students: [],
             //may change when training is implemented
             trained: [],
@@ -150,7 +150,7 @@ async function createUser(userFormData, author) {
         const newUser = new User(newUserData);
         if (!newUser) {
             logger.error(`createUser couldn't save new user ${newUserData.name}!`);
-            message.content = `Sorry, we ran into a problem saving your character!`;
+            message.content = `Sorry, we ran into a problem saving your user!`;
             return message;
         }
         if (author && author._id) {
@@ -161,13 +161,13 @@ async function createUser(userFormData, author) {
         const nameSaved = await nameToRegister.save();
         if (!nameSaved) {
             logger.error(`createUser saved the Name ${newUser.name} to Names!`);
-            message.content = `Sorry, we ran into a problem saving your character!`;
+            message.content = `Sorry, we ran into a problem saving your user!`;
             return message;
         }
         if (author) {
-            logger.info(`Author "${author.name}" created character "${newUser.name}".`);
+            logger.info(`Author "${author.name}" created user "${newUser.name}".`);
             message.type = "createUser";
-            message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new character.`;
+            message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new user.`;
             if (newUser.author) {
                 logger.info(`Author ${author.name} is the author of ${newUser.name}.`);
             }

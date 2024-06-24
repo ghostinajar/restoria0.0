@@ -79,14 +79,14 @@ async function editUser(user: IUser, userDescription: IDescription) {
       `messageFor${user.username}`,
       makeMessage(
         `success`,
-        `Character description saved! Type 'look ${user.name}' to view it.`
+        `User description saved! Type 'look ${user.name}' to view it.`
       )
     );
     return;
   } else {
     worldEmitter.emit(
       `messageFor${user.username}`,
-      makeMessage(`rejected`, `No change saved to character description.`)
+      makeMessage(`rejected`, `No change saved to user description.`)
     );
     return;
   }

@@ -48,7 +48,7 @@ export const userSchema = new Schema({
         required: true,
     },
     description: { type: descriptionSchema, required: true, default: () => ({}) },
-    characters: {
+    users: {
         type: [{ type: Schema.Types.ObjectId, ref: "User" }],
         required: true,
         default: () => [],
