@@ -121,14 +121,14 @@ const roomSchema = new Schema({
             default: () => ({}),
         },
     ],
-    items: [],
+    inventory: [],
     mobs: [],
     users: [],
 });
 //since there will only ever be one instance of a Room, the Room class will have
-//arrays to store active mobs, items, and users inside the room.
+//arrays to store active mobs, inventory, and users inside the room.
 //These are never saved in db.
-//entityType should be a string to indicate which array to use ("mobs", "items", or "users")
+//entityType should be a string to indicate which array to use ("mobs", "inventory", or "users")
 roomSchema.methods.addEntityTo = function (entityType, instance) {
     //if the array exists, and the instance doesn't already exist in the array, add it
     if (this[entityType] &&
@@ -155,16 +155,16 @@ roomSchema.methods.initiate = async function () {
     logger.log(`loadout`, `Mobs in room "${this.name}": ${this.mobs.map((mob) => {
         return mob.name;
     })}`);
-    //loadout items array
+    //loadout inventory array
     this.inventory = [];
     await activateItemNodes(this.itemNodes, this.inventory);
-    logger.log(`loadout`, `Items in room "${this.name}": ${JSON.stringify(this.inventory.map((item) => item.name))}`);
+    logger.log(`loadout`, `Inventory in room "${this.name}": ${JSON.stringify(this.inventory.map((item) => item.name))}`);
     //open users array
     this.users = [];
 };
 roomSchema.pre("save", function (next) {
-    this.items = [];
     this.mobs = [];
+    this.inventory = [];
     this.users = [];
     next();
 });

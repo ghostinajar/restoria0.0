@@ -94,13 +94,13 @@ function lookTarget(
     return;
   }
 
-  // if items names includes target
+  // if inventory names includes target
   logger.debug(
-    `Checking items ${JSON.stringify(
-      room.items.map((item) => item.name)
+    `Checking inventory ${JSON.stringify(
+      room.inventory.map((item) => item.name)
     )} array for ${target}`
   );
-  targetObject = room.items.find((item) => item.keywords.includes(target));
+  targetObject = room.inventory.find((item) => item.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
     lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
@@ -134,7 +134,7 @@ function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
   );
   lookArray.push(roomDescriptionMessage);
   //push a message for each item's description.look into lookArray
-  for (let itemInRoom of room.items) {
+  for (let itemInRoom of room.inventory) {
     const message = makeMessage(`itemIsHere`, `${itemInRoom.description.look}`);
     lookArray.push(message);
   }

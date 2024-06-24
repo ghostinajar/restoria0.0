@@ -52,7 +52,7 @@ export interface IRoom {
   };
   mobNodes: Array<IMobNode>;
   itemNodes: Array<IItemNode>;
-  items: Array<IItem>;
+  inventory: Array<IItem>;
   mobs: Array<IMob>;
   users: Array<IUser>;
 
@@ -172,16 +172,16 @@ const roomSchema = new Schema<IRoom>({
       default: () => ({}),
     },
   ],
-  items: [],
+  inventory: [],
   mobs: [],
   users: [],
 });
 
 //since there will only ever be one instance of a Room, the Room class will have
-//arrays to store active mobs, items, and users inside the room.
+//arrays to store active mobs, inventory, and users inside the room.
 //These are never saved in db.
 
-//entityType should be a string to indicate which array to use ("mobs", "items", or "users")
+//entityType should be a string to indicate which array to use ("mobs", "inventory", or "users")
 roomSchema.methods.addEntityTo = function (
   entityType: string,
   instance: IMob | IItem | IUser
@@ -226,12 +226,12 @@ roomSchema.methods.initiate = async function () {
     })}`
   );
 
-  //loadout items array
+  //loadout inventory array
   this.inventory = [];
   await activateItemNodes(this.itemNodes, this.inventory);
   logger.log(
     `loadout`,
-    `Items in room "${this.name}": ${JSON.stringify(
+    `Inventory in room "${this.name}": ${JSON.stringify(
       this.inventory.map((item: IItem) => item.name)
     )}`
   );
@@ -241,8 +241,8 @@ roomSchema.methods.initiate = async function () {
 };
 
 roomSchema.pre("save", function (next) {
-  this.items = [];
   this.mobs = [];
+  this.inventory = [];
   this.users = [];
   next();
 });
