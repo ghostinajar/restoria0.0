@@ -179,10 +179,11 @@ select {
   color: var(--green_light);
 }
 
+.createCharacter,
+.saved,
 .userArrived,
 .userIsHere,
-.userMove,
-.createCharacter {
+.userMove {
   color: var(--yellow);
 }
 

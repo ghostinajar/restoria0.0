@@ -46,7 +46,7 @@ async function editUser(user, userDescription) {
     }
     if (changed) {
         await user.save();
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`saved`, `Character description saved! Type 'look ${user.name}' to view it.`));
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Character description saved! Type 'look ${user.name}' to view it.`));
         return;
     }
     else {

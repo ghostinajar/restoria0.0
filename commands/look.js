@@ -36,7 +36,7 @@ function lookTarget(target, room, user, lookArray) {
     targetObject = room.users.find((user) => user.username === target);
     if (targetObject) {
         // push a message for the target.name into lookArray
-        lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
+        lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
         // push a message for the target.description.look into lookArray
         if (targetObject.description.examine) {
             lookArray.push(makeMessage(`userDescription`, `${targetObject.description.examine}`));
@@ -50,7 +50,7 @@ function lookTarget(target, room, user, lookArray) {
     targetObject = room.mobs.find((mob) => mob.keywords.includes(target));
     if (targetObject) {
         // push a message for the target.name into lookArray
-        lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
+        lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
         // push a message for the target.description.look into lookArray
         lookArray.push(makeMessage(`mobDescription`, `${targetObject.description.examine}`));
         pushTargetEquipped(targetObject, lookArray);
@@ -62,7 +62,7 @@ function lookTarget(target, room, user, lookArray) {
     targetObject = room.items.find((item) => item.keywords.includes(target));
     if (targetObject) {
         // push a message for the target.name into lookArray
-        lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
+        lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
         // push a message for the target.description.look into lookArray
         lookArray.push(makeMessage(`itemDescription`, `${targetObject.description.examine}`));
         if (targetObject.itemType === "container" ||
@@ -76,7 +76,7 @@ function lookTarget(target, room, user, lookArray) {
 }
 function lookRoom(room, user, lookArray) {
     //push a message for the room's name into look Array
-    let roomNameMessage = makeMessage(`header`, `${room.name}`);
+    let roomNameMessage = makeMessage(`heading`, `${room.name}`);
     lookArray.push(roomNameMessage);
     //push a message for the room's description.look into look Array
     let roomDescriptionMessage = makeMessage(`roomDescription`, `${room.description.look}`);

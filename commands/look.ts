@@ -63,7 +63,7 @@ function lookTarget(
   targetObject = room.users.find((user) => user.username === target);
   if (targetObject) {
     // push a message for the target.name into lookArray
-    lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
+    lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
     if (targetObject.description.examine) {
       lookArray.push(
@@ -84,7 +84,7 @@ function lookTarget(
   targetObject = room.mobs.find((mob) => mob.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
-    lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
+    lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
     lookArray.push(
       makeMessage(`mobDescription`, `${targetObject.description.examine}`)
@@ -103,7 +103,7 @@ function lookTarget(
   targetObject = room.items.find((item) => item.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
-    lookArray.push(makeMessage(`header`, `Name: ${targetObject.name}`));
+    lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
     // push a message for the target.description.look into lookArray
     lookArray.push(
       makeMessage(`itemDescription`, `${targetObject.description.examine}`)
@@ -125,7 +125,7 @@ function lookTarget(
 
 function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
   //push a message for the room's name into look Array
-  let roomNameMessage = makeMessage(`header`, `${room.name}`);
+  let roomNameMessage = makeMessage(`heading`, `${room.name}`);
   lookArray.push(roomNameMessage);
   //push a message for the room's description.look into look Array
   let roomDescriptionMessage = makeMessage(
