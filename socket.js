@@ -9,7 +9,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 const setupSocket = (io) => {
     try {
@@ -34,6 +34,9 @@ const setupSocket = (io) => {
             worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
             worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
             // Listen for game events
+            worldEmitter.on(`formPromptFor${user.username}`, async (formData) => {
+                formPromptForUserHandler(formData, socket);
+            });
             worldEmitter.on(`messageArrayFor${user.username}`, async (messageArray) => {
                 messageArrayForUserHandler(messageArray, socket);
             });

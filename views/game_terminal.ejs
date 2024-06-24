@@ -23,12 +23,12 @@
 
       <form id="createUserForm" class="sideForm" style="display: none">
         <section>
-          <label for="name">Name:</label>
+          <label for="newUserName">Name:</label>
           <input
-            id="name"
-            name="name"
+            id="newUserName"
+            name="newUserName"
             type="text"
-            autocomplete="name"
+            autocomplete="newUserName"
             required
           />
         </section>
@@ -110,7 +110,7 @@
       const commandForm = document.getElementById("commandForm");
       const createUserForm = document.getElementById("createUserForm");
       const editUserForm = document.getElementById("editUserForm");
-      const name = document.getElementById("name");
+      const newUserName = document.getElementById("newUserName");
       const password = document.getElementById("new-password");
       const input= document.getElementById("commandInput");
       const messagesContainer= document.getElementById("messagesContainer");
@@ -171,16 +171,7 @@
             input.value = "";
             return;
           }
-          if (input.value.toLowerCase() === "edit user") {
-            activeForm.reset();
-            activeForm.style.display = "none";
-            activeForm = editUserForm;
-            activeForm.style.display = "block";
-            messagesContainer.classList.add("makeRoom");
-            input.value = "";
-            return;
-          }
-
+          
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
             appendMessageToTerminal(
@@ -197,8 +188,8 @@
       createUserForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const userData = {
-          username: document.getElementById("name").value.toLowerCase(),
-          name: document.getElementById("name").value,
+          username: document.getElementById("newUserName").value.toLowerCase(),
+          name: document.getElementById("newUserName").value,
           password: document.getElementById("new-password").value,
           pronouns: document.getElementById("pronouns").value,
           job: document.getElementById("job").value,
@@ -220,6 +211,19 @@
         editUserForm.reset();
         editUserForm.style.display = "none"; // Hide the form after submission
         messagesContainer.classList.remove("makeRoom");
+      });
+
+      socket.on("openEditUserForm", (formData) => {
+        activeForm.reset();
+        activeForm.style.display = "none";
+        activeForm = editUserForm;
+        activeForm.style.display = "block";
+        messagesContainer.classList.add("makeRoom");
+        input.value = "";
+        // Set the values of the textareas based on formData
+        document.getElementById("examineUser").value = formData.examine || '';
+        document.getElementById("studyUser").value = formData.study || '';
+        document.getElementById("researchUser").value = formData.research || '';
       });
 
       socket.on("invalid", (rejectionString) => {

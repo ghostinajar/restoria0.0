@@ -1,4 +1,9 @@
 import logger from "./logger.js";
+export const formPromptForUserHandler = async (formData, socket) => {
+    if (formData.form === 'editUserForm') {
+        socket.emit(`openEditUserForm`, formData);
+    }
+};
 export const messageArrayForUserHandler = async (messageArray, socket) => {
     for (let message of messageArray) {
         socket.emit(`message`, message);

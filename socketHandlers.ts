@@ -2,6 +2,15 @@ import logger from "./logger.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 
+export const formPromptForUserHandler = async (
+  formData : any,
+  socket : any,
+) => {
+  if (formData.form === 'editUserForm') {
+    socket.emit(`openEditUserForm`, formData)
+  }
+}
+
 export const messageArrayForUserHandler = async (
   messageArray: Array<IMessage>,
   socket: any

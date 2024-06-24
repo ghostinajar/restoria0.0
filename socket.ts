@@ -13,6 +13,7 @@ import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import {
+  formPromptForUserHandler,
   messageArrayForUserHandler,
   messageForUserHandler,
   messageForUsersRoomHandler,
@@ -39,6 +40,7 @@ const setupSocket = (io: any) => {
       }
 
       // Remove existing event listeners for the user before adding new ones
+      worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
       worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
       worldEmitter.removeAllListeners(`messageFor${user.username}`);
       worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
@@ -47,6 +49,12 @@ const setupSocket = (io: any) => {
       worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
 
       // Listen for game events
+      worldEmitter.on(
+        `formPromptFor${user.username}`,
+        async (formData : any) => {
+          formPromptForUserHandler(formData, socket);
+        }
+      )
       worldEmitter.on(
         `messageArrayFor${user.username}`,
         async (messageArray: Array<IMessage>) => {
@@ -135,6 +143,7 @@ const setupSocket = (io: any) => {
           // Then, zonemanager will alert userManager to remove user from users map
           worldEmitter.emit(`socketDisconnectedUser`, user);
           // Remove existing event listeners for user
+          worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
           worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
           worldEmitter.removeAllListeners(`messageFor${user.username}`);
           worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
