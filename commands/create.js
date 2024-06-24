@@ -7,6 +7,12 @@ async function create(parsedCommand, user) {
         return;
     }
     switch (target) {
+        case `room`: {
+            worldEmitter.emit(`formPromptFor${user.username}`, {
+                form: `createRoomForm`,
+            });
+            break;
+        }
         case `user`: {
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `createUserForm`,

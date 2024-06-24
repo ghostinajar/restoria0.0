@@ -11,12 +11,12 @@ export interface IExit {
   isHidden: boolean;
   isClosed: boolean;
   isLocked: boolean;
-  keyItemBlueprint: mongoose.Types.ObjectId;
-  keyItemZone: mongoose.Types.ObjectId;
-  echoes: {
-    unlock: IEcho;
-    open: IEcho;
-    close: IEcho;
+  keyItemBlueprint?: mongoose.Types.ObjectId;
+  keyItemZone?: mongoose.Types.ObjectId;
+  echoes?: {
+    unlock?: IEcho;
+    open?: IEcho;
+    close?: IEcho;
   };
 }
 
@@ -25,7 +25,7 @@ const exitSchema = new Schema(
     destinationLocation: {
       inZone: {
         type: Schema.Types.ObjectId,
-        ref: "Room",
+        ref: "Zone",
       },
       inRoom: {
         type: Schema.Types.ObjectId,

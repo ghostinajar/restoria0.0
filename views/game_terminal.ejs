@@ -21,6 +21,86 @@
         <ul id="messages"></ul>
       </div>
 
+      <form id="createRoomForm" class="sideForm" style="display: none">
+        <section>
+          <label for="newRoomName">Name:</label>
+          <input
+            id="newRoomName"
+            name="newRoomName"
+            type="text"
+            autocomplete="newRoomName"
+            required
+          />
+        </section>
+        <section>
+          <label for="newRoomDirection">Direction:</label>
+          <select id="newRoomDirection" name="newRoomDirection" required>
+            <option value="north">north</option>
+            <option value="east">east</option>
+            <option value="south">south</option>
+            <option value="west">west</option>
+            <option value="up">up</option>
+            <option value="down">down</option>
+          </select>
+        </section>
+        <section>
+          <input type="checkbox" id="isDark" name="isDark" value="isDark" />
+          <label for="isDark">Dark</label>
+          <input
+            type="checkbox"
+            id="isIndoors"
+            name="isIndoors"
+            value="isIndoors"
+          />
+          <label for="isIndoors">Indoors</label>
+          
+          <input
+            type="checkbox"
+            id="isOnWater"
+            name="isOnWater"
+            value="isOnWater"
+          />
+          
+          <label for="isOnWater">On Water</label>
+          <input
+            type="checkbox"
+            id="isUnderwater"
+            name="isUnderwater"
+            value="isUnderwater"
+          />
+          <label for="isUnderwater">Underwater</label>
+        </section>
+        <section>
+          <label for="examineRoom">Examine:</label>
+          <textarea
+            id="examineRoom"
+            name="examineRoom"
+            type="text"
+            autocomplete="examineRoom"
+          ></textarea>
+        </section>
+        <section>
+          <label for="studyRoom">Study:</label>
+          <textarea
+            id="studyRoom"
+            name="studyRoom"
+            type="text"
+            autocomplete="studyRoom"
+          ></textarea>
+        </section>
+        <section>
+          <label for="researchRoom">Research:</label>
+          <textarea
+            id="researchRoom"
+            name="researchRoom"
+            type="text"
+            autocomplete="researchRoom"
+          ></textarea>
+        </section>
+        <button type="submit">Create Room</button>
+        <button type="button" id="cancelCreateRoomForm">Cancel</button>
+      </form>
+
       <form id="createUserForm" class="sideForm" style="display: none">
         <section>
           <label for="newUserName">Name:</label>
@@ -108,6 +188,7 @@
       const socket = io(); // no URL needed for now; defaults to host that serves the page
       const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
       const commandForm = document.getElementById("commandForm");
+      const createRoomForm = document.getElementById("createRoomForm");
       const createUserForm = document.getElementById("createUserForm");
       const editUserForm = document.getElementById("editUserForm");
       const newUserName = document.getElementById("newUserName");
@@ -141,27 +222,36 @@
         window.scrollTo(0, document.body.scrollHeight);
       }
 
+      // Form cancel button listeners
+      document
+        .getElementById("cancelCreateRoomForm")
+        .addEventListener("click", function () {
+          // messagesContainer.classList.remove("moveOver");
+          createRoomForm.style.display = "none";
+      });
       document
         .getElementById("cancelCreateUserForm")
         .addEventListener("click", function () {
-          messagesContainer.classList.remove("makeRoom");
+          // messagesContainer.classList.remove("moveOver");
           createUserForm.style.display = "none";
         });
       document
         .getElementById("cancelEditUserForm")
         .addEventListener("click", function () {
-          messagesContainer.classList.remove("makeRoom");
+          // messagesContainer.classList.remove("moveOver");
           editUserForm.style.display = "none";
       });
+      
 
       let activeForm = editUserForm;
 
+      // Form submit button listeners
       commandForm.addEventListener("submit", (e) => {
         e.preventDefault();
         if (input.value) {
           const parsedCommand = parseCommand(input.value);
           //reject invalid command words
-          
+
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
             appendMessageToTerminal(
@@ -173,6 +263,25 @@
           socket.emit("userSentCommand", input.value);
           input.value = "";
         }
+      });
+
+      createRoomForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const roomData = {
+          name: document.getElementById("newRoomName").value,
+          direction: document.getElementById("newRoomDirection").value,
+          isDark: document.getElementById("isDark").checked,
+          isIndoors: document.getElementById("isIndoors").checked,
+          isOnWater: document.getElementById("isOnWater").checked,
+          isUnderwater: document.getElementById("isUnderwater").checked,
+          examine: document.getElementById("examineRoom").value,
+          study: document.getElementById("studyRoom").value,
+          research: document.getElementById("researchRoom").value,
+        };
+        socket.emit("userSubmittedNewRoom", roomData);
+        createRoomForm.reset();
+        createRoomForm.style.display = "none"; // Hide the form after submission
+        // messagesContainer.classList.remove("moveOver");
       });
 
       createUserForm.addEventListener("submit", (e) => {
@@ -187,7 +296,7 @@
         socket.emit("userSubmittedNewUser", userData);
         createUserForm.reset();
         createUserForm.style.display = "none"; // Hide the form after submission
-        messagesContainer.classList.remove("makeRoom");
+        // messagesContainer.classList.remove("moveOver");
       });
 
       editUserForm.addEventListener("submit", (e) => {
@@ -200,15 +309,24 @@
         socket.emit("userSubmittedUserDescription", userDescription);
         editUserForm.reset();
         editUserForm.style.display = "none"; // Hide the form after submission
-        messagesContainer.classList.remove("makeRoom");
+        // messagesContainer.classList.remove("moveOver");
       });
+
+      socket.on("openCreateRoomForm", () => {
+            activeForm.reset();
+            activeForm.style.display = "none";
+            activeForm = createRoomForm;
+            activeForm.style.display = "block";
+            // messagesContainer.classList.add("moveOver");
+            input.value = "";
+      })
 
       socket.on("openCreateUserForm", () => {
             activeForm.reset();
             activeForm.style.display = "none";
             activeForm = createUserForm;
             activeForm.style.display = "block";
-            messagesContainer.classList.add("makeRoom");
+            // messagesContainer.classList.add("moveOver");
             input.value = "";
       })
 
@@ -217,7 +335,7 @@
         activeForm.style.display = "none";
         activeForm = editUserForm;
         activeForm.style.display = "block";
-        messagesContainer.classList.add("makeRoom");
+        // messagesContainer.classList.add("moveOver");
         input.value = "";
         // Set the values of the textareas based on formData
         document.getElementById("examineUser").value = formData.examine || '';

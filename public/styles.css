@@ -43,6 +43,8 @@ body {
 
 label {
   white-space: pre-wrap;
+  text-align: left; /* Align text to the left */
+
 }
 
 #commandForm {
@@ -68,9 +70,10 @@ label {
   background-color: var(--grey_dark);
   box-shadow: 0 0.5px 2px var(--black);
   display: none; /* Initially hidden */
-  display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow: auto; /* Add scrollbars if content exceeds the box */
+  max-height: calc(100vh - 120px); /* Adjust max height based on your layout */
 }
 
 .sideForm section {
@@ -82,6 +85,8 @@ label {
 
 .sideForm label {
   flex-shrink: 0; /* Prevent labels from shrinking */
+  text-align: left; /* Align text to the left */
+  padding-right: 5px; /* Add some padding to the right of the label */
 }
 
 .sideForm textarea,
@@ -133,7 +138,7 @@ select {
   overflow-y: auto;
 }
 
-#messagesContainer.makeRoom {
+#messagesContainer.moveOver {
   width: 64%;
 }
 

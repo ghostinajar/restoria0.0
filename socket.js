@@ -1,6 +1,7 @@
 // socket
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
+import createRoom from "./commands/createRoom.js";
 import createUser from "./commands/createUser.js";
 import makeMessage from "./types/makeMessage.js";
 import look from "./commands/look.js";
@@ -59,6 +60,9 @@ const setupSocket = (io) => {
             // Listen for client events
             socket.on(`userSentCommand`, async (userInput) => {
                 userSentCommandHandler(socket, userInput, user);
+            });
+            socket.on(`userSubmittedNewRoom`, async (roomData) => {
+                const newRoom = await createRoom(roomData, user);
             });
             socket.on(`userSubmittedNewUser`, async (userData) => {
                 const newUser = await createUser(userData, user);

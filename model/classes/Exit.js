@@ -6,7 +6,7 @@ const exitSchema = new Schema({
     destinationLocation: {
         inZone: {
             type: Schema.Types.ObjectId,
-            ref: "Room",
+            ref: "Zone",
         },
         inRoom: {
             type: Schema.Types.ObjectId,

@@ -12,7 +12,6 @@ const ROOM_TYPE = {
     RECALL: "recall",
     RECLASS: "reclass",
     SHOP: "shop",
-    SHRINE: "shrine",
     STABLE: "stable",
     STORAGE: "storage",
     TRAINER: "trainer"
