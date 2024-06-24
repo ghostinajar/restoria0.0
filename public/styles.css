@@ -1,4 +1,3 @@
-/* styles.css */
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
 :root {
@@ -141,11 +140,15 @@ select {
   list-style-type: none;
   margin: 10px;
   padding: 0.1rem;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  max-width: 80ch; /* Ensure text wraps before 81 characters */
+  word-wrap: break-word; /* For older browsers */
 }
 
 .message-item {
   white-space: pre-wrap; /* Ensure that white spaces are preserved and lines break as needed */
+  max-width: 80ch; /* Ensure text wraps before 81 characters */
+  word-wrap: break-word; /* For older browsers */
 }
 
 .quit,
@@ -158,7 +161,7 @@ select {
 }
 
 .stats {
-  color: var(--blue)
+  color: var(--blue);
 }
 
 .equippedItemName,
