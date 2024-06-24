@@ -8,15 +8,6 @@ async function editUser(user, userDescription) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejected`, `Oops! The form didn't seem to have any new descriptions.`));
         return;
     }
-    if (userDescription.look !== user.description.look) {
-        if (userDescription.look && userDescription.look.length > 60) {
-            userDescription.look = userDescription.look.substring(0, 60);
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Look descriptions should be 60 characters (1 line) or less. Shortened to '${userDescription.look}'.`));
-        }
-        user.description.look = userDescription.look;
-        changed = true;
-        logger.debug(`editUser updated user ${user.name}'s look description: ${user.description.look}`);
-    }
     if (userDescription.examine !== user.description.examine) {
         if (userDescription.examine && userDescription.examine.length > 240) {
             userDescription.examine = userDescription.examine.substring(0, 240);
@@ -42,7 +33,7 @@ async function editUser(user, userDescription) {
         }
         user.description.research = userDescription.research;
         changed = true;
-        logger.debug(`editUser updated user ${user.name}'s look description: ${user.description.research}`);
+        logger.debug(`editUser updated user ${user.name}'s research description: ${user.description.research}`);
     }
     if (changed) {
         await user.save();
