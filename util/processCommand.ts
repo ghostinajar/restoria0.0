@@ -82,9 +82,6 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       );
     }
   }
-  if (parsedCommand.commandWord !== `stats`) {
-    stats(user);
-  }
 }
 
 export default processCommand;

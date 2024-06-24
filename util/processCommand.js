@@ -77,8 +77,5 @@ async function processCommand(parsedCommand, user) {
             logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`);
         }
     }
-    if (parsedCommand.commandWord !== `stats`) {
-        stats(user);
-    }
 }
 export default processCommand;
