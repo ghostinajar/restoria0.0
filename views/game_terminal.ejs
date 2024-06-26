@@ -71,6 +71,15 @@
           <label for="isUnderwater">Underwater</label>
         </section>
         <section>
+          <label for="lookRoom">Look:</label>
+          <textarea
+            id="lookRoom"
+            name="lookRoom"
+            type="text"
+            autocomplete="lookRoom"
+          ></textarea>
+        </section>
+        <section>
           <label for="examineRoom">Examine:</label>
           <textarea
             id="examineRoom"
@@ -269,6 +278,7 @@
           isIndoors: document.getElementById("isIndoors").checked,
           isOnWater: document.getElementById("isOnWater").checked,
           isUnderwater: document.getElementById("isUnderwater").checked,
+          look: document.getElementById("lookRoom").value,
           examine: document.getElementById("examineRoom").value,
           study: document.getElementById("studyRoom").value,
           research: document.getElementById("researchRoom").value,

@@ -11,6 +11,7 @@ import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IZone } from "../model/classes/Zone.js";
 import createExit from "./createExit.js";
+import unusedExitsForUser from "../util/unusedExitsForUser.js";
 
 export interface IRoomData {
   name: string;
@@ -19,6 +20,7 @@ export interface IRoomData {
   isIndoors: boolean;
   isOnWater: boolean;
   isUnderwater: boolean;
+  look: string;
   examine: string;
   study: string;
   research: string;
@@ -30,8 +32,14 @@ async function createRoom(
   author: IUser
 ): Promise<IRoom | IMessage> {
   try {
-    logger.debug(`Trying to create room ${roomFormData.name}`);
     let message = makeMessage("rejection", ``);
+    if (!roomFormData.direction || roomFormData.direction == ``) {
+      logger.error(`createRoom rejected, No direction selected.`);
+      message.content = `Can't create a room without a direction!`
+      return message;
+    }
+
+    logger.debug(`Trying to create room ${roomFormData.name}, ${roomFormData.direction}.`);
     let originRoom : IRoom = await getRoomOfUser(author);
     if (!originRoom) {
       logger.error(`Couldn't find origin room to create room.`);
@@ -42,6 +50,14 @@ async function createRoom(
     });
     if (!originZone) {
       logger.error(`Couldn't find origin zone to create room.`);
+    }
+
+    const unusedExits = await unusedExitsForUser(author);
+    logger.debug(`createRoom found unusedExitsForUser: ${unusedExits}.`)
+    if (!unusedExits.includes(roomFormData.direction)) {
+      logger.error(`createRoom rejected, exit already exists (this shouldn't be possible). Author ${author._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`);
+      message.content = `Can't create the room. That exit already goes somewhere!`
+      return message;
     }
 
     let newRoomData: IRoom = {
@@ -71,6 +87,7 @@ async function createRoom(
       mountIdForSale: [],
       mapCoords: originRoom.mapCoords.slice(), // Copy to avoid mutation
       description: {
+        look: roomFormData.look,
         examine: roomFormData.examine,
         study: roomFormData.study,
         research: roomFormData.research,
@@ -160,7 +177,7 @@ async function createRoom(
 
     logger.info(`Author "${author.name}" created room "${newRoomData.name}".`);
     message.type = "success";
-    message.content = `You created ${newRoomData.name} to the ${roomFormData.direction}!`;
+    message.content = `You created ${newRoomData.name}, ${roomFormData.direction} from here!`;
     worldEmitter.emit(`messageFor${author.username}`, message);
 
     return newRoomData;
