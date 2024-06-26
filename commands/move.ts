@@ -6,6 +6,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
+import exits from "./exits.js";
 import look from "./look.js";
 
 async function move(parsedCommand: IParsedCommand, user: IUser) {
@@ -141,7 +142,8 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
     makeMessage(`userMove`, `You move ${requestedDirection}.`)
   );
 
-  look({ commandWord: `look` }, user);
+  await look({ commandWord: `look` }, user);
+  await exits(user);
 }
 
 export default move;

@@ -3,6 +3,7 @@ import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
+import exits from "./exits.js";
 import look from "./look.js";
 async function move(parsedCommand, user) {
     let requestedDirection = parsedCommand.commandWord;
@@ -81,6 +82,7 @@ async function move(parsedCommand, user) {
     worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`userMove`, `${user.name} arrived.`));
     // Message user
     worldEmitter.emit(`messageFor${user.username}`, makeMessage(`userMove`, `You move ${requestedDirection}.`));
-    look({ commandWord: `look` }, user);
+    await look({ commandWord: `look` }, user);
+    await exits(user);
 }
 export default move;

@@ -14,6 +14,7 @@ import createExit from "./createExit.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
 import { IDescription } from "../model/classes/Description.js";
 import truncateDescription from "../util/truncateDescription.js";
+import exits from "./exits.js";
 
 export interface IRoomData {
   name: string;
@@ -184,7 +185,7 @@ async function createRoom(
     message.type = "success";
     message.content = `You created ${newRoomData.name}, ${roomFormData.direction} from here!`;
     worldEmitter.emit(`messageFor${author.username}`, message);
-
+    await exits(author);
     return newRoomData;
   } catch (error: any) {
     logger.error(`Error in createUser: ${error.message} `);

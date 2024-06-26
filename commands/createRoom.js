@@ -10,6 +10,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import createExit from "./createExit.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
 import truncateDescription from "../util/truncateDescription.js";
+import exits from "./exits.js";
 // Return room, or a message explaining failure (if by author, emit message to their socket)
 async function createRoom(roomFormData, author) {
     try {
@@ -156,6 +157,7 @@ async function createRoom(roomFormData, author) {
         message.type = "success";
         message.content = `You created ${newRoomData.name}, ${roomFormData.direction} from here!`;
         worldEmitter.emit(`messageFor${author.username}`, message);
+        await exits(author);
         return newRoomData;
     }
     catch (error) {
