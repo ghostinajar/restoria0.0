@@ -53,14 +53,14 @@
             value="isIndoors"
           />
           <label for="isIndoors">Indoors</label>
-          
+
           <input
             type="checkbox"
             id="isOnWater"
             name="isOnWater"
             value="isOnWater"
           />
-          
+
           <label for="isOnWater">On Water</label>
           <input
             type="checkbox"
@@ -193,9 +193,10 @@
       const editUserForm = document.getElementById("editUserForm");
       const newUserName = document.getElementById("newUserName");
       const password = document.getElementById("new-password");
-      const input= document.getElementById("commandInput");
-      const messagesContainer= document.getElementById("messagesContainer");
+      const input = document.getElementById("commandInput");
+      const messagesContainer = document.getElementById("messagesContainer");
       const messages = document.getElementById("messages");
+      const directionSelect = document.getElementById("newRoomDirection");
 
       //methods definitions (validation and parsing are client version)
       function isValidCommandWord(commandWord) {
@@ -204,6 +205,7 @@
         }
         return true;
       }
+
       function parseCommand(command) {
         const parsedCommand = {};
         const splitCommand = command.split(" ");
@@ -213,6 +215,7 @@
         }
         return parsedCommand;
       }
+
       function appendMessageToTerminal(message) {
         const item = document.createElement("li");
         item.classList.add('message-item'); // Add message-item class
@@ -223,25 +226,17 @@
       }
 
       // Form cancel button listeners
-      document
-        .getElementById("cancelCreateRoomForm")
-        .addEventListener("click", function () {
-          // messagesContainer.classList.remove("moveOver");
-          createRoomForm.style.display = "none";
+      document.getElementById("cancelCreateRoomForm").addEventListener("click", function () {
+        createRoomForm.style.display = "none";
       });
-      document
-        .getElementById("cancelCreateUserForm")
-        .addEventListener("click", function () {
-          // messagesContainer.classList.remove("moveOver");
-          createUserForm.style.display = "none";
-        });
-      document
-        .getElementById("cancelEditUserForm")
-        .addEventListener("click", function () {
-          // messagesContainer.classList.remove("moveOver");
-          editUserForm.style.display = "none";
+
+      document.getElementById("cancelCreateUserForm").addEventListener("click", function () {
+        createUserForm.style.display = "none";
       });
-      
+
+      document.getElementById("cancelEditUserForm").addEventListener("click", function () {
+        editUserForm.style.display = "none";
+      });
 
       let activeForm = editUserForm;
 
@@ -255,7 +250,7 @@
           if (!isValidCommandWord(parsedCommand.commandWord)) {
             const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
             appendMessageToTerminal(
-              {type: "rejection", content: `Sorry, '${shortenedCommand}' is not a valid command word.`}
+              { type: "rejection", content: `Sorry, '${shortenedCommand}' is not a valid command word.` }
             );
             input.value = "";
             return;
@@ -281,7 +276,6 @@
         socket.emit("userSubmittedNewRoom", roomData);
         createRoomForm.reset();
         createRoomForm.style.display = "none"; // Hide the form after submission
-        // messagesContainer.classList.remove("moveOver");
       });
 
       createUserForm.addEventListener("submit", (e) => {
@@ -296,7 +290,6 @@
         socket.emit("userSubmittedNewUser", userData);
         createUserForm.reset();
         createUserForm.style.display = "none"; // Hide the form after submission
-        // messagesContainer.classList.remove("moveOver");
       });
 
       editUserForm.addEventListener("submit", (e) => {
@@ -309,33 +302,40 @@
         socket.emit("userSubmittedUserDescription", userDescription);
         editUserForm.reset();
         editUserForm.style.display = "none"; // Hide the form after submission
-        // messagesContainer.classList.remove("moveOver");
       });
 
-      socket.on("openCreateRoomForm", () => {
-            activeForm.reset();
-            activeForm.style.display = "none";
-            activeForm = createRoomForm;
-            activeForm.style.display = "block";
-            // messagesContainer.classList.add("moveOver");
-            input.value = "";
-      })
+      socket.on("openCreateRoomForm", (formData) => {
+        console.log(`openCreateRoomForm received formData: ${JSON.stringify(formData)}`);
+        activeForm.reset();
+        activeForm.style.display = "none";
+        activeForm = createRoomForm;
+        activeForm.style.display = "block";
+        input.value = "";
+
+        // Update the direction select element
+        directionSelect.innerHTML = ''; // Clear existing options
+
+        formData.unusedExits.forEach(exit => {
+          const option = document.createElement('option');
+          option.value = exit;
+          option.textContent = exit;
+          directionSelect.appendChild(option);
+        });
+      });
 
       socket.on("openCreateUserForm", () => {
-            activeForm.reset();
-            activeForm.style.display = "none";
-            activeForm = createUserForm;
-            activeForm.style.display = "block";
-            // messagesContainer.classList.add("moveOver");
-            input.value = "";
-      })
+        activeForm.reset();
+        activeForm.style.display = "none";
+        activeForm = createUserForm;
+        activeForm.style.display = "block";
+        input.value = "";
+      });
 
       socket.on("openEditUserForm", (formData) => {
         activeForm.reset();
         activeForm.style.display = "none";
         activeForm = editUserForm;
         activeForm.style.display = "block";
-        // messagesContainer.classList.add("moveOver");
         input.value = "";
         // Set the values of the textareas based on formData
         document.getElementById("examineUser").value = formData.examine || '';
@@ -344,11 +344,10 @@
       });
 
       socket.on("invalid", (rejectionString) => {
-        appendMessageToTerminal({type: "rejection", content: "Server says invalid command."});
+        appendMessageToTerminal({ type: "rejection", content: "Server says invalid command." });
       });
 
       socket.on("redirectToLogin", () => {
-        // Redirect to /login
         socket.disconnect();
         window.location.href = "/login";
       });

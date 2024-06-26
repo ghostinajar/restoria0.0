@@ -1,5 +1,6 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
+import unusedExitsForUser from "../util/unusedExitsForUser.js";
 async function create(parsedCommand, user) {
     let target = parsedCommand.directObject;
     if (!target) {
@@ -8,8 +9,10 @@ async function create(parsedCommand, user) {
     }
     switch (target) {
         case `room`: {
+            const unusedExits = await unusedExitsForUser(user);
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `createRoomForm`,
+                unusedExits: unusedExits,
             });
             break;
         }

@@ -7,7 +7,8 @@ export const formPromptForUserHandler = async (
   socket : any,
 ) => {
   if (formData.form === 'createRoomForm') {
-    socket.emit(`openCreateRoomForm`);
+    console.log(`openCreateRoomForm sending formData: ${JSON.stringify(formData)}`);
+    socket.emit(`openCreateRoomForm`, formData);
     return;
   }
   if (formData.form === 'editUserForm') {

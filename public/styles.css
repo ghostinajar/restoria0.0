@@ -62,7 +62,7 @@ label {
 }
 
 .sideForm {
-  width: 34%;
+  height: 75%;
   position: fixed;
   top: 60px;
   right: 10px;
@@ -97,6 +97,10 @@ label {
   border-radius: 6px;
   padding: 5px 10px; /* Add padding for better spacing */
   margin: 0; /* Remove default margin */
+}
+
+.sideForm textarea {
+  height: 3rem;
 }
 
 .sideForm button {
