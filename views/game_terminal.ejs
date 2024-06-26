@@ -29,6 +29,7 @@
             name="newRoomName"
             type="text"
             autocomplete="newRoomName"
+            maxlength="60"
             required
           />
         </section>
@@ -77,6 +78,7 @@
             name="lookRoom"
             type="text"
             autocomplete="lookRoom"
+            maxlength="60"
           ></textarea>
         </section>
         <section>
@@ -86,6 +88,7 @@
             name="examineRoom"
             type="text"
             autocomplete="examineRoom"
+            maxlength="240"
           ></textarea>
         </section>
         <section>
@@ -95,6 +98,7 @@
             name="studyRoom"
             type="text"
             autocomplete="studyRoom"
+            maxlength="640"
           ></textarea>
         </section>
         <section>
@@ -104,6 +108,7 @@
             name="researchRoom"
             type="text"
             autocomplete="researchRoom"
+            maxlength="1600"
           ></textarea>
         </section>
         <button type="submit">Create Room</button>
@@ -118,6 +123,7 @@
             name="newUserName"
             type="text"
             autocomplete="newUserName"
+            maxlength="18"
             required
           />
         </section>
@@ -161,6 +167,7 @@
             name="examineUser"
             type="text"
             autocomplete="examineUser"
+            maxlength="240"
           ></textarea>
         </section>
         <section>
@@ -170,6 +177,7 @@
             name="studyUser"
             type="text"
             autocomplete="studyUser"
+            maxlength="640"
           ></textarea>
         </section>
         <section>
@@ -179,6 +187,7 @@
             name="researchUser"
             type="text"
             autocomplete="researchUser"
+            maxlength="1600"
           ></textarea>
         </section>
         <button type="submit">Update Description</button>
@@ -188,7 +197,7 @@
 
     <form id="commandForm" action="">
       <label for="commandInput"></label>
-      <input id="commandInput" autocomplete="off" />
+      <input id="commandInput" autocomplete="off" maxlength="80" />
       <button type="submit">Send</button>
     </form>
 

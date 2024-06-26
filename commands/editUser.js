@@ -4,7 +4,7 @@ import makeMessage from "../types/makeMessage.js";
 import truncateDescription from "../util/truncateDescription.js";
 async function editUser(user, userDescription) {
     let changed = false;
-    logger.debug(`editUser updating user ${user.name} with description: ${JSON.stringify(userDescription)}`);
+    logger.debug(`editUser received user ${user.name} request for userDescription: ${JSON.stringify(userDescription)}`);
     if (!userDescription) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejected`, `Oops! The form didn't seem to have any new descriptions.`));
         return;

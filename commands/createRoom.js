@@ -9,6 +9,7 @@ import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import createExit from "./createExit.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
+import truncateDescription from "../util/truncateDescription.js";
 // Return room, or a message explaining failure (if by author, emit message to their socket)
 async function createRoom(roomFormData, author) {
     try {
@@ -37,6 +38,13 @@ async function createRoom(roomFormData, author) {
             message.content = `Can't create the room. That exit already goes somewhere!`;
             return message;
         }
+        const roomDescription = {
+            look: roomFormData.look,
+            examine: roomFormData.examine,
+            study: roomFormData.study,
+            research: roomFormData.research,
+        };
+        truncateDescription(roomDescription, author);
         let newRoomData = {
             _id: new mongoose.Types.ObjectId(),
             author: author._id,
@@ -63,12 +71,7 @@ async function createRoom(roomFormData, author) {
             itemsForSale: [],
             mountIdForSale: [],
             mapCoords: originRoom.mapCoords.slice(), // Copy to avoid mutation
-            description: {
-                look: roomFormData.look,
-                examine: roomFormData.examine,
-                study: roomFormData.study,
-                research: roomFormData.research,
-            },
+            description: roomDescription,
             exits: {},
             mobNodes: [],
             itemNodes: [],

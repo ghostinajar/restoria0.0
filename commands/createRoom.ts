@@ -12,6 +12,8 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IZone } from "../model/classes/Zone.js";
 import createExit from "./createExit.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
+import { IDescription } from "../model/classes/Description.js";
+import truncateDescription from "../util/truncateDescription.js";
 
 export interface IRoomData {
   name: string;
@@ -60,6 +62,14 @@ async function createRoom(
       return message;
     }
 
+    const roomDescription : IDescription = {
+      look: roomFormData.look,
+      examine: roomFormData.examine,
+      study: roomFormData.study,
+      research: roomFormData.research,
+    };
+    truncateDescription(roomDescription, author);
+
     let newRoomData: IRoom = {
       _id: new mongoose.Types.ObjectId(),
       author: author._id,
@@ -86,12 +96,7 @@ async function createRoom(
       itemsForSale: [],
       mountIdForSale: [],
       mapCoords: originRoom.mapCoords.slice(), // Copy to avoid mutation
-      description: {
-        look: roomFormData.look,
-        examine: roomFormData.examine,
-        study: roomFormData.study,
-        research: roomFormData.research,
-      },
+      description: roomDescription,
       exits: {},
       mobNodes: [],
       itemNodes: [],
