@@ -7,7 +7,7 @@ export interface IHistory {
     creationDate: Date;
     modifiedDate: Date;
     completionStatus: String;
-    completionDate: Date | null;
+    completionDate?: Date;
 }
 
 const historySchema = new Schema<IHistory>({
