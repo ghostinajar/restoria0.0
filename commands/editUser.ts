@@ -35,6 +35,7 @@ async function editUser(user: IUser, userDescription: IDescription) {
   );
 
   if (changed) {
+    user.history.modifiedDate = new Date();
     await user.save();
     worldEmitter.emit(
       `messageFor${user.username}`,

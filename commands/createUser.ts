@@ -9,6 +9,7 @@ import IMessage from "../types/Message.js";
 import Name from "../model/classes/Name.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
 
 export interface IUserData {
   username: string;
@@ -81,7 +82,11 @@ async function createUser(
         inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
       },
       pronouns: userFormData.pronouns,
-      creationDate: new Date(),
+      history: {
+        creationDate: new Date(),
+        modifiedDate: new Date(),
+        completionStatus: COMPLETION_STATUS.DRAFT,
+      },
       hoursPlayed: 0,
       job: userFormData.job,
       level: 1,
@@ -184,9 +189,7 @@ async function createUser(
     }
 
     if (author) {
-      logger.info(
-        `Author "${author.name}" created user "${newUser.name}".`
-      );
+      logger.info(`Author "${author.name}" created user "${newUser.name}".`);
       message.type = "createUser";
       message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new user.`;
       if (newUser.author) {

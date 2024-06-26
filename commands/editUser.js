@@ -17,6 +17,7 @@ async function editUser(user, userDescription) {
     }
     logger.debug(`editUser updated user ${user.name}'s description: ${JSON.stringify(user.description)}`);
     if (changed) {
+        user.history.modifiedDate = new Date();
         await user.save();
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `User description saved! Type 'look ${user.name}' to view it.`));
         return;

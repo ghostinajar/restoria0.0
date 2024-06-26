@@ -8,6 +8,7 @@ import isValidName from "../util/isValidName.js";
 import Name from "../model/classes/Name.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
 // Return user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
@@ -66,7 +67,11 @@ async function createUser(userFormData, author) {
                 inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
             },
             pronouns: userFormData.pronouns,
-            creationDate: new Date(),
+            history: {
+                creationDate: new Date(),
+                modifiedDate: new Date(),
+                completionStatus: COMPLETION_STATUS.DRAFT,
+            },
             hoursPlayed: 0,
             job: userFormData.job,
             level: 1,

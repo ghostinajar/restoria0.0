@@ -30,7 +30,7 @@ export const userSchema = new Schema({
     },
     // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
     pronouns: { type: Number, required: true, default: 3 },
-    creationDate: { type: Date, required: true, default: Date.now },
+    history: { type: descriptionSchema, required: true },
     hoursPlayed: { type: Number, required: true, default: 0 },
     job: { type: String, required: true, default: "cleric" },
     level: { type: Number, required: true, default: 1 },

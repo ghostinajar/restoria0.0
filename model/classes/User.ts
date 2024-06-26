@@ -8,6 +8,7 @@ import locationSchema, { ILocation } from "./Location.js";
 import statBlockSchema, { IStatBlock } from "./StatBlock.js";
 import IRuntimeProps from "../../types/RuntimeProps.js";
 import IEquipped from "../../types/Equipped.js";
+import historySchema, { IHistory } from "./History.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -35,7 +36,7 @@ export interface IUser extends mongoose.Document {
   author: mongoose.Types.ObjectId | null;
   location: ILocation;
   pronouns: number;
-  creationDate: Date;
+  history: IHistory;
   hoursPlayed: number;
   job: string;
   level: number;
@@ -83,7 +84,7 @@ export const userSchema = new Schema<IUser>({
   },
   // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
   pronouns: { type: Number, required: true, default: 3 },
-  creationDate: { type: Date, required: true, default: Date.now },
+  history: { type: historySchema, required: true},
   hoursPlayed: { type: Number, required: true, default: 0 },
   job: { type: String, required: true, default: "cleric" },
   level: { type: Number, required: true, default: 1 },

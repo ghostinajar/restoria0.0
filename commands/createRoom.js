@@ -56,7 +56,6 @@ async function createRoom(roomFormData, author) {
                 creationDate: new Date(),
                 modifiedDate: new Date(),
                 completionStatus: COMPLETION_STATUS.DRAFT,
-                completionDate: null,
             },
             playerCap: 30,
             mobCap: 30,
