@@ -45,7 +45,7 @@ class UserManager {
 };
 
 
-  requestingWhoArrayHandler = async () => {
+  requestingWhoArrayHandler = async (username : string) => {
     let whoArray = [];
     // Populate array with all online players's level, job, name
     for (let user of this.users.values()) {
@@ -56,7 +56,7 @@ class UserManager {
       };
       whoArray.push(whoObject);
     }
-    worldEmitter.emit(`userManagerReturningWhoArray`, whoArray);
+    worldEmitter.emit(`userManagerReturningWhoArrayFor${username}`, whoArray);
   };
 
   socketCheckingMultiplayHandler = (id: mongoose.Types.ObjectId) => {

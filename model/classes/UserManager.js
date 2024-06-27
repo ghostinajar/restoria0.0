@@ -29,7 +29,7 @@ class UserManager {
         }
         worldEmitter.emit(`userManagerReturningUser${user.username}`, user);
     };
-    requestingWhoArrayHandler = async () => {
+    requestingWhoArrayHandler = async (username) => {
         let whoArray = [];
         // Populate array with all online players's level, job, name
         for (let user of this.users.values()) {
@@ -40,7 +40,7 @@ class UserManager {
             };
             whoArray.push(whoObject);
         }
-        worldEmitter.emit(`userManagerReturningWhoArray`, whoArray);
+        worldEmitter.emit(`userManagerReturningWhoArrayFor${username}`, whoArray);
     };
     socketCheckingMultiplayHandler = (id) => {
         logger.debug(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`);
