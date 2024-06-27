@@ -51,7 +51,7 @@ class ZoneManager {
     zoneRequestedHandler = async (zoneId) => {
         try {
             const zone = this.addZoneById(zoneId);
-            worldEmitter.emit(`zoneLoaded`, zone);
+            worldEmitter.emit(`zone${zoneId.toString()}Loaded`, zone);
         }
         catch (err) {
             logger.error(`Error in zoneRequestedHandler: ${err.message}`);

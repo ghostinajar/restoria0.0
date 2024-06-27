@@ -6,6 +6,7 @@ import itemSchema from "./Item.js";
 import descriptionSchema from "./Description.js";
 import locationSchema from "./Location.js";
 import statBlockSchema from "./StatBlock.js";
+import historySchema from "./History.js";
 const { Schema, Types, model } = mongoose;
 export const userSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -30,7 +31,7 @@ export const userSchema = new Schema({
     },
     // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
     pronouns: { type: Number, required: true, default: 3 },
-    history: { type: descriptionSchema, required: true },
+    history: { type: historySchema, required: true },
     hoursPlayed: { type: Number, required: true, default: 0 },
     job: { type: String, required: true, default: "cleric" },
     level: { type: Number, required: true, default: 1 },

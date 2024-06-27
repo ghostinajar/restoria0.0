@@ -26,8 +26,8 @@ async function createRoom(roomFormData, author) {
             logger.error(`Couldn't find origin room to create room.`);
         }
         let originZone = await new Promise((resolve) => {
-            worldEmitter.once(`zoneLoaded`, resolve);
-            worldEmitter.emit(`zoneRequested`, author.location.inZone);
+            worldEmitter.once(`zone${author.location.inZone.toString()}Loaded`, resolve);
+            worldEmitter.emit(`zoneRequested`, author.location.inZone.toString());
         });
         if (!originZone) {
             logger.error(`Couldn't find origin zone to create room.`);

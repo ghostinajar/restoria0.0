@@ -6,7 +6,7 @@ async function activateItemNodes(itemNodes, inventory, isNested = false) {
     for (const itemNode of itemNodes) {
         try {
             const zone = await new Promise((resolve) => {
-                worldEmitter.once(`zoneLoaded`, resolve);
+                worldEmitter.once(`zone${itemNode.fromZoneId.toString()}Loaded`, resolve);
                 worldEmitter.emit(`zoneRequested`, itemNode.fromZoneId.toString());
             });
             if (!zone) {

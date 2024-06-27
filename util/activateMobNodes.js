@@ -6,7 +6,7 @@ async function activateMobNodes(mobNodes, mobArray) {
     for (const mobNode of mobNodes) {
         try {
             const zone = await new Promise((resolve) => {
-                worldEmitter.once(`zoneLoaded`, resolve);
+                worldEmitter.once(`zone${mobNode.fromZoneId.toString()}Loaded`, resolve);
                 worldEmitter.emit(`zoneRequested`, mobNode.fromZoneId.toString());
             });
             if (!zone) {

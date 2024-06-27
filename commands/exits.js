@@ -21,7 +21,7 @@ async function exits(user) {
             //get zone (if exit.toExternalZone just use user's location.inZone)
             logger.debug(`exits command finding zone for ${key} exit...`);
             let zone = await new Promise((resolve) => {
-                worldEmitter.once(`zoneLoaded`, resolve);
+                worldEmitter.once(`zone${value.destinationLocation.inZone.toString()}Loaded`, resolve);
                 worldEmitter.emit(`zoneRequested`, value.destinationLocation.inZone);
             });
             //get room

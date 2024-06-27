@@ -72,7 +72,7 @@ class ZoneManager {
   zoneRequestedHandler = async (zoneId: mongoose.Types.ObjectId) => {
     try {
       const zone = this.addZoneById(zoneId);
-      worldEmitter.emit(`zoneLoaded`, zone);
+      worldEmitter.emit(`zone${zoneId.toString()}Loaded`, zone);
     } catch (err: any) {
       logger.error(`Error in zoneRequestedHandler: ${err.message}`);
     }
