@@ -1,5 +1,6 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
+import getRoomOfUser from "../util/getRoomOfUser.js";
 async function edit(parsedCommand, user) {
     let target = parsedCommand.directObject;
     if (!target) {
@@ -13,6 +14,22 @@ async function edit(parsedCommand, user) {
                 examine: user.description.examine,
                 study: user.description.study,
                 research: user.description.research,
+            });
+            break;
+        }
+        case `room`: {
+            const room = await getRoomOfUser(user);
+            worldEmitter.emit(`formPromptFor${user.username}`, {
+                form: `editRoomForm`,
+                name: room.name,
+                isDark: room.isDark,
+                isIndoors: room.isIndoors,
+                isOnWater: room.isOnWater,
+                isUnderwater: room.isUnderwater,
+                look: room.description.look,
+                examine: room.description.examine,
+                study: room.description.study,
+                research: room.description.research,
             });
             break;
         }

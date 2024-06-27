@@ -10,7 +10,6 @@ async function editUser(user, userDescription) {
         return;
     }
     truncateDescription(userDescription, user);
-    //replace with refactored logic to truncateDescription, then compare, then set description to user
     if (userDescription !== user.description) {
         user.description = userDescription;
         changed = true;

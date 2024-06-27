@@ -23,6 +23,8 @@ import {
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
+import editRoom from "./commands/editRoom.js";
+import getRoomOfUser from "./util/getRoomOfUser.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -127,6 +129,14 @@ const setupSocket = (io: any) => {
         `userSubmittedUserDescription`,
         async (userDescription: IDescription) => {
           await editUser(user, userDescription);
+        }
+      );
+
+      socket.on(
+        `userSubmittedRoomEdit`,
+        async (roomData: IRoomData) => {
+          const room = await getRoomOfUser(user);
+          await editRoom(room, roomData, user);
         }
       );
 

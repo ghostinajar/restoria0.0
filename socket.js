@@ -12,6 +12,8 @@ import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
 import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
+import editRoom from "./commands/editRoom.js";
+import getRoomOfUser from "./util/getRoomOfUser.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -69,6 +71,10 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedUserDescription`, async (userDescription) => {
                 await editUser(user, userDescription);
+            });
+            socket.on(`userSubmittedRoomEdit`, async (roomData) => {
+                const room = await getRoomOfUser(user);
+                await editRoom(room, roomData, user);
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);

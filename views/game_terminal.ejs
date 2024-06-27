@@ -28,7 +28,7 @@
             id="newRoomName"
             name="newRoomName"
             type="text"
-            autocomplete="newRoomName"
+            autocomplete="on"
             maxlength="60"
             required
           />
@@ -45,69 +45,69 @@
           </select>
         </section>
         <section>
-          <input type="checkbox" id="isDark" name="isDark" value="isDark" />
-          <label for="isDark">Dark</label>
+          <input type="checkbox" id="newIsDark" name="newIsDark" value="newIsDark" />
+          <label for="newIsDark">Dark</label>
           <input
             type="checkbox"
-            id="isIndoors"
-            name="isIndoors"
-            value="isIndoors"
+            id="newIsIndoors"
+            name="newIsIndoors"
+            value="newIsIndoors"
           />
-          <label for="isIndoors">Indoors</label>
+          <label for="newIsIndoors">Indoors</label>
 
           <input
             type="checkbox"
-            id="isOnWater"
-            name="isOnWater"
-            value="isOnWater"
+            id="newIsOnWater"
+            name="newIsOnWater"
+            value="newIsOnWater"
           />
+          <label for="newIsOnWater">On Water</label>
 
-          <label for="isOnWater">On Water</label>
           <input
             type="checkbox"
-            id="isUnderwater"
-            name="isUnderwater"
-            value="isUnderwater"
+            id="newIsUnderwater"
+            name="newIsUnderwater"
+            value="newIsUnderwater"
           />
-          <label for="isUnderwater">Underwater</label>
+          <label for="newIsUnderwater">Underwater</label>
         </section>
         <section>
-          <label for="lookRoom">Look:</label>
+          <label for="newLookRoom">Look:</label>
           <textarea
-            id="lookRoom"
-            name="lookRoom"
+            id="newLookRoom"
+            name="newLookRoom"
             type="text"
-            autocomplete="lookRoom"
+            autocomplete="off"
             maxlength="60"
           ></textarea>
         </section>
         <section>
-          <label for="examineRoom">Examine:</label>
+          <label for="newExamineRoom">Examine:</label>
           <textarea
-            id="examineRoom"
-            name="examineRoom"
+            id="newExamineRoom"
+            name="newExamineRoom"
             type="text"
-            autocomplete="examineRoom"
+            autocomplete="off"
             maxlength="240"
           ></textarea>
         </section>
         <section>
-          <label for="studyRoom">Study:</label>
+          <label for="newStudyRoom">Study:</label>
           <textarea
-            id="studyRoom"
-            name="studyRoom"
+            id="newStudyRoom"
+            name="newStudyRoom"
             type="text"
-            autocomplete="studyRoom"
+            autocomplete="off"
             maxlength="640"
           ></textarea>
         </section>
         <section>
-          <label for="researchRoom">Research:</label>
+          <label for="newResearchRoom">Research:</label>
           <textarea
-            id="researchRoom"
-            name="researchRoom"
+            id="newResearchRoom"
+            name="newResearchRoom"
             type="text"
-            autocomplete="researchRoom"
+            autocomplete="off"
             maxlength="1600"
           ></textarea>
         </section>
@@ -122,7 +122,7 @@
             id="newUserName"
             name="newUserName"
             type="text"
-            autocomplete="newUserName"
+            autocomplete="on"
             maxlength="18"
             required
           />
@@ -133,7 +133,7 @@
             id="new-password"
             name="password"
             type="password"
-            autocomplete="new-password"
+            autocomplete="password"
             required
           />
         </section>
@@ -159,6 +159,94 @@
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
 
+      <form id="editRoomForm" class="sideForm" style="display: none">
+        <section>
+          <label for="roomName">Name:</label>
+          <input
+            id="roomName"
+            name="roomName"
+            type="text"
+            autocomplete="on"
+            maxlength="60"
+            required
+          />
+        </section>
+        <section>
+          <input
+            type="checkbox"
+            id="isDark"
+            name="isDark"
+            value="isDark"
+          />
+          <label for="isDark">Dark</label>
+          <input
+            type="checkbox"
+            id="isIndoors"
+            name="isIndoors"
+            value="isIndoors"
+          />
+          <label for="isIndoors">Indoors</label>
+
+          <input
+            type="checkbox"
+            id="isOnWater"
+            name="isOnWater"
+            value="isOnWater"
+          />
+          <label for="isOnWater">On Water</label>
+
+          <input
+            type="checkbox"
+            id="isUnderwater"
+            name="isUnderwater"
+            value="isUnderwater"
+          />
+          <label for="isUnderwater">Underwater</label>
+        </section>
+        <section>
+          <label for="lookRoom">Look:</label>
+          <textarea
+            id="lookRoom"
+            name="lookRoom"
+            type="text"
+            autocomplete="off"
+            maxlength="60"
+          ></textarea>
+        </section>
+        <section>
+          <label for="examineRoom">Examine:</label>
+          <textarea
+            id="examineRoom"
+            name="examineRoom"
+            type="text"
+            autocomplete="off"
+            maxlength="240"
+          ></textarea>
+        </section>
+        <section>
+          <label for="studyRoom">Study:</label>
+          <textarea
+            id="studyRoom"
+            name="studyRoom"
+            type="text"
+            autocomplete="off"
+            maxlength="640"
+          ></textarea>
+        </section>
+        <section>
+          <label for="researchRoom">Research:</label>
+          <textarea
+            id="researchRoom"
+            name="researchRoom"
+            type="text"
+            autocomplete="off"
+            maxlength="1600"
+          ></textarea>
+        </section>
+        <button type="submit">Update Room</button>
+        <button type="button" id="cancelEditRoomForm">Cancel</button>
+      </form>
+
       <form id="editUserForm" class="sideForm" style="display: none">
         <section>
           <label for="examineUser">Examine:</label>
@@ -166,7 +254,7 @@
             id="examineUser"
             name="examineUser"
             type="text"
-            autocomplete="examineUser"
+            autocomplete="off"
             maxlength="240"
           ></textarea>
         </section>
@@ -176,7 +264,7 @@
             id="studyUser"
             name="studyUser"
             type="text"
-            autocomplete="studyUser"
+            autocomplete="off"
             maxlength="640"
           ></textarea>
         </section>
@@ -186,7 +274,7 @@
             id="researchUser"
             name="researchUser"
             type="text"
-            autocomplete="researchUser"
+            autocomplete="off"
             maxlength="1600"
           ></textarea>
         </section>
@@ -197,7 +285,7 @@
 
     <form id="commandForm" action="">
       <label for="commandInput"></label>
-      <input id="commandInput" autocomplete="off" maxlength="80" />
+      <input id="commandInput" autocomplete="on" maxlength="80" />
       <button type="submit">Send</button>
     </form>
 
@@ -208,6 +296,7 @@
       const commandForm = document.getElementById("commandForm");
       const createRoomForm = document.getElementById("createRoomForm");
       const createUserForm = document.getElementById("createUserForm");
+      const editRoomForm = document.getElementById("editRoomForm");
       const editUserForm = document.getElementById("editUserForm");
       const newUserName = document.getElementById("newUserName");
       const password = document.getElementById("new-password");
@@ -256,6 +345,10 @@
         editUserForm.style.display = "none";
       });
 
+      document.getElementById("cancelEditRoomForm").addEventListener("click", function () {
+        editRoomForm.style.display = "none";
+      });
+
       let activeForm = editUserForm;
 
       // Form submit button listeners
@@ -283,14 +376,14 @@
         const roomData = {
           name: document.getElementById("newRoomName").value,
           direction: document.getElementById("newRoomDirection").value,
-          isDark: document.getElementById("isDark").checked,
-          isIndoors: document.getElementById("isIndoors").checked,
-          isOnWater: document.getElementById("isOnWater").checked,
-          isUnderwater: document.getElementById("isUnderwater").checked,
-          look: document.getElementById("lookRoom").value,
-          examine: document.getElementById("examineRoom").value,
-          study: document.getElementById("studyRoom").value,
-          research: document.getElementById("researchRoom").value,
+          isDark: document.getElementById("newIsDark").checked,
+          isIndoors: document.getElementById("newIsIndoors").checked,
+          isOnWater: document.getElementById("newIsOnWater").checked,
+          isUnderwater: document.getElementById("newIsUnderwater").checked,
+          look: document.getElementById("newLookRoom").value,
+          examine: document.getElementById("newExamineRoom").value,
+          study: document.getElementById("newStudyRoom").value,
+          research: document.getElementById("newResearchRoom").value,
         };
         socket.emit("userSubmittedNewRoom", roomData);
         createRoomForm.reset();
@@ -309,6 +402,25 @@
         socket.emit("userSubmittedNewUser", userData);
         createUserForm.reset();
         createUserForm.style.display = "none"; // Hide the form after submission
+      });
+
+      editRoomForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const roomData = {
+          name: document.getElementById("roomName").value,
+          direction: '',
+          isDark: document.getElementById("isDark").checked,
+          isIndoors: document.getElementById("isIndoors").checked,
+          isOnWater: document.getElementById("isOnWater").checked,
+          isUnderwater: document.getElementById("isUnderwater").checked,
+          look: document.getElementById("lookRoom").value,
+          examine: document.getElementById("examineRoom").value,
+          study: document.getElementById("studyRoom").value,
+          research: document.getElementById("researchRoom").value,
+        };
+        socket.emit("userSubmittedRoomEdit", roomData);
+        createRoomForm.reset();
+        createRoomForm.style.display = "none"; // Hide the form after submission
       });
 
       editUserForm.addEventListener("submit", (e) => {
@@ -360,6 +472,24 @@
         document.getElementById("examineUser").value = formData.examine || '';
         document.getElementById("studyUser").value = formData.study || '';
         document.getElementById("researchUser").value = formData.research || '';
+      });
+
+      socket.on("openEditRoomForm", (formData) => {
+        activeForm.reset();
+        activeForm.style.display = "none";
+        activeForm = editRoomForm;
+        activeForm.style.display = "block";
+        input.value = "";
+        // Set the values of the fields based on formData
+        document.getElementById("roomName").value = formData.name || '';
+        document.getElementById("isDark").checked = formData.isDark || false;
+        document.getElementById("isIndoors").checked = formData.isIndoors || false;
+        document.getElementById("isOnWater").checked = formData.isOnWater || false;
+        document.getElementById("isUnderWater").checked = formData.isUnderWater || false;
+        document.getElementById("lookRoom").value = formData.look || '';
+        document.getElementById("examineRoom").value = formData.examine || '';
+        document.getElementById("studyRoom").value = formData.study || '';
+        document.getElementById("researchRoom").value = formData.research || '';
       });
 
       socket.on("invalid", (rejectionString) => {
