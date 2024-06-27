@@ -18,7 +18,7 @@ class MobManager {
         const mob = new Mob(blueprint);
         this.mobs.set(mob._id.toString(), mob);
         logger.log(`debug`, `mobManager added ${mob.name} to mobs. Mobs after adding: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`);
-        worldEmitter.emit('mobManagerAddedMob', mob);
+        worldEmitter.emit(`mobManagerAddedMobFromBlueprint${blueprint._id}`, mob);
     };
     removingMobHandler = async (mobId) => {
         logger.debug(`removingMobHandler called...`);

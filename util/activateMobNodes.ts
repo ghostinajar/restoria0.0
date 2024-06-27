@@ -35,8 +35,8 @@ async function activateMobNodes(
 
       for (let i = 0; i < mobNode.quantity; i++) {
         const mob: IMob = await new Promise((resolve) => {
-          worldEmitter.once("mobManagerAddedMob", resolve);
-          worldEmitter.emit("roomRequestingNewMob", blueprint);
+          worldEmitter.once(`mobManagerAddedMobFromBlueprint${blueprint._id}`, resolve);
+          worldEmitter.emit(`roomRequestingNewMob`, blueprint);
         });
         //TODO initiate mob inventory
         mob.inventory = [];
