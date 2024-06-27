@@ -22,7 +22,7 @@ async function telepath(parsedCommand : IParsedCommand, user : IUser) {
     };
 
     const target : IUser = await new Promise ((resolve) => {
-        worldEmitter.once(`userManagerReturningUser`, resolve);
+        worldEmitter.once(`userManagerReturningUser${parsedCommand.directObject}`, resolve);
         worldEmitter.emit(`requestingUser`, parsedCommand.directObject);
     });
     if (!target) {

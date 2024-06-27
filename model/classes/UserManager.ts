@@ -33,22 +33,17 @@ class UserManager {
     );
   };
 
-  requestingUserHandler = (username: string) => {
-    logger.debug(
-      `worldEmitter received 'requestingUser' and ${username}, checking...`
-    );
-    const user = this.getUserByUserName(username);
+  requestingUserHandler = async (username: string) => {
+    logger.debug(`worldEmitter received 'requestingUser' and ${username}, checking...`);
+    const user = await this.getUserByUserName(username);
     if (!user) {
-      logger.error(
-        `requestingUserHandler was returned a null or undefined user object for ${username}`
-      );
-      return;
+        logger.error(`requestingUserHandler couldn't find user ${username}`);
+        worldEmitter.emit(`userManagerReturningUser${username}`, null);
+        return;
     }
-    logger.debug(
-      `worldEmitter sending userManagerReturningUser with User promise for ${username}...`
-    );
-    worldEmitter.emit(`userManagerReturningUser`, user);
-  };
+    worldEmitter.emit(`userManagerReturningUser${user.username}`, user);
+};
+
 
   requestingWhoArrayHandler = async () => {
     let whoArray = [];

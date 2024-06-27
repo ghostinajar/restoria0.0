@@ -19,15 +19,15 @@ class UserManager {
         this.removeUserById(user._id);
         logger.debug(`Users after removal: ${Array.from(this.users.values()).map((user) => user.username)}`);
     };
-    requestingUserHandler = (username) => {
+    requestingUserHandler = async (username) => {
         logger.debug(`worldEmitter received 'requestingUser' and ${username}, checking...`);
-        const user = this.getUserByUserName(username);
+        const user = await this.getUserByUserName(username);
         if (!user) {
-            logger.error(`requestingUserHandler was returned a null or undefined user object for ${username}`);
+            logger.error(`requestingUserHandler couldn't find user ${username}`);
+            worldEmitter.emit(`userManagerReturningUser${username}`, null);
             return;
         }
-        logger.debug(`worldEmitter sending userManagerReturningUser with User promise for ${username}...`);
-        worldEmitter.emit(`userManagerReturningUser`, user);
+        worldEmitter.emit(`userManagerReturningUser${user.username}`, user);
     };
     requestingWhoArrayHandler = async () => {
         let whoArray = [];

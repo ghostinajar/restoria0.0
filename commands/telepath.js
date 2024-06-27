@@ -17,7 +17,7 @@ async function telepath(parsedCommand, user) {
     }
     ;
     const target = await new Promise((resolve) => {
-        worldEmitter.once(`userManagerReturningUser`, resolve);
+        worldEmitter.once(`userManagerReturningUser${parsedCommand.directObject}`, resolve);
         worldEmitter.emit(`requestingUser`, parsedCommand.directObject);
     });
     if (!target) {
