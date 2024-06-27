@@ -67,7 +67,7 @@ class UserManager {
     logger.debug(
       `worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`
     );
-    worldEmitter.emit(`userManagerCheckedMultiplay`, isDuplicate);
+    worldEmitter.emit(`userManagerCheckedMultiplayFor${id}`, isDuplicate);
   };
 
   socketConnectingUserHandler = async (id: mongoose.Types.ObjectId) => {

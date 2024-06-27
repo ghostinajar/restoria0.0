@@ -46,7 +46,7 @@ class UserManager {
         logger.debug(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`);
         const isDuplicate = this.users.has(id.toString());
         logger.debug(`worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`);
-        worldEmitter.emit(`userManagerCheckedMultiplay`, isDuplicate);
+        worldEmitter.emit(`userManagerCheckedMultiplayFor${id}`, isDuplicate);
     };
     socketConnectingUserHandler = async (id) => {
         logger.debug(`worldEmitter received 'socketConnectingUser' and ${id}, checking...`);

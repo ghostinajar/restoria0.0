@@ -4,7 +4,7 @@ async function disconnectMultiplayerOnSocket(socket) {
     try {
         // User multiplaying sockets? Disconnect.
         const isMultiplaying = await new Promise((resolve) => {
-            worldEmitter.once(`userManagerCheckedMultiplay`, resolve);
+            worldEmitter.once(`userManagerCheckedMultiplayFor${socket.request.session.passport.user._id}`, resolve);
             worldEmitter.emit(`socketCheckingMultiplay`, socket.request.session.passport.user._id);
         });
         if (isMultiplaying) {
