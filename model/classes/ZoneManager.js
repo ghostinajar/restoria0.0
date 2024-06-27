@@ -8,7 +8,7 @@ class ZoneManager {
         this.zones = new Map();
         worldEmitter.on("roomRequested", this.roomRequestedHandler);
         worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
-        worldEmitter.on("userManagerAddedUser", this.userManagerAddedUserHandler);
+        worldEmitter.on("placeUserRequest", this.placeUserRequestHandler);
         worldEmitter.on("zoneRequested", this.zoneRequestedHandler);
     }
     zones;
@@ -45,7 +45,7 @@ class ZoneManager {
         room.removeEntityFrom("users", user);
         worldEmitter.emit("zoneManagerRemovedUser", user);
     };
-    userManagerAddedUserHandler = async (user) => {
+    placeUserRequestHandler = async (user) => {
         this.placeUserInLocation(user);
     };
     zoneRequestedHandler = async (zoneId) => {
@@ -165,7 +165,7 @@ class ZoneManager {
     clearContents() {
         this.zones.clear();
         worldEmitter.off("socketDisconnectedUser", this.userLogoutHandler);
-        worldEmitter.off("userManagerAddedUser", this.userManagerAddedUserHandler);
+        worldEmitter.off("placeUserRequest", this.placeUserRequestHandler);
         worldEmitter.off("zoneRequested", this.zoneRequestedHandler);
     }
 }

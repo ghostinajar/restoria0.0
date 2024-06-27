@@ -7,7 +7,7 @@ async function setupUserOnSocket(socket: any) {
   try {
     // Get user, alert userManager
     const user: IUser = await new Promise((resolve) => {
-      worldEmitter.once(`userManagerAddedUser`, resolve);
+      worldEmitter.once(`userManagerAddedUser${socket.request.session.passport.user._id}`, resolve);
       worldEmitter.emit(
         `socketConnectingUser`,
         socket.request.session.passport.user._id

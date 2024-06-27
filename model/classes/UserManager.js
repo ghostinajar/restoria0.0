@@ -56,7 +56,8 @@ class UserManager {
             return;
         }
         logger.debug(`worldEmitter sending 'userManagerAddedUser' and user object for ${user.name}...`);
-        worldEmitter.emit(`userManagerAddedUser`, user);
+        worldEmitter.emit(`userManagerAddedUser${user._id}`, user);
+        worldEmitter.emit(`placeUserRequest`, user);
     };
     async addUserById(id) {
         try {
