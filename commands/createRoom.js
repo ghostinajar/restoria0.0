@@ -159,7 +159,7 @@ async function createRoom(roomFormData, author) {
         return newRoomData;
     }
     catch (error) {
-        logger.error(`Error in createUser: ${error.message} `);
+        logger.error(`Error in createRoom: ${error.message} `);
         throw error;
     }
 }

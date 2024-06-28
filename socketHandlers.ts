@@ -6,6 +6,10 @@ export const formPromptForUserHandler = async (
   formData : any,
   socket : any,
 ) => {
+  if (formData.form === 'createMobForm') {
+    socket.emit(`openCreateMobForm`, formData);
+    return;
+  }
   if (formData.form === 'createRoomForm') {
     socket.emit(`openCreateRoomForm`, formData);
     return;

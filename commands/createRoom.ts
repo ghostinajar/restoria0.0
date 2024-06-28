@@ -189,7 +189,7 @@ async function createRoom(
     await exits(author);
     return newRoomData;
   } catch (error: any) {
-    logger.error(`Error in createUser: ${error.message} `);
+    logger.error(`Error in createRoom: ${error.message} `);
     throw error;
   }
 }

@@ -8,6 +8,12 @@ async function create(parsedCommand, user) {
         return;
     }
     switch (target) {
+        case `mob`: {
+            worldEmitter.emit(`formPromptFor${user.username}`, {
+                form: `createMobForm`,
+            });
+            break;
+        }
         case `room`: {
             const unusedExits = await unusedExitsForUser(user);
             worldEmitter.emit(`formPromptFor${user.username}`, {

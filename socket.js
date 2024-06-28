@@ -14,6 +14,7 @@ import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHan
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
+import createMobBlueprint from "./commands/createMobBlueprint.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -62,6 +63,9 @@ const setupSocket = (io) => {
             // Listen for client events
             socket.on(`userSentCommand`, async (userInput) => {
                 userSentCommandHandler(socket, userInput, user);
+            });
+            socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {
+                const newMobBlueprint = await createMobBlueprint(mobBlueprintData, user);
             });
             socket.on(`userSubmittedNewRoom`, async (roomData) => {
                 const newRoom = await createRoom(roomData, user);

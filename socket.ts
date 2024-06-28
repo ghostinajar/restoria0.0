@@ -25,6 +25,7 @@ import {
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
+import createMobBlueprint, { IMobBlueprintData } from "./commands/createMobBlueprint.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -115,6 +116,10 @@ const setupSocket = (io: any) => {
       // Listen for client events
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
+      });
+
+      socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData: IMobBlueprintData) => {
+        const newMobBlueprint = await createMobBlueprint(mobBlueprintData, user);
       });
 
       socket.on(`userSubmittedNewRoom`, async (roomData: IRoomData) => {

@@ -21,7 +21,155 @@
         <ul id="messages"></ul>
       </div>
 
-      <form id="createRoomForm" class="sideForm" style="display: none">
+      <form
+        id="createMobForm"
+        class="sideForm"
+        style="display: none"
+        autocomplete="off"
+      >
+        <section>
+          <label for="newMobName">Name:</label>
+          <input
+            id="newMobName"
+            name="newMobName"
+            type="text"
+            autocomplete="on"
+            maxlength="36"
+            required
+          />
+        </section>
+        <section>
+          <label for="newMobPronouns">Pronouns:</label>
+          <select id="newMobPronouns" name="newMobPronouns" required>
+            <option value="0">He/Him</option>
+            <option value="1">It/It</option>
+            <option value="2">She/Her</option>
+            <option value="3">They/Them</option>
+          </select>
+        </section>
+        <section>
+          <label for="newMobLevel">Level:</label>
+          <select id="newMobLevel" name="newMobLevel" required>
+            <!-- populated by script -->
+          </select>
+          <label for="newMobJob">Job:</label>
+          <select id="newMobJob" name="newMobJob" required>
+            <option value="cleric">Cleric</option>
+            <option value="mage">Mage</option>
+            <option value="rogue">Rogue</option>
+            <option value="warrior">Warrior</option>
+          </select>
+        </section>
+        <!-- statBlock -->
+        <section>
+          <label for="newMobStr">Str:</label>
+          <select id="newMobStr" name="newMobStr" required>
+            <!-- populated by script -->
+          </select>
+          <label for="newMobDex">Dex:</label>
+          <select id="newMobDex" name="newMobDex" required>
+            <!-- populated by script -->
+          </select>
+          <label for="newMobCon">Con:</label>
+          <select id="newMobCon" name="newMobCon" required>
+            <!-- populated by script -->
+          </select>
+        </section>
+        <section>
+          <label for="newMobInt">Int:</label>
+          <select id="newMobInt" name="newMobInt" required>
+            <!-- populated by script -->
+          </select>
+          <label for="newMobWis">Wis:</label>
+          <select id="newMobWis" name="newMobWis" required>
+            <!-- populated by script -->
+          </select>
+          <label for="newMobSpi">Spi:</label>
+          <input
+            id="newMobSpi"
+            name="newMobSpi"
+            type="number"
+            min="-1000"
+            max="1000"
+            value="0"
+            step="100"
+            required
+          />
+        </section>
+        <section>
+          <label for="newMobKeywords">Keywords:</label>
+          <input
+            id="newMobKeywords"
+            name="newMobKeywords"
+            maxlength="80"
+            required
+          />
+        </section>
+        <section>
+          <input
+            type="checkbox"
+            id="newMobIsUnique"
+            name="newMobIsUnique"
+            value="isUnewMobIsUniquenique"
+          />
+          <label for="newMobIsUnique">Unique</label>
+          <input
+            type="checkbox"
+            id="newMobIsMount"
+            name="newMobIsMount"
+            value="newMobIsMount"
+          />
+          <label for="newMobIsMount">Mount</label>
+
+          <input
+            type="checkbox"
+            id="newMobIsAggressive"
+            name="newMobIsAggressive"
+            value="newMobIsAggressive"
+          />
+          <label for="newMobIsAggressive">Aggressive</label>
+        </section>
+        <section>
+          <label for="newLookMob">Look:</label>
+          <input id="newLookMob" name="newLookMob" type="text" maxlength="80" />
+        </section>
+        <section>
+          <label for="newExamineMob">Examine:</label>
+          <textarea
+            id="newExamineMob"
+            name="newExamineMob"
+            type="text"
+            maxlength="240"
+          ></textarea>
+        </section>
+        <section>
+          <label for="newStudyMob">Study:</label>
+          <textarea
+            id="newStudyMob"
+            name="newStudyMob"
+            type="text"
+            maxlength="640"
+          ></textarea>
+        </section>
+        <section>
+          <label for="newResearchMob">Research:</label>
+          <textarea
+            id="newResearchMob"
+            name="newResearchMob"
+            type="text"
+            maxlength="1600"
+          ></textarea>
+        </section>
+        <button type="submit">Create Mob</button>
+        <button type="button" id="cancelCreateMobForm">Cancel</button>
+      </form>
+
+      <form
+        id="createRoomForm"
+        class="sideForm"
+        style="display: none"
+        autocomplete="off"
+      >
         <section>
           <label for="newRoomName">Name:</label>
           <input
@@ -45,7 +193,12 @@
           </select>
         </section>
         <section>
-          <input type="checkbox" id="newIsDark" name="newIsDark" value="newIsDark" />
+          <input
+            type="checkbox"
+            id="newIsDark"
+            name="newIsDark"
+            value="newIsDark"
+          />
           <label for="newIsDark">Dark</label>
           <input
             type="checkbox"
@@ -77,7 +230,6 @@
             id="newExamineRoom"
             name="newExamineRoom"
             type="text"
-            autocomplete="off"
             maxlength="240"
           ></textarea>
         </section>
@@ -87,7 +239,6 @@
             id="newStudyRoom"
             name="newStudyRoom"
             type="text"
-            autocomplete="off"
             maxlength="640"
           ></textarea>
         </section>
@@ -97,7 +248,6 @@
             id="newResearchRoom"
             name="newResearchRoom"
             type="text"
-            autocomplete="off"
             maxlength="1600"
           ></textarea>
         </section>
@@ -105,27 +255,25 @@
         <button type="button" id="cancelCreateRoomForm">Cancel</button>
       </form>
 
-      <form id="createUserForm" class="sideForm" style="display: none">
+      <form
+        id="createUserForm"
+        class="sideForm"
+        style="display: none"
+        autocomplete="off"
+      >
         <section>
           <label for="newUserName">Name:</label>
           <input
             id="newUserName"
             name="newUserName"
             type="text"
-            autocomplete="on"
             maxlength="18"
             required
           />
         </section>
         <section>
           <label for="new-password">Password:</label>
-          <input
-            id="new-password"
-            name="password"
-            type="password"
-            autocomplete="off"
-            required
-          />
+          <input id="new-password" name="password" type="password" required />
         </section>
         <section>
           <label for="pronouns">Pronouns:</label>
@@ -149,7 +297,12 @@
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
 
-      <form id="editRoomForm" class="sideForm" style="display: none">
+      <form
+        id="editRoomForm"
+        class="sideForm"
+        style="display: none"
+        autocomplete="off"
+      >
         <section>
           <label for="roomName">Name:</label>
           <input
@@ -162,12 +315,7 @@
           />
         </section>
         <section>
-          <input
-            type="checkbox"
-            id="isDark"
-            name="isDark"
-            value="isDark"
-          />
+          <input type="checkbox" id="isDark" name="isDark" value="isDark" />
           <label for="isDark">Dark</label>
           <input
             type="checkbox"
@@ -201,20 +349,10 @@
             value="noMounts"
           />
           <label for="noMounts">No Mounts</label>
-          <input
-            type="checkbox"
-            id="noMobs"
-            name="noMobs"
-            value="noMobs"
-          />
+          <input type="checkbox" id="noMobs" name="noMobs" value="noMobs" />
           <label for="noMobs">No Mobs</label>
 
-          <input
-            type="checkbox"
-            id="noMagic"
-            name="noMagic"
-            value="noMagic"
-          />
+          <input type="checkbox" id="noMagic" name="noMagic" value="noMagic" />
           <label for="noMagic">No Magic</label>
 
           <input
@@ -231,7 +369,6 @@
             id="examineRoom"
             name="examineRoom"
             type="text"
-            autocomplete="off"
             maxlength="240"
           ></textarea>
         </section>
@@ -241,7 +378,6 @@
             id="studyRoom"
             name="studyRoom"
             type="text"
-            autocomplete="off"
             maxlength="640"
           ></textarea>
         </section>
@@ -251,7 +387,6 @@
             id="researchRoom"
             name="researchRoom"
             type="text"
-            autocomplete="off"
             maxlength="1600"
           ></textarea>
         </section>
@@ -259,14 +394,18 @@
         <button type="button" id="cancelEditRoomForm">Cancel</button>
       </form>
 
-      <form id="editUserForm" class="sideForm" style="display: none">
+      <form
+        id="editUserForm"
+        class="sideForm"
+        style="display: none"
+        autocomplete="off"
+      >
         <section>
           <label for="examineUser">Examine:</label>
           <textarea
             id="examineUser"
             name="examineUser"
             type="text"
-            autocomplete="off"
             maxlength="240"
           ></textarea>
         </section>
@@ -276,7 +415,6 @@
             id="studyUser"
             name="studyUser"
             type="text"
-            autocomplete="off"
             maxlength="640"
           ></textarea>
         </section>
@@ -286,7 +424,6 @@
             id="researchUser"
             name="researchUser"
             type="text"
-            autocomplete="off"
             maxlength="1600"
           ></textarea>
         </section>
@@ -295,9 +432,9 @@
       </form>
     </div>
 
-    <form id="commandForm" action="">
+    <form id="commandForm" action="" autocomplete="on">
       <label for="commandInput"></label>
-      <input id="commandInput" autocomplete="off" maxlength="80" />
+      <input id="commandInput" maxlength="80" />
       <button type="submit">Send</button>
     </form>
 
@@ -306,6 +443,7 @@
       const socket = io(); // no URL needed for now; defaults to host that serves the page
       const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
       const commandForm = document.getElementById("commandForm");
+      const createMobForm = document.getElementById("createMobForm");
       const createRoomForm = document.getElementById("createRoomForm");
       const createUserForm = document.getElementById("createUserForm");
       const editRoomForm = document.getElementById("editRoomForm");
@@ -318,6 +456,22 @@
       const directionSelect = document.getElementById("newRoomDirection");
 
       //methods definitions (validation and parsing are client version)
+
+      function generateSelectOptions(min, max, select) {
+        for (let i = min; i <= max; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            select.appendChild(option);
+        }
+      }
+      generateSelectOptions(1,31, document.getElementById('newMobLevel'));
+      generateSelectOptions(1,18, document.getElementById('newMobStr'));
+      generateSelectOptions(1,18, document.getElementById('newMobDex'));
+      generateSelectOptions(1,18, document.getElementById('newMobCon'));
+      generateSelectOptions(1,18, document.getElementById('newMobInt'));
+      generateSelectOptions(1,18, document.getElementById('newMobWis'));
+
       function isValidCommandWord(commandWord) {
         if (!validCommandWords.includes(commandWord.toLowerCase())) {
           return false;
@@ -345,6 +499,10 @@
       }
 
       // Form cancel button listeners
+      document.getElementById("cancelCreateMobForm").addEventListener("click", function () {
+        createMobForm.style.display = "none";
+      });
+
       document.getElementById("cancelCreateRoomForm").addEventListener("click", function () {
         createRoomForm.style.display = "none";
       });
@@ -381,6 +539,38 @@
           socket.emit("userSentCommand", input.value);
           input.value = "";
         }
+      });
+
+      createMobForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const mobBlueprintData = {
+          name: document.getElementById("newMobName").value,
+          pronouns: document.getElementById("newMobPronouns").value,
+          level: document.getElementById("newMobLevel").value,
+          job: document.getElementById("newMobJob").value,
+          statBlock: {
+            strength: document.getElementById("newMobStr").value,
+            dexterity: document.getElementById("newMobDex").value,
+            constitution: document.getElementById("newMobCon").value,
+            intelligence: document.getElementById("newMobInt").value,
+            wisdom: document.getElementById("newMobWis").value,
+            charisma: 10,
+            spirit: document.getElementById("newMobSpi").value,
+          },
+          keywords: document.getElementById("newMobKeywords").value,
+          isUnique: document.getElementById("newMobIsUnique").checked,
+          isMount: document.getElementById("newMobIsMount").checked,
+          isAggressive: document.getElementById("newMobIsAggressive").checked,
+          description: {
+            look: document.getElementById("newLookMob").value,
+            examine: document.getElementById("newExamineMob").value,
+            study: document.getElementById("newStudyMob").value,
+            research: document.getElementById("newResearchMob").value,
+          },
+        };
+        socket.emit("userSubmittedNewMobBlueprint", mobBlueprintData);
+        createMobForm.reset();
+        createMobForm.style.display = "none"; // Hide the form after submission
       });
 
       createRoomForm.addEventListener("submit", (e) => {
@@ -451,6 +641,15 @@
         socket.emit("userSubmittedUserDescription", userDescription);
         editUserForm.reset();
         editUserForm.style.display = "none"; // Hide the form after submission
+      });
+
+      socket.on("openCreateMobForm", (formData) => {
+        console.log(`openCreateMobForm received formData: ${JSON.stringify(formData)}`);
+        activeForm.reset();
+        activeForm.style.display = "none";
+        activeForm = createMobForm;
+        activeForm.style.display = "block";
+        input.value = "";
       });
 
       socket.on("openCreateRoomForm", (formData) => {

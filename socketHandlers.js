@@ -1,5 +1,9 @@
 import logger from "./logger.js";
 export const formPromptForUserHandler = async (formData, socket) => {
+    if (formData.form === 'createMobForm') {
+        socket.emit(`openCreateMobForm`, formData);
+        return;
+    }
     if (formData.form === 'createRoomForm') {
         socket.emit(`openCreateRoomForm`, formData);
         return;
