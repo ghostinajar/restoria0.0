@@ -9,6 +9,7 @@ import logger from "../../logger.js";
 import activateItemNodes from "../../util/activateItemNodes.js";
 import activateMobNodes from "../../util/activateMobNodes.js";
 import destroyMobs from "../../util/destroyMobs.js";
+import ROOM_TYPE from "../../constants/ROOM_TYPE.js";
 const { Schema } = mongoose;
 const roomSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -20,7 +21,10 @@ const roomSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Zone",
     },
-    roomType: String,
+    roomType: {
+        type: String,
+        default: ROOM_TYPE.NONE,
+    },
     name: String,
     history: {
         type: historySchema,
@@ -32,11 +36,10 @@ const roomSchema = new Schema({
     isIndoors: Boolean,
     isOnWater: Boolean,
     isUnderwater: Boolean,
-    isOnFire: Boolean,
-    blocksMounts: Boolean,
-    blocksMobs: Boolean,
-    blocksCasting: Boolean,
-    blocksCombat: Boolean,
+    noMounts: Boolean,
+    noMobs: Boolean,
+    noMagic: Boolean,
+    noCombat: Boolean,
     itemsForSale: [
         {
             itemBlueprint: {

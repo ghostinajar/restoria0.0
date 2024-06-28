@@ -4,7 +4,7 @@ function lookRoom(room, user, lookArray) {
     let roomNameMessage = makeMessage(`heading`, `${room.name}`);
     lookArray.push(roomNameMessage);
     //push a message for the room's description.look into look Array
-    let roomDescriptionMessage = makeMessage(`roomDescription`, `${room.description.look}`);
+    let roomDescriptionMessage = makeMessage(`roomDescription`, `${room.description.examine}`);
     lookArray.push(roomDescriptionMessage);
     //push a message for each item's description.look into lookArray
     for (let itemInRoom of room.inventory) {

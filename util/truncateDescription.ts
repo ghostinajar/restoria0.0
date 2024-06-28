@@ -4,13 +4,13 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 
 function truncateDescription(description: IDescription, user: IUser) {
-  if (description.look && description.look.length > 60) {
-    description.examine = description.look.substring(0, 60);
+  if (description.look && description.look.length > 80) {
+    description.look = description.look.substring(0, 80);
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage(
         `rejection`,
-        `Look descriptions should be 60 characters (1 lines) or less. Shortened to '${description.look}'.`
+        `Look descriptions should be 80 characters (1 lines) or less. Shortened to '${description.look}'.`
       )
     );
   }

@@ -40,7 +40,6 @@ async function createRoom(roomFormData, author) {
             return message;
         }
         const roomDescription = {
-            look: roomFormData.look,
             examine: roomFormData.examine,
             study: roomFormData.study,
             research: roomFormData.research,
@@ -63,11 +62,10 @@ async function createRoom(roomFormData, author) {
             isIndoors: roomFormData.isIndoors,
             isOnWater: roomFormData.isOnWater,
             isUnderwater: roomFormData.isUnderwater,
-            isOnFire: false,
-            blocksMounts: false,
-            blocksMobs: false,
-            blocksCasting: false,
-            blocksCombat: false,
+            noMounts: false,
+            noMobs: false,
+            noMagic: false,
+            noCombat: false,
             itemsForSale: [],
             mountIdForSale: [],
             mapCoords: originRoom.mapCoords.slice(), // Copy to avoid mutation
@@ -150,7 +148,8 @@ async function createRoom(roomFormData, author) {
         logger.debug(`createRoom adjusted exits in newRoomData ${JSON.stringify(newRoomData.exits)}`);
         logger.debug(`createRoom adjusted exits in originRoom ${JSON.stringify(originRoom.exits)}`);
         originZone.rooms.push(newRoomData);
-        originZone.save();
+        await originZone.save();
+        await originZone.initRooms();
         logger.debug(`Saved zone ${originZone.name} with rooms ${originZone.rooms.map(room => room.name)}`);
         logger.info(`Author "${author.name}" created room "${newRoomData.name}".`);
         message.type = "success";

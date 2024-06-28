@@ -10,7 +10,7 @@ function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
   //push a message for the room's description.look into look Array
   let roomDescriptionMessage = makeMessage(
     `roomDescription`,
-    `${room.description.look}`
+    `${room.description.examine}`
   );
   lookArray.push(roomDescriptionMessage);
   //push a message for each item's description.look into lookArray

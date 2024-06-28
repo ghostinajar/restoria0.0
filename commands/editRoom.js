@@ -10,7 +10,6 @@ async function editRoom(room, roomData, user) {
         return;
     }
     const newRoomDescription = {
-        look: roomData.look,
         examine: roomData.examine,
         study: roomData.study,
         research: roomData.research,
@@ -22,14 +21,26 @@ async function editRoom(room, roomData, user) {
         isIndoors: roomData.isIndoors,
         isOnWater: roomData.isOnWater,
         isUnderwater: roomData.isUnderwater,
+        noMounts: roomData.noMounts,
+        noMobs: roomData.noMobs,
+        noMagic: roomData.noMagic,
+        noCombat: roomData.noCombat,
     };
     let previousRoomFlags = {
         isDark: room.isDark,
         isIndoors: room.isIndoors,
         isOnWater: room.isOnWater,
         isUnderwater: room.isUnderwater,
+        noMounts: room.noMounts,
+        noMobs: room.noMobs,
+        noMagic: room.noMagic,
+        noCombat: room.noCombat,
     };
     //compare
+    if (roomData.name !== room.name) {
+        room.name = roomData.name;
+        changed = true;
+    }
     if (newRoomDescription !== room.description) {
         room.description = newRoomDescription;
         changed = true;
@@ -39,6 +50,10 @@ async function editRoom(room, roomData, user) {
         room.isIndoors = roomData.isIndoors;
         room.isOnWater = roomData.isOnWater;
         room.isUnderwater = roomData.isUnderwater;
+        room.noMounts = roomData.noMounts;
+        room.noMobs = roomData.noMobs;
+        room.noMagic = roomData.noMagic;
+        room.noCombat = roomData.noCombat;
         changed = true;
     }
     if (changed) {
@@ -53,12 +68,18 @@ async function editRoom(room, roomData, user) {
         }
         //TODO get zone of room
         await zone.save();
+        await zone.initRooms();
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Room updated!`));
-        logger.debug(`editRoom updated room ${room.name}: ${JSON.stringify(room.description)} 
+        logger.debug(`editRoom updated room ${room.name}: 
+      ${JSON.stringify(room.description)} 
       isDark: ${room.isDark} 
       isIndoors: ${room.isIndoors} 
       isOnWater: ${room.isOnWater} 
-      isUnderwater: ${room.isUnderwater}`);
+      isUnderwater: ${room.isUnderwater}
+      noMounts: ${room.noMounts}
+      noMobs: ${room.noMobs}
+      noMagic: ${room.noMagic}
+      noCombat: ${room.noCombat}`);
         return;
     }
     else {

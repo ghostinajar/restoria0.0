@@ -12,6 +12,7 @@ import destroyMobs from "../../util/destroyMobs.js";
 import { IMob } from "./Mob.js";
 import { IItem } from "./Item.js";
 import { IUser } from "./User.js";
+import ROOM_TYPE from "../../constants/ROOM_TYPE.js";
 
 const { Schema } = mongoose;
 
@@ -33,11 +34,10 @@ export interface IRoom {
   isIndoors: boolean;
   isOnWater: boolean;
   isUnderwater: boolean;
-  isOnFire: boolean;
-  blocksMounts: boolean;
-  blocksMobs: boolean;
-  blocksCasting: boolean;
-  blocksCombat: boolean;
+  noMounts: boolean;
+  noMobs: boolean;
+  noMagic: boolean;
+  noCombat: boolean;
   itemsForSale: Array<IForSale>;
   mountIdForSale: Array<IForSale>;
   mapCoords: Array<number>;
@@ -70,7 +70,10 @@ const roomSchema = new Schema<IRoom>({
     type: Schema.Types.ObjectId,
     ref: "Zone",
   },
-  roomType: String,
+  roomType: {
+    type: String,
+    default: ROOM_TYPE.NONE,
+  },
   name: String,
   history: {
     type: historySchema,
@@ -82,11 +85,10 @@ const roomSchema = new Schema<IRoom>({
   isIndoors: Boolean,
   isOnWater: Boolean,
   isUnderwater: Boolean,
-  isOnFire: Boolean,
-  blocksMounts: Boolean,
-  blocksMobs: Boolean,
-  blocksCasting: Boolean,
-  blocksCombat: Boolean,
+  noMounts: Boolean,
+  noMobs: Boolean,
+  noMagic: Boolean,
+  noCombat: Boolean,
   itemsForSale: [
     {
       itemBlueprint: {

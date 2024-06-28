@@ -23,7 +23,10 @@ export interface IRoomData {
   isIndoors: boolean;
   isOnWater: boolean;
   isUnderwater: boolean;
-  look: string;
+  noMounts: boolean;
+  noMobs: boolean;
+  noMagic: boolean;
+  noCombat: boolean;
   examine: string;
   study: string;
   research: string;
@@ -64,7 +67,6 @@ async function createRoom(
     }
 
     const roomDescription : IDescription = {
-      look: roomFormData.look,
       examine: roomFormData.examine,
       study: roomFormData.study,
       research: roomFormData.research,
@@ -88,11 +90,10 @@ async function createRoom(
       isIndoors: roomFormData.isIndoors,
       isOnWater: roomFormData.isOnWater,
       isUnderwater: roomFormData.isUnderwater,
-      isOnFire: false,
-      blocksMounts: false,
-      blocksMobs: false,
-      blocksCasting: false,
-      blocksCombat: false,
+      noMounts: false,
+      noMobs: false,
+      noMagic: false,
+      noCombat: false,
       itemsForSale: [],
       mountIdForSale: [],
       mapCoords: originRoom.mapCoords.slice(), // Copy to avoid mutation
@@ -177,7 +178,8 @@ async function createRoom(
     logger.debug(`createRoom adjusted exits in originRoom ${JSON.stringify(originRoom.exits)}`);
 
     originZone.rooms.push(newRoomData);
-    originZone.save();
+    await originZone.save();
+    await originZone.initRooms();
     logger.debug(`Saved zone ${originZone.name} with rooms ${originZone.rooms.map(room => room.name)}`)
 
     logger.info(`Author "${author.name}" created room "${newRoomData.name}".`);

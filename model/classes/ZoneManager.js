@@ -147,7 +147,6 @@ class ZoneManager {
         try {
             const zone = this.zones.get(id.toString());
             if (zone) {
-                //TODO how to declare .clearRooms() in IZone interface? or should I run this some other way? Is initRooms(zoneToInit) its own function?
                 await zone.clearRooms();
                 logger.debug(`Removing zone "${zone.name}" from zones...`);
                 this.zones.delete(id.toString());

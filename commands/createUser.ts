@@ -109,7 +109,6 @@ async function createUser(
         warrior: 0,
       },
       description: {
-        look: ``,
         examine: ``,
         study: ``,
         research: ``,
