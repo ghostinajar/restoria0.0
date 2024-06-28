@@ -133,7 +133,7 @@
             id="new-password"
             name="password"
             type="password"
-            autocomplete="password"
+            autocomplete="off"
             required
           />
         </section>
@@ -285,7 +285,7 @@
 
     <form id="commandForm" action="">
       <label for="commandInput"></label>
-      <input id="commandInput" autocomplete="on" maxlength="80" />
+      <input id="commandInput" autocomplete="off" maxlength="80" />
       <button type="submit">Send</button>
     </form>
 
@@ -480,12 +480,13 @@
         activeForm = editRoomForm;
         activeForm.style.display = "block";
         input.value = "";
+        console.log(JSON.stringify(formData));
         // Set the values of the fields based on formData
         document.getElementById("roomName").value = formData.name || '';
         document.getElementById("isDark").checked = formData.isDark || false;
         document.getElementById("isIndoors").checked = formData.isIndoors || false;
         document.getElementById("isOnWater").checked = formData.isOnWater || false;
-        document.getElementById("isUnderWater").checked = formData.isUnderWater || false;
+        document.getElementById("isUnderwater").checked = formData.isUnderwater || false;
         document.getElementById("lookRoom").value = formData.look || '';
         document.getElementById("examineRoom").value = formData.examine || '';
         document.getElementById("studyRoom").value = formData.study || '';
