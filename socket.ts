@@ -19,6 +19,7 @@ import {
   messageForUserHandler,
   messageForUsersRoomHandler,
   messageForUsersZoneHandler,
+  userSelectedMobEditHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
@@ -26,6 +27,7 @@ import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint, { IMobBlueprintData } from "./commands/createMobBlueprint.js";
+import mongoose from "mongoose";
 
 const setupSocket = (io: any) => {
   try {
@@ -114,6 +116,11 @@ const setupSocket = (io: any) => {
       );
 
       // Listen for client events
+      socket.on(`userSelectedMobEdit`, async (mobId: mongoose.Types.ObjectId | string) => {
+        logger.debug(`User selected MobEdit for ${mobId}.`);
+        userSelectedMobEditHandler(user, mobId);
+      });
+
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
       });

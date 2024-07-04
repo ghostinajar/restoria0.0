@@ -1,6 +1,7 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
+import getZoneOfUser from "../util/getZoneofUser.js";
 async function edit(parsedCommand, user) {
     let target = parsedCommand.directObject;
     if (!target) {
@@ -9,10 +10,7 @@ async function edit(parsedCommand, user) {
     }
     switch (target) {
         case `mob`: {
-            const zone = await new Promise((resolve) => {
-                worldEmitter.once(`zone${user.location.inZone.toString()}Loaded`, resolve);
-                worldEmitter.emit(`zoneRequested`, user.location.inZone);
-            });
+            const zone = await getZoneOfUser(user);
             const mobBlueprintList = zone.mobBlueprints.map(blueprint => { return { "id": blueprint._id, "value": blueprint.name }; });
             worldEmitter.emit(`formPromptFor${user.username}`, { form: `editMobSelect`, list: mobBlueprintList });
             break;

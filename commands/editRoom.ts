@@ -5,6 +5,7 @@ import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import { IZone } from "../model/classes/Zone.js";
 import makeMessage from "../types/makeMessage.js";
+import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IRoomData } from "./createRoom.js";
 
@@ -76,10 +77,7 @@ async function editRoom(room: IRoom, roomData: IRoomData, user: IUser) {
 
   if (changed) {
     room.history.modifiedDate = new Date();
-    const zone: IZone = await new Promise((resolve)=>{
-      worldEmitter.once(`zone${user.location.inZone.toString()}Loaded`, resolve);
-      worldEmitter.emit(`zoneRequested`, user.location.inZone)
-    });
+    const zone: IZone = await getZoneOfUser(user);
     if (!zone) {
       logger.error(`editRoom couldn't find zone to save for user ${user.username}'s location.}`);
       return;
