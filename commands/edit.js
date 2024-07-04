@@ -8,13 +8,13 @@ async function edit(parsedCommand, user) {
         return;
     }
     switch (target) {
-        case `user`: {
-            worldEmitter.emit(`formPromptFor${user.username}`, {
-                form: `editUserForm`,
-                examine: user.description.examine,
-                study: user.description.study,
-                research: user.description.research,
+        case `mob`: {
+            const zone = await new Promise((resolve) => {
+                worldEmitter.once(`zone${user.location.inZone.toString()}Loaded`, resolve);
+                worldEmitter.emit(`zoneRequested`, user.location.inZone);
             });
+            const mobBlueprintList = zone.mobBlueprints.map(blueprint => { return { "id": blueprint._id, "value": blueprint.name }; });
+            worldEmitter.emit(`formPromptFor${user.username}`, { form: `editMobSelect`, list: mobBlueprintList });
             break;
         }
         case `room`: {
@@ -33,6 +33,15 @@ async function edit(parsedCommand, user) {
                 examine: room.description.examine,
                 study: room.description.study,
                 research: room.description.research,
+            });
+            break;
+        }
+        case `user`: {
+            worldEmitter.emit(`formPromptFor${user.username}`, {
+                form: `editUserForm`,
+                examine: user.description.examine,
+                study: user.description.study,
+                research: user.description.research,
             });
             break;
         }

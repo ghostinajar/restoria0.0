@@ -14,6 +14,10 @@ export const formPromptForUserHandler = async (
     socket.emit(`openCreateRoomForm`, formData);
     return;
   }
+  if (formData.form === 'createUserForm') {
+    socket.emit(`openCreateUserForm`);
+    return;
+  }
   if (formData.form === 'editUserForm') {
     socket.emit(`openEditUserForm`, formData);
     return;
@@ -22,8 +26,8 @@ export const formPromptForUserHandler = async (
     socket.emit(`openEditRoomForm`, formData);
     return;
   }
-  if (formData.form === 'createUserForm') {
-    socket.emit(`openCreateUserForm`);
+  if (formData.form === 'editMobSelect') {
+    socket.emit(`openEditMobSelect`, formData.list);
     return;
   }
 }

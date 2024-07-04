@@ -16,11 +16,28 @@
       </form>
     </nav>
 
+    <!-- Messages and side forms -->
     <div>
       <div id="messagesContainer">
         <ul id="messages"></ul>
       </div>
-
+      <!-- Edit mob select -->
+      <form 
+        id="editMobSelect"
+        class="sideForm"
+        style="display: none"
+        autocomplete="off"
+      >
+      <section>
+        <label for="editMobSelectName">Name:</label>
+        <select id="editMobSelectName" name="editMobSelectName" required>
+          <!-- populated by script -->
+        </select>
+      </section>
+      <button type="submit">Select Mob</button>
+      <button type="button" id="cancelEditMobSelect">Cancel</button>
+      </form>
+      <!-- Create Mob form -->
       <form
         id="createMobForm"
         class="sideForm"
@@ -163,7 +180,7 @@
         <button type="submit">Create Mob</button>
         <button type="button" id="cancelCreateMobForm">Cancel</button>
       </form>
-
+      <!-- Create room form -->
       <form
         id="createRoomForm"
         class="sideForm"
@@ -254,7 +271,7 @@
         <button type="submit">Create Room</button>
         <button type="button" id="cancelCreateRoomForm">Cancel</button>
       </form>
-
+      <!-- Create user form -->
       <form
         id="createUserForm"
         class="sideForm"
@@ -296,7 +313,7 @@
         <button type="submit">Create User</button>
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
-
+      <!-- Edit room form -->
       <form
         id="editRoomForm"
         class="sideForm"
@@ -393,7 +410,7 @@
         <button type="submit">Update Room</button>
         <button type="button" id="cancelEditRoomForm">Cancel</button>
       </form>
-
+      <!-- Edit user form -->
       <form
         id="editUserForm"
         class="sideForm"
@@ -432,6 +449,7 @@
       </form>
     </div>
 
+    <!-- Command form -->
     <form id="commandForm" action="" autocomplete="on">
       <label for="commandInput"></label>
       <input id="commandInput" maxlength="80" />
@@ -446,6 +464,7 @@
       const createMobForm = document.getElementById("createMobForm");
       const createRoomForm = document.getElementById("createRoomForm");
       const createUserForm = document.getElementById("createUserForm");
+      const editMobSelect = document.getElementById("editMobSelect");
       const editRoomForm = document.getElementById("editRoomForm");
       const editUserForm = document.getElementById("editUserForm");
       const newUserName = document.getElementById("newUserName");
@@ -456,8 +475,18 @@
       const directionSelect = document.getElementById("newRoomDirection");
 
       //methods definitions (validation and parsing are client version)
+      function generateStringSelectOptions(stringArray, select) {
+        select.options.length = 0;
+        for (let i = 0; i <= stringArray.length-1; i++) {
+            const option = document.createElement('option');
+            option.value = stringArray[i].id;
+            option.textContent = stringArray[i].value;
+            select.appendChild(option);
+        }
+      }
 
-      function generateSelectOptions(min, max, select) {
+      function generateNumberSelectOptions(min, max, select) {
+        select.options.length = 0;
         for (let i = min; i <= max; i++) {
             const option = document.createElement('option');
             option.value = i;
@@ -465,12 +494,12 @@
             select.appendChild(option);
         }
       }
-      generateSelectOptions(1,31, document.getElementById('newMobLevel'));
-      generateSelectOptions(1,18, document.getElementById('newMobStr'));
-      generateSelectOptions(1,18, document.getElementById('newMobDex'));
-      generateSelectOptions(1,18, document.getElementById('newMobCon'));
-      generateSelectOptions(1,18, document.getElementById('newMobInt'));
-      generateSelectOptions(1,18, document.getElementById('newMobWis'));
+      generateNumberSelectOptions(1,31, document.getElementById('newMobLevel'));
+      generateNumberSelectOptions(4,18, document.getElementById('newMobStr'));
+      generateNumberSelectOptions(4,18, document.getElementById('newMobDex'));
+      generateNumberSelectOptions(4,18, document.getElementById('newMobCon'));
+      generateNumberSelectOptions(4,18, document.getElementById('newMobInt'));
+      generateNumberSelectOptions(4,18, document.getElementById('newMobWis'));
 
       function isValidCommandWord(commandWord) {
         if (!validCommandWords.includes(commandWord.toLowerCase())) {
@@ -509,6 +538,10 @@
 
       document.getElementById("cancelCreateUserForm").addEventListener("click", function () {
         createUserForm.style.display = "none";
+      });
+
+      document.getElementById("cancelEditMobSelect").addEventListener("click", function () {
+        editMobSelect.style.display = "none";
       });
 
       document.getElementById("cancelEditUserForm").addEventListener("click", function () {
@@ -609,6 +642,14 @@
         createUserForm.style.display = "none"; // Hide the form after submission
       });
 
+      editMobSelect.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const mobId = document.getElementById("editMobSelectName").value;
+        socket.emit("userSelectedMobEdit", mobId);
+        editMobSelect.reset();
+        editMobSelect.style.display = "none"; // Hide the form after submission
+      });
+
       editRoomForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const roomData = {
@@ -643,6 +684,7 @@
         editUserForm.style.display = "none"; // Hide the form after submission
       });
 
+      //socket event listeners
       socket.on("openCreateMobForm", (formData) => {
         console.log(`openCreateMobForm received formData: ${JSON.stringify(formData)}`);
         activeForm.reset();
@@ -679,6 +721,16 @@
         input.value = "";
       });
 
+      socket.on("openEditMobSelect", (formData) => {
+        activeForm.reset();
+        activeForm.style.display = "none";
+        activeForm = editMobSelect;
+        activeForm.style.display = "block";
+        input.value = "";
+        // Set the editMobSelectName options
+        generateStringSelectOptions(formData, document.getElementById('editMobSelectName'))
+      });
+      
       socket.on("openEditUserForm", (formData) => {
         activeForm.reset();
         activeForm.style.display = "none";
