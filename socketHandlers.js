@@ -56,6 +56,7 @@ export const userSelectedMobEditHandler = async (user, mobId) => {
     }
     logger.debug(`userSelectedMobEditHandler found blueprint for ${mobBlueprint.name}`);
     const editMobBlueprintFormData = {
+        _id: mobBlueprint?._id,
         name: mobBlueprint?.name,
         pronouns: mobBlueprint?.pronouns,
         level: mobBlueprint?.level,

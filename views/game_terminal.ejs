@@ -608,6 +608,7 @@
       const createRoomForm = document.getElementById("createRoomForm");
       const createUserForm = document.getElementById("createUserForm");
       const editMobForm = document.getElementById("editMobForm");
+      let editMobId = '';
       const editMobSelect = document.getElementById("editMobSelect");
       const editRoomForm = document.getElementById("editRoomForm");
       const editUserForm = document.getElementById("editUserForm");
@@ -732,6 +733,7 @@
       createMobForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const mobBlueprintData = {
+          _id: editMobId,
           name: document.getElementById("newMobName").value,
           pronouns: document.getElementById("newMobPronouns").value,
           level: document.getElementById("newMobLevel").value,
@@ -799,6 +801,7 @@
 
       editMobForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        const mobId = editMobId;
         const mobBlueprintData = {
           name: document.getElementById("editMobName").value,
           pronouns: document.getElementById("editMobPronouns").value,
@@ -824,7 +827,7 @@
             research: document.getElementById("editResearchMob").value,
           },
         };
-        socket.emit("userSubmittedEditMobBlueprint", mobBlueprintData);
+        socket.emit("userSubmittedEditMobBlueprint", mobId, mobBlueprintData);
         editMobForm.reset();
         editMobForm.style.display = "none"; // Hide the form after submission
       });
@@ -927,6 +930,7 @@
         input.value = "";
         console.log(JSON.stringify(formData));
         // Set the values of the fields based on formData
+        editMobId = formData._id || '';
         document.getElementById("editMobName").value = formData.name || '';
         document.getElementById("editMobPronouns").value = formData.pronouns || 0;
         document.getElementById("editMobLevel").value = formData.level || 1;

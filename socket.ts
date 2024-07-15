@@ -28,6 +28,7 @@ import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint, { IMobBlueprintData } from "./commands/createMobBlueprint.js";
 import mongoose from "mongoose";
+import editMobBlueprint from "./commands/editMobBlueprint.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -123,6 +124,10 @@ const setupSocket = (io: any) => {
 
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
+      });
+
+      socket.on(`userSubmittedEditMobBlueprint`, async (mobId: mongoose.Types.ObjectId, mobBlueprintData: IMobBlueprintData) => {
+        await editMobBlueprint(mobId, mobBlueprintData, user)
       });
 
       socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData: IMobBlueprintData) => {
