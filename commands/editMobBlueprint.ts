@@ -9,7 +9,6 @@ import truncateDescription from "../util/truncateDescription.js";
 import { IMobBlueprintData } from "./createMobBlueprint.js";
 
 async function editMobBlueprint(mobId: mongoose.Types.ObjectId, mobBlueprintData: IMobBlueprintData, user: IUser) {
-  let changed = false;
   logger.debug(`editMobBlueprint submitted by user ${user.name} for mob id: ${mobId.toString()}`);
   if (!mobId || !mobBlueprintData || !user) {
     worldEmitter.emit(
@@ -35,8 +34,20 @@ async function editMobBlueprint(mobId: mongoose.Types.ObjectId, mobBlueprintData
   }
   logger.debug(`editMobBlueprint found a match! ${mob.name}`)
 
-  //TODO compare, update, flag changed
-
+  //compare, update, flag changed
+  function updateMob(newData: any, existingData : any) {
+    for (let key in mobBlueprintData) {
+      if (mobBlueprintData.hasOwnProperty(key)) {
+        if (existingData[key] !== newData[key]) {
+          existingData[key] = newData[key];
+          changed = true;
+        }
+      }
+    }
+  }
+  let changed = false;
+  updateMob(mobBlueprintData, mob);
+  logger.debug(`editMobBlueprint has changed: ${changed}`)
   if (changed) {
     mob.history.modifiedDate = new Date();
     await zone.save();

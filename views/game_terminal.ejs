@@ -50,7 +50,6 @@
             id="newMobName"
             name="newMobName"
             type="text"
-            autocomplete="on"
             maxlength="36"
             required
           />
@@ -313,9 +312,9 @@
         <button type="submit">Create User</button>
         <button type="button" id="cancelCreateUserForm">Cancel</button>
       </form>
-      <!-- Edit mob form -->
+      <!-- Edit mob blueprint form -->
       <form
-        id="editMobForm"
+        id="editMobBlueprintForm"
         class="sideForm"
         style="display: none"
         autocomplete="off"
@@ -326,7 +325,6 @@
             id="editMobName"
             name="editMobName"
             type="text"
-            autocomplete="on"
             maxlength="36"
             required
           />
@@ -454,7 +452,7 @@
           ></textarea>
         </section>
         <button type="submit">Update Mob</button>
-        <button type="button" id="cancelEditMobForm">Cancel</button>
+        <button type="button" id="cancelEditMobBlueprintForm">Cancel</button>
       </form>
       <!-- Edit room form -->
       <form
@@ -469,7 +467,6 @@
             id="roomName"
             name="roomName"
             type="text"
-            autocomplete="on"
             maxlength="60"
             required
           />
@@ -593,7 +590,7 @@
     </div>
 
     <!-- Command form -->
-    <form id="commandForm" action="" autocomplete="on">
+    <form id="commandForm" action="" autocomplete="off">
       <label for="commandInput"></label>
       <input id="commandInput" maxlength="80" />
       <button type="submit">Send</button>
@@ -607,7 +604,7 @@
       const createMobForm = document.getElementById("createMobForm");
       const createRoomForm = document.getElementById("createRoomForm");
       const createUserForm = document.getElementById("createUserForm");
-      const editMobForm = document.getElementById("editMobForm");
+      const editMobBlueprintForm = document.getElementById("editMobBlueprintForm");
       let editMobId = '';
       const editMobSelect = document.getElementById("editMobSelect");
       const editRoomForm = document.getElementById("editRoomForm");
@@ -696,8 +693,8 @@
         editMobSelect.style.display = "none";
       });
 
-      document.getElementById("cancelEditMobForm").addEventListener("click", function () {
-        editMobForm.style.display = "none";
+      document.getElementById("cancelEditMobBlueprintForm").addEventListener("click", function () {
+        editMobBlueprintForm.style.display = "none";
       });
 
       document.getElementById("cancelEditUserForm").addEventListener("click", function () {
@@ -799,7 +796,7 @@
         createUserForm.style.display = "none"; // Hide the form after submission
       });
 
-      editMobForm.addEventListener("submit", (e) => {
+      editMobBlueprintForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const mobId = editMobId;
         const mobBlueprintData = {
@@ -828,15 +825,14 @@
           },
         };
         socket.emit("userSubmittedEditMobBlueprint", mobId, mobBlueprintData);
-        editMobForm.reset();
-        editMobForm.style.display = "none"; // Hide the form after submission
+        editMobBlueprintForm.reset();
+        editMobBlueprintForm.style.display = "none"; // Hide the form after submission
       });
 
       editMobSelect.addEventListener("submit", (e) => {
         e.preventDefault();
-        const mobId = document.getElementById("editMobSelectName").value;
-        console.log(mobId);
-        socket.emit("userSelectedMobEdit", mobId);
+        editMobId = document.getElementById("editMobSelectName").value;
+        socket.emit("userSelectedMobEdit", editMobId);
         editMobSelect.reset();
         editMobSelect.style.display = "none"; // Hide the form after submission
       });
@@ -880,7 +876,7 @@
         console.log(`openCreateMobForm received formData: ${JSON.stringify(formData)}`);
         activeForm.reset();
         activeForm.style.display = "none";
-        activeForm = createMobForm;
+        activeForm = createMobForm; 
         activeForm.style.display = "block";
         input.value = "";
       });
@@ -925,12 +921,11 @@
       socket.on("openEditMobBlueprintForm", (formData) => {
         activeForm.reset();
         activeForm.style.display = "none";
-        activeForm = editMobForm;
+        activeForm = editMobBlueprintForm;
         activeForm.style.display = "block";
         input.value = "";
         console.log(JSON.stringify(formData));
         // Set the values of the fields based on formData
-        editMobId = formData._id || '';
         document.getElementById("editMobName").value = formData.name || '';
         document.getElementById("editMobPronouns").value = formData.pronouns || 0;
         document.getElementById("editMobLevel").value = formData.level || 1;

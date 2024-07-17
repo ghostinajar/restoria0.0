@@ -29,6 +29,7 @@ import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint, { IMobBlueprintData } from "./commands/createMobBlueprint.js";
 import mongoose from "mongoose";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
+import exits from "./commands/exits.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -164,6 +165,7 @@ const setupSocket = (io: any) => {
       );
       worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);
       await look({ commandWord: `look` }, user);
+      await exits(user);
       stats(user);
 
       socket.on(`disconnect`, async () => {

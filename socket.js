@@ -16,6 +16,7 @@ import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
+import exits from "./commands/exits.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -92,6 +93,7 @@ const setupSocket = (io) => {
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
             worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);
             await look({ commandWord: `look` }, user);
+            await exits(user);
             stats(user);
             socket.on(`disconnect`, async () => {
                 try {
