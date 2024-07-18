@@ -1,3 +1,4 @@
+// authenticateSessionUserOnSocket
 import logger from "../logger.js";
 function authenticateSessionUserOnSocket(socket) {
     try {
@@ -9,7 +10,11 @@ function authenticateSessionUserOnSocket(socket) {
             socket.disconnect();
             return false;
         }
-        logger.debug(`socket.request.session.passport.user authenticated, contains ${JSON.stringify(socket.request.session.passport.user)}`);
+        // logger.debug(
+        //   `socket.request.session.passport.user authenticated, contains ${JSON.stringify(
+        //     socket.request.session.passport.user
+        //   )}`
+        // );
         return true;
     }
     catch (err) {
@@ -17,5 +22,4 @@ function authenticateSessionUserOnSocket(socket) {
         throw err;
     }
 }
-;
 export default authenticateSessionUserOnSocket;

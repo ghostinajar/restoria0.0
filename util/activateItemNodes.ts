@@ -15,7 +15,10 @@ async function activateItemNodes(
   for (const itemNode of itemNodes) {
     try {
       const zone: IZone = await new Promise((resolve) => {
-        worldEmitter.once(`zone${itemNode.fromZoneId.toString()}Loaded`, resolve);
+        worldEmitter.once(
+          `zone${itemNode.fromZoneId.toString()}Loaded`,
+          resolve
+        );
         worldEmitter.emit(`zoneRequested`, itemNode.fromZoneId.toString());
       });
       if (!zone) {
@@ -23,10 +26,12 @@ async function activateItemNodes(
         return null;
       }
 
-      const blueprint: IItemBlueprint | undefined = await zone.itemBlueprints.find(
-        (blueprint) =>
-          blueprint._id.toString() === itemNode.loadsItemBlueprintId.toString()
-      );
+      const blueprint: IItemBlueprint | undefined =
+        await zone.itemBlueprints.find(
+          (blueprint) =>
+            blueprint._id.toString() ===
+            itemNode.loadsItemBlueprintId.toString()
+        );
       if (!blueprint) {
         logger.error(
           `ActivateItemNodes couldn't find blueprint ${itemNode.loadsItemBlueprintId} in zone ${zone.name}.`
@@ -43,13 +48,13 @@ async function activateItemNodes(
             item.inventory = [];
           }
           await activateItemNodes(blueprint.itemNodes, item.inventory, true);
-          logger.debug(
-            `Items in container "${item.name}": ${item.inventory.map(
-              (item: IItem) => {
-                return item.name;
-              }
-            )}`
-          );
+          // logger.debug(
+          //   `Items in container "${item.name}": ${item.inventory.map(
+          //     (item: IItem) => {
+          //       return item.name;
+          //     }
+          //   )}`
+          // );
         } else if (item.itemType == "container" && isNested) {
           logger.error(
             `Skipping container "${item.name}" because it is nested.`

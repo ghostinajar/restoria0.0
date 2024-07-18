@@ -12,7 +12,7 @@ import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
 // Return user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
-        logger.debug(`Trying to create user ${userFormData.name}`);
+        // logger.debug(`Trying to create user ${userFormData.name}`);
         let message = makeMessage("rejection", ``);
         // Validate new name
         if (!isValidName(userFormData.username)) {

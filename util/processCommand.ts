@@ -15,7 +15,7 @@ import edit from "../commands/edit.js";
 import create from "../commands/create.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
-  logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
+  // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
   switch (parsedCommand.commandWord) {
     case `create`: {
       await create(parsedCommand, user);
@@ -33,7 +33,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
     }
     case `exa`:
     case `examine`:
-    case `l`: 
+    case `l`:
     case `look`: {
       await look(parsedCommand, user);
       break;

@@ -26,7 +26,9 @@ import {
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
-import createMobBlueprint, { IMobBlueprintData } from "./commands/createMobBlueprint.js";
+import createMobBlueprint, {
+  IMobBlueprintData,
+} from "./commands/createMobBlueprint.js";
 import mongoose from "mongoose";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
@@ -59,10 +61,10 @@ const setupSocket = (io: any) => {
       // Listen for game events
       worldEmitter.on(
         `formPromptFor${user.username}`,
-        async (formData : any) => {
+        async (formData: any) => {
           formPromptForUserHandler(formData, socket);
         }
-      )
+      );
       worldEmitter.on(
         `messageArrayFor${user.username}`,
         async (messageArray: Array<IMessage>) => {
@@ -118,22 +120,37 @@ const setupSocket = (io: any) => {
       );
 
       // Listen for client events
-      socket.on(`userSelectedMobEdit`, async (mobId: mongoose.Types.ObjectId | string) => {
-        logger.debug(`User selected MobEdit for ${mobId}.`);
-        userSelectedMobEditHandler(user, mobId);
-      });
+      socket.on(
+        `userSelectedMobEdit`,
+        async (mobId: mongoose.Types.ObjectId | string) => {
+          // logger.debug(`User selected MobEdit for ${mobId}.`);
+          userSelectedMobEditHandler(user, mobId);
+        }
+      );
 
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
       });
 
-      socket.on(`userSubmittedEditMobBlueprint`, async (mobId: mongoose.Types.ObjectId, mobBlueprintData: IMobBlueprintData) => {
-        await editMobBlueprint(mobId, mobBlueprintData, user)
-      });
+      socket.on(
+        `userSubmittedEditMobBlueprint`,
+        async (
+          mobId: mongoose.Types.ObjectId,
+          mobBlueprintData: IMobBlueprintData
+        ) => {
+          await editMobBlueprint(mobId, mobBlueprintData, user);
+        }
+      );
 
-      socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData: IMobBlueprintData) => {
-        const newMobBlueprint = await createMobBlueprint(mobBlueprintData, user);
-      });
+      socket.on(
+        `userSubmittedNewMobBlueprint`,
+        async (mobBlueprintData: IMobBlueprintData) => {
+          const newMobBlueprint = await createMobBlueprint(
+            mobBlueprintData,
+            user
+          );
+        }
+      );
 
       socket.on(`userSubmittedNewRoom`, async (roomData: IRoomData) => {
         const newRoom = await createRoom(roomData, user);
@@ -150,13 +167,10 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(
-        `userSubmittedRoomEdit`,
-        async (roomData: IRoomData) => {
-          const room = await getRoomOfUser(user);
-          await editRoom(room, roomData, user);
-        }
-      );
+      socket.on(`userSubmittedRoomEdit`, async (roomData: IRoomData) => {
+        const room = await getRoomOfUser(user);
+        await editRoom(room, roomData, user);
+      });
 
       // On connection, alert room and look
       let userArrivedMessage = makeMessage(

@@ -1,3 +1,4 @@
+// editRoom
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
@@ -5,7 +6,11 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 async function editRoom(room, roomData, user) {
     let changed = false;
-    logger.debug(`editRoom submitted by user ${user.name} for room: ${JSON.stringify(room.name)}`);
+    // logger.debug(
+    //   `editRoom submitted by user ${user.name} for room: ${JSON.stringify(
+    //     room.name
+    //   )}`
+    // );
     if (!room || !roomData || !user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejected`, `Oops! Can't seem to edit this room.`));
         return;
@@ -68,16 +73,18 @@ async function editRoom(room, roomData, user) {
         await zone.save();
         await zone.initRooms();
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Room updated!`));
-        logger.debug(`editRoom updated room ${room.name}: 
-      ${JSON.stringify(room.description)} 
-      isDark: ${room.isDark} 
-      isIndoors: ${room.isIndoors} 
-      isOnWater: ${room.isOnWater} 
-      isUnderwater: ${room.isUnderwater}
-      noMounts: ${room.noMounts}
-      noMobs: ${room.noMobs}
-      noMagic: ${room.noMagic}
-      noCombat: ${room.noCombat}`);
+        // logger.debug(
+        //   `editRoom updated room ${room.name}:
+        //   ${JSON.stringify(room.description)}
+        //   isDark: ${room.isDark}
+        //   isIndoors: ${room.isIndoors}
+        //   isOnWater: ${room.isOnWater}
+        //   isUnderwater: ${room.isUnderwater}
+        //   noMounts: ${room.noMounts}
+        //   noMobs: ${room.noMobs}
+        //   noMagic: ${room.noMagic}
+        //   noCombat: ${room.noCombat}`
+        // );
         return;
     }
     else {

@@ -10,7 +10,7 @@ async function createItemFromBlueprint (blueprint : IItemBlueprint) {
         creationDate: Date.now,
     }
     item.itemNodes = null
-    logger.log(`loadout`, `createItemFromBlueprint: ${item.name}`);
+    //logger.log(`loadout`, `createItemFromBlueprint: ${item.name}`);
     return item;
 }
 

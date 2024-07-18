@@ -1,3 +1,4 @@
+// UserManager
 import logger from "../../logger.js";
 import initRuntimePropsForAgent from "../../util/initRuntimePropsForAgent.js";
 import User from "./User.js";
@@ -14,13 +15,23 @@ class UserManager {
     //key is user's _id.toString()
     users;
     logoutUserHandler = (user) => {
-        logger.debug(`logoutUserHandler called`);
-        logger.debug(`Users before removal: ${Array.from(this.users.values()).map((user) => user.username)}`);
+        // logger.debug(`logoutUserHandler called`);
+        // logger.debug(
+        //   `Users before removal: ${Array.from(this.users.values()).map(
+        //     (user) => user.username
+        //   )}`
+        // );
         this.removeUserById(user._id);
-        logger.debug(`Users after removal: ${Array.from(this.users.values()).map((user) => user.username)}`);
+        // logger.debug(
+        //   `Users after removal: ${Array.from(this.users.values()).map(
+        //     (user) => user.username
+        //   )}`
+        // );
     };
     requestingUserHandler = async (username) => {
-        logger.debug(`worldEmitter received 'requestingUser' and ${username}, checking...`);
+        // logger.debug(
+        //   `worldEmitter received 'requestingUser' and ${username}, checking...`
+        // );
         const user = await this.getUserByUserName(username);
         if (!user) {
             logger.error(`requestingUserHandler couldn't find user ${username}`);
@@ -43,19 +54,27 @@ class UserManager {
         worldEmitter.emit(`userManagerReturningWhoArrayFor${username}`, whoArray);
     };
     socketCheckingMultiplayHandler = (id) => {
-        logger.debug(`worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`);
+        // logger.debug(
+        //   `worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`
+        // );
         const isDuplicate = this.users.has(id.toString());
-        logger.debug(`worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`);
+        // logger.debug(
+        //   `worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`
+        // );
         worldEmitter.emit(`userManagerCheckedMultiplayFor${id}`, isDuplicate);
     };
     socketConnectingUserHandler = async (id) => {
-        logger.debug(`worldEmitter received 'socketConnectingUser' and ${id}, checking...`);
+        // logger.debug(
+        //   `worldEmitter received 'socketConnectingUser' and ${id}, checking...`
+        // );
         const user = await this.addUserById(id);
         if (!user) {
             logger.error(`socketConnectingUserHandler couldn't addUserById ${id}`);
             return;
         }
-        logger.debug(`worldEmitter sending 'userManagerAddedUser' and user object for ${user.name}...`);
+        // logger.debug(
+        //   `worldEmitter sending 'userManagerAddedUser' and user object for ${user.name}...`
+        // );
         worldEmitter.emit(`userManagerAddedUser${user._id}`, user);
         worldEmitter.emit(`placeUserRequest`, user);
     };
@@ -67,10 +86,16 @@ class UserManager {
             const user = await User.findById(id);
             if (user) {
                 initRuntimePropsForAgent(user);
-                logger.debug(`User's runtime props on init: ${JSON.stringify(user.runtimeProps)}`);
+                // logger.debug(
+                //   `User's runtime props on init: ${JSON.stringify(user.runtimeProps)}`
+                // );
                 this.users.set(user._id.toString(), user);
-                logger.debug(`userManager added ${user.name} to users.`);
-                logger.debug(`Active users: ${JSON.stringify(Array.from(this.users.values()).map((user) => user.name))}`);
+                // logger.debug(`userManager added ${user.name} to users.`);
+                // logger.debug(
+                //   `Active users: ${JSON.stringify(
+                //     Array.from(this.users.values()).map((user) => user.name)
+                //   )}`
+                // );
                 return user;
             }
             else {

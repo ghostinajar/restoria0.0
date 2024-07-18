@@ -64,7 +64,7 @@ const setupSocket = (io) => {
             });
             // Listen for client events
             socket.on(`userSelectedMobEdit`, async (mobId) => {
-                logger.debug(`User selected MobEdit for ${mobId}.`);
+                // logger.debug(`User selected MobEdit for ${mobId}.`);
                 userSelectedMobEditHandler(user, mobId);
             });
             socket.on(`userSentCommand`, async (userInput) => {

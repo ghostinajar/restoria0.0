@@ -13,7 +13,8 @@ async function activateItemNodes(itemNodes, inventory, isNested = false) {
                 logger.error(`activateItemNodes couldn't get a zone`);
                 return null;
             }
-            const blueprint = await zone.itemBlueprints.find((blueprint) => blueprint._id.toString() === itemNode.loadsItemBlueprintId.toString());
+            const blueprint = await zone.itemBlueprints.find((blueprint) => blueprint._id.toString() ===
+                itemNode.loadsItemBlueprintId.toString());
             if (!blueprint) {
                 logger.error(`ActivateItemNodes couldn't find blueprint ${itemNode.loadsItemBlueprintId} in zone ${zone.name}.`);
                 return null;
@@ -27,9 +28,13 @@ async function activateItemNodes(itemNodes, inventory, isNested = false) {
                         item.inventory = [];
                     }
                     await activateItemNodes(blueprint.itemNodes, item.inventory, true);
-                    logger.debug(`Items in container "${item.name}": ${item.inventory.map((item) => {
-                        return item.name;
-                    })}`);
+                    // logger.debug(
+                    //   `Items in container "${item.name}": ${item.inventory.map(
+                    //     (item: IItem) => {
+                    //       return item.name;
+                    //     }
+                    //   )}`
+                    // );
                 }
                 else if (item.itemType == "container" && isNested) {
                     logger.error(`Skipping container "${item.name}" because it is nested.`);

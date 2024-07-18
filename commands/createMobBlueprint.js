@@ -10,7 +10,7 @@ import look from "./look.js";
 async function createMobBlueprint(mobFormData, author) {
     try {
         let message = makeMessage("rejection", ``);
-        logger.debug(`Trying to create mob blueprint ${mobFormData.name}.`);
+        // logger.debug(`Trying to create mob blueprint ${mobFormData.name}.`);
         // let originRoom : IRoom = await getRoomOfUser(author);
         // if (!originRoom) {
         //   logger.error(`Couldn't find origin room to create room.`);
@@ -49,22 +49,22 @@ async function createMobBlueprint(mobFormData, author) {
             chattersToPlayer: false,
             emotesToPlayer: false,
             description: mobFormData.description,
-            keywords: mobFormData.keywords.split(' '),
+            keywords: mobFormData.keywords.split(" "),
             affixes: [],
             chatters: [],
             emotes: [],
             itemNodes: [],
         };
-        logger.debug(`createMobBlueprint made newMobBlueprint: ${JSON.stringify(newMobBlueprint)}`);
+        // logger.debug(`createMobBlueprint made newMobBlueprint: ${JSON.stringify(newMobBlueprint)}`);
         originZone.mobBlueprints.push(newMobBlueprint);
         await originZone.save();
         await originZone.initRooms();
-        logger.debug(`Saved zone ${originZone.name} with mob blueprints for ${originZone.mobBlueprints.map(mob => mob.name)}`);
+        // logger.debug(`Saved zone ${originZone.name} with mob blueprints for ${originZone.mobBlueprints.map(mob => mob.name)}`)
         logger.info(`Author "${author.name}" created mob blueprint "${newMobBlueprint.name}".`);
         message.type = "success";
         message.content = `You created a mob blueprint for ${newMobBlueprint.name}. To use blueprints, type 'place mob' or 'remove mob'.`;
         worldEmitter.emit(`messageFor${author.username}`, message);
-        await look({ commandWord: 'look' }, author);
+        await look({ commandWord: "look" }, author);
         return newMobBlueprint;
     }
     catch (error) {

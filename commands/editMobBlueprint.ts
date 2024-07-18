@@ -8,8 +8,12 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IMobBlueprintData } from "./createMobBlueprint.js";
 
-async function editMobBlueprint(mobId: mongoose.Types.ObjectId, mobBlueprintData: IMobBlueprintData, user: IUser) {
-  logger.debug(`editMobBlueprint submitted by user ${user.name} for mob id: ${mobId.toString()}`);
+async function editMobBlueprint(
+  mobId: mongoose.Types.ObjectId,
+  mobBlueprintData: IMobBlueprintData,
+  user: IUser
+) {
+  // logger.debug(`editMobBlueprint submitted by user ${user.name} for mob id: ${mobId.toString()}`);
   if (!mobId || !mobBlueprintData || !user) {
     worldEmitter.emit(
       `messageFor${user.username}`,
@@ -23,19 +27,25 @@ async function editMobBlueprint(mobId: mongoose.Types.ObjectId, mobBlueprintData
   //get existing mob data
   const zone = await getZoneOfUser(user);
   if (!zone) {
-    logger.error(`editMobBlueprint couldn't find zone to save for user ${user.username}'s location.}`);
-    return;
-  };
-  logger.debug(`editMobBlueprint finding ${mobId} in ${zone.mobBlueprints.map(blueprint => blueprint._id)}`);
-  const mob = zone.mobBlueprints.find(blueprint => blueprint._id.toString() === mobId.toString());
-  if (!mob) {
-    logger.error(`editMobBlueprint couldn't find mob with id ${mobId} in ${zone.name}`)
+    logger.error(
+      `editMobBlueprint couldn't find zone to save for user ${user.username}'s location.}`
+    );
     return;
   }
-  logger.debug(`editMobBlueprint found a match! ${mob.name}`)
+  // logger.debug(`editMobBlueprint finding ${mobId} in ${zone.mobBlueprints.map(blueprint => blueprint._id)}`);
+  const mob = zone.mobBlueprints.find(
+    (blueprint) => blueprint._id.toString() === mobId.toString()
+  );
+  if (!mob) {
+    logger.error(
+      `editMobBlueprint couldn't find mob with id ${mobId} in ${zone.name}`
+    );
+    return;
+  }
+  // logger.debug(`editMobBlueprint found a match! ${mob.name}`)
 
   //compare, update, flag changed
-  function updateMob(newData: any, existingData : any) {
+  function updateMob(newData: any, existingData: any) {
     for (let key in mobBlueprintData) {
       if (mobBlueprintData.hasOwnProperty(key)) {
         if (existingData[key] !== newData[key]) {
@@ -47,31 +57,27 @@ async function editMobBlueprint(mobId: mongoose.Types.ObjectId, mobBlueprintData
   }
   let changed = false;
   updateMob(mobBlueprintData, mob);
-  logger.debug(`editMobBlueprint has changed: ${changed}`)
   if (changed) {
     mob.history.modifiedDate = new Date();
     await zone.save();
     await zone.initRooms();
     worldEmitter.emit(
       `messageFor${user.username}`,
-      makeMessage(
-        `success`,
-        `Mob updated!`
-      )
+      makeMessage(`success`, `Mob updated!`)
     );
 
-    logger.debug(
-      `editMob updated mob ${mob.name}:
-      pronouns ${mob.pronouns}, 
-      level ${mob.level},
-      job ${mob.job},
-      statBlock ${mob.statBlock},
-      keywords ${mob.keywords},
-      isUnique ${mob.isUnique},
-      isMount ${mob.isMount},
-      isAggressive ${mob.isAggressive},
-      ${JSON.stringify(mob.description)}`
-    );
+    // logger.debug(
+    //   `editMob updated mob ${mob.name}:
+    //   pronouns ${mob.pronouns},
+    //   level ${mob.level},
+    //   job ${mob.job},
+    //   statBlock ${mob.statBlock},
+    //   keywords ${mob.keywords},
+    //   isUnique ${mob.isUnique},
+    //   isMount ${mob.isMount},
+    //   isAggressive ${mob.isAggressive},
+    //   ${JSON.stringify(mob.description)}`
+    // );
     return;
   } else {
     worldEmitter.emit(

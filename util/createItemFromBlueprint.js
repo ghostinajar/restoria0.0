@@ -1,4 +1,3 @@
-import logger from '../logger.js';
 import mongoose from 'mongoose';
 async function createItemFromBlueprint(blueprint) {
     // Create a copy of the blueprint and give its own unique Id
@@ -8,7 +7,7 @@ async function createItemFromBlueprint(blueprint) {
         creationDate: Date.now,
     };
     item.itemNodes = null;
-    logger.log(`loadout`, `createItemFromBlueprint: ${item.name}`);
+    //logger.log(`loadout`, `createItemFromBlueprint: ${item.name}`);
     return item;
 }
 export default createItemFromBlueprint;

@@ -7,14 +7,14 @@ import exits from "./exits.js";
 import look from "./look.js";
 async function move(parsedCommand, user) {
     let requestedDirection = parsedCommand.commandWord;
-    logger.debug(`move command says ${user.name}'s location is ${JSON.stringify(user.location)}`);
+    // logger.debug(`move command says ${user.name}'s location is ${JSON.stringify(user.location)}`)
     // Get origin room of user
     const originRoom = await getRoomOfUser(user);
     if (!originRoom) {
         logger.error(`Error in move, couldn't find origin room for user ${user.name}`);
         return;
     }
-    logger.debug(`move command got origin room ${originRoom.name}`);
+    // logger.debug(`move command got origin room ${originRoom.name}`);
     switch (requestedDirection) {
         case `n`: {
             requestedDirection = `north`;
@@ -47,9 +47,11 @@ async function move(parsedCommand, user) {
     const direction = requestedDirection;
     // Check if the exit is defined
     const exit = originRoom.exits[direction];
-    logger.debug(`move command verifying ${JSON.stringify(direction)} exit in originRoom..`);
+    // logger.debug(
+    //   `move command verifying ${JSON.stringify(direction)} exit in originRoom..`
+    // );
     if (!exit || !originRoom.exits || !originRoom.exits[direction]) {
-        logger.debug(`no exit!`);
+        // logger.debug(`no exit!`);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `There's no exit in that direction.`));
         return;
     }
@@ -63,19 +65,31 @@ async function move(parsedCommand, user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `A mysterious force blocks your way.`));
         return;
     }
-    logger.debug(`move command got destination room ${destinationRoom.name}`);
+    // logger.debug(`move command got destination room ${destinationRoom.name}`);
     // Remove user from originRoom users array
     originRoom.removeEntityFrom(`users`, user);
-    logger.debug(`User ${user.name} removed from ${originRoom.name}. Users remaining: ${originRoom.users.map((user) => user.name)}`);
+    // logger.debug(
+    //   `User ${user.name} removed from ${
+    //     originRoom.name
+    //   }. Users remaining: ${originRoom.users.map((user) => user.name)}`
+    // );
     // Add user to destinationRoom users array
     destinationRoom.addEntityTo(`users`, user);
-    logger.debug(`User ${user.name} added to ${destinationRoom.name}. Users in room: ${destinationRoom.users.map((user) => user.name)}`);
+    // logger.debug(
+    //   `User ${user.name} added to ${
+    //     destinationRoom.name
+    //   }. Users in room: ${destinationRoom.users.map((user) => user.name)}`
+    // );
     // Message user's origin room
     worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`userMove`, `${user.name} went ${direction}.`));
     // Update user.location
     user.location.inRoom = destinationRoom._id;
     user.location.inZone = destinationRoom.fromZoneId;
-    logger.debug(`move command says ${user.name}'s location changed to ${JSON.stringify(user.location)}`);
+    // logger.debug(
+    //   `move command says ${user.name}'s location changed to ${JSON.stringify(
+    //     user.location
+    //   )}`
+    // );
     // Alert socket to update User's ioRoom
     worldEmitter.emit(`user${user.username}ChangingRooms`, originRoom._id.toString(), originRoom.fromZoneId.toString(), destinationRoom._id.toString(), destinationRoom.fromZoneId.toString());
     // Message user's destination room

@@ -219,24 +219,23 @@ roomSchema.methods.initiate = async function () {
   if (this.mobNodes) {
     await activateMobNodes(this.mobNodes, this.mobs);
   } else {
-    logger.log(`loadout`, `No mobnodes in ${this.name}.`);
+    //logger.log(`loadout`, `No mobnodes in ${this.name}.`);
   }
-  logger.log(
-    `loadout`,
-    `Mobs in room "${this.name}": ${this.mobs.map((mob: IMob) => {
-      return mob.name;
-    })}`
-  );
+  // logger.log(`loadout`,
+  //   `Mobs in room "${this.name}": ${this.mobs.map((mob: IMob) => {
+  //     return mob.name;
+  //   })}`
+  // );
 
   //loadout inventory array
   this.inventory = [];
   await activateItemNodes(this.itemNodes, this.inventory);
-  logger.log(
-    `loadout`,
-    `Inventory in room "${this.name}": ${JSON.stringify(
-      this.inventory.map((item: IItem) => item.name)
-    )}`
-  );
+  // logger.log(
+  //   `loadout`,
+  //   `Inventory in room "${this.name}": ${JSON.stringify(
+  //     this.inventory.map((item: IItem) => item.name)
+  //   )}`
+  // );
 
   //open users array
   this.users = [];

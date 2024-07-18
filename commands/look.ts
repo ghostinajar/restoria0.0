@@ -10,22 +10,22 @@ import lookRoom from "./lookRoom.js";
 import lookTarget from "./lookTarget.js";
 
 async function look(parsedCommand: IParsedCommand, user: IUser) {
-  logger.debug(`look command initiated`);
+  // logger.debug(`look command initiated`);
   const room: IRoom = await getRoomOfUser(user);
   let lookArray: Array<IMessage> = [];
   let target = parsedCommand.directObject;
 
   if (target) {
-    logger.debug(`look command targeting ${target}`);
+    // logger.debug(`look command targeting ${target}`);
     lookTarget(target.toLowerCase(), room, lookArray);
-    logger.debug(`lookArray gathered: ${JSON.stringify(lookArray)}`);
+    // logger.debug(`lookArray gathered: ${JSON.stringify(lookArray)}`);
     worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
     return;
   } else {
     lookRoom(room, user, lookArray);
   }
 
-  logger.debug(`lookArray gathered: ${JSON.stringify(lookArray)}`);
+  // logger.debug(`lookArray gathered: ${JSON.stringify(lookArray)}`);
   worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
 }
 

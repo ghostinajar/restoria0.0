@@ -20,7 +20,7 @@ async function createRoom(roomFormData, author) {
             message.content = `Can't create a room without a direction!`;
             return message;
         }
-        logger.debug(`Trying to create room ${roomFormData.name}, ${roomFormData.direction}.`);
+        // logger.debug(`Trying to create room ${roomFormData.name}, ${roomFormData.direction}.`);
         let originRoom = await getRoomOfUser(author);
         if (!originRoom) {
             logger.error(`Couldn't find origin room to create room.`);
@@ -33,7 +33,7 @@ async function createRoom(roomFormData, author) {
             logger.error(`Couldn't find origin zone to create room.`);
         }
         const unusedExits = await unusedExitsForUser(author);
-        logger.debug(`createRoom found unusedExitsForUser: ${unusedExits}.`);
+        // logger.debug(`createRoom found unusedExitsForUser: ${unusedExits}.`)
         if (!unusedExits.includes(roomFormData.direction)) {
             logger.error(`createRoom rejected, exit already exists (this shouldn't be possible). Author ${author._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`);
             message.content = `Can't create the room. That exit already goes somewhere!`;
@@ -79,7 +79,7 @@ async function createRoom(roomFormData, author) {
             addEntityTo: roomSchema.methods.addEntityTo,
             removeEntityFrom: roomSchema.methods.removeEntityFrom,
         };
-        logger.debug(`createRoom made newRoomData: ${JSON.stringify(newRoomData)}`);
+        // logger.debug(`createRoom made newRoomData: ${JSON.stringify(newRoomData)}`);
         switch (roomFormData.direction) {
             case "north": {
                 newRoomData.mapCoords = [
@@ -144,13 +144,13 @@ async function createRoom(roomFormData, author) {
             default:
                 break;
         }
-        logger.debug(`createRoom adjusted mapcoords in newRoom: ${JSON.stringify(newRoomData.mapCoords)}`);
-        logger.debug(`createRoom adjusted exits in newRoomData ${JSON.stringify(newRoomData.exits)}`);
-        logger.debug(`createRoom adjusted exits in originRoom ${JSON.stringify(originRoom.exits)}`);
+        // logger.debug(`createRoom adjusted mapcoords in newRoom: ${JSON.stringify(newRoomData.mapCoords)}`);
+        // logger.debug(`createRoom adjusted exits in newRoomData ${JSON.stringify(newRoomData.exits)}`);
+        // logger.debug(`createRoom adjusted exits in originRoom ${JSON.stringify(originRoom.exits)}`);
         originZone.rooms.push(newRoomData);
         await originZone.save();
         await originZone.initRooms();
-        logger.debug(`Saved zone ${originZone.name} with rooms ${originZone.rooms.map(room => room.name)}`);
+        // logger.debug(`Saved zone ${originZone.name} with rooms ${originZone.rooms.map(room => room.name)}`)
         logger.info(`Author "${author.name}" created room "${newRoomData.name}".`);
         message.type = "success";
         message.content = `You created ${newRoomData.name}, ${roomFormData.direction} from here!`;

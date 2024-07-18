@@ -1,13 +1,11 @@
-// exits
-import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 async function exits(user) {
-    logger.debug(`exits command called, getting user's room...`);
+    // logger.debug(`exits command called, getting user's room...`);
     //get room
     const room = await getRoomOfUser(user);
-    logger.debug(`exits command found user's room: ${room.name}`);
+    // logger.debug(`exits command found user's room: ${room.name}`);
     let exitsArray = [];
     //iterate over exits to push to exitsArray
     for (let [key, value] of Object.entries(room.exits)) {
@@ -19,13 +17,13 @@ async function exits(user) {
             key !== "$_id" &&
             key !== "_doc") {
             //get zone (if exit.toExternalZone just use user's location.inZone)
-            logger.debug(`exits command finding zone for ${key} exit...`);
+            // logger.debug(`exits command finding zone for ${key} exit...`);
             let zone = await new Promise((resolve) => {
                 worldEmitter.once(`zone${value.destinationLocation.inZone.toString()}Loaded`, resolve);
                 worldEmitter.emit(`zoneRequested`, value.destinationLocation.inZone);
             });
             //get room
-            logger.debug(`exits command found zone ${zone.name}, finding room for ${key} exit...`);
+            // logger.debug(`exits command found zone ${zone.name}, finding room for ${key} exit...`);
             const room = zone.rooms.find((room) => room._id.toString() === value.destinationLocation.inRoom.toString());
             let direction = ``;
             switch (key) {
@@ -53,17 +51,22 @@ async function exits(user) {
                     direction = `Down:   `;
                     break;
                 }
-                default: break;
+                default:
+                    break;
             }
             //create message with room name
             if (room) {
-                logger.debug(`exits command found room ${room.name}, creating message...`);
+                // logger.debug(
+                //   `exits command found room ${room.name}, creating message...`
+                // );
                 let message = makeMessage(`exit`, `${direction} ${room?.name}`);
                 exitsArray.push(message);
             }
         }
     }
-    logger.debug(`exits command sending exitsArray: ${JSON.stringify(exitsArray)}`);
+    // logger.debug(
+    //   `exits command sending exitsArray: ${JSON.stringify(exitsArray)}`
+    // );
     worldEmitter.emit(`messageArrayFor${user.username}`, exitsArray);
 }
 export default exits;

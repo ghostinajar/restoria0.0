@@ -5,7 +5,6 @@ import descriptionSchema from "./Description.js";
 import exitSchema from "./Exit.js";
 import mobNodeSchema from "./MobNode.js";
 import itemNodeSchema from "./ItemNode.js";
-import logger from "../../logger.js";
 import activateItemNodes from "../../util/activateItemNodes.js";
 import activateMobNodes from "../../util/activateMobNodes.js";
 import destroyMobs from "../../util/destroyMobs.js";
@@ -153,15 +152,22 @@ roomSchema.methods.initiate = async function () {
         await activateMobNodes(this.mobNodes, this.mobs);
     }
     else {
-        logger.log(`loadout`, `No mobnodes in ${this.name}.`);
+        //logger.log(`loadout`, `No mobnodes in ${this.name}.`);
     }
-    logger.log(`loadout`, `Mobs in room "${this.name}": ${this.mobs.map((mob) => {
-        return mob.name;
-    })}`);
+    // logger.log(`loadout`,
+    //   `Mobs in room "${this.name}": ${this.mobs.map((mob: IMob) => {
+    //     return mob.name;
+    //   })}`
+    // );
     //loadout inventory array
     this.inventory = [];
     await activateItemNodes(this.itemNodes, this.inventory);
-    logger.log(`loadout`, `Inventory in room "${this.name}": ${JSON.stringify(this.inventory.map((item) => item.name))}`);
+    // logger.log(
+    //   `loadout`,
+    //   `Inventory in room "${this.name}": ${JSON.stringify(
+    //     this.inventory.map((item: IItem) => item.name)
+    //   )}`
+    // );
     //open users array
     this.users = [];
 };

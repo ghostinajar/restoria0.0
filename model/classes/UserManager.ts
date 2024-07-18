@@ -1,3 +1,4 @@
+// UserManager
 import logger from "../../logger.js";
 import initRuntimePropsForAgent from "../../util/initRuntimePropsForAgent.js";
 import User, { IUser } from "./User.js";
@@ -10,7 +11,10 @@ class UserManager {
 
     worldEmitter.on(`requestingUser`, this.requestingUserHandler);
     worldEmitter.on(`requestingWhoArray`, this.requestingWhoArrayHandler);
-    worldEmitter.on(`socketCheckingMultiplay`,this.socketCheckingMultiplayHandler);
+    worldEmitter.on(
+      `socketCheckingMultiplay`,
+      this.socketCheckingMultiplayHandler
+    );
     worldEmitter.on(`socketConnectingUser`, this.socketConnectingUserHandler);
     worldEmitter.on(`zoneManagerRemovedUser`, this.logoutUserHandler);
   }
@@ -19,33 +23,34 @@ class UserManager {
   users: Map<string, IUser>;
 
   logoutUserHandler = (user: IUser) => {
-    logger.debug(`logoutUserHandler called`);
-    logger.debug(
-      `Users before removal: ${Array.from(this.users.values()).map(
-        (user) => user.username
-      )}`
-    );
+    // logger.debug(`logoutUserHandler called`);
+    // logger.debug(
+    //   `Users before removal: ${Array.from(this.users.values()).map(
+    //     (user) => user.username
+    //   )}`
+    // );
     this.removeUserById(user._id);
-    logger.debug(
-      `Users after removal: ${Array.from(this.users.values()).map(
-        (user) => user.username
-      )}`
-    );
+    // logger.debug(
+    //   `Users after removal: ${Array.from(this.users.values()).map(
+    //     (user) => user.username
+    //   )}`
+    // );
   };
 
   requestingUserHandler = async (username: string) => {
-    logger.debug(`worldEmitter received 'requestingUser' and ${username}, checking...`);
+    // logger.debug(
+    //   `worldEmitter received 'requestingUser' and ${username}, checking...`
+    // );
     const user = await this.getUserByUserName(username);
     if (!user) {
-        logger.error(`requestingUserHandler couldn't find user ${username}`);
-        worldEmitter.emit(`userManagerReturningUser${username}`, null);
-        return;
+      logger.error(`requestingUserHandler couldn't find user ${username}`);
+      worldEmitter.emit(`userManagerReturningUser${username}`, null);
+      return;
     }
     worldEmitter.emit(`userManagerReturningUser${user.username}`, user);
-};
+  };
 
-
-  requestingWhoArrayHandler = async (username : string) => {
+  requestingWhoArrayHandler = async (username: string) => {
     let whoArray = [];
     // Populate array with all online players's level, job, name
     for (let user of this.users.values()) {
@@ -60,28 +65,28 @@ class UserManager {
   };
 
   socketCheckingMultiplayHandler = (id: mongoose.Types.ObjectId) => {
-    logger.debug(
-      `worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`
-    );
+    // logger.debug(
+    //   `worldEmitter received 'socketCheckingMultiplay' and ${id}, checking...`
+    // );
     const isDuplicate = this.users.has(id.toString());
-    logger.debug(
-      `worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`
-    );
+    // logger.debug(
+    //   `worldEmitter sending userManagerCheckedMultiplay with value ${isDuplicate}...`
+    // );
     worldEmitter.emit(`userManagerCheckedMultiplayFor${id}`, isDuplicate);
   };
 
   socketConnectingUserHandler = async (id: mongoose.Types.ObjectId) => {
-    logger.debug(
-      `worldEmitter received 'socketConnectingUser' and ${id}, checking...`
-    );
+    // logger.debug(
+    //   `worldEmitter received 'socketConnectingUser' and ${id}, checking...`
+    // );
     const user = await this.addUserById(id);
     if (!user) {
       logger.error(`socketConnectingUserHandler couldn't addUserById ${id}`);
       return;
     }
-    logger.debug(
-      `worldEmitter sending 'userManagerAddedUser' and user object for ${user.name}...`
-    );
+    // logger.debug(
+    //   `worldEmitter sending 'userManagerAddedUser' and user object for ${user.name}...`
+    // );
     worldEmitter.emit(`userManagerAddedUser${user._id}`, user);
     worldEmitter.emit(`placeUserRequest`, user);
   };
@@ -94,14 +99,16 @@ class UserManager {
       const user = await User.findById(id);
       if (user) {
         initRuntimePropsForAgent(user);
-        logger.debug(`User's runtime props on init: ${JSON.stringify(user.runtimeProps)}`);
+        // logger.debug(
+        //   `User's runtime props on init: ${JSON.stringify(user.runtimeProps)}`
+        // );
         this.users.set(user._id.toString(), user);
-        logger.debug(`userManager added ${user.name} to users.`);
-        logger.debug(
-          `Active users: ${JSON.stringify(
-            Array.from(this.users.values()).map((user) => user.name)
-          )}`
-        );
+        // logger.debug(`userManager added ${user.name} to users.`);
+        // logger.debug(
+        //   `Active users: ${JSON.stringify(
+        //     Array.from(this.users.values()).map((user) => user.name)
+        //   )}`
+        // );
         return user;
       } else {
         logger.error(`userManager couldn't add user with id ${id} to users.`);

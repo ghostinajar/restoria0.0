@@ -7,7 +7,7 @@ import getRoomOfUser from "./getRoomOfUser.js";
 async function unusedExitsForUser(user: IUser) {
   //get user's room
   const room: IRoom = await getRoomOfUser(user);
-  logger.debug(`unusedExitsForUser found user's room: ${room.name}`);
+  // logger.debug(`unusedExitsForUser found user's room: ${room.name}`);
   let unusedExitsArray: Array<string> = [
     "north",
     "east",

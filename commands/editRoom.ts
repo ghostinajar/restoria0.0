@@ -1,3 +1,4 @@
+// editRoom
 import logger from "../logger.js";
 import { IDescription } from "../model/classes/Description.js";
 import { IRoom } from "../model/classes/Room.js";
@@ -11,11 +12,11 @@ import { IRoomData } from "./createRoom.js";
 
 async function editRoom(room: IRoom, roomData: IRoomData, user: IUser) {
   let changed = false;
-  logger.debug(
-    `editRoom submitted by user ${user.name} for room: ${JSON.stringify(
-      room.name
-    )}`
-  );
+  // logger.debug(
+  //   `editRoom submitted by user ${user.name} for room: ${JSON.stringify(
+  //     room.name
+  //   )}`
+  // );
   if (!room || !roomData || !user) {
     worldEmitter.emit(
       `messageFor${user.username}`,
@@ -79,7 +80,9 @@ async function editRoom(room: IRoom, roomData: IRoomData, user: IUser) {
     room.history.modifiedDate = new Date();
     const zone: IZone = await getZoneOfUser(user);
     if (!zone) {
-      logger.error(`editRoom couldn't find zone to save for user ${user.username}'s location.}`);
+      logger.error(
+        `editRoom couldn't find zone to save for user ${user.username}'s location.}`
+      );
       return;
     }
     //TODO get zone of room
@@ -87,24 +90,21 @@ async function editRoom(room: IRoom, roomData: IRoomData, user: IUser) {
     await zone.initRooms();
     worldEmitter.emit(
       `messageFor${user.username}`,
-      makeMessage(
-        `success`,
-        `Room updated!`
-      )
+      makeMessage(`success`, `Room updated!`)
     );
 
-    logger.debug(
-      `editRoom updated room ${room.name}: 
-      ${JSON.stringify(room.description)} 
-      isDark: ${room.isDark} 
-      isIndoors: ${room.isIndoors} 
-      isOnWater: ${room.isOnWater} 
-      isUnderwater: ${room.isUnderwater}
-      noMounts: ${room.noMounts}
-      noMobs: ${room.noMobs}
-      noMagic: ${room.noMagic}
-      noCombat: ${room.noCombat}`
-    );
+    // logger.debug(
+    //   `editRoom updated room ${room.name}:
+    //   ${JSON.stringify(room.description)}
+    //   isDark: ${room.isDark}
+    //   isIndoors: ${room.isIndoors}
+    //   isOnWater: ${room.isOnWater}
+    //   isUnderwater: ${room.isUnderwater}
+    //   noMounts: ${room.noMounts}
+    //   noMobs: ${room.noMobs}
+    //   noMagic: ${room.noMagic}
+    //   noCombat: ${room.noCombat}`
+    // );
     return;
   } else {
     worldEmitter.emit(

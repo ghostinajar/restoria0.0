@@ -47,11 +47,11 @@ function lookTarget(target: string, room: IRoom, lookArray: Array<IMessage>) {
   let targetObject: IUser | IMob | IItem | undefined;
 
   // if users names include target
-  logger.debug(
-    `Checking users array ${JSON.stringify(
-      room.users.map((user) => user.username)
-    )} for ${target}`
-  );
+  // logger.debug(
+  //   `Checking users array ${JSON.stringify(
+  //     room.users.map((user) => user.username)
+  //   )} for ${target}`
+  // );
   targetObject = room.users.find((user) => user.username === target);
   if (targetObject) {
     // push a message for the target.name into lookArray
@@ -68,11 +68,11 @@ function lookTarget(target: string, room: IRoom, lookArray: Array<IMessage>) {
   }
 
   // if mobs names includes target
-  logger.debug(
-    `Checking mobs array ${JSON.stringify(
-      room.mobs.map((mob) => mob.name)
-    )} for ${target}`
-  );
+  // logger.debug(
+  //   `Checking mobs array ${JSON.stringify(
+  //     room.mobs.map((mob) => mob.name)
+  //   )} for ${target}`
+  // );
   targetObject = room.mobs.find((mob) => mob.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray
@@ -87,11 +87,11 @@ function lookTarget(target: string, room: IRoom, lookArray: Array<IMessage>) {
   }
 
   // if inventory names includes target
-  logger.debug(
-    `Checking inventory ${JSON.stringify(
-      room.inventory.map((item) => item.name)
-    )} array for ${target}`
-  );
+  // logger.debug(
+  //   `Checking inventory ${JSON.stringify(
+  //     room.inventory.map((item) => item.name)
+  //   )} array for ${target}`
+  // );
   targetObject = room.inventory.find((item) => item.keywords.includes(target));
   if (targetObject) {
     // push a message for the target.name into lookArray

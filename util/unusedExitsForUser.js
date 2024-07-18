@@ -1,10 +1,8 @@
-// unusedExits
-import logger from "../logger.js";
 import getRoomOfUser from "./getRoomOfUser.js";
 async function unusedExitsForUser(user) {
     //get user's room
     const room = await getRoomOfUser(user);
-    logger.debug(`unusedExitsForUser found user's room: ${room.name}`);
+    // logger.debug(`unusedExitsForUser found user's room: ${room.name}`);
     let unusedExitsArray = [
         "north",
         "east",

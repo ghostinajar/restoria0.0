@@ -1,3 +1,4 @@
+// Zone
 import mongoose from "mongoose";
 import historySchema from "./History.js";
 import descriptionSchema from "./Description.js";
@@ -77,7 +78,7 @@ zoneSchema.methods.clearRooms = async function () {
         // Clear each room's contents
         for (const room of this.rooms.values()) {
             // Assuming each room has a method to clear its contents
-            logger.debug(`Clearing contents of room "${room.name}"`);
+            // logger.debug(`Clearing contents of room "${room.name}"`);
             await room.clearContents();
         }
     }

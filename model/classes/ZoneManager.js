@@ -1,4 +1,4 @@
-//zoneManager
+// ZoneManager
 import logger from "../../logger.js";
 import Zone from "./Zone.js";
 import worldEmitter from "./WorldEmitter.js";
@@ -13,11 +13,11 @@ class ZoneManager {
     }
     zones;
     roomRequestedHandler = async (location) => {
-        logger.debug(`roomRequestedHandler called, with ${JSON.stringify(location)}`);
+        // logger.debug(`roomRequestedHandler called, with ${JSON.stringify(location)}`);
         //get the room
         let zone = this.getZoneById(location.inZone) || await this.addZoneById(location.inZone);
-        logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
-        logger.debug(`looking for room id ${location.inRoom.toString()}`);
+        // logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
+        // logger.debug(`looking for room id ${location.inRoom.toString()}`);
         const room = zone?.rooms.find(room => room._id.toString() === location.inRoom.toString());
         if (!room) {
             logger.error(`lookArrayRequestedHandler got an undefined room`);
@@ -26,7 +26,7 @@ class ZoneManager {
         worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);
     };
     userLogoutHandler = async (user) => {
-        logger.debug(`userLogoutHandler called`);
+        // logger.debug(`userLogoutHandler called`);
         // find (or reset) user's location on logout
         let { inRoom, inZone } = user.location;
         let zone = this.zones.get(inZone.toString());
@@ -34,13 +34,13 @@ class ZoneManager {
             resetUserLocation(user, "User location not found at logout! Reset to world recall.");
             return;
         }
-        logger.debug(`userLogoutHandler has zone ${zone.name}`);
+        // logger.debug(`userLogoutHandler has zone ${zone.name}`);
         let room = zone.rooms.find((room) => room._id.toString() == inRoom.toString());
         if (!room) {
             resetUserLocation(user, "User location not found at logout! Reset to world recall.");
             return;
         }
-        logger.debug(`userLogoutHandler has room ${room.name}`);
+        // logger.debug(`userLogoutHandler has room ${room.name}`);
         //remove user from location
         room.removeEntityFrom("users", user);
         worldEmitter.emit("zoneManagerRemovedUser", user);
@@ -71,8 +71,16 @@ class ZoneManager {
             // add zone to zones map
             this.zones.set(zone._id.toString(), zone);
             logger.info(`zoneManager added ${zone.name} to zones.`);
-            logger.log(`loadout`, `Rooms in zone "${zone.name}": ${zone.rooms.map((room) => room.name)}.`);
-            logger.log(`loadout`, `Active zones: ${JSON.stringify(Array.from(this.zones.values()).map((zone) => zone.name))}`);
+            // logger.log(
+            //   `loadout`,
+            //   `Rooms in zone "${zone.name}": ${zone.rooms.map((room) => room.name)}.`
+            // );
+            // logger.log(
+            //   `loadout`,
+            //   `Active zones: ${JSON.stringify(
+            //     Array.from(this.zones.values()).map((zone) => zone.name)
+            //   )}`
+            // );
             await zone.initRooms();
             return zone;
         }
@@ -148,9 +156,13 @@ class ZoneManager {
             const zone = this.zones.get(id.toString());
             if (zone) {
                 await zone.clearRooms();
-                logger.debug(`Removing zone "${zone.name}" from zones...`);
+                // logger.debug(`Removing zone "${zone.name}" from zones...`);
                 this.zones.delete(id.toString());
-                logger.debug(`Active zones: ${JSON.stringify(Array.from(this.zones.values()).map((zone) => zone.name))}`);
+                // logger.debug(
+                //   `Active zones: ${JSON.stringify(
+                //     Array.from(this.zones.values()).map((zone) => zone.name)
+                //   )}`
+                // );
             }
             else {
                 logger.warn(`Zone with id ${id} does not exist in zones.`);
