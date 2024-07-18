@@ -331,7 +331,7 @@
         </section>
         <section>
           <label for="editMobPronouns">Pronouns:</label>
-          <select id="editMobPronouns" name="editMobPronouns" required>
+          <select id="editMobPronouns" name="editMobPronouns" type="number" required>
             <option value="0">He/Him</option>
             <option value="1">It/It</option>
             <option value="2">She/Her</option>
@@ -340,7 +340,7 @@
         </section>
         <section>
           <label for="editMobLevel">Level:</label>
-          <select id="editMobLevel" name="editMobLevel" required>
+          <select id="editMobLevel" name="editMobLevel" type="number" required>
             <!-- populated by script -->
           </select>
           <label for="editMobJob">Job:</label>
@@ -354,25 +354,25 @@
         <!-- statBlock -->
         <section>
           <label for="editMobStr">Str:</label>
-          <select id="editMobStr" name="editMobStr" required>
+          <select id="editMobStr" name="editMobStr" type="number" required>
             <!-- populated by script -->
           </select>
           <label for="editMobDex">Dex:</label>
-          <select id="editMobDex" name="editMobDex" required>
+          <select id="editMobDex" name="editMobDex" type="number" required>
             <!-- populated by script -->
           </select>
           <label for="editMobCon">Con:</label>
-          <select id="editMobCon" name="editMobCon" required>
+          <select id="editMobCon" name="editMobCon" type="number" required>
             <!-- populated by script -->
           </select>
         </section>
         <section>
           <label for="editMobInt">Int:</label>
-          <select id="editMobInt" name="editMobInt" required>
+          <select id="editMobInt" name="editMobInt" type="number" required>
             <!-- populated by script -->
           </select>
           <label for="editMobWis">Wis:</label>
-          <select id="editMobWis" name="editMobWis" required>
+          <select id="editMobWis" name="editMobWis" type="number" required>
             <!-- populated by script -->
           </select>
           <label for="editMobSpi">Spi:</label>
@@ -729,22 +729,22 @@
 
       createMobForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const mobBlueprintData = {
+        const createMobFormData = {
           _id: editMobId,
           name: document.getElementById("newMobName").value,
-          pronouns: document.getElementById("newMobPronouns").value,
-          level: document.getElementById("newMobLevel").value,
+          pronouns: Number(document.getElementById("newMobPronouns").value),
+          level: Number(document.getElementById("newMobLevel").value),
           job: document.getElementById("newMobJob").value,
           statBlock: {
-            strength: document.getElementById("newMobStr").value,
-            dexterity: document.getElementById("newMobDex").value,
-            constitution: document.getElementById("newMobCon").value,
-            intelligence: document.getElementById("newMobInt").value,
-            wisdom: document.getElementById("newMobWis").value,
+            strength: Number(document.getElementById("newMobStr").value),
+            dexterity: Number(document.getElementById("newMobDex").value),
+            constitution: Number(document.getElementById("newMobCon").value),
+            intelligence: Number(document.getElementById("newMobInt").value),
+            wisdom: Number(document.getElementById("newMobWis").value),
             charisma: 10,
-            spirit: document.getElementById("newMobSpi").value,
+            spirit: Number(document.getElementById("newMobSpi").value),
           },
-          keywords: document.getElementById("newMobKeywords").value,
+          keywords: document.getElementById("newMobKeywords").value.split(/[ ,]+/),
           isUnique: document.getElementById("newMobIsUnique").checked,
           isMount: document.getElementById("newMobIsMount").checked,
           isAggressive: document.getElementById("newMobIsAggressive").checked,
@@ -755,7 +755,7 @@
             research: document.getElementById("newResearchMob").value,
           },
         };
-        socket.emit("userSubmittedNewMobBlueprint", mobBlueprintData);
+        socket.emit("userSubmittedNewMobBlueprint", createMobFormData);
         createMobForm.reset();
         createMobForm.style.display = "none"; // Hide the form after submission
       });
@@ -799,21 +799,21 @@
       editMobBlueprintForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const mobId = editMobId;
-        const mobBlueprintData = {
+        const editMobBlueprintFormData = {
           name: document.getElementById("editMobName").value,
-          pronouns: document.getElementById("editMobPronouns").value,
-          level: document.getElementById("editMobLevel").value,
+          pronouns: Number(document.getElementById("editMobPronouns").value),
+          level: Number(document.getElementById("editMobLevel").value),
           job: document.getElementById("editMobJob").value,
           statBlock: {
-            strength: document.getElementById("editMobStr").value,
-            dexterity: document.getElementById("editMobDex").value,
-            constitution: document.getElementById("editMobCon").value,
-            intelligence: document.getElementById("editMobInt").value,
-            wisdom: document.getElementById("editMobWis").value,
+            strength: Number(document.getElementById("editMobStr").value),
+            dexterity: Number(document.getElementById("editMobDex").value),
+            constitution: Number(document.getElementById("editMobCon").value),
+            intelligence: Number(document.getElementById("editMobInt").value),
+            wisdom: Number(document.getElementById("editMobWis").value),
             charisma: 10,
-            spirit: document.getElementById("editMobSpi").value,
+            spirit: Number(document.getElementById("editMobSpi").value),
           },
-          keywords: document.getElementById("editMobKeywords").value,
+          keywords: document.getElementById("editMobKeywords").value.split(/[ ,]+/),
           isUnique: document.getElementById("editMobIsUnique").checked,
           isMount: document.getElementById("editMobIsMount").checked,
           isAggressive: document.getElementById("editMobIsAggressive").checked,
@@ -824,7 +824,7 @@
             research: document.getElementById("editResearchMob").value,
           },
         };
-        socket.emit("userSubmittedEditMobBlueprint", mobId, mobBlueprintData);
+        socket.emit("userSubmittedEditMobBlueprint", mobId, editMobBlueprintFormData);
         editMobBlueprintForm.reset();
         editMobBlueprintForm.style.display = "none"; // Hide the form after submission
       });

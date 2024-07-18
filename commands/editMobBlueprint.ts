@@ -10,19 +10,17 @@ import { IMobBlueprintData } from "./createMobBlueprint.js";
 
 async function editMobBlueprint(
   mobId: mongoose.Types.ObjectId,
-  mobBlueprintData: IMobBlueprintData,
+  formData: IMobBlueprintData,
   user: IUser
 ) {
   // logger.debug(`editMobBlueprint submitted by user ${user.name} for mob id: ${mobId.toString()}`);
-  if (!mobId || !mobBlueprintData || !user) {
+  if (!mobId || !formData || !user) {
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage(`rejected`, `Oops! Can't seem to edit this mob.`)
     );
     return;
   }
-
-  truncateDescription(mobBlueprintData.description, user);
 
   //get existing mob data
   const zone = await getZoneOfUser(user);
@@ -44,48 +42,37 @@ async function editMobBlueprint(
   }
   // logger.debug(`editMobBlueprint found a match! ${mob.name}`)
 
-  //compare, update, flag changed
-  function updateMob(newData: any, existingData: any) {
-    for (let key in mobBlueprintData) {
-      if (mobBlueprintData.hasOwnProperty(key)) {
-        if (existingData[key] !== newData[key]) {
-          existingData[key] = newData[key];
-          changed = true;
-        }
-      }
-    }
-  }
-  let changed = false;
-  updateMob(mobBlueprintData, mob);
-  if (changed) {
-    mob.history.modifiedDate = new Date();
-    await zone.save();
-    await zone.initRooms();
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(`success`, `Mob updated!`)
-    );
+  //coerce formData property values to correct types
+  formData.pronouns = Number(formData.pronouns);
+  formData.level = Number(formData.level);
+  formData.statBlock.strength = Number(formData.statBlock.strength);
+  formData.statBlock.dexterity = Number(formData.statBlock.dexterity);
+  formData.statBlock.constitution = Number(formData.statBlock.constitution);
+  formData.statBlock.intelligence = Number(formData.statBlock.intelligence);
+  formData.statBlock.wisdom = Number(formData.statBlock.wisdom);
+  formData.statBlock.spirit = Number(formData.statBlock.spirit);
+  truncateDescription(formData.description, user);
 
-    // logger.debug(
-    //   `editMob updated mob ${mob.name}:
-    //   pronouns ${mob.pronouns},
-    //   level ${mob.level},
-    //   job ${mob.job},
-    //   statBlock ${mob.statBlock},
-    //   keywords ${mob.keywords},
-    //   isUnique ${mob.isUnique},
-    //   isMount ${mob.isMount},
-    //   isAggressive ${mob.isAggressive},
-    //   ${JSON.stringify(mob.description)}`
-    // );
-    return;
-  } else {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(`rejected`, `No change saved to mob.`)
-    );
-    return;
-  }
+  //update values and save zone
+  mob.name = formData.name;
+  mob.pronouns = formData.pronouns;
+  mob.level = formData.level;
+  mob.job = formData.job;
+  mob.statBlock = formData.statBlock;
+  mob.keywords = formData.keywords;
+  mob.isUnique = formData.isUnique;
+  mob.isMount = formData.isMount;
+  mob.isAggressive = formData.isAggressive;
+  mob.description = formData.description;
+  mob.history.modifiedDate = new Date();
+  await zone.save();
+  await zone.initRooms();
+
+  
+  worldEmitter.emit(
+    `messageFor${user.username}`,
+    makeMessage(`success`, `Mob updated!`)
+  );
 }
 
 export default editMobBlueprint;

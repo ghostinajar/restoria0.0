@@ -49,7 +49,7 @@ app.use(passport.authenticate("session"));
 passport.use(
   new LocalStrategy(async function verify(name, password, cb) {
     try {
-      logger.debug(`Passport local strategy verifying name ${name}.`)
+      // logger.debug(`Passport local strategy verifying name ${name}.`)
       name = name.toLowerCase();
       const user = await User.findOne({ username: name });
       if (!user) {
@@ -62,7 +62,7 @@ passport.use(
         logger.debug(`Passport local strategy couldn't verify password.`);
         return cb(null, false, { message: "Incorrect name or password." });
       }
-      logger.debug(`Passport local strategy authenticated, returning user ${user.name}.`);
+      // logger.debug(`Passport local strategy authenticated, returning user ${user.name}.`);
       return cb(null, user); 
     } catch (err) {
       return cb(err);
@@ -72,7 +72,7 @@ passport.use(
 
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
-    logger.debug(`passport.serializeUser has user id ${user._id} name ${user.username}`)
+    // logger.debug(`passport.serializeUser has user id ${user._id} name ${user.username}`)
     return cb(null, {
       _id: user._id,
       name: user.name,

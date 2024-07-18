@@ -19,7 +19,7 @@ export interface IMobBlueprintData {
   level: number;
   job: string;
   statBlock: IStatBlock;
-  keywords: string;
+  keywords: string[];
   isUnique: boolean;
   isMount: boolean;
   isAggressive: boolean;
@@ -83,7 +83,7 @@ async function createMobBlueprint(
       chattersToPlayer: false,
       emotesToPlayer: false,
       description: mobFormData.description,
-      keywords: mobFormData.keywords.split(" "),
+      keywords: mobFormData.keywords,
       affixes: [],
       chatters: [],
       emotes: [],

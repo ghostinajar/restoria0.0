@@ -49,7 +49,7 @@ async function createMobBlueprint(mobFormData, author) {
             chattersToPlayer: false,
             emotesToPlayer: false,
             description: mobFormData.description,
-            keywords: mobFormData.keywords.split(" "),
+            keywords: mobFormData.keywords,
             affixes: [],
             chatters: [],
             emotes: [],
