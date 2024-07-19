@@ -1,31 +1,37 @@
-    <!-- Command form -->
-    <form id="commandForm" action="" autocomplete="off">
-      <label for="commandInput"></label>
-      <input id="commandInput" maxlength="80" />
-      <button type="submit">Send</button>
-    </form>
+<!-- Command form -->
+<form id="commandForm" action="" autocomplete="off">
+  <label for="commandInput"></label>
+  <input id="commandInput" maxlength="80" />
+  <button type="submit">Send</button>
+</form>
 
-    <script>
-            const commandForm = document.getElementById("commandForm");
+<script>
+  const commandForm = document.getElementById("commandForm");
 
-            commandForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (input.value) {
-          const parsedCommand = parseCommand(input.value);
-          //reject invalid command words
-
-          if (!isValidCommandWord(parsedCommand.commandWord)) {
-            const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
-            appendMessageToTerminal(
-              { type: "rejection", content: `Sorry, '${shortenedCommand}' is not a valid command word.` }
-            );
-            input.value = "";
-            return;
-          }
-          socket.emit("userSentCommand", input.value);
-          input.value = "";
+  function isValidCommandWord(commandWord) {
+        if (!validCommandWords.includes(commandWord.toLowerCase())) {
+          return false;
         }
-      });
-      
+        return true;
+      }
 
-    </script>
+  commandForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (input.value) {
+      const parsedCommand = parseCommand(input.value);
+      //reject invalid command words
+
+      if (!isValidCommandWord(parsedCommand.commandWord)) {
+        const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
+        appendMessageToTerminal({
+          type: "rejection",
+          content: `Sorry, '${shortenedCommand}' is not a valid command word.`,
+        });
+        input.value = "";
+        return;
+      }
+      socket.emit("userSentCommand", input.value);
+      input.value = "";
+    }
+  });
+</script>
