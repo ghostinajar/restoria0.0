@@ -9,11 +9,21 @@
   const commandForm = document.getElementById("commandForm");
 
   function isValidCommandWord(commandWord) {
-        if (!validCommandWords.includes(commandWord.toLowerCase())) {
-          return false;
-        }
-        return true;
-      }
+    if (!validCommandWords.includes(commandWord.toLowerCase())) {
+      return false;
+    }
+    return true;
+  }
+
+  function parseCommand(command) {
+    const parsedCommand = {};
+    const splitCommand = command.split(" ");
+    parsedCommand.commandWord = splitCommand[0];
+    if (splitCommand.length > 1) {
+      parsedCommand.string = splitCommand.slice(1).join(" ");
+    }
+    return parsedCommand;
+  }
 
   commandForm.addEventListener("submit", (e) => {
     e.preventDefault();
