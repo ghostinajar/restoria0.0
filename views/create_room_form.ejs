@@ -1,0 +1,86 @@
+<!-- create_room_form -->
+<form
+  id="createRoomForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <section>
+    <label for="newRoomName">Name:</label>
+    <input
+      id="newRoomName"
+      name="newRoomName"
+      type="text"
+      autocomplete="on"
+      maxlength="60"
+      required
+    />
+  </section>
+  <section>
+    <label for="newRoomDirection">Direction:</label>
+    <select id="newRoomDirection" name="newRoomDirection" required>
+      <option value="north">north</option>
+      <option value="east">east</option>
+      <option value="south">south</option>
+      <option value="west">west</option>
+      <option value="up">up</option>
+      <option value="down">down</option>
+    </select>
+  </section>
+  <section>
+    <input type="checkbox" id="newIsDark" name="newIsDark" value="newIsDark" />
+    <label for="newIsDark">Dark</label>
+    <input
+      type="checkbox"
+      id="newIsIndoors"
+      name="newIsIndoors"
+      value="newIsIndoors"
+    />
+    <label for="newIsIndoors">Indoors</label>
+
+    <input
+      type="checkbox"
+      id="newIsOnWater"
+      name="newIsOnWater"
+      value="newIsOnWater"
+    />
+    <label for="newIsOnWater">On Water</label>
+
+    <input
+      type="checkbox"
+      id="newIsUnderwater"
+      name="newIsUnderwater"
+      value="newIsUnderwater"
+    />
+    <label for="newIsUnderwater">Underwater</label>
+  </section>
+  <section>
+    <label for="newExamineRoom">Examine:</label>
+    <textarea
+      id="newExamineRoom"
+      name="newExamineRoom"
+      type="text"
+      maxlength="240"
+    ></textarea>
+  </section>
+  <section>
+    <label for="newStudyRoom">Study:</label>
+    <textarea
+      id="newStudyRoom"
+      name="newStudyRoom"
+      type="text"
+      maxlength="640"
+    ></textarea>
+  </section>
+  <section>
+    <label for="newResearchRoom">Research:</label>
+    <textarea
+      id="newResearchRoom"
+      name="newResearchRoom"
+      type="text"
+      maxlength="1600"
+    ></textarea>
+  </section>
+  <button type="submit">Create Room</button>
+  <button type="button" id="cancelCreateRoomForm">Cancel</button>
+</form>

@@ -1,0 +1,42 @@
+<!-- create_user_form -->
+<form
+  id="createUserForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <section>
+    <label for="newUserName">Name:</label>
+    <input
+      id="newUserName"
+      name="newUserName"
+      type="text"
+      maxlength="18"
+      required
+    />
+  </section>
+  <section>
+    <label for="new-password">Password:</label>
+    <input id="new-password" name="password" type="password" required />
+  </section>
+  <section>
+    <label for="pronouns">Pronouns:</label>
+    <select id="pronouns" name="pronouns" required>
+      <option value="0">He/Him</option>
+      <option value="1">It/It</option>
+      <option value="2">She/Her</option>
+      <option value="3">They/Them</option>
+    </select>
+  </section>
+  <section>
+    <label for="job">Job:</label>
+    <select id="job" name="job" required>
+      <option value="cleric">Cleric</option>
+      <option value="mage">Mage</option>
+      <option value="rogue">Rogue</option>
+      <option value="warrior">Warrior</option>
+    </select>
+  </section>
+  <button type="submit">Create User</button>
+  <button type="button" id="cancelCreateUserForm">Cancel</button>
+</form>

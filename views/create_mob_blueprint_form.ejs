@@ -1,0 +1,137 @@
+<!-- create_mob_blueprint_form -->
+<form
+  id="createMobForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <section>
+    <label for="newMobName">Name:</label>
+    <input
+      id="newMobName"
+      name="newMobName"
+      type="text"
+      maxlength="36"
+      required
+    />
+  </section>
+  <section>
+    <label for="newMobPronouns">Pronouns:</label>
+    <select id="newMobPronouns" name="newMobPronouns" required>
+      <option value="0">He/Him</option>
+      <option value="1">It/It</option>
+      <option value="2">She/Her</option>
+      <option value="3">They/Them</option>
+    </select>
+  </section>
+  <section>
+    <label for="newMobLevel">Level:</label>
+    <select id="newMobLevel" name="newMobLevel" required>
+      <!-- populated by script -->
+    </select>
+    <label for="newMobJob">Job:</label>
+    <select id="newMobJob" name="newMobJob" required>
+      <option value="cleric">Cleric</option>
+      <option value="mage">Mage</option>
+      <option value="rogue">Rogue</option>
+      <option value="warrior">Warrior</option>
+    </select>
+  </section>
+  <!-- statBlock -->
+  <section>
+    <label for="newMobStr">Str:</label>
+    <select id="newMobStr" name="newMobStr" required>
+      <!-- populated by script -->
+    </select>
+    <label for="newMobDex">Dex:</label>
+    <select id="newMobDex" name="newMobDex" required>
+      <!-- populated by script -->
+    </select>
+    <label for="newMobCon">Con:</label>
+    <select id="newMobCon" name="newMobCon" required>
+      <!-- populated by script -->
+    </select>
+  </section>
+  <section>
+    <label for="newMobInt">Int:</label>
+    <select id="newMobInt" name="newMobInt" required>
+      <!-- populated by script -->
+    </select>
+    <label for="newMobWis">Wis:</label>
+    <select id="newMobWis" name="newMobWis" required>
+      <!-- populated by script -->
+    </select>
+    <label for="newMobSpi">Spi:</label>
+    <input
+      id="newMobSpi"
+      name="newMobSpi"
+      type="number"
+      min="-1000"
+      max="1000"
+      value="0"
+      step="100"
+      required
+    />
+  </section>
+  <section>
+    <label for="newMobKeywords">Keywords:</label>
+    <input id="newMobKeywords" name="newMobKeywords" maxlength="80" required />
+  </section>
+  <section>
+    <input
+      type="checkbox"
+      id="newMobIsUnique"
+      name="newMobIsUnique"
+      value="isUnewMobIsUniquenique"
+    />
+    <label for="newMobIsUnique">Unique</label>
+    <input
+      type="checkbox"
+      id="newMobIsMount"
+      name="newMobIsMount"
+      value="newMobIsMount"
+    />
+    <label for="newMobIsMount">Mount</label>
+
+    <input
+      type="checkbox"
+      id="newMobIsAggressive"
+      name="newMobIsAggressive"
+      value="newMobIsAggressive"
+    />
+    <label for="newMobIsAggressive">Aggressive</label>
+  </section>
+  <section>
+    <label for="newLookMob">Look:</label>
+    <input id="newLookMob" name="newLookMob" type="text" maxlength="80" />
+  </section>
+  <section>
+    <label for="newExamineMob">Examine:</label>
+    <textarea
+      id="newExamineMob"
+      name="newExamineMob"
+      type="text"
+      maxlength="240"
+    ></textarea>
+  </section>
+  <section>
+    <label for="newStudyMob">Study:</label>
+    <textarea
+      id="newStudyMob"
+      name="newStudyMob"
+      type="text"
+      maxlength="640"
+    ></textarea>
+  </section>
+  <section>
+    <label for="newResearchMob">Research:</label>
+    <textarea
+      id="newResearchMob"
+      name="newResearchMob"
+      type="text"
+      maxlength="1600"
+    ></textarea>
+  </section>
+  <button type="submit">Create Mob</button>
+  <button type="button" id="cancelCreateMobForm">Cancel</button>
+</form>

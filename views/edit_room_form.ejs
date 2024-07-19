@@ -1,0 +1,70 @@
+<!-- Edit room form -->
+<form
+  id="editRoomForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <section>
+    <label for="roomName">Name:</label>
+    <input id="roomName" name="roomName" type="text" maxlength="60" required />
+  </section>
+  <section>
+    <input type="checkbox" id="isDark" name="isDark" value="isDark" />
+    <label for="isDark">Dark</label>
+    <input type="checkbox" id="isIndoors" name="isIndoors" value="isIndoors" />
+    <label for="isIndoors">Indoors</label>
+
+    <input type="checkbox" id="isOnWater" name="isOnWater" value="isOnWater" />
+    <label for="isOnWater">On Water</label>
+
+    <input
+      type="checkbox"
+      id="isUnderwater"
+      name="isUnderwater"
+      value="isUnderwater"
+    />
+    <label for="isUnderwater">Underwater</label>
+  </section>
+  <section>
+    <input type="checkbox" id="noMounts" name="noMounts" value="noMounts" />
+    <label for="noMounts">No Mounts</label>
+    <input type="checkbox" id="noMobs" name="noMobs" value="noMobs" />
+    <label for="noMobs">No Mobs</label>
+
+    <input type="checkbox" id="noMagic" name="noMagic" value="noMagic" />
+    <label for="noMagic">No Magic</label>
+
+    <input type="checkbox" id="noCombat" name="noCombat" value="noCombat" />
+    <label for="noCombat">No Combat</label>
+  </section>
+  <section>
+    <label for="examineRoom">Examine:</label>
+    <textarea
+      id="examineRoom"
+      name="examineRoom"
+      type="text"
+      maxlength="240"
+    ></textarea>
+  </section>
+  <section>
+    <label for="studyRoom">Study:</label>
+    <textarea
+      id="studyRoom"
+      name="studyRoom"
+      type="text"
+      maxlength="640"
+    ></textarea>
+  </section>
+  <section>
+    <label for="researchRoom">Research:</label>
+    <textarea
+      id="researchRoom"
+      name="researchRoom"
+      type="text"
+      maxlength="1600"
+    ></textarea>
+  </section>
+  <button type="submit">Update Room</button>
+  <button type="button" id="cancelEditRoomForm">Cancel</button>
+</form>
