@@ -17,6 +17,7 @@
 
 <script>
   const editMobSelect = document.getElementById("editMobSelect");
+  let editMobId = "";
 
   editMobSelect.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -31,4 +32,17 @@
     .addEventListener("click", function () {
       editMobSelect.style.display = "none";
     });
+
+  socket.on("openEditMobSelect", (formData) => {
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = editMobSelect;
+    activeForm.style.display = "block";
+    input.value = "";
+    // Set the editMobSelectName options
+    generateStringSelectOptions(
+      formData,
+      document.getElementById("editMobSelectName")
+    );
+  });
 </script>

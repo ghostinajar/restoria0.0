@@ -56,4 +56,16 @@
     .addEventListener("click", function () {
       editUserForm.style.display = "none";
     });
+
+  socket.on("openEditUserForm", (formData) => {
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = editUserForm;
+    activeForm.style.display = "block";
+    input.value = "";
+    // Set the values of the textareas based on formData
+    document.getElementById("examineUser").value = formData.examine || "";
+    document.getElementById("studyUser").value = formData.study || "";
+    document.getElementById("researchUser").value = formData.research || "";
+  });
 </script>

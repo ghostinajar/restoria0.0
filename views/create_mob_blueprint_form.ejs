@@ -139,10 +139,19 @@
 <script>
   const createMobForm = document.getElementById("createMobForm");
 
+  document.addEventListener("DOMContentLoaded", () => {
+    generateNumberSelectOptions(1, 31, document.getElementById("newMobLevel"));
+    generateNumberSelectOptions(4, 18, document.getElementById("newMobStr"));
+    generateNumberSelectOptions(4, 18, document.getElementById("newMobDex"));
+    generateNumberSelectOptions(4, 18, document.getElementById("newMobCon"));
+    generateNumberSelectOptions(4, 18, document.getElementById("newMobInt"));
+    generateNumberSelectOptions(4, 18, document.getElementById("newMobWis"));
+  });
+
   createMobForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const createMobFormData = {
-      _id: '',
+      _id: "",
       name: document.getElementById("newMobName").value,
       pronouns: Number(document.getElementById("newMobPronouns").value),
       level: Number(document.getElementById("newMobLevel").value),
@@ -177,4 +186,15 @@
     .addEventListener("click", function () {
       createMobForm.style.display = "none";
     });
+
+  socket.on("openCreateMobForm", (formData) => {
+    console.log(
+      `openCreateMobForm received formData: ${JSON.stringify(formData)}`
+    );
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = createMobForm;
+    activeForm.style.display = "block";
+    input.value = "";
+  });
 </script>

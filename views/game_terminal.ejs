@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>Restoria 0.0.1</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io(); // no URL needed for now; defaults to host that serves the page
+    </script>
   </head>
 
   <body>
@@ -29,16 +33,14 @@
       <%- include('edit_room_form'); %>
       <%- include('edit_user_form'); %>
     </div>
+
+    <!-- User input command form -->
     <%- include('command_form'); %>
 
-    <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io(); // no URL needed for now; defaults to host that serves the page
-      const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
-      let editMobId = '';
-      const input = document.getElementById("commandInput");
       const messagesContainer = document.getElementById("messagesContainer");
       const messages = document.getElementById("messages");
+      let activeForm = editUserForm;
 
       //methods definitions (validation and parsing are client version)
       function generateStringSelectOptions(stringArray, select) {
@@ -60,19 +62,6 @@
             select.appendChild(option);
         }
       }
-      generateNumberSelectOptions(1,31, document.getElementById('newMobLevel'));
-      generateNumberSelectOptions(4,18, document.getElementById('newMobStr'));
-      generateNumberSelectOptions(4,18, document.getElementById('newMobDex'));
-      generateNumberSelectOptions(4,18, document.getElementById('newMobCon'));
-      generateNumberSelectOptions(4,18, document.getElementById('newMobInt'));
-      generateNumberSelectOptions(4,18, document.getElementById('newMobWis'));
-
-      generateNumberSelectOptions(1,31, document.getElementById('editMobLevel'));
-      generateNumberSelectOptions(4,18, document.getElementById('editMobStr'));
-      generateNumberSelectOptions(4,18, document.getElementById('editMobDex'));
-      generateNumberSelectOptions(4,18, document.getElementById('editMobCon'));
-      generateNumberSelectOptions(4,18, document.getElementById('editMobInt'));
-      generateNumberSelectOptions(4,18, document.getElementById('editMobWis'));
 
       function appendMessageToTerminal(message) {
         const item = document.createElement("li");
@@ -82,120 +71,8 @@
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       }
-
-      let activeForm = editUserForm;
       
-      //socket event listeners
-      socket.on("openCreateMobForm", (formData) => {
-        console.log(
-          `openCreateMobForm received formData: ${JSON.stringify(formData)}`
-        );
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = createMobForm;
-        activeForm.style.display = "block";
-        input.value = "";
-      });
-
-      socket.on("openCreateRoomForm", (formData) => {
-        console.log(`openCreateRoomForm received formData: ${JSON.stringify(formData)}`);
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = createRoomForm;
-        activeForm.style.display = "block";
-        input.value = "";
-
-        // Update the direction select element
-        directionSelect.innerHTML = ''; // Clear existing options
-
-        formData.unusedExits.forEach(exit => {
-          const option = document.createElement('option');
-          option.value = exit;
-          option.textContent = exit;
-          directionSelect.appendChild(option);
-        });
-      });
-
-      socket.on("openCreateUserForm", () => {
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = createUserForm;
-        activeForm.style.display = "block";
-        input.value = "";
-      });
-
-      socket.on("openEditMobSelect", (formData) => {
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = editMobSelect;
-        activeForm.style.display = "block";
-        input.value = "";
-        // Set the editMobSelectName options
-        generateStringSelectOptions(formData, document.getElementById('editMobSelectName'))
-      });
-      
-      socket.on("openEditMobBlueprintForm", (formData) => {
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = editMobBlueprintForm;
-        activeForm.style.display = "block";
-        input.value = "";
-        console.log(JSON.stringify(formData));
-        // Set the values of the fields based on formData
-        document.getElementById("editMobName").value = formData.name || '';
-        document.getElementById("editMobPronouns").value = formData.pronouns || 0;
-        document.getElementById("editMobLevel").value = formData.level || 1;
-        document.getElementById("editMobJob").value = formData.job || 'cleric';
-        document.getElementById("editMobStr").value = formData.statBlock.strength || 4;
-        document.getElementById("editMobDex").value = formData.statBlock.dexterity || 4;
-        document.getElementById("editMobCon").value = formData.statBlock.constitution || 4;
-        document.getElementById("editMobInt").value = formData.statBlock.intelligence || 4;
-        document.getElementById("editMobWis").value = formData.statBlock.wisdom || 4;
-        document.getElementById("editMobSpi").value = formData.statBlock.spirit || 0;
-        document.getElementById("editMobKeywords").value = formData.keywords || '';
-        document.getElementById("editMobIsUnique").checked = formData.isUnique || '';
-        document.getElementById("editMobIsMount").checked = formData.isMount || '';
-        document.getElementById("editMobIsAggressive").checked = formData.isAggressive || '';
-        document.getElementById("editLookMob").value = formData.description.look || '';
-        document.getElementById("editExamineMob").value = formData.description.examine || '';
-        document.getElementById("editStudyMob").value = formData.description.study || '';
-        document.getElementById("editResearchMob").value = formData.description.research || '';
-      });
-
-      socket.on("openEditUserForm", (formData) => {
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = editUserForm;
-        activeForm.style.display = "block";
-        input.value = "";
-        // Set the values of the textareas based on formData
-        document.getElementById("examineUser").value = formData.examine || '';
-        document.getElementById("studyUser").value = formData.study || '';
-        document.getElementById("researchUser").value = formData.research || '';
-      });
-
-      socket.on("openEditRoomForm", (formData) => {
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = editRoomForm;
-        activeForm.style.display = "block";
-        input.value = "";
-        console.log(JSON.stringify(formData));
-        // Set the values of the fields based on formData
-        document.getElementById("roomName").value = formData.name || '';
-        document.getElementById("isDark").checked = formData.isDark || false;
-        document.getElementById("isIndoors").checked = formData.isIndoors || false;
-        document.getElementById("isOnWater").checked = formData.isOnWater || false;
-        document.getElementById("isUnderwater").checked = formData.isUnderwater || false;
-        document.getElementById("noMounts").checked = formData.noMounts || false;
-        document.getElementById("noMobs").checked = formData.noMobs || false;
-        document.getElementById("noMagic").checked = formData.noMagic || false;
-        document.getElementById("noCombat").checked = formData.noCombat || false;
-        document.getElementById("examineRoom").value = formData.examine || '';
-        document.getElementById("studyRoom").value = formData.study || '';
-        document.getElementById("researchRoom").value = formData.research || '';
-      });
-
+      //socket event listeners         
       socket.on("invalid", (rejectionString) => {
         appendMessageToTerminal({ type: "rejection", content: "Server says invalid command." });
       });

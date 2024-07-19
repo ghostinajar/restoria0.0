@@ -143,7 +143,16 @@
 
 <script>
   const editMobBlueprintForm = document.getElementById("editMobBlueprintForm");
- 
+
+  document.addEventListener("DOMContentLoaded", () => {
+    generateNumberSelectOptions(1, 31, document.getElementById("editMobLevel"));
+    generateNumberSelectOptions(4, 18, document.getElementById("editMobStr"));
+    generateNumberSelectOptions(4, 18, document.getElementById("editMobDex"));
+    generateNumberSelectOptions(4, 18, document.getElementById("editMobCon"));
+    generateNumberSelectOptions(4, 18, document.getElementById("editMobInt"));
+    generateNumberSelectOptions(4, 18, document.getElementById("editMobWis"));
+  });
+
   editMobBlueprintForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const mobId = editMobId;
@@ -180,10 +189,50 @@
     editMobBlueprintForm.reset();
     editMobBlueprintForm.style.display = "none"; // Hide the form after submission
   });
-  
+
   document
     .getElementById("cancelEditMobBlueprintForm")
     .addEventListener("click", function () {
       editMobBlueprintForm.style.display = "none";
     });
+
+  socket.on("openEditMobBlueprintForm", (formData) => {
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = editMobBlueprintForm;
+    activeForm.style.display = "block";
+    input.value = "";
+    console.log(JSON.stringify(formData));
+    // Set the values of the fields based on formData
+    document.getElementById("editMobName").value = formData.name || "";
+    document.getElementById("editMobPronouns").value = formData.pronouns || 0;
+    document.getElementById("editMobLevel").value = formData.level || 1;
+    document.getElementById("editMobJob").value = formData.job || "cleric";
+    document.getElementById("editMobStr").value =
+      formData.statBlock.strength || 4;
+    document.getElementById("editMobDex").value =
+      formData.statBlock.dexterity || 4;
+    document.getElementById("editMobCon").value =
+      formData.statBlock.constitution || 4;
+    document.getElementById("editMobInt").value =
+      formData.statBlock.intelligence || 4;
+    document.getElementById("editMobWis").value =
+      formData.statBlock.wisdom || 4;
+    document.getElementById("editMobSpi").value =
+      formData.statBlock.spirit || 0;
+    document.getElementById("editMobKeywords").value = formData.keywords || "";
+    document.getElementById("editMobIsUnique").checked =
+      formData.isUnique || "";
+    document.getElementById("editMobIsMount").checked = formData.isMount || "";
+    document.getElementById("editMobIsAggressive").checked =
+      formData.isAggressive || "";
+    document.getElementById("editLookMob").value =
+      formData.description.look || "";
+    document.getElementById("editExamineMob").value =
+      formData.description.examine || "";
+    document.getElementById("editStudyMob").value =
+      formData.description.study || "";
+    document.getElementById("editResearchMob").value =
+      formData.description.research || "";
+  });
 </script>

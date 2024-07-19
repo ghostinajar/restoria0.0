@@ -116,4 +116,25 @@
     .addEventListener("click", function () {
       createRoomForm.style.display = "none";
     });
+
+  socket.on("openCreateRoomForm", (formData) => {
+    console.log(
+      `openCreateRoomForm received formData: ${JSON.stringify(formData)}`
+    );
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = createRoomForm;
+    activeForm.style.display = "block";
+    input.value = "";
+
+    // Update the direction select element
+    directionSelect.innerHTML = ""; // Clear existing options
+
+    formData.unusedExits.forEach((exit) => {
+      const option = document.createElement("option");
+      option.value = exit;
+      option.textContent = exit;
+      directionSelect.appendChild(option);
+    });
+  });
 </script>

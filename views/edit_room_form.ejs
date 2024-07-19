@@ -99,4 +99,27 @@
     .addEventListener("click", function () {
       editRoomForm.style.display = "none";
     });
+
+  socket.on("openEditRoomForm", (formData) => {
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = editRoomForm;
+    activeForm.style.display = "block";
+    input.value = "";
+    console.log(JSON.stringify(formData));
+    // Set the values of the fields based on formData
+    document.getElementById("roomName").value = formData.name || "";
+    document.getElementById("isDark").checked = formData.isDark || false;
+    document.getElementById("isIndoors").checked = formData.isIndoors || false;
+    document.getElementById("isOnWater").checked = formData.isOnWater || false;
+    document.getElementById("isUnderwater").checked =
+      formData.isUnderwater || false;
+    document.getElementById("noMounts").checked = formData.noMounts || false;
+    document.getElementById("noMobs").checked = formData.noMobs || false;
+    document.getElementById("noMagic").checked = formData.noMagic || false;
+    document.getElementById("noCombat").checked = formData.noCombat || false;
+    document.getElementById("examineRoom").value = formData.examine || "";
+    document.getElementById("studyRoom").value = formData.study || "";
+    document.getElementById("researchRoom").value = formData.research || "";
+  });
 </script>

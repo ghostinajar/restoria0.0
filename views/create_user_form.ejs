@@ -65,4 +65,12 @@
     .addEventListener("click", function () {
       createUserForm.style.display = "none";
     });
+
+  socket.on("openCreateUserForm", () => {
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = createUserForm;
+    activeForm.style.display = "block";
+    input.value = "";
+  });
 </script>

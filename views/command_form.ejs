@@ -7,6 +7,8 @@
 
 <script>
   const commandForm = document.getElementById("commandForm");
+  const input = document.getElementById("commandInput");
+  const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
 
   function isValidCommandWord(commandWord) {
     if (!validCommandWords.includes(commandWord.toLowerCase())) {
