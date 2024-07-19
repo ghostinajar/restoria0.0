@@ -1,6 +1,6 @@
 <!-- create_mob_blueprint_form -->
 <form
-  id="createMobForm"
+  id="createMobBlueprintForm"
   class="sideForm"
   style="display: none"
   autocomplete="off"
@@ -133,11 +133,11 @@
     ></textarea>
   </section>
   <button type="submit">Create Mob</button>
-  <button type="button" id="cancelCreateMobForm">Cancel</button>
+  <button type="button" id="cancelcreateMobBlueprintForm">Cancel</button>
 </form>
 
 <script>
-  const createMobForm = document.getElementById("createMobForm");
+  const createMobBlueprintForm = document.getElementById("createMobBlueprintForm");
 
   document.addEventListener("DOMContentLoaded", () => {
     generateNumberSelectOptions(1, 31, document.getElementById("newMobLevel"));
@@ -148,9 +148,9 @@
     generateNumberSelectOptions(4, 18, document.getElementById("newMobWis"));
   });
 
-  createMobForm.addEventListener("submit", (e) => {
+  createMobBlueprintForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const createMobFormData = {
+    const createMobBlueprintFormData = {
       _id: "",
       name: document.getElementById("newMobName").value,
       pronouns: Number(document.getElementById("newMobPronouns").value),
@@ -176,24 +176,24 @@
         research: document.getElementById("newResearchMob").value,
       },
     };
-    socket.emit("userSubmittedNewMobBlueprint", createMobFormData);
-    createMobForm.reset();
-    createMobForm.style.display = "none"; // Hide the form after submission
+    socket.emit("userSubmittedNewMobBlueprint", createMobBlueprintFormData);
+    createMobBlueprintForm.reset();
+    createMobBlueprintForm.style.display = "none"; // Hide the form after submission
   });
 
   document
-    .getElementById("cancelCreateMobForm")
+    .getElementById("cancelcreateMobBlueprintForm")
     .addEventListener("click", function () {
-      createMobForm.style.display = "none";
+      createMobBlueprintForm.style.display = "none";
     });
 
-  socket.on("openCreateMobForm", (formData) => {
+  socket.on("opencreateMobBlueprintForm", (formData) => {
     console.log(
-      `openCreateMobForm received formData: ${JSON.stringify(formData)}`
+      `opencreateMobBlueprintForm received formData: ${JSON.stringify(formData)}`
     );
     activeForm.reset();
     activeForm.style.display = "none";
-    activeForm = createMobForm;
+    activeForm = createMobBlueprintForm;
     activeForm.style.display = "block";
     input.value = "";
   });

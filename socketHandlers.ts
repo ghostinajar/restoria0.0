@@ -8,8 +8,8 @@ import worldEmitter from "./model/classes/WorldEmitter.js";
 import { IMobBlueprint } from "./model/classes/MobBlueprint.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
-  if (formData.form === "createMobForm") {
-    socket.emit(`openCreateMobForm`, formData);
+  if (formData.form === "createMobBlueprintForm") {
+    socket.emit(`opencreateMobBlueprintForm`, formData);
     return;
   }
   if (formData.form === "createRoomForm") {

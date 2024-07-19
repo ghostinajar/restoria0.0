@@ -18,7 +18,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
   switch (target) {
     case `mob`: {
       worldEmitter.emit(`formPromptFor${user.username}`, {
-        form: `createMobForm`,
+        form: `createMobBlueprintForm`,
       });
       break;
     }
