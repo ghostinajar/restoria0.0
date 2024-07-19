@@ -140,3 +140,50 @@
   <button type="submit">Update Mob</button>
   <button type="button" id="cancelEditMobBlueprintForm">Cancel</button>
 </form>
+
+<script>
+  const editMobBlueprintForm = document.getElementById("editMobBlueprintForm");
+ 
+  editMobBlueprintForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const mobId = editMobId;
+    const editMobBlueprintFormData = {
+      name: document.getElementById("editMobName").value,
+      pronouns: Number(document.getElementById("editMobPronouns").value),
+      level: Number(document.getElementById("editMobLevel").value),
+      job: document.getElementById("editMobJob").value,
+      statBlock: {
+        strength: Number(document.getElementById("editMobStr").value),
+        dexterity: Number(document.getElementById("editMobDex").value),
+        constitution: Number(document.getElementById("editMobCon").value),
+        intelligence: Number(document.getElementById("editMobInt").value),
+        wisdom: Number(document.getElementById("editMobWis").value),
+        charisma: 10,
+        spirit: Number(document.getElementById("editMobSpi").value),
+      },
+      keywords: document.getElementById("editMobKeywords").value.split(/[ ,]+/),
+      isUnique: document.getElementById("editMobIsUnique").checked,
+      isMount: document.getElementById("editMobIsMount").checked,
+      isAggressive: document.getElementById("editMobIsAggressive").checked,
+      description: {
+        look: document.getElementById("editLookMob").value,
+        examine: document.getElementById("editExamineMob").value,
+        study: document.getElementById("editStudyMob").value,
+        research: document.getElementById("editResearchMob").value,
+      },
+    };
+    socket.emit(
+      "userSubmittedEditMobBlueprint",
+      mobId,
+      editMobBlueprintFormData
+    );
+    editMobBlueprintForm.reset();
+    editMobBlueprintForm.style.display = "none"; // Hide the form after submission
+  });
+  
+  document
+    .getElementById("cancelEditMobBlueprintForm")
+    .addEventListener("click", function () {
+      editMobBlueprintForm.style.display = "none";
+    });
+</script>

@@ -68,3 +68,35 @@
   <button type="submit">Update Room</button>
   <button type="button" id="cancelEditRoomForm">Cancel</button>
 </form>
+
+<script>
+  const editRoomForm = document.getElementById("editRoomForm");
+
+  editRoomForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const roomData = {
+      name: document.getElementById("roomName").value,
+      direction: "",
+      isDark: document.getElementById("isDark").checked,
+      isIndoors: document.getElementById("isIndoors").checked,
+      isOnWater: document.getElementById("isOnWater").checked,
+      isUnderwater: document.getElementById("isUnderwater").checked,
+      noMounts: document.getElementById("noMounts").checked,
+      noMobs: document.getElementById("noMobs").checked,
+      noMagic: document.getElementById("noMagic").checked,
+      noCombat: document.getElementById("noCombat").checked,
+      examine: document.getElementById("examineRoom").value,
+      study: document.getElementById("studyRoom").value,
+      research: document.getElementById("researchRoom").value,
+    };
+    socket.emit("userSubmittedRoomEdit", roomData);
+    editRoomForm.reset();
+    editRoomForm.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelEditRoomForm")
+    .addEventListener("click", function () {
+      editRoomForm.style.display = "none";
+    });
+</script>

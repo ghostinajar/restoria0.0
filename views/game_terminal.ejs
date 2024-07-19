@@ -29,33 +29,16 @@
       <%- include('edit_room_form'); %>
       <%- include('edit_user_form'); %>
     </div>
-
-    <!-- Command form -->
-    <form id="commandForm" action="" autocomplete="off">
-      <label for="commandInput"></label>
-      <input id="commandInput" maxlength="80" />
-      <button type="submit">Send</button>
-    </form>
+    <%- include('command_form'); %>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io(); // no URL needed for now; defaults to host that serves the page
       const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
-      const commandForm = document.getElementById("commandForm");
-      const createMobForm = document.getElementById("createMobForm");
-      const createRoomForm = document.getElementById("createRoomForm");
-      const createUserForm = document.getElementById("createUserForm");
-      const editMobBlueprintForm = document.getElementById("editMobBlueprintForm");
       let editMobId = '';
-      const editMobSelect = document.getElementById("editMobSelect");
-      const editRoomForm = document.getElementById("editRoomForm");
-      const editUserForm = document.getElementById("editUserForm");
-      const newUserName = document.getElementById("newUserName");
-      const password = document.getElementById("new-password");
       const input = document.getElementById("commandInput");
       const messagesContainer = document.getElementById("messagesContainer");
       const messages = document.getElementById("messages");
-      const directionSelect = document.getElementById("newRoomDirection");
 
       //methods definitions (validation and parsing are client version)
       function generateStringSelectOptions(stringArray, select) {
@@ -117,207 +100,16 @@
         window.scrollTo(0, document.body.scrollHeight);
       }
 
-      // Form cancel button listeners
-      document.getElementById("cancelCreateMobForm").addEventListener("click", function () {
-        createMobForm.style.display = "none";
-      });
-
-      document.getElementById("cancelCreateRoomForm").addEventListener("click", function () {
-        createRoomForm.style.display = "none";
-      });
-
-      document.getElementById("cancelCreateUserForm").addEventListener("click", function () {
-        createUserForm.style.display = "none";
-      });
-
-      document.getElementById("cancelEditMobSelect").addEventListener("click", function () {
-        editMobSelect.style.display = "none";
-      });
-
-      document.getElementById("cancelEditMobBlueprintForm").addEventListener("click", function () {
-        editMobBlueprintForm.style.display = "none";
-      });
-
-      document.getElementById("cancelEditUserForm").addEventListener("click", function () {
-        editUserForm.style.display = "none";
-      });
-
-      document.getElementById("cancelEditRoomForm").addEventListener("click", function () {
-        editRoomForm.style.display = "none";
-      });
-
       let activeForm = editUserForm;
-
-      // Form submit button listeners
-      commandForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (input.value) {
-          const parsedCommand = parseCommand(input.value);
-          //reject invalid command words
-
-          if (!isValidCommandWord(parsedCommand.commandWord)) {
-            const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
-            appendMessageToTerminal(
-              { type: "rejection", content: `Sorry, '${shortenedCommand}' is not a valid command word.` }
-            );
-            input.value = "";
-            return;
-          }
-          socket.emit("userSentCommand", input.value);
-          input.value = "";
-        }
-      });
-
-      createMobForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const createMobFormData = {
-          _id: editMobId,
-          name: document.getElementById("newMobName").value,
-          pronouns: Number(document.getElementById("newMobPronouns").value),
-          level: Number(document.getElementById("newMobLevel").value),
-          job: document.getElementById("newMobJob").value,
-          statBlock: {
-            strength: Number(document.getElementById("newMobStr").value),
-            dexterity: Number(document.getElementById("newMobDex").value),
-            constitution: Number(document.getElementById("newMobCon").value),
-            intelligence: Number(document.getElementById("newMobInt").value),
-            wisdom: Number(document.getElementById("newMobWis").value),
-            charisma: 10,
-            spirit: Number(document.getElementById("newMobSpi").value),
-          },
-          keywords: document.getElementById("newMobKeywords").value.split(/[ ,]+/),
-          isUnique: document.getElementById("newMobIsUnique").checked,
-          isMount: document.getElementById("newMobIsMount").checked,
-          isAggressive: document.getElementById("newMobIsAggressive").checked,
-          description: {
-            look: document.getElementById("newLookMob").value,
-            examine: document.getElementById("newExamineMob").value,
-            study: document.getElementById("newStudyMob").value,
-            research: document.getElementById("newResearchMob").value,
-          },
-        };
-        socket.emit("userSubmittedNewMobBlueprint", createMobFormData);
-        createMobForm.reset();
-        createMobForm.style.display = "none"; // Hide the form after submission
-      });
-
-      createRoomForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const roomData = {
-          name: document.getElementById("newRoomName").value,
-          direction: document.getElementById("newRoomDirection").value,
-          isDark: document.getElementById("newIsDark").checked,
-          isIndoors: document.getElementById("newIsIndoors").checked,
-          isOnWater: document.getElementById("newIsOnWater").checked,
-          isUnderwater: document.getElementById("newIsUnderwater").checked,
-          noMounts: false,
-          noMobs: false,
-          noMagic: false,
-          noCombat: false,
-          examine: document.getElementById("newExamineRoom").value,
-          study: document.getElementById("newStudyRoom").value,
-          research: document.getElementById("newResearchRoom").value,
-        };
-        socket.emit("userSubmittedNewRoom", roomData);
-        createRoomForm.reset();
-        createRoomForm.style.display = "none"; // Hide the form after submission
-      });
-
-      createUserForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const userData = {
-          username: document.getElementById("newUserName").value.toLowerCase(),
-          name: document.getElementById("newUserName").value,
-          password: document.getElementById("new-password").value,
-          pronouns: document.getElementById("pronouns").value,
-          job: document.getElementById("job").value,
-        };
-        socket.emit("userSubmittedNewUser", userData);
-        createUserForm.reset();
-        createUserForm.style.display = "none"; // Hide the form after submission
-      });
-
-      editMobBlueprintForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const mobId = editMobId;
-        const editMobBlueprintFormData = {
-          name: document.getElementById("editMobName").value,
-          pronouns: Number(document.getElementById("editMobPronouns").value),
-          level: Number(document.getElementById("editMobLevel").value),
-          job: document.getElementById("editMobJob").value,
-          statBlock: {
-            strength: Number(document.getElementById("editMobStr").value),
-            dexterity: Number(document.getElementById("editMobDex").value),
-            constitution: Number(document.getElementById("editMobCon").value),
-            intelligence: Number(document.getElementById("editMobInt").value),
-            wisdom: Number(document.getElementById("editMobWis").value),
-            charisma: 10,
-            spirit: Number(document.getElementById("editMobSpi").value),
-          },
-          keywords: document.getElementById("editMobKeywords").value.split(/[ ,]+/),
-          isUnique: document.getElementById("editMobIsUnique").checked,
-          isMount: document.getElementById("editMobIsMount").checked,
-          isAggressive: document.getElementById("editMobIsAggressive").checked,
-          description: {
-            look: document.getElementById("editLookMob").value,
-            examine: document.getElementById("editExamineMob").value,
-            study: document.getElementById("editStudyMob").value,
-            research: document.getElementById("editResearchMob").value,
-          },
-        };
-        socket.emit("userSubmittedEditMobBlueprint", mobId, editMobBlueprintFormData);
-        editMobBlueprintForm.reset();
-        editMobBlueprintForm.style.display = "none"; // Hide the form after submission
-      });
-
-      editMobSelect.addEventListener("submit", (e) => {
-        e.preventDefault();
-        editMobId = document.getElementById("editMobSelectName").value;
-        socket.emit("userSelectedMobEdit", editMobId);
-        editMobSelect.reset();
-        editMobSelect.style.display = "none"; // Hide the form after submission
-      });
-
-      editRoomForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const roomData = {
-          name: document.getElementById("roomName").value,
-          direction: '',
-          isDark: document.getElementById("isDark").checked,
-          isIndoors: document.getElementById("isIndoors").checked,
-          isOnWater: document.getElementById("isOnWater").checked,
-          isUnderwater: document.getElementById("isUnderwater").checked,
-          noMounts: document.getElementById("noMounts").checked,
-          noMobs: document.getElementById("noMobs").checked,
-          noMagic: document.getElementById("noMagic").checked,
-          noCombat: document.getElementById("noCombat").checked,
-          examine: document.getElementById("examineRoom").value,
-          study: document.getElementById("studyRoom").value,
-          research: document.getElementById("researchRoom").value,
-        };
-        socket.emit("userSubmittedRoomEdit", roomData);
-        editRoomForm.reset();
-        editRoomForm.style.display = "none"; // Hide the form after submission
-      });
-
-      editUserForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const userDescription = {
-          examine: document.getElementById("examineUser").value,
-          study: document.getElementById("studyUser").value,
-          research: document.getElementById("researchUser").value,
-        };
-        socket.emit("userSubmittedUserDescription", userDescription);
-        editUserForm.reset();
-        editUserForm.style.display = "none"; // Hide the form after submission
-      });
-
+      
       //socket event listeners
       socket.on("openCreateMobForm", (formData) => {
-        console.log(`openCreateMobForm received formData: ${JSON.stringify(formData)}`);
+        console.log(
+          `openCreateMobForm received formData: ${JSON.stringify(formData)}`
+        );
         activeForm.reset();
         activeForm.style.display = "none";
-        activeForm = createMobForm; 
+        activeForm = createMobForm;
         activeForm.style.display = "block";
         input.value = "";
       });

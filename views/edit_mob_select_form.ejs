@@ -14,3 +14,21 @@
   <button type="submit">Select Mob</button>
   <button type="button" id="cancelEditMobSelect">Cancel</button>
 </form>
+
+<script>
+  const editMobSelect = document.getElementById("editMobSelect");
+
+  editMobSelect.addEventListener("submit", (e) => {
+    e.preventDefault();
+    editMobId = document.getElementById("editMobSelectName").value;
+    socket.emit("userSelectedMobEdit", editMobId);
+    editMobSelect.reset();
+    editMobSelect.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelEditMobSelect")
+    .addEventListener("click", function () {
+      editMobSelect.style.display = "none";
+    });
+</script>

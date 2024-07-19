@@ -35,3 +35,25 @@
   <button type="submit">Update Description</button>
   <button type="button" id="cancelEditUserForm">Cancel</button>
 </form>
+
+<script>
+  const editUserForm = document.getElementById("editUserForm");
+
+  editUserForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const userDescription = {
+      examine: document.getElementById("examineUser").value,
+      study: document.getElementById("studyUser").value,
+      research: document.getElementById("researchUser").value,
+    };
+    socket.emit("userSubmittedUserDescription", userDescription);
+    editUserForm.reset();
+    editUserForm.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelEditUserForm")
+    .addEventListener("click", function () {
+      editUserForm.style.display = "none";
+    });
+</script>

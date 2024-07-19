@@ -84,3 +84,36 @@
   <button type="submit">Create Room</button>
   <button type="button" id="cancelCreateRoomForm">Cancel</button>
 </form>
+
+<script>
+  const createRoomForm = document.getElementById("createRoomForm");
+  const directionSelect = document.getElementById("newRoomDirection");
+
+  createRoomForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const roomData = {
+      name: document.getElementById("newRoomName").value,
+      direction: document.getElementById("newRoomDirection").value,
+      isDark: document.getElementById("newIsDark").checked,
+      isIndoors: document.getElementById("newIsIndoors").checked,
+      isOnWater: document.getElementById("newIsOnWater").checked,
+      isUnderwater: document.getElementById("newIsUnderwater").checked,
+      noMounts: false,
+      noMobs: false,
+      noMagic: false,
+      noCombat: false,
+      examine: document.getElementById("newExamineRoom").value,
+      study: document.getElementById("newStudyRoom").value,
+      research: document.getElementById("newResearchRoom").value,
+    };
+    socket.emit("userSubmittedNewRoom", roomData);
+    createRoomForm.reset();
+    createRoomForm.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelCreateRoomForm")
+    .addEventListener("click", function () {
+      createRoomForm.style.display = "none";
+    });
+</script>

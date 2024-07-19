@@ -135,3 +135,46 @@
   <button type="submit">Create Mob</button>
   <button type="button" id="cancelCreateMobForm">Cancel</button>
 </form>
+
+<script>
+  const createMobForm = document.getElementById("createMobForm");
+
+  createMobForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const createMobFormData = {
+      _id: '',
+      name: document.getElementById("newMobName").value,
+      pronouns: Number(document.getElementById("newMobPronouns").value),
+      level: Number(document.getElementById("newMobLevel").value),
+      job: document.getElementById("newMobJob").value,
+      statBlock: {
+        strength: Number(document.getElementById("newMobStr").value),
+        dexterity: Number(document.getElementById("newMobDex").value),
+        constitution: Number(document.getElementById("newMobCon").value),
+        intelligence: Number(document.getElementById("newMobInt").value),
+        wisdom: Number(document.getElementById("newMobWis").value),
+        charisma: 10,
+        spirit: Number(document.getElementById("newMobSpi").value),
+      },
+      keywords: document.getElementById("newMobKeywords").value.split(/[ ,]+/),
+      isUnique: document.getElementById("newMobIsUnique").checked,
+      isMount: document.getElementById("newMobIsMount").checked,
+      isAggressive: document.getElementById("newMobIsAggressive").checked,
+      description: {
+        look: document.getElementById("newLookMob").value,
+        examine: document.getElementById("newExamineMob").value,
+        study: document.getElementById("newStudyMob").value,
+        research: document.getElementById("newResearchMob").value,
+      },
+    };
+    socket.emit("userSubmittedNewMobBlueprint", createMobFormData);
+    createMobForm.reset();
+    createMobForm.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelCreateMobForm")
+    .addEventListener("click", function () {
+      createMobForm.style.display = "none";
+    });
+</script>
