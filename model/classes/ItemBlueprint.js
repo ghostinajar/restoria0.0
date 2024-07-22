@@ -1,3 +1,4 @@
+// ItemBlueprint
 import mongoose from 'mongoose';
 import historySchema from './History.js';
 import descriptionSchema from './Description.js';
@@ -21,7 +22,7 @@ const itemBlueprintSchema = new Schema({
         default: 0
     },
     capacity: Number,
-    levelRestriction: Number,
+    minimumLevel: Number,
     history: {
         type: historySchema,
         default: () => ({})

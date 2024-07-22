@@ -47,14 +47,17 @@ async function activateItemNodes(
           if (!item.inventory) {
             item.inventory = [];
           }
-          await activateItemNodes(blueprint.itemNodes, item.inventory, true);
-          // logger.debug(
-          //   `Items in container "${item.name}": ${item.inventory.map(
-          //     (item: IItem) => {
-          //       return item.name;
-          //     }
-          //   )}`
-          // );
+          if (blueprint.itemNodes) {
+            await activateItemNodes(blueprint.itemNodes, item.inventory, true);
+            // logger.debug(
+            //   `Items in container "${item.name}": ${item.inventory.map(
+            //     (item: IItem) => {
+            //       return item.name;
+            //     }
+            //   )}`
+            // );
+          }
+          
         } else if (item.itemType == "container" && isNested) {
           logger.error(
             `Skipping container "${item.name}" because it is nested.`

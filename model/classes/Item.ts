@@ -2,6 +2,8 @@
 import mongoose from "mongoose";
 import descriptionSchema, { IDescription } from "./Description.js";
 import affixSchema, { IAffix } from "./Affix.js";
+import { ISpellCharges, IWeaponStats } from './ItemBlueprint.js';
+
 
 const { Schema } = mongoose;
 
@@ -14,19 +16,6 @@ const { Schema } = mongoose;
 // because mongodb says Data used together should be stored together,
 // (items are only ever loaded/saved from db attached to a user).
 
-export interface IWeaponStats {
-  damageDieSides: number;
-  damageDieQuantity: number;
-  damageType: string;
-  isRanged: boolean;
-}
-
-export interface ISpellCharges {
-  name: string;
-  level: number;
-  maxCharges: number;
-}
-
 export interface IItem {
   _id: mongoose.Types.ObjectId;
   itemBlueprint: mongoose.Types.ObjectId;
@@ -36,7 +25,7 @@ export interface IItem {
   itemType: string;
   price: number;
   capacity: number;
-  levelRestriction: number;
+  minimumLevel: number;
   description: IDescription;
   weaponStats: IWeaponStats;
   spellCharges: ISpellCharges;
@@ -45,7 +34,7 @@ export interface IItem {
   wearableLocations: Array<string>;
   creationDate: Date;
   expiryDate: Date;
-  levelRestrictionTweak: number;
+  minimumLevelTweak: number;
   isInStorage: boolean;
   spellChargesRemaining: number;
   isIdentified: boolean;
@@ -73,7 +62,7 @@ const itemSchema = new Schema<IItem>({
   itemType: String,
   price: Number,
   capacity: Number,
-  levelRestriction: Number,
+  minimumLevel: Number,
   description: {
     type: descriptionSchema,
     default: () => ({}),
@@ -102,7 +91,7 @@ const itemSchema = new Schema<IItem>({
       return Date.now() + 1000 * 60 * 60 * 24 * 180;
     },
   },
-  levelRestrictionTweak: Number,
+  minimumLevelTweak: Number,
   isInStorage: Boolean,
   spellChargesRemaining: Number,
   isIdentified: Boolean,

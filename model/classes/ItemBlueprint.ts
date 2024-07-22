@@ -1,11 +1,24 @@
+// ItemBlueprint
 import mongoose from 'mongoose';
 import historySchema, { IHistory } from './History.js';
 import descriptionSchema, { IDescription } from './Description.js';
 import affixSchema, { IAffix } from './Affix.js';
 import itemNodeSchema, { IItemNode } from './ItemNode.js';
-import { ISpellCharges, IWeaponStats } from './Item.js';
 
 const { Schema } = mongoose;
+
+export interface IWeaponStats {
+    damageDieSides: number;
+    damageDieQuantity: number;
+    damageType: string;
+    isRanged: boolean;
+  }
+  
+  export interface ISpellCharges {
+    name: string;
+    level: number;
+    maxCharges: number;
+  }
 
 export interface IItemBlueprint {
     _id: mongoose.Types.ObjectId;
@@ -14,17 +27,17 @@ export interface IItemBlueprint {
     itemType: string;
     price: number;
     capacity: number;
-    levelRestriction: number;
+    minimumLevel: number;
     history: IHistory;
     description: IDescription;
-    weaponStats: IWeaponStats;
-    spellCharges: ISpellCharges;
+    weaponStats?: IWeaponStats;
+    spellCharges?: ISpellCharges;
     tags: Array<string>;
     keywords: Array<string>;
-    wearableLocations: Array<string>;
-    affixes: Array<IAffix>;
+    wearableLocations?: Array<string>;
+    affixes?: Array<IAffix>;
     tweakDuration: number;
-    itemNodes: Array<IItemNode>;
+    itemNodes?: Array<IItemNode>;
 }
 
 /*Only mobs and items have blueprints, and only because multiple instances 
@@ -45,7 +58,7 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
         default: 0
     },
     capacity: Number,
-    levelRestriction: Number,
+    minimumLevel: Number,
     history: { 
         type: historySchema,
         default: () => ({})

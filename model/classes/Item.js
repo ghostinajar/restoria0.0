@@ -21,7 +21,7 @@ const itemSchema = new Schema({
     itemType: String,
     price: Number,
     capacity: Number,
-    levelRestriction: Number,
+    minimumLevel: Number,
     description: {
         type: descriptionSchema,
         default: () => ({}),
@@ -50,7 +50,7 @@ const itemSchema = new Schema({
             return Date.now() + 1000 * 60 * 60 * 24 * 180;
         },
     },
-    levelRestrictionTweak: Number,
+    minimumLevelTweak: Number,
     isInStorage: Boolean,
     spellChargesRemaining: Number,
     isIdentified: Boolean,

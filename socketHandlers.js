@@ -2,6 +2,10 @@ import logger from "./logger.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 export const formPromptForUserHandler = async (formData, socket) => {
+    if (formData.form === "createItemBlueprintForm") {
+        socket.emit(`openCreateItemBlueprintForm`, formData);
+        return;
+    }
     if (formData.form === "createMobBlueprintForm") {
         socket.emit(`opencreateMobBlueprintForm`, formData);
         return;
