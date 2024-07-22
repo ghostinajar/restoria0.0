@@ -19,13 +19,9 @@
     <label for="newItemType">Type:</label>
     <select id="newItemType" name="newItemType" required>
       <option value="armor">armor</option>
-      <option value="container">container</option>
       <option value="fishing_rod">fishing rod</option>
-      <option value="food">food</option>
       <option value="gold">gold</option>
       <option value="key">key</option>
-      <option value="liquid">liquid</option>
-      <option value="liquid_container">liquid container</option>
       <option value="none" selected>none</option>
       <option value="potion">potion</option>
       <option value="scroll">scroll</option>
@@ -88,20 +84,12 @@
       value="0"
       required
     />
-    <label for="newItemCapacity">Capacity:</label>
-    <input
-      type="number"
-      id="newItemCapacity"
-      name="newItemCapacity"
-      min="0"
-      max="20"
-      value="10"
-      required
-    />
     <label for="newItemMinimumLevel">MinLvl:</label>
     <select id="newItemMinimumLevel" name="newItemMinimumLevel" required>
       <!-- populated by script -->
     </select>
+    <label for="newItemIsContainer">Container: </label>
+    <input type="checkbox" id="newItemIsContainer" name="newItemIsContainer" />
   </section>
 
   <button type="submit">Create Item</button>
@@ -114,18 +102,16 @@
   );
 
   document.addEventListener("DOMContentLoaded", () => {
-    generateNumberSelectOptions(1, 31, document.getElementById("newItemMinimumLevel"));
+    generateNumberSelectOptions(
+      1,
+      31,
+      document.getElementById("newItemMinimumLevel")
+    );
   });
 
   createItemBlueprintForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const createItemBlueprintFormData= {
-      history: {
-        creationDate: new Date(),
-        modifiedDate: new Date(),
-        completionStatus: "Draft",
-      },
-      tweakDuration: 182,
+    const createItemBlueprintFormData = {
       name: document.getElementById("newItemName").value,
       itemType: document.getElementById("newItemType").value,
       keywords: document.getElementById("newItemKeywords").value.split(/[ ,]+/),
@@ -136,8 +122,8 @@
         research: document.getElementById("newResearchItem").value,
       },
       price: document.getElementById("newItemPrice").value,
-      capacity: document.getElementById("newItemCapacity").value,
       minimumLevel: document.getElementById("newItemMinimumLevel").value,
+      isContainer: document.getElementById("newItemIsContainer").checked,
     };
     socket.emit("userSubmittedNewItemBlueprint", createItemBlueprintFormData);
     createItemBlueprintForm.reset();

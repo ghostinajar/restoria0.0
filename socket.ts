@@ -32,6 +32,7 @@ import createMobBlueprint, {
 import mongoose from "mongoose";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
+import createItemBlueprint, { IItemBlueprintData } from "./commands/createItemBlueprint.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -139,6 +140,16 @@ const setupSocket = (io: any) => {
           mobBlueprintData: IMobBlueprintData
         ) => {
           await editMobBlueprint(mobId, mobBlueprintData, user);
+        }
+      );
+
+      socket.on(
+        `userSubmittedNewItemBlueprint`,
+        async (itemBlueprintData: IItemBlueprintData) => {
+          const newItemBlueprint = await createItemBlueprint(
+            itemBlueprintData,
+            user
+          );
         }
       );
 

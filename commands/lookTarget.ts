@@ -100,10 +100,7 @@ function lookTarget(target: string, room: IRoom, lookArray: Array<IMessage>) {
     lookArray.push(
       makeMessage(`itemDescription`, `${targetObject.description.examine}`)
     );
-    if (
-      targetObject.itemType === "container" ||
-      targetObject.itemType === "liquid_container"
-    ) {
+    if (targetObject.tags.container) {
       pushTargetInventory(targetObject, lookArray);
     }
     return;

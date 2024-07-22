@@ -73,8 +73,7 @@ function lookTarget(target, room, lookArray) {
         lookArray.push(makeMessage(`heading`, `Name: ${targetObject.name}`));
         // push a message for the target.description.look into lookArray
         lookArray.push(makeMessage(`itemDescription`, `${targetObject.description.examine}`));
-        if (targetObject.itemType === "container" ||
-            targetObject.itemType === "liquid_container") {
+        if (targetObject.tags.container) {
             pushTargetInventory(targetObject, lookArray);
         }
         return;

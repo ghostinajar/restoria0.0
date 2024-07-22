@@ -1,9 +1,9 @@
 // ItemBlueprint
-import mongoose from 'mongoose';
-import historySchema from './History.js';
-import descriptionSchema from './Description.js';
-import affixSchema from './Affix.js';
-import itemNodeSchema from './ItemNode.js';
+import mongoose from "mongoose";
+import historySchema from "./History.js";
+import descriptionSchema from "./Description.js";
+import affixSchema from "./Affix.js";
+import itemNodeSchema from "./ItemNode.js";
 const { Schema } = mongoose;
 /*Only mobs and items have blueprints, and only because multiple instances
 of them will exist in game simultaneously, and they can't all share the same id.
@@ -13,49 +13,74 @@ const itemBlueprintSchema = new Schema({
     _id: Schema.Types.ObjectId,
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User",
     },
     name: String,
     itemType: String,
     price: {
         type: Number,
-        default: 0
+        default: 0,
     },
     capacity: Number,
     minimumLevel: Number,
     history: {
         type: historySchema,
-        default: () => ({})
+        default: () => ({}),
     },
     description: {
         type: descriptionSchema,
-        default: () => ({})
+        default: () => ({}),
     },
     weaponStats: {
         damageDieSides: Number,
         damageDieQuantity: Number,
         damageType: String,
-        isRanged: Boolean
+        isRanged: Boolean,
     },
     spellCharges: {
         spellName: String,
         level: Number,
-        maxCharges: Number
+        maxCharges: Number,
     },
-    tags: [String],
+    tags: {
+        cleric: Boolean,
+        container: Boolean,
+        dark: Boolean,
+        dagger: Boolean,
+        fixture: Boolean,
+        food: Boolean,
+        guild: Boolean,
+        hidden: Boolean,
+        illuminates: Boolean, //lights up the room
+        light: Boolean, //can be equipped by players with a light aura
+        mage: Boolean,
+        neutral: Boolean,
+        quest: Boolean,
+        offhand: Boolean,
+        reach: Boolean,
+        temporary: Boolean,
+        rogue: Boolean,
+        thrown: Boolean,
+        two_hand: Boolean,
+        warrior: Boolean,
+    },
     keywords: [String],
     wearableLocations: [String],
-    affixes: [{
+    affixes: [
+        {
             type: affixSchema,
-            default: () => ({})
-        }],
+            default: () => ({}),
+        },
+    ],
     tweakDuration: {
         type: Number,
         default: 182,
     },
-    itemNodes: [{
+    itemNodes: [
+        {
             type: itemNodeSchema,
-            default: () => ({})
-        }],
+            default: () => ({}),
+        },
+    ],
 });
 export default itemBlueprintSchema;

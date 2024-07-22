@@ -1,11 +1,10 @@
 const ITEM_TAG = {
     CLERIC: 'cleric',
-    COLD: 'cold',
+    CONTAINER: 'container',
     DARK: 'dark',
     DAGGER: 'dagger',
-    ELECTRIC: 'electric',
-    FIRE: 'fire',
     FIXTURE: 'fixture',
+    FOOD: 'food',
     GUILD: 'guild',
     HIDDEN: 'hidden',
     ILLUMINATES: 'illuminates',

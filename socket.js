@@ -17,6 +17,7 @@ import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
+import createItemBlueprint from "./commands/createItemBlueprint.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -72,6 +73,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
                 await editMobBlueprint(mobId, mobBlueprintData, user);
+            });
+            socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
+                const newItemBlueprint = await createItemBlueprint(itemBlueprintData, user);
             });
             socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {
                 const newMobBlueprint = await createMobBlueprint(mobBlueprintData, user);

@@ -31,7 +31,7 @@ export interface IMobBlueprintData {
   };
 }
 
-// Return room, or a message explaining failure (if by author, emit message to their socket)
+// Return mob blueprint, or a message explaining failure (if by author, emit message to their socket)
 async function createMobBlueprint(
   mobFormData: IMobBlueprintData,
   author: IUser
@@ -42,7 +42,7 @@ async function createMobBlueprint(
     // logger.debug(`Trying to create mob blueprint ${mobFormData.name}.`);
     // let originRoom : IRoom = await getRoomOfUser(author);
     // if (!originRoom) {
-    //   logger.error(`Couldn't find origin room to create room.`);
+    //   logger.error(`Couldn't find origin room to create mob.`);
     // }
     let originZone: IZone = await new Promise((resolve) => {
       worldEmitter.once(
@@ -52,7 +52,7 @@ async function createMobBlueprint(
       worldEmitter.emit(`zoneRequested`, author.location.inZone.toString());
     });
     if (!originZone) {
-      logger.error(`Couldn't find origin zone to create room.`);
+      logger.error(`Couldn't find origin zone to create mob.`);
     }
 
     const mobDescription: IDescription = {

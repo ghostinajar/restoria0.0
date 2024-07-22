@@ -2,8 +2,7 @@
 import mongoose from "mongoose";
 import descriptionSchema, { IDescription } from "./Description.js";
 import affixSchema, { IAffix } from "./Affix.js";
-import { ISpellCharges, IWeaponStats } from './ItemBlueprint.js';
-
+import { ISpellCharges, IWeaponStats } from "./ItemBlueprint.js";
 
 const { Schema } = mongoose;
 
@@ -29,7 +28,28 @@ export interface IItem {
   description: IDescription;
   weaponStats: IWeaponStats;
   spellCharges: ISpellCharges;
-  tags: Array<string>;
+  tags: {
+    cleric: boolean;
+    container: boolean;
+    dark: boolean;
+    dagger: boolean;
+    fixture: boolean;
+    food: boolean;
+    guild: boolean;
+    hidden: boolean;
+    illuminates: boolean; //lights up the room
+    light: boolean; //can be equipped by players with a light aura
+    mage: boolean;
+    neutral: boolean;
+    quest: boolean;
+    offhand: boolean;
+    reach: boolean;
+    temporary: boolean;
+    rogue: boolean;
+    thrown: boolean;
+    two_hand: boolean;
+    warrior: boolean;
+  };
   keywords: Array<string>;
   wearableLocations: Array<string>;
   creationDate: Date;
@@ -78,7 +98,28 @@ const itemSchema = new Schema<IItem>({
     level: Number,
     maxCharges: Number,
   },
-  tags: [String],
+  tags: {
+    cleric: Boolean,
+    container: Boolean,
+    dark: Boolean,
+    dagger: Boolean,
+    fixture: Boolean,
+    food: Boolean,
+    guild: Boolean,
+    hidden: Boolean,
+    illuminates: Boolean, //lights up the room
+    light: Boolean, //can be equipped by players with a light aura
+    mage: Boolean,
+    neutral: Boolean,
+    quest: Boolean,
+    offhand: Boolean,
+    reach: Boolean,
+    temporary: Boolean,
+    rogue: Boolean,
+    thrown: Boolean,
+    two_hand: Boolean,
+    warrior: Boolean,
+  },
   keywords: [String],
   wearableLocations: [String],
   creationDate: {

@@ -6,21 +6,21 @@ import mongoose from "mongoose";
 import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
 import truncateDescription from "../util/truncateDescription.js";
 import look from "./look.js";
-// Return room, or a message explaining failure (if by author, emit message to their socket)
+// Return mob blueprint, or a message explaining failure (if by author, emit message to their socket)
 async function createMobBlueprint(mobFormData, author) {
     try {
         let message = makeMessage("rejection", ``);
         // logger.debug(`Trying to create mob blueprint ${mobFormData.name}.`);
         // let originRoom : IRoom = await getRoomOfUser(author);
         // if (!originRoom) {
-        //   logger.error(`Couldn't find origin room to create room.`);
+        //   logger.error(`Couldn't find origin room to create mob.`);
         // }
         let originZone = await new Promise((resolve) => {
             worldEmitter.once(`zone${author.location.inZone.toString()}Loaded`, resolve);
             worldEmitter.emit(`zoneRequested`, author.location.inZone.toString());
         });
         if (!originZone) {
-            logger.error(`Couldn't find origin zone to create room.`);
+            logger.error(`Couldn't find origin zone to create mob.`);
         }
         const mobDescription = {
             look: mobFormData.description.look,
