@@ -19,6 +19,7 @@ import {
   messageForUserHandler,
   messageForUsersRoomHandler,
   messageForUsersZoneHandler,
+  userSelectedItemEditHandler,
   userSelectedMobEditHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
@@ -121,6 +122,14 @@ const setupSocket = (io: any) => {
       );
 
       // Listen for client events
+      socket.on(
+        `userSelectedItemEdit`,
+        async (itemId: mongoose.Types.ObjectId | string) => {
+          logger.debug(`User selected ItemEdit for ${itemId}.`);
+          userSelectedItemEditHandler(user, itemId);
+        }
+      );
+
       socket.on(
         `userSelectedMobEdit`,
         async (mobId: mongoose.Types.ObjectId | string) => {

@@ -1,0 +1,173 @@
+<!-- edit_item_blueprint_form -->
+<form
+  id="editItemBlueprintForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <section>
+    <label for="editItemName">Name:</label>
+    <input
+      id="editItemName"
+      name="editItemName"
+      type="text"
+      maxlength="36"
+      required
+    />
+  </section>
+  <section>
+    <label for="editItemType">Type:</label>
+    <select id="editItemType" name="editItemType" required>
+      <option value="armor">armor</option>
+      <option value="fishing_rod">fishing rod</option>
+      <option value="gold">gold</option>
+      <option value="key">key</option>
+      <option value="none">none</option>
+      <option value="potion">potion</option>
+      <option value="scroll">scroll</option>
+      <option value="token">token</option>
+      <option value="treasure">treasure</option>
+      <option value="wand">wand</option>
+      <option value="weapon">weapon</option>
+    </select>
+  </section>
+  <section>
+    <label for="editItemKeywords">Keywords:</label>
+    <input
+      id="editItemKeywords"
+      name="editItemKeywords"
+      maxlength="80"
+      required
+    />
+  </section>
+  <section>
+    <label for="editLookItem">Look:</label>
+    <input id="editLookItem" name="editLookItem" type="text" maxlength="80" />
+  </section>
+  <section>
+    <label for="editExamineItem">Examine:</label>
+    <textarea
+      id="editExamineItem"
+      name="editExamineItem"
+      type="text"
+      maxlength="240"
+    ></textarea>
+  </section>
+  <section>
+    <label for="editStudyItem">Study:</label>
+    <textarea
+      id="editStudyItem"
+      name="editStudyItem"
+      type="text"
+      maxlength="640"
+    ></textarea>
+  </section>
+  <section>
+    <label for="editResearchItem">Research:</label>
+    <textarea
+      id="editResearchItem"
+      name="editResearchItem"
+      type="text"
+      maxlength="1600"
+    ></textarea>
+  </section>
+  <section>
+    <label for="editItemPrice">Price:</label>
+    <input
+      type="number"
+      id="editItemPrice"
+      name="editItemPrice"
+      min="0"
+      max="100000"
+      value="0"
+      required
+    />
+    <label for="editItemMinimumLevel">MinLvl:</label>
+    <select id="editItemMinimumLevel" name="editItemMinimumLevel" required>
+      <!-- populated by script -->
+    </select>
+    <label for="editItemIsContainer">Container:</label>
+    <input
+      type="checkbox"
+      id="editItemIsContainer"
+      name="editItemIsContainer"
+    />
+  </section>
+  <button type="submit">Update Item</button>
+  <button type="button" id="cancelEditItemBlueprintForm">Cancel</button>
+</form>
+
+<script>
+  const editItemBlueprintForm = document.getElementById(
+    "editItemBlueprintForm"
+  );
+
+  document.addEventListener("DOMContentLoaded", () => {
+    generateNumberSelectOptions(
+      1,
+      31,
+      document.getElementById("editItemMinimumLevel")
+    );
+  });
+
+  editItemBlueprintForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const itemId = editItemId;
+    const editItemBlueprintFormData = {
+      name: document.getElementById("editItemName").value,
+      itemType: document.getElementById("editItemType").value,
+      keywords: document
+        .getElementById("editItemKeywords")
+        .value.split(/[ ,]+/),
+      description: {
+        look: document.getElementById("editLookItem").value,
+        examine: document.getElementById("editExamineItem").value,
+        study: document.getElementById("editStudyItem").value,
+        research: document.getElementById("editResearchItem").value,
+      },
+      price: document.getElementById("editItemPrice").value,
+      minimumLevel: document.getElementById("editItemMinimumLevel").value,
+      isContainer: document.getElementById("editItemIsContainer").checked,
+    };
+    socket.emit(
+      "userSubmittedEditItemBlueprint",
+      itemId,
+      editItemBlueprintFormData
+    );
+    editItemBlueprintForm.reset();
+    editItemBlueprintForm.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelEditItemBlueprintForm")
+    .addEventListener("click", function () {
+      editItemBlueprintForm.style.display = "none";
+    });
+
+  socket.on("openEditItemBlueprintForm", (formData) => {
+    console.log(`received openEditItemBlueprintForm with formData` + formData)
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = editItemBlueprintForm;
+    activeForm.style.display = "block";
+    input.value = "";
+    console.log(JSON.stringify(formData));
+    // Set the values of the fields based on formData
+    document.getElementById("editItemName").value = formData.name || "";
+    document.getElementById("editItemType").value = formData.itemType || "none";
+    document.getElementById("editItemKeywords").value = formData.keywords || "";
+    document.getElementById("editLookItem").value =
+      formData.description.look || "";
+    document.getElementById("editExamineItem").value =
+      formData.description.examine || "";
+    document.getElementById("editStudyItem").value =
+      formData.description.study || "";
+    document.getElementById("editResearchItem").value =
+      formData.description.research || "";
+    document.getElementById("editItemPrice").value =
+      formData.price || 0;
+    document.getElementById("editItemMinimumLevel").value = formData.minimumLevel || 0;
+    document.getElementById("editItemIsContainer").checked =
+      formData.isContainer || false;
+  });
+</script>

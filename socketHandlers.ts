@@ -6,6 +6,7 @@ import IMessage from "./types/Message.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import { IMobBlueprint } from "./model/classes/MobBlueprint.js";
+import { IItemBlueprint } from "./model/classes/ItemBlueprint.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -22,6 +23,11 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   }
   if (formData.form === "createUserForm") {
     socket.emit(`openCreateUserForm`);
+    return;
+  }
+  if (formData.form === "editItemBlueprintForm") {
+    console.log(formData);
+    socket.emit(`openEditItemBlueprintForm`, formData.editItemBlueprintFormData);
     return;
   }
   if (formData.form === "editMobBlueprintForm") {
@@ -76,6 +82,39 @@ export const messageForUsersZoneHandler = async (
   user: IUser
 ) => {
   socket.to(user.location.inZone.toString()).emit(`message`, message);
+};
+
+export const userSelectedItemEditHandler = async (
+  user: IUser,
+  itemId: mongoose.Types.ObjectId | string
+) => {
+  const zone = await getZoneOfUser(user);
+  logger.debug(`userSelectedItemEditHandler found zone ${zone.name}`)
+  const itemBlueprint: IItemBlueprint | undefined = zone.itemBlueprints.find(
+    (blueprint) => blueprint._id.toString() === itemId.toString()
+  );
+  if (!itemBlueprint) {
+    logger.error(
+      `userSelectedItemEditHandler couldn't find blueprint for ${itemId}`
+    );
+    return;
+  }
+  logger.debug(`userSelectedItemEditHandler found blueprint for ${itemBlueprint.name}`)
+  const editItemBlueprintFormData = {
+    _id: itemBlueprint?._id,
+    name: itemBlueprint?.name,
+    itemType: itemBlueprint?.itemType,
+    keywords: itemBlueprint?.keywords,
+    description: itemBlueprint?.description,
+    price: itemBlueprint?.price,
+    minimumLevel: itemBlueprint?.minimumLevel,
+    isContainer: itemBlueprint?.tags.container,
+  };
+  logger.debug(`userSelectedItemEditHandler sending formData ${JSON.stringify(editItemBlueprintFormData)}`);
+  worldEmitter.emit(`formPromptFor${user.username}`, {
+    form: `editItemBlueprintForm`,
+    editItemBlueprintFormData,
+  });
 };
 
 export const userSelectedMobEditHandler = async (
