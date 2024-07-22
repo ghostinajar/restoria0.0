@@ -38,7 +38,7 @@ const itemBlueprintSchema = new Schema({
         isRanged: Boolean,
     },
     spellCharges: {
-        spellName: String,
+        name: String,
         level: Number,
         maxCharges: Number,
     },

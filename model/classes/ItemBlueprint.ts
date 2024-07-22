@@ -95,7 +95,7 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     isRanged: Boolean,
   },
   spellCharges: {
-    spellName: String,
+    name: String,
     level: Number,
     maxCharges: Number,
   },
