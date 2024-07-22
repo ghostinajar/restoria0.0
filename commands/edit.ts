@@ -18,6 +18,12 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
   }
 
   switch (target) {
+    case `item`: {
+      const zone: IZone = await getZoneOfUser(user);
+      const itemBlueprintList = zone.itemBlueprints.map(blueprint => {return {"id": blueprint._id, "value": blueprint.name}});
+      worldEmitter.emit(`formPromptFor${user.username}`, {form: `editItemSelect`, list: itemBlueprintList});
+      break;
+    }
     case `mob`: {
       const zone: IZone = await getZoneOfUser(user);
       const mobBlueprintList = zone.mobBlueprints.map(blueprint => {return {"id": blueprint._id, "value": blueprint.name}});

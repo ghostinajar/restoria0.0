@@ -1,0 +1,48 @@
+<!-- Edit item select form -->
+<form
+  id="editItemSelect"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <section>
+    <label for="editItemSelectName">Name:</label>
+    <select id="editItemSelectName" name="editItemSelectName" required>
+      <!-- populated by script -->
+    </select>
+  </section>
+  <button type="submit">Select Item</button>
+  <button type="button" id="cancelEditItemSelect">Cancel</button>
+</form>
+
+<script>
+  const editItemSelect = document.getElementById("editItemSelect");
+  let editItemId = "";
+
+  editItemSelect.addEventListener("submit", (e) => {
+    e.preventDefault();
+    editItemId = document.getElementById("editItemSelectName").value;
+    socket.emit("userSelectedItemEdit", editItemId);
+    editItemSelect.reset();
+    editItemSelect.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelEditItemSelect")
+    .addEventListener("click", function () {
+      editItemSelect.style.display = "none";
+    });
+
+  socket.on("openEditItemSelect", (formData) => {
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = editItemSelect;
+    activeForm.style.display = "block";
+    input.value = "";
+    // Set the editItemSelectName options
+    generateStringSelectOptions(
+      formData,
+      document.getElementById("editItemSelectName")
+    );
+  });
+</script>
