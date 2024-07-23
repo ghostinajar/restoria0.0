@@ -11,7 +11,11 @@ export interface IWeaponStats {
   damageDieSides: number;
   damageDieQuantity: number;
   damageType: string;
+  isFinesse: boolean;
+  isLight: boolean;
+  isReach: boolean;
   isRanged: boolean;
+  isTwohand: boolean;
 }
 
 export interface ISpellCharges {
@@ -36,7 +40,6 @@ export interface IItemBlueprint {
     cleric: boolean;
     container: boolean;
     dark: boolean;
-    dagger: boolean;
     fixture: boolean;
     food: boolean;
     guild: boolean;
@@ -46,12 +49,8 @@ export interface IItemBlueprint {
     mage: boolean;
     neutral: boolean;
     quest: boolean;
-    offhand: boolean;
-    reach: boolean;
     temporary: boolean;
     rogue: boolean;
-    thrown: boolean;
-    two_hand: boolean;
     warrior: boolean;
   };
   keywords: Array<string>;
@@ -92,8 +91,13 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     damageDieSides: Number,
     damageDieQuantity: Number,
     damageType: String,
+    isFinesse: Boolean,
+    isLight: Boolean,
+    isReach: Boolean,
     isRanged: Boolean,
+    isTwohand: Boolean,
   },
+
   spellCharges: {
     name: String,
     level: Number,
@@ -103,7 +107,6 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     cleric: Boolean,
     container: Boolean,
     dark: Boolean,
-    dagger: Boolean,
     fixture: Boolean,
     food: Boolean,
     guild: Boolean,
@@ -113,12 +116,8 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     mage: Boolean,
     neutral: Boolean,
     quest: Boolean,
-    offhand: Boolean,
-    reach: Boolean,
     temporary: Boolean,
     rogue: Boolean,
-    thrown: Boolean,
-    two_hand: Boolean,
     warrior: Boolean,
   },
   keywords: [String],

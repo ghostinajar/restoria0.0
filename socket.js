@@ -18,6 +18,7 @@ import createMobBlueprint from "./commands/createMobBlueprint.js";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
+import editItemBlueprint from "./commands/editItemBlueprint.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -74,6 +75,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSentCommand`, async (userInput) => {
                 userSentCommandHandler(socket, userInput, user);
+            });
+            socket.on(`userSubmittedEditItemBlueprint`, async (itemId, itemBlueprintData) => {
+                await editItemBlueprint(itemId, itemBlueprintData, user);
             });
             socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
                 await editMobBlueprint(mobId, mobBlueprintData, user);

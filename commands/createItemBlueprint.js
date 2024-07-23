@@ -8,7 +8,6 @@ import truncateDescription from "../util/truncateDescription.js";
 import look from "./look.js";
 import DAMAGE_TYPE from "../constants/DAMAGE_TYPE.js";
 import ITEM_TYPE from "../constants/ITEM_TYPE.js";
-import WEARABLE_LOCATION from "../constants/WEARABLE_LOCATION.js";
 import SPELL from "../constants/SPELL.js";
 // Return item blueprint, or a message explaining failure (if by author, emit message to their socket)
 async function createItemBlueprint(itemFormData, author) {
@@ -52,7 +51,6 @@ async function createItemBlueprint(itemFormData, author) {
                 cleric: true,
                 container: itemFormData.isContainer,
                 dark: true,
-                dagger: false,
                 fixture: false,
                 food: false,
                 guild: false,
@@ -62,12 +60,8 @@ async function createItemBlueprint(itemFormData, author) {
                 mage: true,
                 neutral: true,
                 quest: false,
-                offhand: false,
-                reach: false,
                 temporary: false,
                 rogue: true,
-                thrown: false,
-                two_hand: false,
                 warrior: true,
             },
             keywords: itemFormData.keywords,
@@ -79,12 +73,6 @@ async function createItemBlueprint(itemFormData, author) {
         }
         if (itemFormData.itemType === ITEM_TYPE.ARMOR) {
             newItemBlueprint.wearableLocations = [];
-        }
-        if (itemFormData.itemType === ITEM_TYPE.FISHING_ROD ||
-            itemFormData.itemType === ITEM_TYPE.NONE ||
-            itemFormData.itemType === ITEM_TYPE.KEY ||
-            itemFormData.itemType === ITEM_TYPE.WAND) {
-            newItemBlueprint.wearableLocations = [WEARABLE_LOCATION.HELD];
         }
         if (itemFormData.itemType === ITEM_TYPE.POTION ||
             itemFormData.itemType === ITEM_TYPE.SCROLL ||
@@ -100,12 +88,12 @@ async function createItemBlueprint(itemFormData, author) {
                 damageDieSides: 6,
                 damageDieQuantity: 1,
                 damageType: DAMAGE_TYPE.BLUDGEONING,
+                isFinesse: false,
+                isLight: false,
+                isReach: false,
                 isRanged: false,
+                isTwohand: false
             };
-            newItemBlueprint.wearableLocations = [
-                WEARABLE_LOCATION.WEAPON1,
-                WEARABLE_LOCATION.WEAPON2,
-            ];
         }
         originZone.itemBlueprints.push(newItemBlueprint);
         await originZone.save();

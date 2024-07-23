@@ -32,7 +32,6 @@ export interface IItem {
     cleric: boolean;
     container: boolean;
     dark: boolean;
-    dagger: boolean;
     fixture: boolean;
     food: boolean;
     guild: boolean;
@@ -42,12 +41,8 @@ export interface IItem {
     mage: boolean;
     neutral: boolean;
     quest: boolean;
-    offhand: boolean;
-    reach: boolean;
     temporary: boolean;
     rogue: boolean;
-    thrown: boolean;
-    two_hand: boolean;
     warrior: boolean;
   };
   keywords: Array<string>;
@@ -91,7 +86,11 @@ const itemSchema = new Schema<IItem>({
     damageDieSides: Number,
     damageDieQuantity: Number,
     damageType: String,
+    isFinesse: Boolean,
+    isLight: Boolean,
+    isReach: Boolean,
     isRanged: Boolean,
+    isTwohand: Boolean,
   },
   spellCharges: {
     name: String,

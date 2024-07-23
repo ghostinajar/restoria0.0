@@ -13,7 +13,6 @@ import { IItemBlueprint } from "../model/classes/ItemBlueprint.js";
 import look from "./look.js";
 import DAMAGE_TYPE from "../constants/DAMAGE_TYPE.js";
 import ITEM_TYPE from "../constants/ITEM_TYPE.js";
-import WEARABLE_LOCATION from "../constants/WEARABLE_LOCATION.js";
 import SPELL from "../constants/SPELL.js";
 
 export interface IItemBlueprintData {
@@ -83,7 +82,6 @@ async function createItemBlueprint(
         cleric: true,
         container: itemFormData.isContainer,
         dark: true,
-        dagger: false,
         fixture: false,
         food: false,
         guild: false,
@@ -93,12 +91,8 @@ async function createItemBlueprint(
         mage: true,
         neutral: true,
         quest: false,
-        offhand: false,
-        reach: false,
         temporary: false,
         rogue: true,
-        thrown: false,
-        two_hand: false,
         warrior: true,
       },
       keywords: itemFormData.keywords,
@@ -112,15 +106,6 @@ async function createItemBlueprint(
 
     if (itemFormData.itemType === ITEM_TYPE.ARMOR) {
       newItemBlueprint.wearableLocations = [];
-    }
-
-    if (
-      itemFormData.itemType === ITEM_TYPE.FISHING_ROD ||
-      itemFormData.itemType === ITEM_TYPE.NONE ||
-      itemFormData.itemType === ITEM_TYPE.KEY ||
-      itemFormData.itemType === ITEM_TYPE.WAND
-    ) {
-      newItemBlueprint.wearableLocations = [WEARABLE_LOCATION.HELD];
     }
 
     if (
@@ -140,12 +125,12 @@ async function createItemBlueprint(
         damageDieSides: 6,
         damageDieQuantity: 1,
         damageType: DAMAGE_TYPE.BLUDGEONING,
+        isFinesse: false,
+        isLight: false,
+        isReach: false,
         isRanged: false,
+        isTwohand: false
       };
-      newItemBlueprint.wearableLocations = [
-        WEARABLE_LOCATION.WEAPON1,
-        WEARABLE_LOCATION.WEAPON2,
-      ];
     }
 
     originZone.itemBlueprints.push(newItemBlueprint);

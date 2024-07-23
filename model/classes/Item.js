@@ -30,7 +30,11 @@ const itemSchema = new Schema({
         damageDieSides: Number,
         damageDieQuantity: Number,
         damageType: String,
+        isFinesse: Boolean,
+        isLight: Boolean,
+        isReach: Boolean,
         isRanged: Boolean,
+        isTwohand: Boolean,
     },
     spellCharges: {
         name: String,

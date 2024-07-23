@@ -34,6 +34,7 @@ import mongoose from "mongoose";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createItemBlueprint, { IItemBlueprintData } from "./commands/createItemBlueprint.js";
+import editItemBlueprint from "./commands/editItemBlueprint.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -141,6 +142,16 @@ const setupSocket = (io: any) => {
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
       });
+
+      socket.on(
+        `userSubmittedEditItemBlueprint`,
+        async (
+          itemId: mongoose.Types.ObjectId,
+          itemBlueprintData: IItemBlueprintData
+        ) => {
+          await editItemBlueprint(itemId, itemBlueprintData, user);
+        }
+      );
 
       socket.on(
         `userSubmittedEditMobBlueprint`,
