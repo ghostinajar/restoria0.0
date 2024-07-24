@@ -1,7 +1,7 @@
 // socket
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
-import createRoom, { IRoomData } from "./commands/createRoom.js";
+import createRoom, { INewRoomData } from "./commands/createRoom.js";
 import createUser, { IUserData } from "./commands/createUser.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
@@ -25,7 +25,7 @@ import {
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
-import editRoom from "./commands/editRoom.js";
+import editRoom, { IEditRoomData } from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint, {
   IMobBlueprintData,
@@ -183,7 +183,7 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(`userSubmittedNewRoom`, async (roomData: IRoomData) => {
+      socket.on(`userSubmittedNewRoom`, async (roomData: INewRoomData) => {
         const newRoom = await createRoom(roomData, user);
       });
 
@@ -198,7 +198,7 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(`userSubmittedRoomEdit`, async (roomData: IRoomData) => {
+      socket.on(`userSubmittedRoomEdit`, async (roomData: IEditRoomData) => {
         const room = await getRoomOfUser(user);
         await editRoom(room, roomData, user);
       });

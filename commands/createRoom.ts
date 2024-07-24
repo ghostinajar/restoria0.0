@@ -16,7 +16,7 @@ import { IDescription } from "../model/classes/Description.js";
 import truncateDescription from "../util/truncateDescription.js";
 import exits from "./exits.js";
 
-export interface IRoomData {
+export interface INewRoomData {
   name: string;
   direction: string;
   isDark: boolean;
@@ -34,7 +34,7 @@ export interface IRoomData {
 
 // Return room, or a message explaining failure (if by author, emit message to their socket)
 async function createRoom(
-  roomFormData: IRoomData,
+  roomFormData: INewRoomData,
   author: IUser
 ): Promise<IRoom | IMessage> {
   try {

@@ -1,4 +1,5 @@
 // editRoom
+import mongoose, { Mongoose } from "mongoose";
 import logger from "../logger.js";
 import { IDescription } from "../model/classes/Description.js";
 import { IRoom } from "../model/classes/Room.js";
@@ -8,9 +9,37 @@ import { IZone } from "../model/classes/Zone.js";
 import makeMessage from "../types/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
-import { IRoomData } from "./createRoom.js";
+import { IMobNode } from "../model/classes/MobNode.js";
+import { IItemNode } from "../model/classes/ItemNode.js";
+import { IExit } from "../model/classes/Exit.js";
 
-async function editRoom(room: IRoom, roomData: IRoomData, user: IUser) {
+export interface IEditRoomData {
+  _id: string | mongoose.Types.ObjectId;
+  name: string;
+  description: IDescription;
+  isDark: boolean;
+  isIndoors: boolean;
+  isOnWater: boolean;
+  isUnderwater: boolean;
+  noMounts: boolean;
+  noMobs: boolean;
+  noMagic: boolean;
+  noCombat: boolean;
+  playerCap: number;
+  mobCap: number;
+  mobNodes: Array<IMobNode>;
+  itemNodes: Array<IItemNode>;
+  exits: {
+    north?: IExit;
+    south?: IExit;
+    east?: IExit;
+    west?: IExit;
+    up?: IExit;
+    down?: IExit;
+  };
+}
+
+async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   let changed = false;
   // logger.debug(
   //   `editRoom submitted by user ${user.name} for room: ${JSON.stringify(
@@ -26,93 +55,47 @@ async function editRoom(room: IRoom, roomData: IRoomData, user: IUser) {
   }
 
   const newRoomDescription: IDescription = {
-    examine: roomData.examine,
-    study: roomData.study,
-    research: roomData.research,
+    examine: roomData.description.examine,
+    study: roomData.description.study,
+    research: roomData.description.research,
   };
 
   truncateDescription(newRoomDescription, user);
 
-  //prepare to compare new to previous data
-  let newRoomFlags = {
-    isDark: roomData.isDark,
-    isIndoors: roomData.isIndoors,
-    isOnWater: roomData.isOnWater,
-    isUnderwater: roomData.isUnderwater,
-    noMounts: roomData.noMounts,
-    noMobs: roomData.noMobs,
-    noMagic: roomData.noMagic,
-    noCombat: roomData.noCombat,
-  };
-  let previousRoomFlags = {
-    isDark: room.isDark,
-    isIndoors: room.isIndoors,
-    isOnWater: room.isOnWater,
-    isUnderwater: room.isUnderwater,
-    noMounts: room.noMounts,
-    noMobs: room.noMobs,
-    noMagic: room.noMagic,
-    noCombat: room.noCombat,
-  };
-
-  //compare
-  if (roomData.name !== room.name) {
-    room.name = roomData.name;
-    changed = true;
-  }
-  if (newRoomDescription !== room.description) {
-    room.description = newRoomDescription;
-    changed = true;
-  }
-  if (newRoomFlags !== previousRoomFlags) {
-    room.isDark = roomData.isDark;
-    room.isIndoors = roomData.isIndoors;
-    room.isOnWater = roomData.isOnWater;
-    room.isUnderwater = roomData.isUnderwater;
-    room.noMounts = roomData.noMounts;
-    room.noMobs = roomData.noMobs;
-    room.noMagic = roomData.noMagic;
-    room.noCombat = roomData.noCombat;
-    changed = true;
-  }
-
-  if (changed) {
-    room.history.modifiedDate = new Date();
-    const zone: IZone = await getZoneOfUser(user);
-    if (!zone) {
-      logger.error(
-        `editRoom couldn't find zone to save for user ${user.username}'s location.}`
-      );
-      return;
-    }
-    //TODO get zone of room
-    await zone.save();
-    await zone.initRooms();
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(`success`, `Room updated!`)
-    );
-
-    // logger.debug(
-    //   `editRoom updated room ${room.name}:
-    //   ${JSON.stringify(room.description)}
-    //   isDark: ${room.isDark}
-    //   isIndoors: ${room.isIndoors}
-    //   isOnWater: ${room.isOnWater}
-    //   isUnderwater: ${room.isUnderwater}
-    //   noMounts: ${room.noMounts}
-    //   noMobs: ${room.noMobs}
-    //   noMagic: ${room.noMagic}
-    //   noCombat: ${room.noCombat}`
-    // );
-    return;
-  } else {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(`rejected`, `No change saved to room.`)
+  room.history.modifiedDate = new Date();
+  const zone: IZone = await getZoneOfUser(user);
+  if (!zone) {
+    logger.error(
+      `editRoom couldn't find zone to save for user ${user.username}'s location.}`
     );
     return;
   }
+
+  // make the edits
+  room.name = roomData.name;
+  room.description = newRoomDescription;
+  room.isDark = roomData.isDark;
+  room.isIndoors = roomData.isIndoors;
+  room.isOnWater = roomData.isOnWater;
+  room.isUnderwater = roomData.isUnderwater;
+  room.noMounts = roomData.noMounts;
+  room.noMobs = roomData.noMobs;
+  room.noMagic = roomData.noMagic;
+  room.noCombat = roomData.noCombat;
+  room.playerCap = roomData.playerCap;
+  room.mobCap = roomData.mobCap;
+  room.mobNodes = roomData.mobNodes;
+  room.itemNodes = roomData.itemNodes;
+  room.exits = roomData.exits;
+
+  await zone.save();
+  await zone.initRooms();
+  worldEmitter.emit(
+    `messageFor${user.username}`,
+    makeMessage(`success`, `Room updated!`)
+  );
+
+  return;
 }
 
 export default editRoom;
