@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
+* {
+  font-family: "Roboto Mono", monospace;
+  box-sizing: border-box;
+}
+
+/* setup color variables for styles */
 :root {
   --black: #000;
   --grey_dark: #1e1e1e;
@@ -33,117 +39,87 @@
   --brown: #977447;
 }
 
+a:link,
+a:visited {
+  color: var(--white);
+}
+
+/* layout */
+
 html,
 body {
   margin: 0;
-  font-family: "Roboto Mono", monospace;
   background: var(--grey_dark);
   color: var(--grey);
+  display: inline-block;
+}
+
+form li + li {
+  margin-top: 0.5em;
 }
 
 label {
-  white-space: pre-wrap;
-  text-align: left; /* Align text to the left */
-
-}
-
-#commandForm {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: row; /* Ensure items are in a row */
-  align-items: center; /* Center items vertically */
-  padding: 10px; /* Add padding to ensure 10px spacing from left and right */
-  box-sizing: border-box; /* Include padding in the width calculation */
-  background-color: var(--grey_dark);
-  box-shadow: 0 -0.5px 2px var(--black);
-  z-index: 1000; /* Ensure it stays above other elements */
-}
-
-.sideForm {
-  height: 75%;
-  position: fixed;
-  top: 60px;
-  right: 10px;
-  padding: 10px;
-  background-color: var(--grey_dark);
-  box-shadow: 0 0.5px 2px var(--black);
-  display: none; /* Initially hidden */
-  flex-direction: column;
-  gap: 10px;
-  overflow: auto; /* Add scrollbars if content exceeds the box */
-  max-height: calc(100vh - 120px); /* Adjust max height based on your layout */
-}
-
-.sideForm section {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Add space between the label and input */
-  margin-bottom: 2px;
-}
-
-.sideForm label {
-  flex-shrink: 0; /* Prevent labels from shrinking */
-  text-align: left; /* Align text to the left */
-  padding-right: 5px; /* Add some padding to the right of the label */
-}
-
-.sideForm textarea,
-.sideForm input,
-.sideForm select {
-  flex-grow: 1; /* Allow inputs to grow to fill the available space */
-  border: none;
-  border-radius: 6px;
-  padding: 5px 10px; /* Add padding for better spacing */
-  margin: 0; /* Remove default margin */
-}
-
-.sideForm textarea {
-  height: 3rem;
-}
-
-.sideForm button {
-  margin-top: 10px; /* Add some space above the buttons */
-}
-
-.logout {
-  position: fixed;
-  top: 10px; /* Adjust the value as needed for spacing */
-  right: 10px; /* Adjust the value as needed for spacing */
-  z-index: 1000; /* Ensure it stays above other elements */
-}
-
-#commandForm input,
-#name,
-#new-password,
-.sideForm #pronouns,
-.sideForm #job {
-  border-radius: 6px;
-  padding: 5px 10px; /* Add padding for better spacing */
-  margin: 0; /* Remove default margin */
-  border: none;
-  flex-grow: 1;
-  margin-right: 10px; /* Ensure 10px margin between input and button */
+  /* Uniform size & alignment */
+  display: inline-block;
+  min-width: 6rem;
+  text-align: right;
 }
 
 textarea,
-button,
 input,
 select {
-  flex-shrink: 0; /* Ensure the button doesn't shrink */
-  font-family: "Roboto Mono", monospace;
-  margin: 4px 0px;
+  width: 20rem;
+  flex-grow: 1;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+input[type="checkbox"],
+select
+{
+  width: auto;
+}
+
+textarea {
+  vertical-align: top;
+  height: 4rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 2.5px 0px;
+}
+
+.nextButton,
+.submitButton {
+  margin-left: 6em;
+}
+
+#logout {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+.sideForm {
+  width: 30rem;
+  height: 85%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 1rem;
+  background-color: var(--grey_dark);
+  box-shadow: 0 0.5px 2px var(--black);
+  display: none;
+  overflow: auto;
 }
 
 #messagesContainer {
-  margin-top: 8px; /* Adjust as needed for top spacing */
-  margin-bottom: 40px; /* Adjust as needed for bottom spacing */
+  padding: 40px, 8px;
   overflow-y: auto;
-}
-
-#messagesContainer.moveOver {
-  width: 64%;
 }
 
 #messages {
@@ -151,15 +127,31 @@ select {
   margin: 10px;
   padding: 0.1rem;
   overflow-wrap: break-word;
-  max-width: 80ch; /* Ensure text wraps before 81 characters */
-  word-wrap: break-word; /* For older browsers */
+  max-width: 80ch;
+  word-wrap: break-word;
 }
 
 .message-item {
-  white-space: pre-wrap; /* Ensure that white spaces are preserved and lines break as needed */
-  max-width: 80ch; /* Ensure text wraps before 81 characters */
-  word-wrap: break-word; /* For older browsers */
+  white-space: pre-wrap;
+  max-width: 80ch;
+  word-wrap: break-word;
 }
+
+#commandForm {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: var(--grey_dark);
+  box-shadow: 0 -0.5px 2px var(--black);
+  z-index: 1000;
+}
+
+/* colors for message types from server */
 
 .quit,
 .rejection {
@@ -190,7 +182,7 @@ select {
 }
 
 .success {
-  color: var(--green_dark)
+  color: var(--green_dark);
 }
 
 .createUser,
@@ -221,9 +213,4 @@ select {
 
 .telepath {
   color: var(--red_light);
-}
-
-a:link,
-a:visited {
-  color: var(--white);
 }

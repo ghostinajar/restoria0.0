@@ -5,79 +5,131 @@
   style="display: none"
   autocomplete="off"
 >
-  <section class="editObjectColumn">
-    <div id="roomId">Error: Room Id should be here</div>
-    <label for="roomName">Name:</label>
-    <input id="roomName" name="roomName" type="text" maxlength="60" required />
-    <label for="examineRoom">Examine:</label>
-    <textarea
-      id="examineRoom"
-      name="examineRoom"
-      type="text"
-      maxlength="240"
-    ></textarea>
-    <label for="studyRoom">Study:</label>
-    <textarea
-      id="studyRoom"
-      name="studyRoom"
-      type="text"
-      maxlength="640"
-    ></textarea>
-    <label for="researchRoom">Research:</label>
-    <textarea
-      id="researchRoom"
-      name="researchRoom"
-      type="text"
-      maxlength="1600"
-    ></textarea>
+  <h2>Edit Room</h2>
+  <div id="roomId">Error: Room Id should be here</div>
+  <section>
+    <h3>Description</h3>
+    <ul>
+      <li>
+        <label for="roomName">Name</label>
+        <input
+          id="roomName"
+          name="roomName"
+          type="text"
+          maxlength="60"
+          required
+        />
+      </li>
+      <li>
+        <label for="examineRoom">Examine</label>
+        <textarea
+          id="examineRoom"
+          name="examineRoom"
+          type="text"
+          maxlength="240"
+        ></textarea>
+      </li>
+      <li>
+        <label for="studyRoom">Study</label>
+        <textarea
+          id="studyRoom"
+          name="studyRoom"
+          type="text"
+          maxlength="640"
+        ></textarea>
+      </li>
+      <li>
+        <label for="researchRoom">Research</label>
+        <textarea
+          id="researchRoom"
+          name="researchRoom"
+          type="text"
+          maxlength="1600"
+        ></textarea>
+      </li>
+    </ul>
   </section>
-  <section class="editObjectColumn">
-    <input type="checkbox" id="isDark" name="isDark" value="isDark" />
-    <label for="isDark">Dark</label>
-    <input type="checkbox" id="isIndoors" name="isIndoors" value="isIndoors" />
-    <label for="isIndoors">Indoors</label>
-    <input type="checkbox" id="isOnWater" name="isOnWater" value="isOnWater" />
-    <label for="isOnWater">On Water</label>
-    <input
-      type="checkbox"
-      id="isUnderwater"
-      name="isUnderwater"
-      value="isUnderwater"
-    />
-    <label for="isUnderwater">Underwater</label>
-    <input type="checkbox" id="noMounts" name="noMounts" value="noMounts" />
-    <label for="noMounts">No Mounts</label>
-    <input type="checkbox" id="noMobs" name="noMobs" value="noMobs" />
-    <label for="noMobs">No Mobs</label>
-    <input type="checkbox" id="noMagic" name="noMagic" value="noMagic" />
-    <label for="noMagic">No Magic</label>
-    <input type="checkbox" id="noCombat" name="noCombat" value="noCombat" />
-    <label for="noCombat">No Combat</label>
-    <select id="playerCap" name="editPlayerCap" type="number" required>
-      <!-- populated by script -->
-    </select>
-    <select id="mobCap" name="editMobCap" type="number" required>
-      <!-- populated by script -->
-    </select>
+  <section>
+    <h3>Tags</h3>
+    <ul>
+      <li>
+        <label for="isDark">Dark</label>
+        <input type="checkbox" id="isDark" name="isDark" value="isDark" />
+      </li>
+      <li>
+        <label for="isIndoors">Indoors</label>
+        <input
+          type="checkbox"
+          id="isIndoors"
+          name="isIndoors"
+          value="isIndoors"
+        />
+      </li>
+      <li>
+        <label for="isOnWater">On Water</label>
+        <input
+          type="checkbox"
+          id="isOnWater"
+          name="isOnWater"
+          value="isOnWater"
+        />
+      </li>
+      <li>
+        <label for="isUnderwater">Underwater</label>
+        <input
+          type="checkbox"
+          id="isUnderwater"
+          name="isUnderwater"
+          value="isUnderwater"
+        />
+      </li>
+      <li>
+        <label for="noMounts">No Mounts</label>
+        <input type="checkbox" id="noMounts" name="noMounts" value="noMounts" />
+      </li>
+      <li>
+        <label for="noMobs">No Mobs</label>
+        <input type="checkbox" id="noMobs" name="noMobs" value="noMobs" />
+      </li>
+      <li>
+        <label for="noMagic">No Magic</label>
+        <input type="checkbox" id="noMagic" name="noMagic" value="noMagic" />
+      </li>
+      <li>
+        <label for="noCombat">No Combat</label>
+        <input type="checkbox" id="noCombat" name="noCombat" value="noCombat" />
+      </li>
+      <li>
+        <label for="playerCap">Player Cap</label>
+        <select id="playerCap" name="editPlayerCap" type="number" required>
+          <!-- populated by script -->
+        </select>
+      </li>
+      <li>
+        <label for="mobCap">Mob Cap</label>
+        <select id="mobCap" name="editMobCap" type="number" required>
+          <!-- populated by script -->
+        </select>
+      </li>
+    </ul>
+  </section>
+  <section>
+    <h3>Mob Nodes</h3>
   </section>
   <br />
-  <section class="editObjectColumn">
-    <h2>Mob Nodes</h2>
+  <section>
+    <h3>Item Nodes</h3>
   </section>
   <br />
-  <section class="editObjectColumn">
-    <h2>Item Nodes</h2>
+  <section>
+    <h3>Exits</h3>
   </section>
   <br />
-  <section class="editObjectColumn">
-    <h2>Exits</h2>
-  </section>
-  <br />
-  <section class="editObjectColumn">
-    <h2></h2>Exit Details</h2>
+  <section>
+    <h3>Exit Details</h3>
   </section>
 
-  <button type="submit">Update Room</button>
+  <button class="submitButton" type="submit">Update Room</button>
   <button type="button" id="cancelEditRoomForm">Cancel</button>
 </form>
 
@@ -92,20 +144,26 @@
 
   editRoomForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    currentEditRoom.name= document.getElementById("roomName").value;
-    currentEditRoom.description.examine= document.getElementById("examineRoom").value;
-    currentEditRoom.description.study= document.getElementById("studyRoom").value;
-    currentEditRoom.description.research= document.getElementById("researchRoom").value;
-    currentEditRoom.isDark= document.getElementById("isDark").checked;
-    currentEditRoom.isIndoors= document.getElementById("isIndoors").checked;
-    currentEditRoom.isOnWater= document.getElementById("isOnWater").checked;
-    currentEditRoom.isUnderwater= document.getElementById("isUnderwater").checked;
-    currentEditRoom.noMounts= document.getElementById("noMounts").checked;
-    currentEditRoom.noMobs= document.getElementById("noMobs").checked;
-    currentEditRoom.noMagic= document.getElementById("noMagic").checked;
-    currentEditRoom.noCombat= document.getElementById("noCombat").checked;
-    currentEditRoom.playerCap= Number(document.getElementById("playerCap").value);
-    currentEditRoom.mobCap= Number(document.getElementById("mobCap").value);
+    currentEditRoom.name = document.getElementById("roomName").value;
+    currentEditRoom.description.examine =
+      document.getElementById("examineRoom").value;
+    currentEditRoom.description.study =
+      document.getElementById("studyRoom").value;
+    currentEditRoom.description.research =
+      document.getElementById("researchRoom").value;
+    currentEditRoom.isDark = document.getElementById("isDark").checked;
+    currentEditRoom.isIndoors = document.getElementById("isIndoors").checked;
+    currentEditRoom.isOnWater = document.getElementById("isOnWater").checked;
+    currentEditRoom.isUnderwater =
+      document.getElementById("isUnderwater").checked;
+    currentEditRoom.noMounts = document.getElementById("noMounts").checked;
+    currentEditRoom.noMobs = document.getElementById("noMobs").checked;
+    currentEditRoom.noMagic = document.getElementById("noMagic").checked;
+    currentEditRoom.noCombat = document.getElementById("noCombat").checked;
+    currentEditRoom.playerCap = Number(
+      document.getElementById("playerCap").value
+    );
+    currentEditRoom.mobCap = Number(document.getElementById("mobCap").value);
     // console.log(`Edited data to server:` + JSON.stringify(currentEditRoom));
     socket.emit("userSubmittedRoomEdit", currentEditRoom);
     editRoomForm.reset();
@@ -121,7 +179,7 @@
   socket.on("openEditRoomForm", (formData) => {
     // persist the requested room data
     currentEditRoom = formData.roomData;
-    
+
     // reset/hide open forms, show editRoomForm
     activeForm.reset();
     activeForm.style.display = "none";
@@ -132,21 +190,30 @@
     // console.log(`Requested data from server:` + JSON.stringify(currentEditRoom));
 
     // preset the values of the fields from requested room data
-    document.getElementById("roomId").textContent = `Id: ${currentEditRoom._id}` || "error: room id not found"
+    document.getElementById("roomId").textContent =
+      `Id: ${currentEditRoom._id}` || "error: room id not found";
     document.getElementById("roomName").value = currentEditRoom.name || "";
-    document.getElementById("examineRoom").value = currentEditRoom.description.examine || "";
-    document.getElementById("studyRoom").value = currentEditRoom.description.study || "";
-    document.getElementById("researchRoom").value = currentEditRoom.description.research || "";
+    document.getElementById("examineRoom").value =
+      currentEditRoom.description.examine || "";
+    document.getElementById("studyRoom").value =
+      currentEditRoom.description.study || "";
+    document.getElementById("researchRoom").value =
+      currentEditRoom.description.research || "";
     document.getElementById("isDark").checked = currentEditRoom.isDark || false;
-    document.getElementById("isIndoors").checked = currentEditRoom.isIndoors || false;
-    document.getElementById("isOnWater").checked = currentEditRoom.isOnWater || false;
+    document.getElementById("isIndoors").checked =
+      currentEditRoom.isIndoors || false;
+    document.getElementById("isOnWater").checked =
+      currentEditRoom.isOnWater || false;
     document.getElementById("isUnderwater").checked =
-    currentEditRoom.isUnderwater || false;
-    document.getElementById("noMounts").checked = currentEditRoom.noMounts || false;
+      currentEditRoom.isUnderwater || false;
+    document.getElementById("noMounts").checked =
+      currentEditRoom.noMounts || false;
     document.getElementById("noMobs").checked = currentEditRoom.noMobs || false;
-    document.getElementById("noMagic").checked = currentEditRoom.noMagic || false;
-    document.getElementById("noCombat").checked = currentEditRoom.noCombat || false;
+    document.getElementById("noMagic").checked =
+      currentEditRoom.noMagic || false;
+    document.getElementById("noCombat").checked =
+      currentEditRoom.noCombat || false;
     document.getElementById("playerCap").value = currentEditRoom.playerCap || 0;
-    document.getElementById("mobCap").value = currentEditRoom.mobCap || 0;    
+    document.getElementById("mobCap").value = currentEditRoom.mobCap || 0;
   });
 </script>
