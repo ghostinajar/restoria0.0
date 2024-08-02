@@ -7,7 +7,7 @@
 >
   <h2>Edit Room</h2>
   <div id="roomId">Error: Room Id should be here</div>
-  <section>
+  <section class="formsection editroomsection">
     <h3>Description</h3>
     <ul>
       <li>
@@ -49,7 +49,7 @@
       </li>
     </ul>
   </section>
-  <section>
+  <section class="formsection editroomsection">
     <h3>Tags</h3>
     <ul>
       <li>
@@ -113,24 +113,29 @@
       </li>
     </ul>
   </section>
-  <section>
+  <section class="formsection editroomsection">
     <h3>Mob Nodes</h3>
   </section>
   <br />
-  <section>
+  <section class="formsection editroomsection">
     <h3>Item Nodes</h3>
   </section>
   <br />
-  <section>
+  <section class="formsection editroomsection">
     <h3>Exits</h3>
   </section>
   <br />
-  <section>
+  <section class="formsection editroomsection">
     <h3>Exit Details</h3>
   </section>
-
-  <button class="submitButton" type="submit">Update Room</button>
-  <button type="button" id="cancelEditRoomForm">Cancel</button>
+  <ul>
+    <li>
+      <button class="submitButton" type="submit">Update Room</button>
+    </li>
+    <li>
+      <a class="secondaryAction" id="cancelEditRoomForm">Cancel</a>
+    </li>
+  </ul>
 </form>
 
 <script>

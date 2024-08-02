@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>Restoria 0.0.1</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
-			<ul id="messages">
-        <li>Restoria 0.0.1</li>
-        <li>Log in</li>
-        <li>
-          <form action="/login/password" method="post">
-            <section>
+    <ul id="messages">
+      <h1>Restoria 0.0.1</h1>
+      <h2>Log in</h2>
+      <li>
+        <form action="/login/password" method="post">
+          <ul>
+            <li>
               <label for="username">Username:</label>
-              <input id="username" name="username" type="text" autocomplete="username" required autofocus>
-            </section>
-            <section>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                autocomplete="username"
+                required
+                autofocus
+              />
+            </li>
+            <li>
               <label for="current-password">Password:</label>
-              <input id="current-password" name="password" type="password" autocomplete="current-password" required>
-            </section>
-            <button type="submit">Log in</button>
-          </form>
-        </li>
-        <li>Don't have an account? <a href="/register">Register</a></li>
-        <li>Or go <a href="/">home.</a></li>
-	  	</ul>
-	</body>
-
+              <input
+                id="current-password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+              />
+            </li>
+            <li>
+              <button type="submit">Log in</button>
+            </li>
+          </ul>
+        </form>
+      </li>
+      <li>Don't have an account? <a href="/register">Register</a></li>
+      <li>Or go <a href="/">home.</a></li>
+    </ul>
+  </body>
 </html>

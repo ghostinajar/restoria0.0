@@ -41,6 +41,7 @@
 
 a:link,
 a:visited {
+  text-decoration: underline;
   color: var(--white);
 }
 
@@ -59,7 +60,7 @@ form li + li {
 }
 
 label {
-  /* Uniform size & alignment */
+  font-family: "Roboto Mono", monospace;
   display: inline-block;
   min-width: 6rem;
   text-align: right;
@@ -68,12 +69,27 @@ label {
 textarea,
 input,
 select {
+  font-family: "Roboto Mono", monospace;
   width: 20rem;
   flex-grow: 1;
   border: none;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   margin: 0;
+}
+
+button {
+  /* to align with fields next to label */
+  font-family: "Roboto Mono", monospace;
+  margin-left: 6.5rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.secondaryAction {
+  text-decoration: underline;
+  color: var(--white);
+  margin-left: 6.5rem;
 }
 
 input[type="checkbox"],
@@ -93,10 +109,6 @@ ul {
   margin: 2.5px 0px;
 }
 
-.nextButton,
-.submitButton {
-  margin-left: 6em;
-}
 
 #logout {
   position: fixed;
@@ -149,6 +161,10 @@ ul {
   background-color: var(--grey_dark);
   box-shadow: 0 -0.5px 2px var(--black);
   z-index: 1000;
+}
+
+#commandSend {
+  margin-left: 0.5rem;
 }
 
 /* colors for message types from server */
