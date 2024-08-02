@@ -5,9 +5,8 @@
   style="display: none"
   autocomplete="off"
 >
-  <h2>Edit Room</h2>
-  <div id="roomId">Error: Room Id should be here</div>
-  <section class="formsection editroomsection">
+  <h2>Edit Room <span id="roomId">Error: Room Id should be here</span></h2>
+  <section id="editRoomDescriptionSection" style="display: block">
     <h3>Description</h3>
     <ul>
       <li>
@@ -47,9 +46,12 @@
           maxlength="1600"
         ></textarea>
       </li>
+      <li>
+        <button type="button" class="showEditRoomTagsSection">Tags →</button>
+      </li>
     </ul>
   </section>
-  <section class="formsection editroomsection">
+  <section id="editRoomTagsSection" style="display: none">
     <h3>Tags</h3>
     <ul>
       <li>
@@ -111,36 +113,77 @@
           <!-- populated by script -->
         </select>
       </li>
+      <li>
+        <button type="button" class="showEditRoomMobNodesSection">
+          MobNodes →
+        </button>
+      </li>
+      <li>
+        <a class="showEditRoomDescriptionSection secondaryAction">← Description</a>
+      </li>
     </ul>
   </section>
-  <section class="formsection editroomsection">
+  <section id="editRoomMobNodesSection" style="display: none">
     <h3>Mob Nodes</h3>
+    <ul>
+      <li>
+        <button type="button" class="showEditRoomItemNodesSection">
+          ItemNodes →
+        </button>
+      </li>
+      <li>
+        <a class="showEditRoomTagsSection secondaryAction">← Tags</a>
+      </li>
+    </ul>
   </section>
-  <br />
-  <section class="formsection editroomsection">
+  <section id="editRoomItemNodesSection" style="display: none">
     <h3>Item Nodes</h3>
+    <ul>
+      <li>
+        <button type="button" class="showEditRoomExitsSection">Exits →</button>
+      </li>
+      <li>
+        <a class="showEditRoomMobNodesSection secondaryAction">← MobNodes</a>
+      </li>
+    </ul>
   </section>
-  <br />
-  <section class="formsection editroomsection">
+  <section id="editRoomExitsSection" style="display: none">
     <h3>Exits</h3>
-  </section>
-  <br />
-  <section class="formsection editroomsection">
-    <h3>Exit Details</h3>
+    <ul>
+      <li>
+        <button class="submitButton" type="submit">Update Room</button>
+      </li>
+      <li>
+        <a class="showEditRoomItemNodesSection secondaryAction">← ItemNodes</a>
+      </li>
+    </ul>
   </section>
   <ul>
-    <li>
-      <button class="submitButton" type="submit">Update Room</button>
-    </li>
     <li>
       <a class="secondaryAction" id="cancelEditRoomForm">Cancel</a>
     </li>
   </ul>
 </form>
 
+<!-- **************************************************************************
+****************************************************************************
+**************************************************************************** -->
+
 <script>
-  const editRoomForm = document.getElementById("editRoomForm");
   let currentEditRoom;
+  const editRoomForm = document.getElementById("editRoomForm");
+  const editRoomDescriptionSection = document.getElementById(
+    "editRoomDescriptionSection"
+  );
+  const editRoomTagsSection = document.getElementById("editRoomTagsSection");
+  const editRoomMobNodesSection = document.getElementById(
+    "editRoomMobNodesSection"
+  );
+  const editRoomItemNodesSection = document.getElementById(
+    "editRoomItemNodesSection"
+  );
+  const editRoomExitsSection = document.getElementById("editRoomExitsSection");
+  let activeFormSection = editRoomDescriptionSection;
 
   document.addEventListener("DOMContentLoaded", () => {
     generateNumberSelectOptions(0, 9, document.getElementById("playerCap"));
@@ -174,6 +217,56 @@
     editRoomForm.reset();
     editRoomForm.style.display = "none"; // Hide the form after submission
   });
+
+  document
+    .querySelectorAll(".showEditRoomDescriptionSection")
+    .forEach(function (button) {
+      button.addEventListener("click", function () {
+        activeFormSection.style.display = "none";
+        activeFormSection = editRoomDescriptionSection;
+        activeFormSection.style.display = "block";
+      });
+    });
+
+  document
+    .querySelectorAll(".showEditRoomTagsSection")
+    .forEach(function (button) {
+      button.addEventListener("click", function () {
+        activeFormSection.style.display = "none";
+        activeFormSection = editRoomTagsSection;
+        activeFormSection.style.display = "block";
+      });
+    });
+
+  document
+    .querySelectorAll(".showEditRoomMobNodesSection")
+    .forEach(function (button) {
+      button.addEventListener("click", function () {
+        activeFormSection.style.display = "none";
+        activeFormSection = editRoomMobNodesSection;
+        activeFormSection.style.display = "block";
+      });
+    });
+
+  document
+    .querySelectorAll(".showEditRoomItemNodesSection")
+    .forEach(function (button) {
+      button.addEventListener("click", function () {
+        activeFormSection.style.display = "none";
+        activeFormSection = editRoomItemNodesSection;
+        activeFormSection.style.display = "block";
+      });
+    });
+
+  document
+    .querySelectorAll(".showEditRoomExitsSection")
+    .forEach(function (button) {
+      button.addEventListener("click", function () {
+        activeFormSection.style.display = "none";
+        activeFormSection = editRoomExitsSection;
+        activeFormSection.style.display = "block";
+      });
+    });
 
   document
     .getElementById("cancelEditRoomForm")
