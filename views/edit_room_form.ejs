@@ -6,6 +6,7 @@
   autocomplete="off"
 >
   <h2>Edit Room <span id="roomId">Error: Room Id should be here</span></h2>
+
   <section id="editRoomDescriptionSection" style="display: block">
     <h3>Description</h3>
     <ul>
@@ -24,33 +25,27 @@
         <textarea
           id="examineRoom"
           name="examineRoom"
-          type="text"
           maxlength="240"
         ></textarea>
       </li>
       <li>
         <label for="studyRoom">Study</label>
-        <textarea
-          id="studyRoom"
-          name="studyRoom"
-          type="text"
-          maxlength="640"
-        ></textarea>
+        <textarea id="studyRoom" name="studyRoom" maxlength="640"></textarea>
       </li>
       <li>
         <label for="researchRoom">Research</label>
         <textarea
           id="researchRoom"
           name="researchRoom"
-          type="text"
           maxlength="1600"
         ></textarea>
       </li>
       <li>
-        <button type="button" class="showEditRoomTagsSection">Tags →</button>
+        <button type="button" data-target="editRoomTagsSection">Tags →</button>
       </li>
     </ul>
   </section>
+
   <section id="editRoomTagsSection" style="display: none">
     <h3>Tags</h3>
     <ul>
@@ -114,39 +109,50 @@
         </select>
       </li>
       <li>
-        <button type="button" class="showEditRoomMobNodesSection">
+        <button type="button" data-target="editRoomMobNodesSection">
           MobNodes →
         </button>
       </li>
       <li>
-        <a class="showEditRoomDescriptionSection secondaryAction">← Description</a>
+        <a data-target="editRoomDescriptionSection" class="secondaryAction">
+          ← Description
+        </a>
       </li>
     </ul>
   </section>
+
   <section id="editRoomMobNodesSection" style="display: none">
     <h3>Mob Nodes</h3>
     <ul>
       <li>
-        <button type="button" class="showEditRoomItemNodesSection">
+        <button type="button" data-target="editRoomItemNodesSection">
           ItemNodes →
         </button>
       </li>
       <li>
-        <a class="showEditRoomTagsSection secondaryAction">← Tags</a>
+        <a data-target="editRoomTagsSection" class="secondaryAction">
+          ← Tags
+        </a>
       </li>
     </ul>
   </section>
+
   <section id="editRoomItemNodesSection" style="display: none">
     <h3>Item Nodes</h3>
     <ul>
       <li>
-        <button type="button" class="showEditRoomExitsSection">Exits →</button>
+        <button type="button" data-target="editRoomExitsSection">
+          Exits →
+        </button>
       </li>
       <li>
-        <a class="showEditRoomMobNodesSection secondaryAction">← MobNodes</a>
+        <a data-target="editRoomMobNodesSection" class="secondaryAction">
+          ← MobNodes
+        </a>
       </li>
     </ul>
   </section>
+
   <section id="editRoomExitsSection" style="display: none">
     <h3>Exits</h3>
     <ul>
@@ -154,13 +160,16 @@
         <button class="submitButton" type="submit">Update Room</button>
       </li>
       <li>
-        <a class="showEditRoomItemNodesSection secondaryAction">← ItemNodes</a>
+        <a data-target="editRoomItemNodesSection" class="secondaryAction">
+          ← ItemNodes
+        </a>
       </li>
     </ul>
   </section>
+
   <ul>
     <li>
-      <a class="secondaryAction" id="cancelEditRoomForm">Cancel</a>
+      <a id="cancelEditRoomForm" class="secondaryAction"> Cancel </a>
     </li>
   </ul>
 </form>
@@ -170,148 +179,110 @@
 **************************************************************************** -->
 
 <script>
-  let currentEditRoom;
-  const editRoomForm = document.getElementById("editRoomForm");
-  const editRoomDescriptionSection = document.getElementById(
-    "editRoomDescriptionSection"
-  );
-  const editRoomTagsSection = document.getElementById("editRoomTagsSection");
-  const editRoomMobNodesSection = document.getElementById(
-    "editRoomMobNodesSection"
-  );
-  const editRoomItemNodesSection = document.getElementById(
-    "editRoomItemNodesSection"
-  );
-  const editRoomExitsSection = document.getElementById("editRoomExitsSection");
-  let activeFormSection = editRoomDescriptionSection;
-
   document.addEventListener("DOMContentLoaded", () => {
+    let currentEditRoom;
+    const editRoomForm = document.getElementById("editRoomForm");
+    const sections = {
+      editRoomDescriptionSection: document.getElementById(
+        "editRoomDescriptionSection"
+      ),
+      editRoomTagsSection: document.getElementById("editRoomTagsSection"),
+      editRoomMobNodesSection: document.getElementById(
+        "editRoomMobNodesSection"
+      ),
+      editRoomItemNodesSection: document.getElementById(
+        "editRoomItemNodesSection"
+      ),
+      editRoomExitsSection: document.getElementById("editRoomExitsSection"),
+    };
+    let activeFormSection = sections.editRoomDescriptionSection;
+
     generateNumberSelectOptions(0, 9, document.getElementById("playerCap"));
     generateNumberSelectOptions(0, 9, document.getElementById("mobCap"));
-  });
 
-  editRoomForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    currentEditRoom.name = document.getElementById("roomName").value;
-    currentEditRoom.description.examine =
-      document.getElementById("examineRoom").value;
-    currentEditRoom.description.study =
-      document.getElementById("studyRoom").value;
-    currentEditRoom.description.research =
-      document.getElementById("researchRoom").value;
-    currentEditRoom.isDark = document.getElementById("isDark").checked;
-    currentEditRoom.isIndoors = document.getElementById("isIndoors").checked;
-    currentEditRoom.isOnWater = document.getElementById("isOnWater").checked;
-    currentEditRoom.isUnderwater =
-      document.getElementById("isUnderwater").checked;
-    currentEditRoom.noMounts = document.getElementById("noMounts").checked;
-    currentEditRoom.noMobs = document.getElementById("noMobs").checked;
-    currentEditRoom.noMagic = document.getElementById("noMagic").checked;
-    currentEditRoom.noCombat = document.getElementById("noCombat").checked;
-    currentEditRoom.playerCap = Number(
-      document.getElementById("playerCap").value
-    );
-    currentEditRoom.mobCap = Number(document.getElementById("mobCap").value);
-    // console.log(`Edited data to server:` + JSON.stringify(currentEditRoom));
-    socket.emit("userSubmittedRoomEdit", currentEditRoom);
-    editRoomForm.reset();
-    editRoomForm.style.display = "none"; // Hide the form after submission
-  });
+    editRoomForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      currentEditRoom.name = document.getElementById("roomName").value;
+      currentEditRoom.description.examine =
+        document.getElementById("examineRoom").value;
+      currentEditRoom.description.study =
+        document.getElementById("studyRoom").value;
+      currentEditRoom.description.research =
+        document.getElementById("researchRoom").value;
+      currentEditRoom.isDark = document.getElementById("isDark").checked;
+      currentEditRoom.isIndoors = document.getElementById("isIndoors").checked;
+      currentEditRoom.isOnWater = document.getElementById("isOnWater").checked;
+      currentEditRoom.isUnderwater =
+        document.getElementById("isUnderwater").checked;
+      currentEditRoom.noMounts = document.getElementById("noMounts").checked;
+      currentEditRoom.noMobs = document.getElementById("noMobs").checked;
+      currentEditRoom.noMagic = document.getElementById("noMagic").checked;
+      currentEditRoom.noCombat = document.getElementById("noCombat").checked;
+      currentEditRoom.playerCap = Number(
+        document.getElementById("playerCap").value
+      );
+      currentEditRoom.mobCap = Number(document.getElementById("mobCap").value);
+      socket.emit("userSubmittedRoomEdit", currentEditRoom);
+      editRoomForm.reset();
+      editRoomForm.style.display = "none"; // Hide the form after submission
+    });
 
-  document
-    .querySelectorAll(".showEditRoomDescriptionSection")
-    .forEach(function (button) {
-      button.addEventListener("click", function () {
+    editRoomForm.addEventListener("click", (e) => {
+      if (e.target.matches("[data-target]")) {
         activeFormSection.style.display = "none";
-        activeFormSection = editRoomDescriptionSection;
+        activeFormSection = sections[e.target.dataset.target];
         activeFormSection.style.display = "block";
+      }
+    });
+
+    document
+      .getElementById("cancelEditRoomForm")
+      .addEventListener("click", () => {
+        editRoomForm.style.display = "none";
       });
+
+    socket.on("openEditRoomForm", (formData) => {
+      // persist the requested room data
+      currentEditRoom = formData.roomData;
+
+      // reset/hide open forms, show editRoomForm
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = editRoomForm;
+      activeForm.style.display = "block";
+      input.value = "";
+
+      // console.log(`Requested data from server:` + JSON.stringify(currentEditRoom));
+
+      // preset the values of the fields from requested room data
+      document.getElementById("roomId").textContent =
+        `Id: ${currentEditRoom._id}` || "error: room id not found";
+      document.getElementById("roomName").value = currentEditRoom.name || "";
+      document.getElementById("examineRoom").value =
+        currentEditRoom.description.examine || "";
+      document.getElementById("studyRoom").value =
+        currentEditRoom.description.study || "";
+      document.getElementById("researchRoom").value =
+        currentEditRoom.description.research || "";
+      document.getElementById("isDark").checked =
+        currentEditRoom.isDark || false;
+      document.getElementById("isIndoors").checked =
+        currentEditRoom.isIndoors || false;
+      document.getElementById("isOnWater").checked =
+        currentEditRoom.isOnWater || false;
+      document.getElementById("isUnderwater").checked =
+        currentEditRoom.isUnderwater || false;
+      document.getElementById("noMounts").checked =
+        currentEditRoom.noMounts || false;
+      document.getElementById("noMobs").checked =
+        currentEditRoom.noMobs || false;
+      document.getElementById("noMagic").checked =
+        currentEditRoom.noMagic || false;
+      document.getElementById("noCombat").checked =
+        currentEditRoom.noCombat || false;
+      document.getElementById("playerCap").value =
+        currentEditRoom.playerCap || 0;
+      document.getElementById("mobCap").value = currentEditRoom.mobCap || 0;
     });
-
-  document
-    .querySelectorAll(".showEditRoomTagsSection")
-    .forEach(function (button) {
-      button.addEventListener("click", function () {
-        activeFormSection.style.display = "none";
-        activeFormSection = editRoomTagsSection;
-        activeFormSection.style.display = "block";
-      });
-    });
-
-  document
-    .querySelectorAll(".showEditRoomMobNodesSection")
-    .forEach(function (button) {
-      button.addEventListener("click", function () {
-        activeFormSection.style.display = "none";
-        activeFormSection = editRoomMobNodesSection;
-        activeFormSection.style.display = "block";
-      });
-    });
-
-  document
-    .querySelectorAll(".showEditRoomItemNodesSection")
-    .forEach(function (button) {
-      button.addEventListener("click", function () {
-        activeFormSection.style.display = "none";
-        activeFormSection = editRoomItemNodesSection;
-        activeFormSection.style.display = "block";
-      });
-    });
-
-  document
-    .querySelectorAll(".showEditRoomExitsSection")
-    .forEach(function (button) {
-      button.addEventListener("click", function () {
-        activeFormSection.style.display = "none";
-        activeFormSection = editRoomExitsSection;
-        activeFormSection.style.display = "block";
-      });
-    });
-
-  document
-    .getElementById("cancelEditRoomForm")
-    .addEventListener("click", function () {
-      editRoomForm.style.display = "none";
-    });
-
-  socket.on("openEditRoomForm", (formData) => {
-    // persist the requested room data
-    currentEditRoom = formData.roomData;
-
-    // reset/hide open forms, show editRoomForm
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = editRoomForm;
-    activeForm.style.display = "block";
-    input.value = "";
-
-    // console.log(`Requested data from server:` + JSON.stringify(currentEditRoom));
-
-    // preset the values of the fields from requested room data
-    document.getElementById("roomId").textContent =
-      `Id: ${currentEditRoom._id}` || "error: room id not found";
-    document.getElementById("roomName").value = currentEditRoom.name || "";
-    document.getElementById("examineRoom").value =
-      currentEditRoom.description.examine || "";
-    document.getElementById("studyRoom").value =
-      currentEditRoom.description.study || "";
-    document.getElementById("researchRoom").value =
-      currentEditRoom.description.research || "";
-    document.getElementById("isDark").checked = currentEditRoom.isDark || false;
-    document.getElementById("isIndoors").checked =
-      currentEditRoom.isIndoors || false;
-    document.getElementById("isOnWater").checked =
-      currentEditRoom.isOnWater || false;
-    document.getElementById("isUnderwater").checked =
-      currentEditRoom.isUnderwater || false;
-    document.getElementById("noMounts").checked =
-      currentEditRoom.noMounts || false;
-    document.getElementById("noMobs").checked = currentEditRoom.noMobs || false;
-    document.getElementById("noMagic").checked =
-      currentEditRoom.noMagic || false;
-    document.getElementById("noCombat").checked =
-      currentEditRoom.noCombat || false;
-    document.getElementById("playerCap").value = currentEditRoom.playerCap || 0;
-    document.getElementById("mobCap").value = currentEditRoom.mobCap || 0;
   });
 </script>
