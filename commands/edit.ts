@@ -1,3 +1,4 @@
+import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import { IZone } from "../model/classes/Zone.js";
@@ -9,12 +10,6 @@ import { IParsedCommand } from "../util/parseCommand.js";
 async function edit(parsedCommand: IParsedCommand, user: IUser) {
   let target = parsedCommand.directObject;
   const zone: IZone = await getZoneOfUser(user);
-  const itemBlueprintList = zone.itemBlueprints.map((blueprint) => {
-    return { id: blueprint._id, value: blueprint.name };
-  });
-  const mobBlueprintList = zone.mobBlueprints.map((blueprint) => {
-    return { id: blueprint._id, value: blueprint.name };
-  });
 
   if (target !== "user" && zone.author.toString() !== user._id.toString()) {
     worldEmitter.emit(
@@ -36,7 +31,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
     case `item`: {
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `editItemSelect`,
-        list: itemBlueprintList,
+        itemBlueprintList: getItemBlueprintList(zone),
       });
       break;
     }
@@ -44,13 +39,16 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       const zone: IZone = await getZoneOfUser(user);
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `editMobSelect`,
-        list: mobBlueprintList,
+        mobBlueprintList: getMobBlueprintList(zone),
       });
       break;
     }
     case `room`: {
       const room = await getRoomOfUser(user);
-      const mobNodeNames = []
+      const itemBlueprintList = getItemBlueprintList(zone);
+      const mobBlueprintList = getMobBlueprintList(zone);
+      const itemNodesList = getItemNodesList(room, zone);
+      const mobNodesList = getMobNodesList(room, zone);
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `editRoomForm`,
         roomData: {
@@ -65,13 +63,13 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
           noMobs: room.noMobs,
           noMagic: room.noMagic,
           noCombat: room.noCombat,
-          mobNodes: room.mobNodes,
-          itemNodes: room.itemNodes,
+          mobNodes: mobNodesList,
+          itemNodes: itemNodesList,
           exits: room.exits,
         },
         zoneData: {
-          items: zone.itemBlueprints,
-          mobs: zone.mobBlueprints,
+          items: itemBlueprintList,
+          mobs: mobBlueprintList,
           rooms: zone.rooms,
         },
       });
@@ -94,6 +92,50 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
   }
+}
+
+function getItemBlueprintList(zone: IZone) {
+  const itemBlueprintList = zone.itemBlueprints.map((blueprint) => {
+    return { id: blueprint._id, value: blueprint.name };
+  });
+  return itemBlueprintList;
+}
+
+function getMobBlueprintList(zone: IZone) {
+  const mobBlueprintList = zone.mobBlueprints.map((blueprint) => {
+    return { id: blueprint._id, value: blueprint.name };
+  });
+  return mobBlueprintList;
+}
+
+function getItemNodesList(room: IRoom, zone: IZone) {
+  let itemNodesList = [];
+  for (let node of room.itemNodes) {
+    const itemName = zone.itemBlueprints.find(blueprint => {blueprint._id === node.loadsItemBlueprintId})?.name;
+    //TODO handle cases where the item originates in another zone
+    const nodeObject = {
+      nodeId: node._id,
+      blueprintId: node.loadsItemBlueprintId,
+      itemName: itemName,
+    };
+    itemNodesList.push(nodeObject);
+  }
+  return itemNodesList;
+}
+
+function getMobNodesList(room: IRoom, zone: IZone) {
+  let mobNodesList = [];
+  for (let node of room.mobNodes) {
+    const mobName = zone.mobBlueprints.find(blueprint => {blueprint._id === node.loadsMobBlueprintId})?.name;
+    //TODO handle cases where the mob originates in another zone
+    const nodeObject = {
+      nodeId: node._id,
+      blueprintId: node.loadsMobBlueprintId,
+      mobName: mobName,
+    };
+    mobNodesList.push(nodeObject);
+  }
+  return mobNodesList;
 }
 
 export default edit;

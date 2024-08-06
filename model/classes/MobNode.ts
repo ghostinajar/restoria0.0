@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 export interface IMobNode {
+  _id?: mongoose.Types.ObjectId;
   loadsMobBlueprintId: mongoose.Types.ObjectId;
   fromZoneId: mongoose.Types.ObjectId;
 }
