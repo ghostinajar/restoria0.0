@@ -50,6 +50,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
     }
     case `room`: {
       const room = await getRoomOfUser(user);
+      const mobNodeNames = []
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `editRoomForm`,
         roomData: {

@@ -1,14 +1,14 @@
-import mongoose from 'mongoose';
+// ItemNode
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 const itemNodeSchema = new Schema({
     loadsItemBlueprintId: {
         type: Schema.Types.ObjectId,
-        ref: 'ItemBlueprint'
+        ref: "ItemBlueprint",
     },
     fromZoneId: {
         type: Schema.Types.ObjectId,
-        ref: 'Zone'
+        ref: "Zone",
     },
-    quantity: Number
 });
 export default itemNodeSchema;

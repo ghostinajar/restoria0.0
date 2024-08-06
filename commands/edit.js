@@ -37,6 +37,7 @@ async function edit(parsedCommand, user) {
         }
         case `room`: {
             const room = await getRoomOfUser(user);
+            const mobNodeNames = [];
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editRoomForm`,
                 roomData: {

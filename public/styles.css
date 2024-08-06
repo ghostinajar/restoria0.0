@@ -142,6 +142,7 @@ ul {
 }
 
 #messagesContainer {
+  margin-bottom: 3rem;
   padding: 40px, 8px;
   overflow-y: auto;
 }

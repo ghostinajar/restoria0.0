@@ -14,7 +14,10 @@ async function activateMobNodes(
   for (const mobNode of mobNodes) {
     try {
       const zone: IZone = await new Promise((resolve) => {
-        worldEmitter.once(`zone${mobNode.fromZoneId.toString()}Loaded`, resolve);
+        worldEmitter.once(
+          `zone${mobNode.fromZoneId.toString()}Loaded`,
+          resolve
+        );
         worldEmitter.emit(`zoneRequested`, mobNode.fromZoneId.toString());
       });
       if (!zone) {
@@ -33,17 +36,18 @@ async function activateMobNodes(
         return null;
       }
 
-      for (let i = 0; i < mobNode.quantity; i++) {
-        const mob: IMob = await new Promise((resolve) => {
-          worldEmitter.once(`mobManagerAddedMobFromBlueprint${blueprint._id}`, resolve);
-          worldEmitter.emit(`roomRequestingNewMob`, blueprint);
-        });
-        //TODO initiate mob inventory
-        mob.inventory = [];
-        await activateItemNodes(blueprint.itemNodes, mob.inventory);
-        //logger.debug(`Items in mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
-        await mobArray.push(mob);
-      }
+      const mob: IMob = await new Promise((resolve) => {
+        worldEmitter.once(
+          `mobManagerAddedMobFromBlueprint${blueprint._id}`,
+          resolve
+        );
+        worldEmitter.emit(`roomRequestingNewMob`, blueprint);
+      });
+      //TODO initiate mob inventory
+      mob.inventory = [];
+      await activateItemNodes(blueprint.itemNodes, mob.inventory);
+      //logger.debug(`Items in mob "${mob.name}": ${mob.inventory.map(item => item.name)}`)
+      await mobArray.push(mob);
     } catch (err: any) {
       logger.error(`Error in activateMobNodes with a mobNode: ${err.message}`);
       throw err;
