@@ -1,3 +1,5 @@
+// editRoom
+import mongoose from "mongoose";
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
@@ -39,8 +41,24 @@ async function editRoom(room, roomData, user) {
     room.noCombat = roomData.noCombat;
     room.playerCap = roomData.playerCap;
     room.mobCap = roomData.mobCap;
-    room.mobNodes = roomData.mobNodes;
-    room.itemNodes = roomData.itemNodes;
+    //clear room.mobNodes and replace with processed roomData.mobNodes
+    room.mobNodes = [];
+    roomData.mobNodes.forEach((node) => {
+        room.mobNodes.push({
+            _id: new mongoose.Types.ObjectId(node.id),
+            loadsMobBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+            fromZoneId: zone._id,
+        });
+    });
+    //clear room.itemNodes and replace with processed roomData.itemNodes
+    room.itemNodes = [];
+    roomData.itemNodes.forEach((node) => {
+        room.itemNodes.push({
+            _id: new mongoose.Types.ObjectId(node.id),
+            loadsItemBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+            fromZoneId: zone._id,
+        });
+    });
     room.exits = roomData.exits;
     await zone.save();
     await zone.initRooms();
