@@ -33,8 +33,9 @@ async function edit(parsedCommand, user) {
             const room = await getRoomOfUser(user);
             const itemBlueprintList = getItemBlueprintList(zone);
             const mobBlueprintList = getMobBlueprintList(zone);
-            const itemNodesList = getItemNodesList(room, zone);
-            const mobNodesList = getMobNodesList(room, zone);
+            const itemNodesList = getItemNodeList(room, zone);
+            const mobNodesList = getMobNodeList(room, zone);
+            const roomList = getRoomList(zone);
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editRoomForm`,
                 roomData: {
@@ -56,7 +57,7 @@ async function edit(parsedCommand, user) {
                 zoneData: {
                     items: itemBlueprintList,
                     mobs: mobBlueprintList,
-                    rooms: zone.rooms,
+                    rooms: roomList,
                 },
             });
             break;
@@ -82,38 +83,52 @@ function getItemBlueprintList(zone) {
     });
     return itemBlueprintList;
 }
+function getItemNodeList(room, zone) {
+    let itemNodesList = [];
+    for (let node of room.itemNodes) {
+        const itemName = getNameById(zone.itemBlueprints, node.loadsItemBlueprintId.toString());
+        //TODO handle cases where the item originates in another zone
+        const nodeObject = {
+            id: node._id,
+            blueprintId: node.loadsItemBlueprintId,
+            value: itemName || "",
+        };
+        itemNodesList.push(nodeObject);
+    }
+    return itemNodesList;
+}
 function getMobBlueprintList(zone) {
     const mobBlueprintList = zone.mobBlueprints.map((blueprint) => {
         return { id: blueprint._id, value: blueprint.name };
     });
     return mobBlueprintList;
 }
-function getItemNodesList(room, zone) {
-    let itemNodesList = [];
-    for (let node of room.itemNodes) {
-        const itemName = zone.itemBlueprints.find(blueprint => { blueprint._id === node.loadsItemBlueprintId; })?.name;
-        //TODO handle cases where the item originates in another zone
-        const nodeObject = {
-            nodeId: node._id,
-            blueprintId: node.loadsItemBlueprintId,
-            itemName: itemName,
-        };
-        itemNodesList.push(nodeObject);
-    }
-    return itemNodesList;
-}
-function getMobNodesList(room, zone) {
+function getMobNodeList(room, zone) {
     let mobNodesList = [];
     for (let node of room.mobNodes) {
-        const mobName = zone.mobBlueprints.find(blueprint => { blueprint._id === node.loadsMobBlueprintId; })?.name;
+        const mobName = getNameById(zone.mobBlueprints, node.loadsMobBlueprintId.toString());
         //TODO handle cases where the mob originates in another zone
         const nodeObject = {
-            nodeId: node._id,
+            id: node._id,
             blueprintId: node.loadsMobBlueprintId,
-            mobName: mobName,
+            value: mobName,
         };
         mobNodesList.push(nodeObject);
     }
     return mobNodesList;
+}
+function getRoomList(zone) {
+    const roomList = zone.rooms.map((room) => {
+        return { id: room._id, value: room.name };
+    });
+    return roomList;
+}
+function getNameById(array, id) {
+    for (let object of array) {
+        if (object._id.toString() === id) {
+            return object.name;
+        }
+    }
+    return null;
 }
 export default edit;

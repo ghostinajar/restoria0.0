@@ -242,6 +242,7 @@
       });
 
     socket.on("openEditRoomForm", (formData) => {
+      console.log(formData);
       // persist the requested room data
       currentEditRoom = formData.roomData;
 
