@@ -123,6 +123,9 @@
 
   <section id="editRoomMobNodesSection" style="display: none">
     <h3>Mob Nodes</h3>
+    <ul class="nodeList" id="editRoomMobNodeList">
+      <!-- loaded via script -->
+    </ul>
     <ul>
       <li>
         <button type="button" data-target="editRoomItemNodesSection">
@@ -139,6 +142,9 @@
 
   <section id="editRoomItemNodesSection" style="display: none">
     <h3>Item Nodes</h3>
+    <ul class="nodeList" id="editRoomItemNodeList">
+      <!-- loaded via script -->
+    </ul>
     <ul>
       <li>
         <button type="button" data-target="editRoomExitsSection">
@@ -155,6 +161,9 @@
 
   <section id="editRoomExitsSection" style="display: none">
     <h3>Exits</h3>
+    <ul id="editRoomExitList">
+      <!-- loaded via script -->
+    </ul>
     <ul>
       <li>
         <button class="submitButton" type="submit">Update Room</button>
@@ -182,6 +191,11 @@
   document.addEventListener("DOMContentLoaded", () => {
     let currentEditRoom;
     const editRoomForm = document.getElementById("editRoomForm");
+    const editRoomItemNodeList = document.getElementById(
+      "editRoomItemNodeList"
+    );
+    const editRoomMobNodeList = document.getElementById("editRoomMobNodeList");
+    const editRoomExitList = document.getElementById("editRoomExitList");
     const sections = {
       editRoomDescriptionSection: document.getElementById(
         "editRoomDescriptionSection"
@@ -203,7 +217,7 @@
     editRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
       currentEditRoom.name = document.getElementById("roomName").value;
-      currentEditRoom.description.examine = 
+      currentEditRoom.description.examine =
         document.getElementById("examineRoom").value;
       currentEditRoom.description.study =
         document.getElementById("studyRoom").value;
@@ -242,7 +256,6 @@
       });
 
     socket.on("openEditRoomForm", (formData) => {
-      console.log(formData);
       // persist the requested room data
       currentEditRoom = formData.roomData;
 
@@ -252,8 +265,6 @@
       activeForm = editRoomForm;
       activeForm.style.display = "block";
       input.value = "";
-
-      // console.log(`Requested data from server:` + JSON.stringify(currentEditRoom));
 
       // preset the values of the fields from requested room data
       document.getElementById("roomId").textContent =
@@ -284,6 +295,64 @@
       document.getElementById("playerCap").value =
         currentEditRoom.playerCap || 0;
       document.getElementById("mobCap").value = currentEditRoom.mobCap || 0;
+      loadNodeList(currentEditRoom.mobNodes, editRoomMobNodeList);
+      loadNodeList(currentEditRoom.itemNodes, editRoomItemNodeList);
     });
   });
+
+  function clearUl(ul) {
+    while (ul.firstChild) {
+      ul.removeChild(ul.firstChild);
+    }
+  }
+
+  function loadNodeList(nodeList, ulElement) {
+    for (let node of nodeList) {
+      thisNode = node;
+      addNodeToList(ulElement, node);
+    }
+  }
+
+  function addNodeToList(ulElement, node) {
+    // Create a new <li> element
+    const liElement = document.createElement("li");
+    liElement.className = "node";
+    // Set the contents of the <li> to show node.value and node.id
+    liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${node.value}</span><span class="nodeId">id: ${node.id}</span></div>`;
+
+    // Create a delete button
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "remove";
+    deleteButton.className = "deleteNode";
+    deleteButton.onclick = function () {
+      ulElement.removeChild(liElement);
+      deleteNodeById(node.id);
+    };
+
+    // Append the delete button to the <li>
+    liElement.appendChild(deleteButton);
+
+    // Append the <li> to the <ul>
+    ulElement.appendChild(liElement);
+  }
+
+  function deleteNodeById(id) {
+    if (activeFormSection === sections.editRoomMobNodesSection) {
+      // delete the mobnode, clear the ul
+      const index = roomData.mobNodes.findIndex((node) => node.id === id);
+      if (index !== -1) {
+        roomData.mobNodes.splice(index, 1);
+      }
+      clearUl(editRoomMobNodeList);
+      // TODO reload the list
+    } else {
+      // delete the itemnode, clear the ul
+      const index = roomData.itemNodes.findIndex((node) => node.id === id);
+      if (index !== -1) {
+        roomData.itemNodes.splice(index, 1);
+      }
+      clearUl(editRoomItemNodeList);
+    }
+    // TODO reload the list
+  }
 </script>
