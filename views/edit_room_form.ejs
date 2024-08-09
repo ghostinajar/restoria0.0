@@ -196,7 +196,7 @@
     );
     const editRoomMobNodeList = document.getElementById("editRoomMobNodeList");
     const editRoomExitList = document.getElementById("editRoomExitList");
-    const sections = {
+    const sectionsForEditRoom = {
       editRoomDescriptionSection: document.getElementById(
         "editRoomDescriptionSection"
       ),
@@ -209,7 +209,8 @@
       ),
       editRoomExitsSection: document.getElementById("editRoomExitsSection"),
     };
-    let activeFormSection = sections.editRoomDescriptionSection;
+    let activeFormSectionForEditRoom =
+      sectionsForEditRoom.editRoomDescriptionSection;
 
     generateNumberSelectOptions(0, 9, document.getElementById("playerCap"));
     generateNumberSelectOptions(0, 9, document.getElementById("mobCap"));
@@ -237,15 +238,15 @@
       );
       currentEditRoom.mobCap = Number(document.getElementById("mobCap").value);
       socket.emit("userSubmittedRoomEdit", currentEditRoom);
-      editRoomForm.reset();
       editRoomForm.style.display = "none"; // Hide the form after submission
     });
 
     editRoomForm.addEventListener("click", (e) => {
       if (e.target.matches("[data-target]")) {
-        activeFormSection.style.display = "none";
-        activeFormSection = sections[e.target.dataset.target];
-        activeFormSection.style.display = "block";
+        hideEditRoomFormSections();
+        activeFormSectionForEditRoom =
+          sectionsForEditRoom[e.target.dataset.target];
+        activeFormSectionForEditRoom.style.display = "block";
       }
     });
 
@@ -260,6 +261,7 @@
       currentEditRoom = formData.roomData;
 
       // reset/hide open forms, show editRoomForm
+      resetEditRoomForm();
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = editRoomForm;
@@ -298,61 +300,87 @@
       loadNodeList(currentEditRoom.mobNodes, editRoomMobNodeList);
       loadNodeList(currentEditRoom.itemNodes, editRoomItemNodeList);
     });
-  });
 
-  function clearUl(ul) {
-    while (ul.firstChild) {
-      ul.removeChild(ul.firstChild);
-    }
-  }
-
-  function loadNodeList(nodeList, ulElement) {
-    for (let node of nodeList) {
-      thisNode = node;
-      addNodeToList(ulElement, node);
-    }
-  }
-
-  function addNodeToList(ulElement, node) {
-    // Create a new <li> element
-    const liElement = document.createElement("li");
-    liElement.className = "node";
-    // Set the contents of the <li> to show node.value and node.id
-    liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${node.value}</span><span class="nodeId">id: ${node.id}</span></div>`;
-
-    // Create a delete button
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "remove";
-    deleteButton.className = "deleteNode";
-    deleteButton.onclick = function () {
-      ulElement.removeChild(liElement);
-      deleteNodeById(node.id);
-    };
-
-    // Append the delete button to the <li>
-    liElement.appendChild(deleteButton);
-
-    // Append the <li> to the <ul>
-    ulElement.appendChild(liElement);
-  }
-
-  function deleteNodeById(id) {
-    if (activeFormSection === sections.editRoomMobNodesSection) {
-      // delete the mobnode, clear the ul
-      const index = roomData.mobNodes.findIndex((node) => node.id === id);
-      if (index !== -1) {
-        roomData.mobNodes.splice(index, 1);
+    function clearUl(ul) {
+      while (ul.firstChild) {
+        ul.removeChild(ul.firstChild);
       }
+    }
+
+    function hideEditRoomFormSections() {
+      sectionsForEditRoom.editRoomDescriptionSection.style.display = "none";
+      sectionsForEditRoom.editRoomTagsSection.style.display = "none";
+      sectionsForEditRoom.editRoomMobNodesSection.style.display = "none";
+      sectionsForEditRoom.editRoomItemNodesSection.style.display = "none";
+      sectionsForEditRoom.editRoomExitsSection.style.display = "none";
+    }
+
+    function loadNodeList(nodeList, ulElement) {
+      for (let node of nodeList) {
+        thisNode = node;
+        addNodeToList(ulElement, node);
+      }
+    }
+
+    function resetEditRoomForm() {
+      editRoomForm.reset();
       clearUl(editRoomMobNodeList);
-      // TODO reload the list
-    } else {
-      // delete the itemnode, clear the ul
-      const index = roomData.itemNodes.findIndex((node) => node.id === id);
-      if (index !== -1) {
-        roomData.itemNodes.splice(index, 1);
-      }
       clearUl(editRoomItemNodeList);
+      hideEditRoomFormSections();
+      activeFormSectionForEditRoom =
+        sectionsForEditRoom.editRoomDescriptionSection;
+      sectionsForEditRoom.editRoomDescriptionSection.style.display = "block";
     }
-    // TODO reload the list
-  }
+
+    function addNodeToList(ulElement, node) {
+      // Create a new <li> element
+      const liElement = document.createElement("li");
+      liElement.className = "node";
+      // Set the contents of the <li> to show node.value and node.id
+      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${node.value}</span><span class="nodeId">id: ${node.id}</span></div>`;
+
+      // Create a delete button
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "remove";
+      deleteButton.className = "deleteNode";
+      deleteButton.onclick = function () {
+        ulElement.removeChild(liElement);
+        deleteNodeById(node.id);
+      };
+
+      // Append the delete button to the <li>
+      liElement.appendChild(deleteButton);
+
+      // Append the <li> to the <ul>
+      ulElement.appendChild(liElement);
+    }
+
+    function deleteNodeById(id) {
+      let index;
+      //check for index in mobNodes
+      index = roomData.mobNodes.findIndex((node) => node.id === id);
+      if (index) {
+        //it's a mob
+        if (index !== -1) {
+          //delete the mobNode
+          roomData.mobNodes.splice(index, 1);
+        }
+        clearUl(editRoomMobNodeList);
+        loadNodeList(roomData.mobNodes, editRoomMobNodeList);
+      } else {
+        //it's an item
+        index = roomData.itemNodes.findIndex((node) => node.id === id);
+        if (!index) {
+          console.log(`deleteNodeById failed: index of node not found`);
+          return;
+        }
+        //delete the itemNode
+        if (index !== -1) {
+          roomData.itemNodes.splice(index, 1);
+        }
+        clearUl(editRoomItemNodeList);
+        loadNodeList(roomData.itemNodes, editRoomItemNodeList);
+      }
+    }
+  });
 </script>
