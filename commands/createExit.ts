@@ -10,7 +10,6 @@ function createExit(toRoomId: mongoose.Types.ObjectId, inZoneId : mongoose.Types
     toExternalZone: false,
     isHidden: false,
     isClosed: false,
-    isLocked: false,
     };
     return newExit
   };
