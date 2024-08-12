@@ -331,6 +331,39 @@
         editRoomForm.style.display = "none";
       });
 
+    document
+      .getElementById("editRoomItemNodeAdd")
+      .addEventListener("click", () => {
+        //push new node to list
+        workingEditRoomData.itemNodes.push({
+          id: "new", // server will generate legit id on zone save
+          blueprintId: editRoomItemNodeSelect.value,
+          value:
+            editRoomItemNodeSelect.options[editRoomItemNodeSelect.selectedIndex]
+              .text,
+        });
+        console.log(workingEditRoomData.itemNodes);
+        //reload nodeList
+        clearUl(editRoomItemNodeList);
+        loadNodeList(workingEditRoomData.itemNodes, editRoomItemNodeList);
+      });
+    document
+      .getElementById("editRoomMobNodeAdd")
+      .addEventListener("click", () => {
+        //push new node to list
+        workingEditRoomData.mobNodes.push({
+          id: "new", // server will generate legit id on zone save
+          blueprintId: editRoomMobNodeSelect.value,
+          value:
+            editRoomMobNodeSelect.options[editRoomMobNodeSelect.selectedIndex]
+              .text,
+        });
+        console.log(workingEditRoomData.mobNodes);
+        //reload nodeList
+        clearUl(editRoomMobNodeList);
+        loadNodeList(workingEditRoomData.mobNodes, editRoomMobNodeList);
+      });
+
     socket.on("openEditRoomForm", (formData) => {
       // persist the data from server
       workingEditRoomData = formData.roomData;
