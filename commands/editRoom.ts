@@ -41,11 +41,6 @@ export interface IEditRoomData {
 
 async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   let changed = false;
-  // logger.debug(
-  //   `editRoom submitted by user ${user.name} for room: ${JSON.stringify(
-  //     room.name
-  //   )}`
-  // );
   if (!room || !roomData || !user) {
     worldEmitter.emit(
       `messageFor${user.username}`,
@@ -88,7 +83,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   room.mobNodes = [];
   roomData.mobNodes.forEach((node) => {
     room.mobNodes.push({
-      _id: new mongoose.Types.ObjectId(node.id),
+      _id: new mongoose.Types.ObjectId(),
       loadsMobBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
       fromZoneId: zone._id,
     });
@@ -97,7 +92,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   room.itemNodes = [];
   roomData.itemNodes.forEach((node) => {
     room.itemNodes.push({
-      _id: new mongoose.Types.ObjectId(node.id),
+      _id: new mongoose.Types.ObjectId(),
       loadsItemBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
       fromZoneId: zone._id,
     });
