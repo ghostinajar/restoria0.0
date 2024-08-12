@@ -5,7 +5,12 @@
   style="display: none"
   autocomplete="off"
 >
-  <h2>Edit Room <span id="roomId">Error: Room Id should be here</span></h2>
+<ul>
+  <li>
+    <a class="cancelButton" id="cancelEditRoomForm"> Cancel </a>
+  </li>
+</ul>
+  <h2>Edit Room <span class="nodeId" id="roomId">Error: Room Id should be here</span></h2>
 
   <section id="editRoomDescriptionSection" style="display: block">
     <h3>Description</h3>
@@ -126,14 +131,23 @@
     <ul class="nodeList" id="editRoomMobNodeList">
       <!-- loaded via script -->
     </ul>
+    <ul class="addNodeContainer">
+      <li>
+        <!-- mob select and add button -->
+        <select id="editRoomMobNodeSelect" name="editRoomMobNodeSelect" required>
+          <!-- populated by script -->
+        </select>
+        <button type="button" class="addNode" id="editRoomMobNodeAdd">add</button>
+      </li>
+    </ul>
     <ul>
       <li>
-        <button type="button" data-target="editRoomItemNodesSection">
+        <button type="button" class="noLeftMargin" data-target="editRoomItemNodesSection">
           ItemNodes →
         </button>
       </li>
       <li>
-        <a data-target="editRoomTagsSection" class="secondaryAction">
+        <a data-target="editRoomTagsSection" class="secondaryAction noLeftMargin">
           ← Tags
         </a>
       </li>
@@ -147,12 +161,12 @@
     </ul>
     <ul>
       <li>
-        <button type="button" data-target="editRoomExitsSection">
+        <button type="button" class="noLeftMargin" data-target="editRoomExitsSection">
           Exits →
         </button>
       </li>
       <li>
-        <a data-target="editRoomMobNodesSection" class="secondaryAction">
+        <a data-target="editRoomMobNodesSection" class="secondaryAction noLeftMargin">
           ← MobNodes
         </a>
       </li>
@@ -166,21 +180,15 @@
     </ul>
     <ul>
       <li>
-        <button class="submitButton" type="submit">Update Room</button>
+        <button class="submitButton noLeftMargin" type="submit">Update Room</button>
       </li>
       <li>
-        <a data-target="editRoomItemNodesSection" class="secondaryAction">
+        <a data-target="editRoomItemNodesSection" class="secondaryAction noLeftMargin">
           ← ItemNodes
         </a>
       </li>
     </ul>
   </section>
-
-  <ul>
-    <li>
-      <a id="cancelEditRoomForm" class="secondaryAction"> Cancel </a>
-    </li>
-  </ul>
 </form>
 
 <!-- **************************************************************************
@@ -277,6 +285,9 @@
     socket.on("openEditRoomForm", (formData) => {
       // persist the data from server
       workingEditRoomData = formData.roomData;
+      availableMobBlueprints = formData.zoneData.mobs;
+      availableItemBlueprints = formData.zoneData.items;
+      availableRooms = formData.zoneData.rooms;
 
       // prepare fresh editRoomForm
       editRoomForm.reset();
