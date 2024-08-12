@@ -5,12 +5,15 @@
   style="display: none"
   autocomplete="off"
 >
-<ul>
-  <li>
-    <a class="cancelButton" id="cancelEditRoomForm"> Cancel </a>
-  </li>
-</ul>
-  <h2>Edit Room <span class="nodeId" id="roomId">Error: Room Id should be here</span></h2>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelEditRoomForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>
+    Edit Room
+    <span class="nodeId" id="roomId">Error: Room Id should be here</span>
+  </h2>
 
   <section id="editRoomDescriptionSection" style="display: block">
     <h3>Description</h3>
@@ -134,20 +137,33 @@
     <ul class="addNodeContainer">
       <li>
         <!-- mob select and add button -->
-        <select id="editRoomMobNodeSelect" name="editRoomMobNodeSelect" required>
+        <select
+          id="editRoomMobNodeSelect"
+          name="editRoomMobNodeSelect"
+          required
+        >
           <!-- populated by script -->
         </select>
-        <button type="button" class="addNode" id="editRoomMobNodeAdd">add</button>
+        <button type="button" class="addNode" id="editRoomMobNodeAdd">
+          add
+        </button>
       </li>
     </ul>
     <ul>
       <li>
-        <button type="button" class="noLeftMargin" data-target="editRoomItemNodesSection">
+        <button
+          type="button"
+          class="noLeftMargin"
+          data-target="editRoomItemNodesSection"
+        >
           ItemNodes →
         </button>
       </li>
       <li>
-        <a data-target="editRoomTagsSection" class="secondaryAction noLeftMargin">
+        <a
+          data-target="editRoomTagsSection"
+          class="secondaryAction noLeftMargin"
+        >
           ← Tags
         </a>
       </li>
@@ -159,14 +175,36 @@
     <ul class="nodeList" id="editRoomItemNodeList">
       <!-- loaded via script -->
     </ul>
+    <ul class="addNodeContainer">
+      <li>
+        <!-- item select and add button -->
+        <select
+          id="editRoomItemNodeSelect"
+          name="editRoomItemNodeSelect"
+          required
+        >
+          <!-- populated by script -->
+        </select>
+        <button type="button" class="addNode" id="editRoomItemNodeAdd">
+          add
+        </button>
+      </li>
+    </ul>
     <ul>
       <li>
-        <button type="button" class="noLeftMargin" data-target="editRoomExitsSection">
+        <button
+          type="button"
+          class="noLeftMargin"
+          data-target="editRoomExitsSection"
+        >
           Exits →
         </button>
       </li>
       <li>
-        <a data-target="editRoomMobNodesSection" class="secondaryAction noLeftMargin">
+        <a
+          data-target="editRoomMobNodesSection"
+          class="secondaryAction noLeftMargin"
+        >
           ← MobNodes
         </a>
       </li>
@@ -180,10 +218,15 @@
     </ul>
     <ul>
       <li>
-        <button class="submitButton noLeftMargin" type="submit">Update Room</button>
+        <button class="submitButton noLeftMargin" type="submit">
+          Update Room
+        </button>
       </li>
       <li>
-        <a data-target="editRoomItemNodesSection" class="secondaryAction noLeftMargin">
+        <a
+          data-target="editRoomItemNodesSection"
+          class="secondaryAction noLeftMargin"
+        >
           ← ItemNodes
         </a>
       </li>
@@ -192,7 +235,7 @@
 </form>
 
 <!-- **************************************************************************
-****************************************************************************
+****************************SCRIPT*********************************************
 **************************************************************************** -->
 
 <script>
@@ -203,7 +246,13 @@
     const editRoomItemNodeList = document.getElementById(
       "editRoomItemNodeList"
     );
+    const editRoomItemNodeSelect = document.getElementById(
+      "editRoomItemNodeSelect"
+    );
     const editRoomMobNodeList = document.getElementById("editRoomMobNodeList");
+    const editRoomMobNodeSelect = document.getElementById(
+      "editRoomMobNodeSelect"
+    );
     const editRoomExitList = document.getElementById("editRoomExitList");
 
     // form sections
@@ -297,6 +346,14 @@
       activeFormSectionForEditRoom =
         sectionsForEditRoom.editRoomDescriptionSection;
       sectionsForEditRoom.editRoomDescriptionSection.style.display = "block";
+      generateStringSelectOptions(
+        availableMobBlueprints,
+        document.getElementById("editRoomMobNodeSelect")
+      );
+      generateStringSelectOptions(
+        availableItemBlueprints,
+        document.getElementById("editRoomItemNodeSelect")
+      );
 
       // reset/hide open forms, show editRoomForm
       activeForm.reset();
@@ -386,7 +443,7 @@
 
     function deleteNodeById(id) {
       let index;
-      
+
       // Check if it's a mob node
       index = workingEditRoomData.mobNodes.findIndex((node) => node.id === id);
       if (index !== -1) {
