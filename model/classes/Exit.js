@@ -13,10 +13,18 @@ const exitSchema = new Schema({
             ref: "Room",
         },
     },
-    toExternalZone: Boolean,
-    isHidden: Boolean,
-    isClosed: Boolean,
-    isLocked: Boolean,
+    toExternalZone: {
+        type: Boolean,
+        default: false,
+    },
+    isHidden: {
+        type: Boolean,
+        default: false,
+    },
+    isClosed: {
+        type: Boolean,
+        default: false,
+    },
     keyItemBlueprint: {
         type: Schema.Types.ObjectId,
         ref: "ItemBlueprint",

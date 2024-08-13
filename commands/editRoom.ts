@@ -97,7 +97,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
       fromZoneId: zone._id,
     });
   });
-  
+
   room.exits = roomData.exits;
 
   await zone.save();

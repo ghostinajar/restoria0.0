@@ -117,13 +117,32 @@
         </select>
       </li>
       <li>
-        <button type="button" data-target="editRoomMobNodesSection">
-          MobNodes →
+        <button type="button" data-target="editRoomExitsSection">
+          Exits →
         </button>
       </li>
       <li>
         <a data-target="editRoomDescriptionSection" class="secondaryAction">
           ← Description
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section id="editRoomExitsSection" style="display: none">
+    <h3>Exits</h3>
+    <ul id="editRoomExitList">
+      <!-- loaded via script -->
+    </ul>
+    <ul>
+      <li>
+        <button type="button" data-target="editRoomMobNodesSection">
+          MobNodes →
+        </button>
+      </li>
+      <li>
+        <a data-target="editRoomTagsSection" class="secondaryAction">
+          ← Tags
         </a>
       </li>
     </ul>
@@ -161,10 +180,10 @@
       </li>
       <li>
         <a
-          data-target="editRoomTagsSection"
+          data-target="editRoomExitsSection"
           class="secondaryAction noLeftMargin"
         >
-          ← Tags
+          ← Exits
         </a>
       </li>
     </ul>
@@ -192,12 +211,8 @@
     </ul>
     <ul>
       <li>
-        <button
-          type="button"
-          class="noLeftMargin"
-          data-target="editRoomExitsSection"
-        >
-          Exits →
+        <button class="submitButton noLeftMargin" type="submit">
+          Update Room
         </button>
       </li>
       <li>
@@ -206,28 +221,6 @@
           class="secondaryAction noLeftMargin"
         >
           ← MobNodes
-        </a>
-      </li>
-    </ul>
-  </section>
-
-  <section id="editRoomExitsSection" style="display: none">
-    <h3>Exits</h3>
-    <ul id="editRoomExitList">
-      <!-- loaded via script -->
-    </ul>
-    <ul>
-      <li>
-        <button class="submitButton noLeftMargin" type="submit">
-          Update Room
-        </button>
-      </li>
-      <li>
-        <a
-          data-target="editRoomItemNodesSection"
-          class="secondaryAction noLeftMargin"
-        >
-          ← ItemNodes
         </a>
       </li>
     </ul>
@@ -311,6 +304,7 @@
       workingEditRoomData.mobCap = Number(
         document.getElementById("mobCap").value
       );
+      saveExitList(workingEditRoomData.exits);
 
       socket.emit("userSubmittedRoomEdit", workingEditRoomData);
       editRoomForm.style.display = "none"; // Hide the form after submission
@@ -342,7 +336,6 @@
             editRoomItemNodeSelect.options[editRoomItemNodeSelect.selectedIndex]
               .text,
         });
-        console.log(workingEditRoomData.itemNodes);
         //reload nodeList
         clearUl(editRoomItemNodeList);
         loadNodeList(workingEditRoomData.itemNodes, editRoomItemNodeList);
@@ -358,7 +351,6 @@
             editRoomMobNodeSelect.options[editRoomMobNodeSelect.selectedIndex]
               .text,
         });
-        console.log(workingEditRoomData.mobNodes);
         //reload nodeList
         clearUl(editRoomMobNodeList);
         loadNodeList(workingEditRoomData.mobNodes, editRoomMobNodeList);
@@ -427,6 +419,7 @@
       document.getElementById("mobCap").value = workingEditRoomData.mobCap || 0;
       loadNodeList(workingEditRoomData.mobNodes, editRoomMobNodeList);
       loadNodeList(workingEditRoomData.itemNodes, editRoomItemNodeList);
+      loadExitList(workingEditRoomData.exits);
     });
 
     function clearUl(ul) {
@@ -443,9 +436,86 @@
       sectionsForEditRoom.editRoomExitsSection.style.display = "none";
     }
 
+    function loadExitList(exitList) {
+      clearUl(editRoomExitList); // Clear the current list
+
+      const directions = ["north", "east", "south", "west", "up", "down"];
+
+      directions.forEach((direction) => {
+        if (exitList[direction]) {
+          const exitData = exitList[direction];
+          const liElement = document.createElement("li");
+
+          // Display the direction and destination room name
+          const destinationRoom = availableRooms.find(
+            (room) => room.id === exitData.destinationLocation.inRoom
+          );
+
+          liElement.innerHTML = `
+            <div class="exit" style="margin:0;">
+              ${direction}: ${
+                destinationRoom ? destinationRoom.value : "Unknown Room"
+              }
+            </div>
+            <div class="editExitControls">
+              <div style="display: inline-block; margin: 0; vertical-align: top;">
+                <label for="${direction}KeyItemBlueprint">Key:</label>
+                <select class="stubbySelect" id="${direction}KeyItemBlueprint">
+                  ${generateExitKeyOptions(
+                    availableItemBlueprints,
+                    exitData.keyItemBlueprint
+                  )}
+                </select>
+              </div>
+              <div style="display: inline-block; margin: 0; vertical-align: top;">
+                <div class="right-aligned-stacked">
+                  <label for="${direction}IsHidden">Hidden:</label>
+                  <input type="checkbox" id="${direction}IsHidden" ${
+                exitData.isHidden ? "checked" : ""
+              } />
+                </div>
+                <div class="right-aligned-stacked">
+                  <label for="${direction}IsClosed">Closed:</label>
+                  <input type="checkbox" id="${direction}IsClosed" ${
+                exitData.isClosed ? "checked" : ""
+              } />
+                </div>
+              </div>
+            </div>
+          `;
+
+          editRoomExitList.appendChild(liElement);
+        }
+      });
+    }
+
+    function saveExitList(exitList) {
+      const directions = ["north", "east", "south", "west", "up", "down"];
+
+      directions.forEach((direction) => {
+        if (exitList[direction]) {
+          const exitData = exitList[direction];
+          exitData.keyItemBlueprint = document.getElementById(`${direction}KeyItemBlueprint`).value;
+          exitData.isHidden = document.getElementById(`${direction}IsHidden`).checked;
+          exitData.isClosed = document.getElementById(`${direction}IsClosed`).checked;
+        }
+      });
+    }
+
+    function generateExitKeyOptions(availableItems, selectedItem) {
+      let options = `<option value="">(unlocked)</option>`; // Default option
+
+      availableItems.forEach((item) => {
+        options += `<option value="${item.id}" ${
+          item.id === selectedItem ? "selected" : ""
+        }>${item.value}</option>`;
+      });
+
+      return options;
+    }
+
     function loadNodeList(nodeList, ulElement) {
       for (let node of nodeList) {
-        thisNode = node;
         addNodeToList(ulElement, node);
       }
     }

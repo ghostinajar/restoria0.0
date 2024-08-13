@@ -144,7 +144,7 @@ ul {
   padding: 0px 10px;
 }
 .nodeList > li:nth-child(odd) {
-  background: #333;
+  background: #222;
 }
 .nodeInfo {
   display: flex;
@@ -201,6 +201,28 @@ ul {
   box-shadow: 0 0.5px 2px var(--black);
   display: none;
   overflow: auto;
+}
+
+.editExitControls {
+  margin: 0;
+}
+
+.right-aligned-stacked {
+  float: right;
+  clear: right;
+  margin: 0;
+}
+
+.stubbySelect {
+  width: 12rem;
+}
+
+#editRoomExitList > li {
+  margin: 0;
+}
+
+#editRoomExitList > li:nth-child(odd) {
+  background: #222;
 }
 
 #messagesContainer {

@@ -7,7 +7,6 @@ function createExit(toRoomId, inZoneId) {
         toExternalZone: false,
         isHidden: false,
         isClosed: false,
-        isLocked: false,
     };
     return newExit;
 }
