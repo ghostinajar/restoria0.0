@@ -26,8 +26,9 @@ const exitSchema = new Schema({
         default: false,
     },
     keyItemBlueprint: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "ItemBlueprint",
+        default: null,
     },
     keyItemZone: {
         type: Schema.Types.ObjectId,

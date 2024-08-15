@@ -454,8 +454,8 @@
           liElement.innerHTML = `
             <div class="exit" style="margin:0;">
               ${direction}: ${
-                destinationRoom ? destinationRoom.value : "Unknown Room"
-              }
+            destinationRoom ? destinationRoom.value : "Unknown Room"
+          }
             </div>
             <div class="editExitControls">
               <div style="display: inline-block; margin: 0; vertical-align: top;">
@@ -471,14 +471,14 @@
                 <div class="right-aligned-stacked">
                   <label for="${direction}IsHidden">Hidden:</label>
                   <input type="checkbox" id="${direction}IsHidden" ${
-                exitData.isHidden ? "checked" : ""
-              } />
+            exitData.isHidden ? "checked" : ""
+          } />
                 </div>
                 <div class="right-aligned-stacked">
                   <label for="${direction}IsClosed">Closed:</label>
                   <input type="checkbox" id="${direction}IsClosed" ${
-                exitData.isClosed ? "checked" : ""
-              } />
+            exitData.isClosed ? "checked" : ""
+          } />
                 </div>
               </div>
             </div>
@@ -491,13 +491,22 @@
 
     function saveExitList(exitList) {
       const directions = ["north", "east", "south", "west", "up", "down"];
-
       directions.forEach((direction) => {
         if (exitList[direction]) {
           const exitData = exitList[direction];
-          exitData.keyItemBlueprint = document.getElementById(`${direction}KeyItemBlueprint`).value;
-          exitData.isHidden = document.getElementById(`${direction}IsHidden`).checked;
-          exitData.isClosed = document.getElementById(`${direction}IsClosed`).checked;
+          let chosenKeyBlueprint = document.getElementById(
+            `${direction}KeyItemBlueprint`
+          ).value;
+          if (!chosenKeyBlueprint) {
+            chosenKeyBlueprint = null;
+          }
+          exitData.keyItemBlueprint = chosenKeyBlueprint;
+          exitData.isHidden = document.getElementById(
+            `${direction}IsHidden`
+          ).checked;
+          exitData.isClosed = document.getElementById(
+            `${direction}IsClosed`
+          ).checked;
         }
       });
     }

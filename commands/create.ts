@@ -42,6 +42,12 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       });
       break;
     }
+    case `zone`: {
+      worldEmitter.emit(`formPromptFor${user.username}`, {
+        form: `createZoneForm`,
+      });
+      break;
+    }
     default: {
       worldEmitter.emit(
         `messageFor${user.username}`,

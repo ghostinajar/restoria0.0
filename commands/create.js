@@ -34,6 +34,12 @@ async function create(parsedCommand, user) {
             });
             break;
         }
+        case `zone`: {
+            worldEmitter.emit(`formPromptFor${user.username}`, {
+                form: `createZoneForm`,
+            });
+            break;
+        }
         default: {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what?`));
             return;
