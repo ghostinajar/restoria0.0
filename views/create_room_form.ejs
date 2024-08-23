@@ -118,9 +118,6 @@
     });
 
   socket.on("openCreateRoomForm", (formData) => {
-    console.log(
-      `openCreateRoomForm received formData: ${JSON.stringify(formData)}`
-    );
     activeForm.reset();
     activeForm.style.display = "none";
     activeForm = createRoomForm;

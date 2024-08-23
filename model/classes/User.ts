@@ -32,7 +32,6 @@ export interface IUser extends mongoose.Document {
   salt: string;
   isAdmin: boolean;
   isTeacher: boolean;
-  isAuthor: boolean;
   author: mongoose.Types.ObjectId | null;
   location: ILocation;
   pronouns: number;
@@ -48,6 +47,7 @@ export interface IUser extends mongoose.Document {
   description: IDescription;
   users: Array<mongoose.Types.ObjectId>;
   students?: Array<mongoose.Types.ObjectId>;
+  unpublishedZoneTally: number;
   //may change when training is implemented
   trained: Array<ITrained>;
   inventory: Array<IItem>;
@@ -69,7 +69,6 @@ export const userSchema = new Schema<IUser>({
   salt: { type: String, required: true },
   isAdmin: { type: Boolean, required: true, default: false },
   isTeacher: { type: Boolean, required: true, default: false },
-  isAuthor: { type: Boolean, required: true, default: false },
   author: {
     type: Schema.Types.ObjectId,
     default: null,
@@ -112,6 +111,7 @@ export const userSchema = new Schema<IUser>({
     required: true,
     default: () => [],
   },
+  unpublishedZoneTally: { type: Number, required: true, default: 0 },
   trained: {
     type: [{ name: String, level: Number }],
     required: true,

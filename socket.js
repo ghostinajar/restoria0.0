@@ -19,6 +19,7 @@ import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
 import editItemBlueprint from "./commands/editItemBlueprint.js";
+import createZone from "./commands/createZone.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -93,6 +94,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedNewUser`, async (userData) => {
                 const newUser = await createUser(userData, user);
+            });
+            socket.on(`userSubmittedNewZone`, async (zoneData) => {
+                const newZone = await createZone(zoneData, user);
             });
             socket.on(`userSubmittedUserDescription`, async (userDescription) => {
                 await editUser(user, userDescription);

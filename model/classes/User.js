@@ -16,7 +16,6 @@ export const userSchema = new Schema({
     salt: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
     isTeacher: { type: Boolean, required: true, default: false },
-    isAuthor: { type: Boolean, required: true, default: false },
     author: {
         type: Schema.Types.ObjectId,
         default: null,
@@ -59,6 +58,7 @@ export const userSchema = new Schema({
         required: true,
         default: () => [],
     },
+    unpublishedZoneTally: { type: Number, required: true, default: 0 },
     trained: {
         type: [{ name: String, level: Number }],
         required: true,

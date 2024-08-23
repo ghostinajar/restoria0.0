@@ -60,7 +60,6 @@ async function createUser(userFormData, author) {
             salt: salt,
             isAdmin: false,
             isTeacher: false,
-            isAuthor: false,
             author: author?._id || null,
             location: {
                 inZone: new Types.ObjectId(process.env.WORLD_RECALL_ZONEID),
@@ -164,7 +163,7 @@ async function createUser(userFormData, author) {
         const nameToRegister = new Name({ name: newUser.username });
         const nameSaved = await nameToRegister.save();
         if (!nameSaved) {
-            logger.error(`createUser saved the Name ${newUser.name} to Names!`);
+            logger.error(`createZone couldn't save the name ${newUser.name} to Names!`);
             message.content = `Sorry, we ran into a problem saving your user!`;
             return message;
         }

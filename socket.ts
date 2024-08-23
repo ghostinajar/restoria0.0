@@ -35,6 +35,7 @@ import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createItemBlueprint, { IItemBlueprintData } from "./commands/createItemBlueprint.js";
 import editItemBlueprint from "./commands/editItemBlueprint.js";
+import createZone, { INewZoneData } from "./commands/createZone.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -189,6 +190,10 @@ const setupSocket = (io: any) => {
 
       socket.on(`userSubmittedNewUser`, async (userData: IUserData) => {
         const newUser = await createUser(userData, user);
+      });
+
+      socket.on(`userSubmittedNewZone`, async (zoneData: INewZoneData) => {
+        const newZone = await createZone(zoneData, user);
       });
 
       socket.on(
