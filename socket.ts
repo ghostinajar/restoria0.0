@@ -152,6 +152,7 @@ const setupSocket = (io: any) => {
           itemBlueprintData: IItemBlueprintData
         ) => {
           await editItemBlueprint(itemId, itemBlueprintData, user);
+          stats(user);
         }
       );
 
@@ -162,6 +163,7 @@ const setupSocket = (io: any) => {
           mobBlueprintData: IMobBlueprintData
         ) => {
           await editMobBlueprint(mobId, mobBlueprintData, user);
+          stats(user);
         }
       );
 
@@ -171,6 +173,7 @@ const setupSocket = (io: any) => {
           zoneData: IZoneData
         ) => {
           await editZone(zoneData, user);
+          stats(user);
         }
       );
 
@@ -181,6 +184,7 @@ const setupSocket = (io: any) => {
             itemBlueprintData,
             user
           );
+          stats(user);
         }
       );
 
@@ -191,31 +195,37 @@ const setupSocket = (io: any) => {
             mobBlueprintData,
             user
           );
+          stats(user);
         }
       );
 
       socket.on(`userSubmittedNewRoom`, async (roomData: INewRoomData) => {
         const newRoom = await createRoom(roomData, user);
+        stats(user);
       });
 
       socket.on(`userSubmittedNewUser`, async (userData: IUserData) => {
         const newUser = await createUser(userData, user);
+        stats(user);
       });
 
       socket.on(`userSubmittedNewZone`, async (zoneData: IZoneData) => {
         const newZone = await createZone(zoneData, user);
+        stats(user);
       });
 
       socket.on(
         `userSubmittedUserDescription`,
         async (userDescription: IDescription) => {
           await editUser(user, userDescription);
+          stats(user);
         }
       );
 
       socket.on(`userSubmittedRoomEdit`, async (roomData: IEditRoomData) => {
         const room = await getRoomOfUser(user);
         await editRoom(room, roomData, user);
+        stats(user);
       });
 
       // On connection, alert room and look

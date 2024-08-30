@@ -80,34 +80,44 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEditItemBlueprint`, async (itemId, itemBlueprintData) => {
                 await editItemBlueprint(itemId, itemBlueprintData, user);
+                stats(user);
             });
             socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
                 await editMobBlueprint(mobId, mobBlueprintData, user);
+                stats(user);
             });
             socket.on(`userSubmittedEditZone`, async (zoneData) => {
                 await editZone(zoneData, user);
+                stats(user);
             });
             socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
                 const newItemBlueprint = await createItemBlueprint(itemBlueprintData, user);
+                stats(user);
             });
             socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {
                 const newMobBlueprint = await createMobBlueprint(mobBlueprintData, user);
+                stats(user);
             });
             socket.on(`userSubmittedNewRoom`, async (roomData) => {
                 const newRoom = await createRoom(roomData, user);
+                stats(user);
             });
             socket.on(`userSubmittedNewUser`, async (userData) => {
                 const newUser = await createUser(userData, user);
+                stats(user);
             });
             socket.on(`userSubmittedNewZone`, async (zoneData) => {
                 const newZone = await createZone(zoneData, user);
+                stats(user);
             });
             socket.on(`userSubmittedUserDescription`, async (userDescription) => {
                 await editUser(user, userDescription);
+                stats(user);
             });
             socket.on(`userSubmittedRoomEdit`, async (roomData) => {
                 const room = await getRoomOfUser(user);
                 await editRoom(room, roomData, user);
+                stats(user);
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
