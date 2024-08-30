@@ -62,7 +62,7 @@ async function createMobBlueprint(mobFormData, author) {
         // logger.debug(`Saved zone ${originZone.name} with mob blueprints for ${originZone.mobBlueprints.map(mob => mob.name)}`)
         logger.info(`Author "${author.name}" created mob blueprint "${newMobBlueprint.name}".`);
         message.type = "success";
-        message.content = `You created a mob blueprint for ${newMobBlueprint.name}. To use blueprints, type 'place mob' or 'remove mob'.`;
+        message.content = `You created a mob blueprint for ${newMobBlueprint.name}. To place one here, type EDIT ROOM`;
         worldEmitter.emit(`messageFor${author.username}`, message);
         await look({ commandWord: "look" }, author);
         return newMobBlueprint;
