@@ -32,71 +32,55 @@
         required
       />
     </li>
-    <li>
-      <ul>
-        <div style="display: inline-block">
-          <li>
-            <label for="newItemType">Type:</label>
-            <select id="newItemType" name="newItemType" required>
-              <option value="armor">armor</option>
-              <option value="fishing_rod">fishing rod</option>
-              <option value="gold">gold</option>
-              <option value="key">key</option>
-              <option value="none" selected>none</option>
-              <option value="potion">potion</option>
-              <option value="scroll">scroll</option>
-              <option value="token">token</option>
-              <option value="treasure">treasure</option>
-              <option value="wand">wand</option>
-              <option value="weapon">weapon</option>
-            </select>
-          </li>
-        </div>
-        <div style="display: inline-block">
-          <li>
-            <label for="newItemMinimumLevel">MinLvl:</label>
-            <select
-              style="margin-right:0;"
-              class="extraStubbySelect"
-              id="newItemMinimumLevel"
-              name="newItemMinimumLevel"
-              required
-            >
-              <!-- populated by script -->
-            </select>
-          </li>
-        </div>
-      </ul>
+
+    <li style="display: inline-block">
+      <label for="newItemType">Type:</label>
+      <select id="newItemType" name="newItemType" required>
+        <option value="armor">armor</option>
+        <option value="fishing_rod">fishing rod</option>
+        <option value="gold">gold</option>
+        <option value="key">key</option>
+        <option value="none" selected>none</option>
+        <option value="potion">potion</option>
+        <option value="scroll">scroll</option>
+        <option value="token">token</option>
+        <option value="treasure">treasure</option>
+        <option value="wand">wand</option>
+        <option value="weapon">weapon</option>
+      </select>
+    </li>
+    <li style="display: inline-block">
+      <label for="newItemMinimumLevel">MinLvl:</label>
+      <select
+        style="margin-right: 0"
+        id="newItemMinimumLevel"
+        name="newItemMinimumLevel"
+        required
+      >
+        <!-- populated by script -->
+      </select>
     </li>
 
-    <li>
-      <ul>
-        <div style="display: inline-block">
-          <li>
-            <label for="newItemPrice">Price:</label>
-            <input
-              class="stubbySelect"
-              type="number"
-              id="newItemPrice"
-              name="newItemPrice"
-              min="0"
-              max="100000"
-              value="0"
-              required
-            />
-          </li>
-        </div>
-        <div style="display: inline-block">
-          <li>
-            <label for="newItemIsContainer">Container: </label>
-            <input
-              type="checkbox"
-              id="newItemIsContainer"
-              name="newItemIsContainer"
-            />
-          </li>
-        </div>
-      </ul>
+    <li style="display: inline-block">
+      <label for="newItemPrice">Price:</label>
+      <input
+        class="stubbySelect"
+        type="number"
+        id="newItemPrice"
+        name="newItemPrice"
+        min="0"
+        max="100000"
+        value="0"
+        required
+      />
+    </li>
+    <li style="display: inline-block">
+      <label for="newItemIsContainer">Container: </label>
+      <input
+        type="checkbox"
+        id="newItemIsContainer"
+        name="newItemIsContainer"
+      />
     </li>
 
     <h3>Description</h3>
