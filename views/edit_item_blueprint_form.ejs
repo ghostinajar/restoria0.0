@@ -145,13 +145,11 @@
     });
 
   socket.on("openEditItemBlueprintForm", (formData) => {
-    console.log(`received openEditItemBlueprintForm with formData` + formData)
     activeForm.reset();
     activeForm.style.display = "none";
     activeForm = editItemBlueprintForm;
     activeForm.style.display = "block";
     input.value = "";
-    console.log(JSON.stringify(formData));
     // Set the values of the fields based on formData
     document.getElementById("editItemName").value = formData.name || "";
     document.getElementById("editItemType").value = formData.itemType || "none";

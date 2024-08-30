@@ -13,7 +13,6 @@ async function createZone(zoneFormData, author) {
     try {
         let message = makeMessage("rejection", ``);
         // logger.debug(`Trying to create zone ${zoneFormData.name}`);
-        console.log(author.unpublishedZoneTally);
         if (author.unpublishedZoneTally > 4) {
             message.content = `Sorry, you can't have more then 5 unpublished zones at a time.`;
             worldEmitter.emit(`messageFor${author.username}`, message);
@@ -102,7 +101,6 @@ async function createZone(zoneFormData, author) {
             author.unpublishedZoneTally = 0;
         }
         author.unpublishedZoneTally++;
-        console.log(author.unpublishedZoneTally);
         // notify user
         message.type = "success";
         message.content = `You created a zone: ${newZoneData.name}!`;

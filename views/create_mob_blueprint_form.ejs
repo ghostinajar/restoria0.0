@@ -188,9 +188,6 @@
     });
 
   socket.on("opencreateMobBlueprintForm", (formData) => {
-    console.log(
-      `opencreateMobBlueprintForm received formData: ${JSON.stringify(formData)}`
-    );
     activeForm.reset();
     activeForm.style.display = "none";
     activeForm = createMobBlueprintForm;

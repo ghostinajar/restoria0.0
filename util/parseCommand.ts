@@ -28,7 +28,6 @@ function parseCommand (command: string) {
     } else {
         parsedCommand.string = splitCommand.slice(1).join(" ");
     }
-    //console.log(parsedCommand)
     return parsedCommand;
 };
 

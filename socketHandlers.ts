@@ -30,7 +30,6 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     return;
   }
   if (formData.form === "editItemBlueprintForm") {
-    console.log(formData);
     socket.emit(`openEditItemBlueprintForm`, formData.editItemBlueprintFormData);
     return;
   }
@@ -52,6 +51,10 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   }
   if (formData.form === "editUserForm") {
     socket.emit(`openEditUserForm`, formData);
+    return;
+  }
+  if (formData.form === "editZoneForm") {
+    socket.emit(`openEditZoneForm`, formData);
     return;
   }
 };

@@ -20,6 +20,7 @@ import exits from "./commands/exits.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
 import editItemBlueprint from "./commands/editItemBlueprint.js";
 import createZone from "./commands/createZone.js";
+import editZone from "./commands/editZone.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -82,6 +83,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
                 await editMobBlueprint(mobId, mobBlueprintData, user);
+            });
+            socket.on(`userSubmittedEditZone`, async (zoneData) => {
+                await editZone(zoneData, user);
             });
             socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
                 const newItemBlueprint = await createItemBlueprint(itemBlueprintData, user);

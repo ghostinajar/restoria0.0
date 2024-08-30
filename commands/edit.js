@@ -71,6 +71,17 @@ async function edit(parsedCommand, user) {
             });
             break;
         }
+        case `zone`: {
+            const zone = await getZoneOfUser(user);
+            worldEmitter.emit(`formPromptFor${user.username}`, {
+                form: `editZoneForm`,
+                zoneId: zone._id,
+                name: zone.name,
+                minutesToRepop: zone.minutesToRepop,
+                description: zone.description,
+            });
+            break;
+        }
         default: {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Edit what?`));
             return;
