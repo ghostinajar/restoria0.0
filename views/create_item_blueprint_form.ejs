@@ -5,95 +5,139 @@
   style="display: none"
   autocomplete="off"
 >
-  <section>
-    <label for="newItemName">Name:</label>
-    <input
-      id="newItemName"
-      name="newItemName"
-      type="text"
-      maxlength="36"
-      required
-    />
-  </section>
-  <section>
-    <label for="newItemType">Type:</label>
-    <select id="newItemType" name="newItemType" required>
-      <option value="armor">armor</option>
-      <option value="fishing_rod">fishing rod</option>
-      <option value="gold">gold</option>
-      <option value="key">key</option>
-      <option value="none" selected>none</option>
-      <option value="potion">potion</option>
-      <option value="scroll">scroll</option>
-      <option value="token">token</option>
-      <option value="treasure">treasure</option>
-      <option value="wand">wand</option>
-      <option value="weapon">weapon</option>
-    </select>
-  </section>
-  <section>
-    <label for="newItemKeywords">Keywords:</label>
-    <input
-      id="newItemKeywords"
-      name="newItemKeywords"
-      type="text"
-      maxlength="80"
-      required
-    />
-  </section>
-  <section>
-    <label for="newLookItem">Look:</label>
-    <input id="newLookItem" name="newLookItem" type="text" maxlength="80" />
-  </section>
-  <section>
-    <label for="newExamineItem">Examine:</label>
-    <textarea
-      id="newExamineItem"
-      name="newExamineItem"
-      type="text"
-      maxlength="240"
-    ></textarea>
-  </section>
-  <section>
-    <label for="newStudyItem">Study:</label>
-    <textarea
-      id="newStudyItem"
-      name="newStudyItem"
-      type="text"
-      maxlength="640"
-    ></textarea>
-  </section>
-  <section>
-    <label for="newResearchItem">Research:</label>
-    <textarea
-      id="newResearchItem"
-      name="newResearchItem"
-      type="text"
-      maxlength="1600"
-    ></textarea>
-  </section>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelCreateItemBlueprintForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Create Item Blueprint</h2>
+  <ul>
+    <li>
+      <label for="newItemName">Name:</label>
+      <input
+        id="newItemName"
+        name="newItemName"
+        type="text"
+        maxlength="36"
+        required
+      />
+    </li>
+    <li>
+      <label for="newItemKeywords">Keywords:</label>
+      <input
+        id="newItemKeywords"
+        name="newItemKeywords"
+        type="text"
+        maxlength="80"
+        required
+      />
+    </li>
+    <li>
+      <ul>
+        <div style="display: inline-block">
+          <li>
+            <label for="newItemType">Type:</label>
+            <select id="newItemType" name="newItemType" required>
+              <option value="armor">armor</option>
+              <option value="fishing_rod">fishing rod</option>
+              <option value="gold">gold</option>
+              <option value="key">key</option>
+              <option value="none" selected>none</option>
+              <option value="potion">potion</option>
+              <option value="scroll">scroll</option>
+              <option value="token">token</option>
+              <option value="treasure">treasure</option>
+              <option value="wand">wand</option>
+              <option value="weapon">weapon</option>
+            </select>
+          </li>
+        </div>
+        <div style="display: inline-block">
+          <li>
+            <label for="newItemMinimumLevel">MinLvl:</label>
+            <select
+              style="margin-right:0;"
+              class="extraStubbySelect"
+              id="newItemMinimumLevel"
+              name="newItemMinimumLevel"
+              required
+            >
+              <!-- populated by script -->
+            </select>
+          </li>
+        </div>
+      </ul>
+    </li>
 
-  <section>
-    <label for="newItemPrice">Price:</label>
-    <input
-      type="number"
-      id="newItemPrice"
-      name="newItemPrice"
-      min="0"
-      max="100000"
-      value="0"
-      required
-    />
-    <label for="newItemMinimumLevel">MinLvl:</label>
-    <select id="newItemMinimumLevel" name="newItemMinimumLevel" required>
-      <!-- populated by script -->
-    </select>
-    <label for="newItemIsContainer">Container: </label>
-    <input type="checkbox" id="newItemIsContainer" name="newItemIsContainer" />
-  </section>
+    <li>
+      <ul>
+        <div style="display: inline-block">
+          <li>
+            <label for="newItemPrice">Price:</label>
+            <input
+              class="stubbySelect"
+              type="number"
+              id="newItemPrice"
+              name="newItemPrice"
+              min="0"
+              max="100000"
+              value="0"
+              required
+            />
+          </li>
+        </div>
+        <div style="display: inline-block">
+          <li>
+            <label for="newItemIsContainer">Container: </label>
+            <input
+              type="checkbox"
+              id="newItemIsContainer"
+              name="newItemIsContainer"
+            />
+          </li>
+        </div>
+      </ul>
+    </li>
 
-  <button type="submit">Create Item</button>
-  <button type="button" id="cancelcreateItemBlueprintForm">Cancel</button>
+    <h3>Description</h3>
+    <li>
+      <label for="newLookItem">Look:</label>
+      <input id="newLookItem" name="newLookItem" type="text" maxlength="80" />
+    </li>
+    <li>
+      <label for="newExamineItem">Examine:</label>
+      <textarea
+        id="newExamineItem"
+        name="newExamineItem"
+        type="text"
+        maxlength="240"
+      ></textarea>
+    </li>
+    <li>
+      <label for="newStudyItem">Study:</label>
+      <textarea
+        id="newStudyItem"
+        name="newStudyItem"
+        type="text"
+        maxlength="640"
+      ></textarea>
+    </li>
+    <li>
+      <label for="newResearchItem">Research:</label>
+      <textarea
+        id="newResearchItem"
+        name="newResearchItem"
+        type="text"
+        maxlength="1600"
+      ></textarea>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <button class="submitButton" type="submit">Create Item Blueprint</button>
+    </li>
+  </ul>
 </form>
 
 <script>
@@ -131,7 +175,7 @@
   });
 
   document
-    .getElementById("cancelcreateItemBlueprintForm")
+    .getElementById("cancelCreateItemBlueprintForm")
     .addEventListener("click", function () {
       createItemBlueprintForm.style.display = "none";
     });

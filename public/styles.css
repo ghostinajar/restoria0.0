@@ -65,6 +65,8 @@ h2 {
 
 h3 {
   font-size: 1em;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
 }
 
 form li + li {
@@ -215,6 +217,10 @@ ul {
 
 .stubbySelect {
   width: 12rem;
+}
+
+.extraStubbySelect {
+  width: 4rem;
 }
 
 #editRoomExitList > li {
