@@ -30,8 +30,9 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
   switch (target) {
     case `item`: {
       worldEmitter.emit(`formPromptFor${user.username}`, {
-        form: `editItemSelect`,
+        form: `editItemBlueprintForm`,
         itemBlueprintList: getItemBlueprintList(zone),
+        itemBlueprintFullData: zone.itemBlueprints,
       });
       break;
     }

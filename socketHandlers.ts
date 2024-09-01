@@ -27,10 +27,10 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   }
   if (formData.form === "createZoneForm") {
     socket.emit(`openCreateZoneForm`);
-    return;
+    return; 
   }
   if (formData.form === "editItemBlueprintForm") {
-    socket.emit(`openEditItemBlueprintForm`, formData.editItemBlueprintFormData);
+    socket.emit(`openEditItemBlueprintForm`, formData);
     return;
   }
   if (formData.form === "editMobBlueprintForm") {
@@ -89,39 +89,6 @@ export const messageForUsersZoneHandler = async (
   user: IUser
 ) => {
   socket.to(user.location.inZone.toString()).emit(`message`, message);
-};
-
-export const userSelectedItemEditHandler = async (
-  user: IUser,
-  itemId: mongoose.Types.ObjectId | string
-) => {
-  const zone = await getZoneOfUser(user);
-  logger.debug(`userSelectedItemEditHandler found zone ${zone.name}`)
-  const itemBlueprint: IItemBlueprint | undefined = zone.itemBlueprints.find(
-    (blueprint) => blueprint._id.toString() === itemId.toString()
-  );
-  if (!itemBlueprint) {
-    logger.error(
-      `userSelectedItemEditHandler couldn't find blueprint for ${itemId}`
-    );
-    return;
-  }
-  logger.debug(`userSelectedItemEditHandler found blueprint for ${itemBlueprint.name}`)
-  const editItemBlueprintFormData = {
-    _id: itemBlueprint?._id,
-    name: itemBlueprint?.name,
-    itemType: itemBlueprint?.itemType,
-    keywords: itemBlueprint?.keywords,
-    description: itemBlueprint?.description,
-    price: itemBlueprint?.price,
-    minimumLevel: itemBlueprint?.minimumLevel,
-    isContainer: itemBlueprint?.tags.container,
-  };
-  logger.debug(`userSelectedItemEditHandler sending formData ${JSON.stringify(editItemBlueprintFormData)}`);
-  worldEmitter.emit(`formPromptFor${user.username}`, {
-    form: `editItemBlueprintForm`,
-    editItemBlueprintFormData,
-  });
 };
 
 export const userSelectedMobEditHandler = async (

@@ -10,7 +10,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSelectedItemEditHandler, userSelectedMobEditHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSelectedMobEditHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
@@ -67,10 +67,6 @@ const setupSocket = (io) => {
                 userXChangingRoomsHandler(originRoomId, originZoneId, destinationRoomId, destinationZoneId, socket, user);
             });
             // Listen for client events
-            socket.on(`userSelectedItemEdit`, async (itemId) => {
-                logger.debug(`User selected ItemEdit for ${itemId}.`);
-                userSelectedItemEditHandler(user, itemId);
-            });
             socket.on(`userSelectedMobEdit`, async (mobId) => {
                 // logger.debug(`User selected MobEdit for ${mobId}.`);
                 userSelectedMobEditHandler(user, mobId);

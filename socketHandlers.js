@@ -23,7 +23,7 @@ export const formPromptForUserHandler = async (formData, socket) => {
         return;
     }
     if (formData.form === "editItemBlueprintForm") {
-        socket.emit(`openEditItemBlueprintForm`, formData.editItemBlueprintFormData);
+        socket.emit(`openEditItemBlueprintForm`, formData);
         return;
     }
     if (formData.form === "editMobBlueprintForm") {
