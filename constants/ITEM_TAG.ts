@@ -6,7 +6,7 @@ const ITEM_TAG = {
     FOOD: 'food',
     GUILD: 'guild',
     HIDDEN: 'hidden',
-    ILLUMINATES: 'illuminates',
+    LAMP: 'lamp',
     LIGHT: 'light',
     MAGE: 'mage',
     NEUTRAL: 'neutral',

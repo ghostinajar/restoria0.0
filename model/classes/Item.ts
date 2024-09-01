@@ -36,7 +36,7 @@ export interface IItem {
     food: boolean;
     guild: boolean;
     hidden: boolean;
-    illuminates: boolean; //lights up the room
+    lamp: boolean; //lights up the room
     light: boolean; //can be equipped by players with a light aura
     mage: boolean;
     neutral: boolean;
@@ -46,7 +46,23 @@ export interface IItem {
     warrior: boolean;
   };
   keywords: Array<string>;
-  wearableLocations: Array<string>;
+  wearableLocations?: {
+    head: boolean;
+    ears: boolean;
+    neck: boolean;
+    shoulders: boolean;
+    body: boolean;
+    arms: boolean;
+    wrist1: boolean;
+    wrist2: boolean;
+    hands: boolean;
+    finger1: boolean;
+    finger2: boolean;
+    waist: boolean;
+    legs: boolean;
+    feet: boolean;
+    shield: boolean;
+  };
   creationDate: Date;
   expiryDate: Date;
   minimumLevelTweak: number;
@@ -106,7 +122,7 @@ const itemSchema = new Schema<IItem>({
     food: Boolean,
     guild: Boolean,
     hidden: Boolean,
-    illuminates: Boolean, //lights up the room
+    lamp: Boolean, //lights up the room
     light: Boolean, //can be equipped by players with a light aura
     mage: Boolean,
     neutral: Boolean,
@@ -120,7 +136,68 @@ const itemSchema = new Schema<IItem>({
     warrior: Boolean,
   },
   keywords: [String],
-  wearableLocations: [String],
+  wearableLocations: {
+    head: {
+      type: Boolean,
+      default: false,
+    },
+    ears: {
+      type: Boolean,
+      default: false,
+    },
+    neck: {
+      type: Boolean,
+      default: false,
+    },
+    shoulders: {
+      type: Boolean,
+      default: false,
+    },
+    body: {
+      type: Boolean,
+      default: false,
+    },
+    arms: {
+      type: Boolean,
+      default: false,
+    },
+    wrist1: {
+      type: Boolean,
+      default: false,
+    },
+    wrist2: {
+      type: Boolean,
+      default: false,
+    },
+    hands: {
+      type: Boolean,
+      default: false,
+    },
+    finger1: {
+      type: Boolean,
+      default: false,
+    },
+    finger2: {
+      type: Boolean,
+      default: false,
+    },
+    waist: {
+      type: Boolean,
+      default: false,
+    },
+    legs: {
+      type: Boolean,
+      default: false,
+    },
+    feet: {
+      type: Boolean,
+      default: false,
+    },
+    shield: {
+      type: Boolean,
+      default: false,
+    },
+  },
   creationDate: {
     type: Date,
     default: Date.now,

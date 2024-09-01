@@ -68,31 +68,6 @@ export const messageForUsersRoomHandler = async (message, socket, user) => {
 export const messageForUsersZoneHandler = async (message, socket, user) => {
     socket.to(user.location.inZone.toString()).emit(`message`, message);
 };
-export const userSelectedItemEditHandler = async (user, itemId) => {
-    const zone = await getZoneOfUser(user);
-    logger.debug(`userSelectedItemEditHandler found zone ${zone.name}`);
-    const itemBlueprint = zone.itemBlueprints.find((blueprint) => blueprint._id.toString() === itemId.toString());
-    if (!itemBlueprint) {
-        logger.error(`userSelectedItemEditHandler couldn't find blueprint for ${itemId}`);
-        return;
-    }
-    logger.debug(`userSelectedItemEditHandler found blueprint for ${itemBlueprint.name}`);
-    const editItemBlueprintFormData = {
-        _id: itemBlueprint?._id,
-        name: itemBlueprint?.name,
-        itemType: itemBlueprint?.itemType,
-        keywords: itemBlueprint?.keywords,
-        description: itemBlueprint?.description,
-        price: itemBlueprint?.price,
-        minimumLevel: itemBlueprint?.minimumLevel,
-        isContainer: itemBlueprint?.tags.container,
-    };
-    logger.debug(`userSelectedItemEditHandler sending formData ${JSON.stringify(editItemBlueprintFormData)}`);
-    worldEmitter.emit(`formPromptFor${user.username}`, {
-        form: `editItemBlueprintForm`,
-        editItemBlueprintFormData,
-    });
-};
 export const userSelectedMobEditHandler = async (user, mobId) => {
     const zone = await getZoneOfUser(user);
     // logger.debug(`userSelectedMobEditHandler found zone ${zone.name}`)

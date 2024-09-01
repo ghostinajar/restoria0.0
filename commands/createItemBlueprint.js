@@ -55,7 +55,7 @@ async function createItemBlueprint(itemFormData, author) {
                 food: false,
                 guild: false,
                 hidden: false,
-                illuminates: false,
+                lamp: false,
                 light: true,
                 mage: true,
                 neutral: true,
@@ -72,7 +72,23 @@ async function createItemBlueprint(itemFormData, author) {
             newItemBlueprint.capacity = 10;
         }
         if (itemFormData.itemType === ITEM_TYPE.ARMOR) {
-            newItemBlueprint.wearableLocations = [];
+            newItemBlueprint.wearableLocations = {
+                head: false,
+                ears: false,
+                neck: false,
+                shoulders: false,
+                body: false,
+                arms: false,
+                wrist1: false,
+                wrist2: false,
+                hands: false,
+                finger1: false,
+                finger2: false,
+                waist: false,
+                legs: false,
+                feet: false,
+                shield: false,
+            };
         }
         if (itemFormData.itemType === ITEM_TYPE.POTION ||
             itemFormData.itemType === ITEM_TYPE.SCROLL ||
@@ -92,7 +108,7 @@ async function createItemBlueprint(itemFormData, author) {
                 isLight: false,
                 isReach: false,
                 isRanged: false,
-                isTwohand: false
+                isTwohand: false,
             };
         }
         originZone.itemBlueprints.push(newItemBlueprint);
