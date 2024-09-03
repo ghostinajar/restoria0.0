@@ -16,7 +16,7 @@
       >Error: Item Id should be here</span
     >
   </h2>
-  <section id="editItemDescriptionSection" style="display: block">
+  <section id="editItemFirstSection" style="display: block">
     <ul>
       <li>
         <label for="editItemSelectItem">Item:</label>
@@ -79,10 +79,17 @@
         </select>
       </li>
     </ul>
-  </section>
-  <section>
     <ul>
-      <h3>Description</h3>
+      <li>
+        <button type="button" data-target="editItemDescriptionSection">
+          Description →
+        </button>
+      </li>
+    </ul>
+  </section>
+  <section id="editItemDescriptionSection" style="display: block">
+    <h3>Description</h3>
+    <ul>
       <li>
         <label for="editLookItem">Look:</label>
         <input
@@ -119,11 +126,19 @@
           maxlength="1600"
         ></textarea>
       </li>
+      <li>
+        <button type="button" data-target="editItemTagsSection">Tags →</button>
+      </li>
+      <li>
+        <a data-target="editRoomFirstSection" class="secondaryAction">
+          ← Back
+        </a>
+      </li>
     </ul>
   </section>
   <section id="editItemTags" style="display: block">
+    <h3>Tags</h3>
     <ul>
-      <h3>Tags</h3>
       <li>
         <label for="editItemCleric">Cleric:</label>
         <input type="checkbox" id="editItemCleric" name="editItemCleric" />
@@ -192,9 +207,20 @@
           name="editItemContainer"
         />
       </li>
+      <li>
+        <button type="button" data-target="editItemItemNodesSection">
+          Item Nodes →
+        </button>
+      </li>
+      <li>
+        <a data-target="editItemDescriptionSection" class="secondaryAction">
+          ← Description
+        </a>
+      </li>
     </ul>
   </section>
   <section id="editItemItemNodes" style="display: block">
+    <h3>Item Nodes</h3>
     <ul>
       <li>
         <label for="editItemCapacity">Capacity:</label>
@@ -209,19 +235,42 @@
           required
         />
       </li>
-      <h3>Item Nodes</h3>
-      <!-- TODO implement item nodes container etc -->
+    </ul>
+    <!-- TODO implement item nodes container etc -->
+    <ul>
+      <li>
+        <button type="button" data-target="editItemAffixesSection">
+          Affixes →
+        </button>
+      </li>
+      <li>
+        <a data-target="editItemTagsSection" class="secondaryAction">
+          ← Tags
+        </a>
+      </li>
     </ul>
   </section>
   <section id="editItemAffixes">
+    <h3>Affixes</h3>
     <ul>
-      <h3>Affixes</h3>
       <li></li>
+    </ul>
+    <ul>
+      <li>
+        <button type="button" data-target="editItemWeaponAndSpellSection">
+          Weapon and Spell →
+        </button>
+      </li>
+      <li>
+        <a data-target="editItemItemNodesSection" class="secondaryAction">
+          ← Item Nodes
+        </a>
+      </li>
     </ul>
   </section>
   <section id="editItemWeaponAndSpell">
+    <h3>Weapon Properties</h3>
     <ul id="editItemWeaponProperties">
-      <h3>Weapon Properties</h3>
       <li style="display: inline-block">
         <label
           style="min-width: 0; margin-right: 0"
@@ -311,8 +360,8 @@
         />
       </li>
     </ul>
+    <h3>Spell Charges</h3>
     <ul id="editItemSpellProperties">
-      <h3>Spell Charges</h3>
       <li style="display: inline-block">
         <label for="editItemSpell">Spell:</label>
         <select id="editItemSpell" name="editItemSpell" required>
@@ -441,10 +490,22 @@
         />
       </li>
     </ul>
+    <ul>
+      <li>
+        <button type="button" data-target="editItemWearableLocationsSection">
+          Wearable Locations →
+        </button>
+      </li>
+      <li>
+        <a data-target="editItemAffixesSection" class="secondaryAction">
+          ← Affixes
+        </a>
+      </li>
+    </ul>
   </section>
   <section id="editItemWearableLocations" style="display: block">
+    <h3>Wearable Locations</h3>
     <ul>
-      <h3>Wearable Locations</h3>
       <li>
         <label for="editItemHead">Head:</label>
         <input type="checkbox" id="editItemHead" name="editItemHead" />
@@ -502,11 +563,14 @@
         <input type="checkbox" id="editItemShield" name="editItemShield" />
       </li>
     </ul>
-  </section>
-  <section>
     <ul>
       <li>
         <button type="submit">Update Item</button>
+      </li>
+      <li>
+        <a data-target="editItemWeaponAndSpellSection" class="secondaryAction">
+          ← Weapon and Spell
+        </a>
       </li>
     </ul>
   </section>
