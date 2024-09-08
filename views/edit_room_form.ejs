@@ -14,8 +14,32 @@
     Edit Room
     <span class="nodeId" id="roomId">Error: Room Id should be here</span>
   </h2>
-
-  <section id="editRoomDescriptionSection" style="display: block">
+  <div class="tabs">
+    <button
+      type="button"
+      class="tab-link active"
+      data-tab="editRoomDescriptionSection"
+    >
+      Description
+    </button>
+    <button type="button" class="tab-link" data-tab="editRoomTagsSection">
+      Tags
+    </button>
+    <button type="button" class="tab-link" data-tab="editRoomExitsSection">
+      Exits
+    </button>
+    <button type="button" class="tab-link" data-tab="editRoomMobNodesSection">
+      MobNodes
+    </button>
+    <button type="button" class="tab-link" data-tab="editRoomItemNodesSection">
+      ItemNodes
+    </button>
+  </div>
+  <section
+    class="tab-content"
+    id="editRoomDescriptionSection"
+    style="display: block"
+  >
     <h3>Description</h3>
     <ul>
       <li>
@@ -48,13 +72,10 @@
           maxlength="1600"
         ></textarea>
       </li>
-      <li>
-        <button type="button" data-target="editRoomTagsSection">Tags →</button>
-      </li>
     </ul>
   </section>
 
-  <section id="editRoomTagsSection" style="display: none">
+  <section class="tab-content" id="editRoomTagsSection" style="display: none">
     <h3>Tags</h3>
     <ul>
       <li>
@@ -116,39 +137,21 @@
           <!-- populated by script -->
         </select>
       </li>
-      <li>
-        <button type="button" data-target="editRoomExitsSection">
-          Exits →
-        </button>
-      </li>
-      <li>
-        <a data-target="editRoomDescriptionSection" class="secondaryAction">
-          ← Description
-        </a>
-      </li>
     </ul>
   </section>
 
-  <section id="editRoomExitsSection" style="display: none">
+  <section class="tab-content" id="editRoomExitsSection" style="display: none">
     <h3>Exits</h3>
     <ul id="editRoomExitList">
       <!-- loaded via script -->
     </ul>
-    <ul>
-      <li>
-        <button type="button" data-target="editRoomMobNodesSection">
-          MobNodes →
-        </button>
-      </li>
-      <li>
-        <a data-target="editRoomTagsSection" class="secondaryAction">
-          ← Tags
-        </a>
-      </li>
-    </ul>
   </section>
 
-  <section id="editRoomMobNodesSection" style="display: none">
+  <section
+    class="tab-content"
+    id="editRoomMobNodesSection"
+    style="display: none"
+  >
     <h3>Mob Nodes</h3>
     <ul class="nodeList" id="editRoomMobNodeList">
       <!-- loaded via script -->
@@ -168,28 +171,13 @@
         </button>
       </li>
     </ul>
-    <ul>
-      <li>
-        <button
-          type="button"
-          class="noLeftMargin"
-          data-target="editRoomItemNodesSection"
-        >
-          ItemNodes →
-        </button>
-      </li>
-      <li>
-        <a
-          data-target="editRoomExitsSection"
-          class="secondaryAction noLeftMargin"
-        >
-          ← Exits
-        </a>
-      </li>
-    </ul>
   </section>
 
-  <section id="editRoomItemNodesSection" style="display: none">
+  <section
+    class="tab-content"
+    id="editRoomItemNodesSection"
+    style="display: none"
+  >
     <h3>Item Nodes</h3>
     <ul class="nodeList" id="editRoomItemNodeList">
       <!-- loaded via script -->
@@ -209,19 +197,13 @@
         </button>
       </li>
     </ul>
+  </section>
+  <section>
     <ul>
       <li>
         <button class="submitButton noLeftMargin" type="submit">
           Update Room
         </button>
-      </li>
-      <li>
-        <a
-          data-target="editRoomMobNodesSection"
-          class="secondaryAction noLeftMargin"
-        >
-          ← MobNodes
-        </a>
       </li>
     </ul>
   </section>
@@ -233,7 +215,23 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    const tabLinks = document.querySelectorAll(".tab-link");
+    const tabContents = document.querySelectorAll(".tab-content");
     const editRoomForm = document.getElementById("editRoomForm");
+    tabLinks.forEach((link) => {
+      link.addEventListener("click", function () {
+        // Remove active class from all tab links and sections
+        tabLinks.forEach((link) => link.classList.remove("active"));
+        tabContents.forEach((section) => section.classList.remove("active"));
+        tabContents.forEach((section) => (section.style.display = "none"));
+
+        // Add active class to the clicked tab and corresponding section
+        this.classList.add("active");
+        const target = document.getElementById(this.getAttribute("data-tab"));
+        target.classList.add("active");
+        target.style.display = "block";
+      });
+    });
 
     // nodeList ul elements
     const editRoomItemNodeList = document.getElementById(
