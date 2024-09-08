@@ -16,7 +16,7 @@
       >Error: Item Id should be here</span
     >
   </h2>
-  <section id="editItemFirstSection" style="display: block">
+  <section id="editItemGeneralSection" style="display: block">
     <ul>
       <li>
         <label for="editItemSelectItem">Item:</label>
@@ -79,6 +79,213 @@
         </select>
       </li>
     </ul>
+    <div id="editItemWeaponProperties"></div>
+    <h3>Weapon Properties</h3>
+    <ul>
+      <li style="display: inline-block">
+        <label
+          style="min-width: 0; margin-right: 0"
+          for="editItemDamageDieQuantity"
+          >Damage:</label
+        >
+        <input
+          style="width: 3.4rem"
+          type="number"
+          id="editItemDamageDieQuantity"
+          name="editItemDamageDieQuantity"
+          min="1"
+          max="9"
+          value="1"
+          required
+        />
+      </li>
+      <li style="display: inline-block">
+        <label
+          style="min-width: 0; margin-left: 0; margin-right: 0"
+          for="editItemDamageDieSides"
+          >d</label
+        >
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editItemDamageDieSides"
+          name="editItemDamageDieSides"
+          min="4"
+          max="12"
+          value="4"
+          required
+        />
+      </li>
+      <li style="display: inline-block">
+        <label
+          style="min-width: 0; margin-left: 0"
+          for="editItemDamageType"
+        ></label>
+        <select id="editItemDamageType" name="editItemDamageType" required>
+          <option value="bludgeoning">bludgeoning</option>
+          <option value="piercing">piercing</option>
+          <option value="slashing">slashing</option>
+          <option value="fire">fire</option>
+          <option value="cold">cold</option>
+          <option value="electricity">electricity</option>
+        </select>
+      </li>
+      <li>
+        <label for="editItemFinesseWeapon">Finesse:</label>
+        <input
+          type="checkbox"
+          id="editItemFinesseWeapon"
+          name="editItemFinesseWeapon"
+        />
+      </li>
+      <li>
+        <label for="editItemLightWeapon">Light:</label>
+        <input
+          type="checkbox"
+          id="editItemLightWeapon"
+          name="editItemLightWeapon"
+        />
+      </li>
+      <li>
+        <label for="editItemReachWeapon">Reach:</label>
+        <input
+          type="checkbox"
+          id="editItemReachWeapon"
+          name="editItemReachWeapon"
+        />
+      </li>
+      <li>
+        <label for="editItemRangedWeapon">Ranged:</label>
+        <input
+          type="checkbox"
+          id="editItemRangedWeapon"
+          name="editItemRangedWeapon"
+        />
+      </li>
+      <li>
+        <label for="editItemTwoHandWeapon">TwoHand:</label>
+        <input
+          type="checkbox"
+          id="editItemTwoHandWeapon"
+          name="editItemTwoHandWeapon"
+        />
+      </li>
+    </ul>
+    <div id="editItemSpellProperties">
+      <h3>Spell Charges</h3>
+      <ul>
+        <li style="display: inline-block">
+          <label for="editItemSpell">Spell:</label>
+          <select id="editItemSpell" name="editItemSpell" required>
+            <option value="arcane eye">arcane eye</option>
+            <option value="berserk">berserk</option>
+            <option value="bless">bless</option>
+            <option value="blind">blind</option>
+            <option value="blink">blink</option>
+            <option value="blizzard">blizzard</option>
+            <option value="blood magic">blood magic</option>
+            <option value="breadcrumbs">breadcrumbs</option>
+            <option value="breathe water">breathe water</option>
+            <option value="bubble">bubble</option>
+            <option value="charm">charm</option>
+            <option value="cold">cold</option>
+            <option value="color spray">color spray</option>
+            <option value="conjure elemental">conjure elemental</option>
+            <option value="create food">create food</option>
+            <option value="create water">create water</option>
+            <option value="cure blind">cure blind</option>
+            <option value="cure fatigue">cure fatigue</option>
+            <option value="cure poison">cure poison</option>
+            <option value="curse">curse</option>
+            <option value="dimension door">dimension door</option>
+            <option value="discern spirit">discern spirit</option>
+            <option value="disintegrate">disintegrate</option>
+            <option value="dispel magic">dispel magic</option>
+            <option value="drain">drain</option>
+            <option value="echo spirit">echo spirit</option>
+            <option value="faerie fire">faerie fire</option>
+            <option value="farsight">farsight</option>
+            <option value="fatigue">fatigue</option>
+            <option value="fear">fear</option>
+            <option value="fire">fire</option>
+            <option value="firestorm">firestorm</option>
+            <option value="gate">gate</option>
+            <option value="harm">harm</option>
+            <option value="heal">heal</option>
+            <option value="identify">identify</option>
+            <option value="infravision">infravision</option>
+            <option value="invisibility">invisibility</option>
+            <option value="levitate">levitate</option>
+            <option value="lift curse">lift curse</option>
+            <option value="lightning">lightning</option>
+            <option value="locate object">locate object</option>
+            <option value="magic missile">magic missile</option>
+            <option value="manashield">manashield</option>
+            <option value="mass invisibility">mass invisibility</option>
+            <option value="mass levitate">mass levitate</option>
+            <option value="mass refresh">mass refresh</option>
+            <option value="minor creation">minor creation</option>
+            <option value="mirage">mirage</option>
+            <option value="mirror images">mirror images</option>
+            <option value="one heart">one heart</option>
+            <option value="poison">poison</option>
+            <option value="protect">protect</option>
+            <option value="refresh">refresh</option>
+            <option value="resist cold">resist cold</option>
+            <option value="resist electric">resist electric</option>
+            <option value="resist fire">resist fire</option>
+            <option value="resurrect">resurrect</option>
+            <option value="rot">rot</option>
+            <option value="scry">scry</option>
+            <option value="see invisible">see invisible</option>
+            <option value="sense life">sense life</option>
+            <option value="sense presence">sense presence</option>
+            <option value="shield">shield</option>
+            <option value="sleep">sleep</option>
+            <option value="spirit armor">spirit armor</option>
+            <option value="spirit bolt">spirit bolt</option>
+            <option value="spirit shock">spirit shock</option>
+            <option value="steal">steal</option>
+            <option value="stone skin">stone skin</option>
+            <option value="strength">strength</option>
+            <option value="summon">summon</option>
+            <option value="teleport">teleport</option>
+            <option value="thorns">thorns</option>
+            <option value="track">track</option>
+            <option value="tremor">tremor</option>
+            <option value="visit">visit</option>
+            <option value="weaken">weaken</option>
+            <option value="word of recall">word of recall</option>
+          </select>
+        </li>
+        <li style="display: inline-block">
+          <label for="editItemSpellLevel">Level:</label>
+          <input
+            style="width: 4rem"
+            type="number"
+            id="editItemSpellLevel"
+            name="editItemSpellLevel"
+            min="1"
+            max="31"
+            value="1"
+            required
+          />
+        </li>
+        <li style="display: inline-block">
+          <label for="editItemSpellCharges">Charges:</label>
+          <input
+            style="width: 4rem"
+            type="number"
+            id="editItemSpellCharges"
+            name="editItemSpellCharges"
+            min="1"
+            max="20"
+            value="1"
+            required
+          />
+        </li>
+      </ul>
+    </div>
     <ul>
       <li>
         <button type="button" data-target="editItemDescriptionSection">
@@ -264,241 +471,6 @@
       <li>
         <a data-target="editItemItemNodesSection" class="secondaryAction">
           ← Item Nodes
-        </a>
-      </li>
-    </ul>
-  </section>
-  <section id="editItemWeaponAndSpell">
-    <h3>Weapon Properties</h3>
-    <ul id="editItemWeaponProperties">
-      <li style="display: inline-block">
-        <label
-          style="min-width: 0; margin-right: 0"
-          for="editItemDamageDieQuantity"
-          >Damage:</label
-        >
-        <input
-          style="width: 3.4rem"
-          type="number"
-          id="editItemDamageDieQuantity"
-          name="editItemDamageDieQuantity"
-          min="1"
-          max="9"
-          value="1"
-          required
-        />
-      </li>
-      <li style="display: inline-block">
-        <label
-          style="min-width: 0; margin-left: 0; margin-right: 0"
-          for="editItemDamageDieSides"
-          >d</label
-        >
-        <input
-          style="width: 3.9rem"
-          type="number"
-          id="editItemDamageDieSides"
-          name="editItemDamageDieSides"
-          min="4"
-          max="12"
-          value="4"
-          required
-        />
-      </li>
-      <li style="display: inline-block">
-        <label
-          style="min-width: 0; margin-left: 0"
-          for="editItemDamageType"
-        ></label>
-        <select id="editItemDamageType" name="editItemDamageType" required>
-          <option value="bludgeoning">bludgeoning</option>
-          <option value="piercing">piercing</option>
-          <option value="slashing">slashing</option>
-          <option value="fire">fire</option>
-          <option value="cold">cold</option>
-          <option value="electricity">electricity</option>
-        </select>
-      </li>
-      <li>
-        <label for="editItemFinesseWeapon">Finesse:</label>
-        <input
-          type="checkbox"
-          id="editItemFinesseWeapon"
-          name="editItemFinesseWeapon"
-        />
-      </li>
-      <li>
-        <label for="editItemLightWeapon">Light:</label>
-        <input
-          type="checkbox"
-          id="editItemLightWeapon"
-          name="editItemLightWeapon"
-        />
-      </li>
-      <li>
-        <label for="editItemReachWeapon">Reach:</label>
-        <input
-          type="checkbox"
-          id="editItemReachWeapon"
-          name="editItemReachWeapon"
-        />
-      </li>
-      <li>
-        <label for="editItemRangedWeapon">Ranged:</label>
-        <input
-          type="checkbox"
-          id="editItemRangedWeapon"
-          name="editItemRangedWeapon"
-        />
-      </li>
-      <li>
-        <label for="editItemTwoHandWeapon">TwoHand:</label>
-        <input
-          type="checkbox"
-          id="editItemTwoHandWeapon"
-          name="editItemTwoHandWeapon"
-        />
-      </li>
-    </ul>
-    <h3>Spell Charges</h3>
-    <ul id="editItemSpellProperties">
-      <li style="display: inline-block">
-        <label for="editItemSpell">Spell:</label>
-        <select id="editItemSpell" name="editItemSpell" required>
-          <option value="ambush">ambush</option>
-          <option value="arcane eye">arcane eye</option>
-          <option value="attune">attune</option>
-          <option value="backstab">backstab</option>
-          <option value="berserk">berserk</option>
-          <option value="bless">bless</option>
-          <option value="blind">blind</option>
-          <option value="blink">blink</option>
-          <option value="blizzard">blizzard</option>
-          <option value="blood magic">blood magic</option>
-          <option value="breadcrumbs">breadcrumbs</option>
-          <option value="breathe water">breathe water</option>
-          <option value="bubble">bubble</option>
-          <option value="charm">charm</option>
-          <option value="cleave">cleave</option>
-          <option value="cold">cold</option>
-          <option value="color spray">color spray</option>
-          <option value="conjure elemental">conjure elemental</option>
-          <option value="create food">create food</option>
-          <option value="create water">create water</option>
-          <option value="cure blind">cure blind</option>
-          <option value="cure fatigue">cure fatigue</option>
-          <option value="cure poison">cure poison</option>
-          <option value="curse">curse</option>
-          <option value="defend">defend</option>
-          <option value="dimension door">dimension door</option>
-          <option value="disarm">disarm</option>
-          <option value="discern spirit">discern spirit</option>
-          <option value="disintegrate">disintegrate</option>
-          <option value="dispel magic">dispel magic</option>
-          <option value="drain">drain</option>
-          <option value="echo spirit">echo spirit</option>
-          <option value="faerie fire">faerie fire</option>
-          <option value="farsight">farsight</option>
-          <option value="fatigue">fatigue</option>
-          <option value="fear">fear</option>
-          <option value="fire">fire</option>
-          <option value="firestorm">firestorm</option>
-          <option value="gate">gate</option>
-          <option value="harm">harm</option>
-          <option value="heal">heal</option>
-          <option value="hide">hide</option>
-          <option value="identify">identify</option>
-          <option value="infravision">infravision</option>
-          <option value="invisibility">invisibility</option>
-          <option value="kick">kick</option>
-          <option value="levitate">levitate</option>
-          <option value="lift curse">lift curse</option>
-          <option value="lightning">lightning</option>
-          <option value="locate object">locate object</option>
-          <option value="magic missile">magic missile</option>
-          <option value="malediction">malediction</option>
-          <option value="manashield">manashield</option>
-          <option value="mass invisibility">mass invisibility</option>
-          <option value="mass levitate">mass levitate</option>
-          <option value="mass refresh">mass refresh</option>
-          <option value="meditate">meditate</option>
-          <option value="minor creation">minor creation</option>
-          <option value="mirage">mirage</option>
-          <option value="mirror images">mirror images</option>
-          <option value="one heart">one heart</option>
-          <option value="pick">pick</option>
-          <option value="poison">poison</option>
-          <option value="protect">protect</option>
-          <option value="refresh">refresh</option>
-          <option value="resist cold">resist cold</option>
-          <option value="resist electric">resist electric</option>
-          <option value="resist fire">resist fire</option>
-          <option value="resurrect">resurrect</option>
-          <option value="rot">rot</option>
-          <option value="scan">scan</option>
-          <option value="scry">scry</option>
-          <option value="see invisible">see invisible</option>
-          <option value="sense life">sense life</option>
-          <option value="sense presence">sense presence</option>
-          <option value="shield">shield</option>
-          <option value="shove">shove</option>
-          <option value="sleep">sleep</option>
-          <option value="sneak">sneak</option>
-          <option value="spirit armor">spirit armor</option>
-          <option value="spirit bolt">spirit bolt</option>
-          <option value="spirit shock">spirit shock</option>
-          <option value="steal">steal</option>
-          <option value="stone skin">stone skin</option>
-          <option value="strength">strength</option>
-          <option value="summon">summon</option>
-          <option value="teleport">teleport</option>
-          <option value="thorns">thorns</option>
-          <option value="throw">throw</option>
-          <option value="track">track</option>
-          <option value="trap">trap</option>
-          <option value="tremor">tremor</option>
-          <option value="trip">trip</option>
-          <option value="visit">visit</option>
-          <option value="weaken">weaken</option>
-          <option value="word of recall">word of recall</option>
-        </select>
-      </li>
-      <li style="display: inline-block">
-        <label for="editItemSpellLevel">Level:</label>
-        <input
-          style="width: 4rem"
-          type="number"
-          id="editItemSpellLevel"
-          name="editItemSpellLevel"
-          min="1"
-          max="31"
-          value="1"
-          required
-        />
-      </li>
-      <li style="display: inline-block">
-        <label for="editItemSpellCharges">Charges:</label>
-        <input
-          style="width: 4rem"
-          type="number"
-          id="editItemSpellCharges"
-          name="editItemSpellCharges"
-          min="1"
-          max="20"
-          value="1"
-          required
-        />
-      </li>
-    </ul>
-    <ul>
-      <li>
-        <button type="button" data-target="editItemWearableLocationsSection">
-          Wearable Locations →
-        </button>
-      </li>
-      <li>
-        <a data-target="editItemAffixesSection" class="secondaryAction">
-          ← Affixes
         </a>
       </li>
     </ul>

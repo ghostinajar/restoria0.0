@@ -50,7 +50,6 @@ const SPELL = {
   LIGHTNING: 'lightning',
   LOCATE_OBJECT: 'locate object',
   MAGIC_MISSILE: 'magic missile',
-  MALEDICTION: 'malediction',
   MANASHIELD: 'manashield',
   MASS_INVISIBILITY: 'mass invisibility',
   MASS_LEVITATE: 'mass levitate',
