@@ -214,6 +214,7 @@
         <li style="display: inline-block">
           <label for="editItemSpell">Spell:</label>
           <select id="editItemSpell" name="editItemSpell" required>
+            <option value="none">none</option>
             <option value="arcane eye">arcane eye</option>
             <option value="berserk">berserk</option>
             <option value="bless">bless</option>
@@ -677,7 +678,7 @@
         weaponStats: {
           damageDieQuantity: editItemDamageDieQuantity || 1,
           damageDieSides: editItemDamageDieSides || 4,
-          damageType: editItemDamageType || 'bludgeoning',
+          damageType: editItemDamageType || "bludgeoning",
           isFinesse: editItemIsFinesse || false,
           isLight: editItemIsLight || false,
           isReach: editItemIsReach || false,
@@ -685,15 +686,15 @@
           isTwohand: editItemIsTwohand || false,
         },
         spellCharges: {
-          name: editItemSpell || 'none',
+          name: editItemSpell || "none",
           level: editItemSpellLevel || 1,
           maxCharges: editItemSpellCharges || 1,
         },
         description: {
-          look: editLookItem || '',
-          examine: editExamineItem || '',
-          study: editStudyItem || '',
-          research: editResearchItem || '',
+          look: editLookItem || "",
+          examine: editExamineItem || "",
+          study: editStudyItem || "",
+          research: editResearchItem || "",
         },
         tags: {
           cleric: editItemCleric || false,
@@ -772,14 +773,35 @@
         editItemIdDisplay.textContent =
           `Id: ${selectedItem._id}` || "error: no itemId";
         editItemName.value = selectedItem.name || "";
-        editItemType.value = selectedItem.itemType || "none";
         editItemKeywords.value = selectedItem.keywords.join(", ") || "";
+        editItemPrice.value = selectedItem.price || 0;
+        editItemMinimumLevel.value = selectedItem.minimumLevel || 0;
+        editItemType.value = selectedItem.itemType || "none";
+
+        if (selectedItem.weaponStats) {
+          editItemDamageDieQuantity.value =
+            selectedItem.weaponStats.damageDieQuantity;
+          editItemDamageDieSides.value =
+            selectedItem.weaponStats.damageDieSides;
+          editItemDamageType.value = selectedItem.weaponStats.damageType;
+          editItemIsFinesse.checked = selectedItem.weaponStats.isFinesse;
+          editItemIsLight.checked = selectedItem.weaponStats.isLight;
+          editItemIsReach.checked = selectedItem.weaponStats.isReach;
+          editItemIsRanged.checked = selectedItem.weaponStats.isRanged;
+          editItemIsTwohand.checked = selectedItem.weaponStats.isTwohand;
+        }
+
+        if (selectedItem.spellCharges) {
+          editItemSpell.value = selectedItem.spellCharges.name || "none";
+          editItemSpellLevel.value = selectedItem.spellCharges.level;
+          editItemSpellCharges.value = selectedItem.spellCharges.maxCharges;
+        }
+
         editLookItem.value = selectedItem.description.look || "";
         editExamineItem.value = selectedItem.description.examine || "";
         editStudyItem.value = selectedItem.description.study || "";
         editResearchItem.value = selectedItem.description.research || "";
-        editItemPrice.value = selectedItem.price || 0;
-        editItemMinimumLevel.value = selectedItem.minimumLevel || 0;
+
         editItemCleric.checked = selectedItem.tags.cleric || true;
         editItemMage.checked = selectedItem.tags.mage || true;
         editItemRogue.checked = selectedItem.tags.rogue || true;
@@ -795,21 +817,28 @@
         editItemQuest.checked = selectedItem.tags.quest || false;
         editItemTemporary.checked = selectedItem.tags.temporary || false;
         editItemContainer.checked = selectedItem.tags.container || false;
-        editItemHead.checked = selectedItem.wearableLocations.head || false;
-        editItemEars.checked = selectedItem.wearableLocations.ears || false;
-        editItemNeck.checked = selectedItem.wearableLocations.neck || false;
-        editItemShoulders.checked =
-          selectedItem.wearableLocations.shoulders || false;
-        editItemBody.checked = selectedItem.wearableLocations.body || false;
-        editItemArms.checked = selectedItem.wearableLocations.arms || false;
-        editItemWrists.checked = selectedItem.wearableLocations.wrist1 || false;
-        editItemHands.checked = selectedItem.wearableLocations.hands || false;
-        editItemFingers.checked =
-          selectedItem.wearableLocations.finger1 || false;
-        editItemWaist.checked = selectedItem.wearableLocations.waist || false;
-        editItemLegs.checked = selectedItem.wearableLocations.legs || false;
-        editItemFeet.checked = selectedItem.wearableLocations.feet || false;
-        editItemShield.checked = selectedItem.wearableLocations.shield || false;
+
+        editItemCapacity.value = selectedItem.capacity || 0;
+
+        if (selectedItem.wearableLocations) {
+          editItemHead.checked = selectedItem.wearableLocations.head || false;
+          editItemEars.checked = selectedItem.wearableLocations.ears || false;
+          editItemNeck.checked = selectedItem.wearableLocations.neck || false;
+          editItemShoulders.checked =
+            selectedItem.wearableLocations.shoulders || false;
+          editItemBody.checked = selectedItem.wearableLocations.body || false;
+          editItemArms.checked = selectedItem.wearableLocations.arms || false;
+          editItemWrists.checked =
+            selectedItem.wearableLocations.wrist1 || false;
+          editItemHands.checked = selectedItem.wearableLocations.hands || false;
+          editItemFingers.checked =
+            selectedItem.wearableLocations.finger1 || false;
+          editItemWaist.checked = selectedItem.wearableLocations.waist || false;
+          editItemLegs.checked = selectedItem.wearableLocations.legs || false;
+          editItemFeet.checked = selectedItem.wearableLocations.feet || false;
+          editItemShield.checked =
+            selectedItem.wearableLocations.shield || false;
+        }
       }
     }
 
