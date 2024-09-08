@@ -23,16 +23,32 @@
     >
       Description
     </button>
-    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomTagsSection">
+    <button
+      type="button"
+      class="tab-link edit-room-tab-link"
+      data-tab="editRoomTagsSection"
+    >
       Tags
     </button>
-    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomExitsSection">
+    <button
+      type="button"
+      class="tab-link edit-room-tab-link"
+      data-tab="editRoomExitsSection"
+    >
       Exits
     </button>
-    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomMobNodesSection">
+    <button
+      type="button"
+      class="tab-link edit-room-tab-link"
+      data-tab="editRoomMobNodesSection"
+    >
       MobNodes
     </button>
-    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomItemNodesSection">
+    <button
+      type="button"
+      class="tab-link edit-room-tab-link"
+      data-tab="editRoomItemNodesSection"
+    >
       ItemNodes
     </button>
   </div>
@@ -76,7 +92,11 @@
     </ul>
   </section>
 
-  <section class="tab-content edit-room-tab-content" id="editRoomTagsSection" style="display: none">
+  <section
+    class="tab-content edit-room-tab-content"
+    id="editRoomTagsSection"
+    style="display: none"
+  >
     <h3>Tags</h3>
     <ul>
       <li>
@@ -128,20 +148,38 @@
       </li>
       <li>
         <label for="playerCap">Player Cap</label>
-        <select id="playerCap" name="editPlayerCap" type="number" required>
-          <!-- populated by script -->
-        </select>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="playerCap"
+          name="playerCap"
+          min="0"
+          max="18"
+          value="0"
+          required
+        />
       </li>
       <li>
         <label for="mobCap">Mob Cap</label>
-        <select id="mobCap" name="editMobCap" type="number" required>
-          <!-- populated by script -->
-        </select>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="mobCap"
+          name="mobCap"
+          min="0"
+          max="18"
+          value="0"
+          required
+        />
       </li>
     </ul>
   </section>
 
-  <section class="tab-content edit-room-tab-content" id="editRoomExitsSection" style="display: none">
+  <section
+    class="tab-content edit-room-tab-content"
+    id="editRoomExitsSection"
+    style="display: none"
+  >
     <h3>Exits</h3>
     <ul id="editRoomExitList">
       <!-- loaded via script -->
@@ -218,13 +256,19 @@
   document.addEventListener("DOMContentLoaded", () => {
     const editRoomForm = document.getElementById("editRoomForm");
     const editRoomTabLinks = document.querySelectorAll(".edit-room-tab-link");
-    const editRoomTabContents = document.querySelectorAll(".edit-room-tab-content");
+    const editRoomTabContents = document.querySelectorAll(
+      ".edit-room-tab-content"
+    );
     editRoomTabLinks.forEach((link) => {
       link.addEventListener("click", function () {
         // Remove active class from all tab links and sections
         editRoomTabLinks.forEach((link) => link.classList.remove("active"));
-        editRoomTabContents.forEach((section) => section.classList.remove("active"));
-        editRoomTabContents.forEach((section) => (section.style.display = "none"));
+        editRoomTabContents.forEach((section) =>
+          section.classList.remove("active")
+        );
+        editRoomTabContents.forEach(
+          (section) => (section.style.display = "none")
+        );
 
         // Add active class to the clicked tab and corresponding section
         this.classList.add("active");
@@ -265,9 +309,6 @@
     // for form pagination
     let activeFormSectionForEditRoom =
       sectionsForEditRoom.editRoomDescriptionSection;
-
-    generateNumberSelectOptions(0, 9, document.getElementById("playerCap"));
-    generateNumberSelectOptions(0, 9, document.getElementById("mobCap"));
 
     // to hold data from server on "edit room" command
     let workingEditRoomData;
@@ -384,7 +425,7 @@
       activeForm.style.display = "none";
       activeForm = editRoomForm;
       activeForm.style.display = "block";
-      document.querySelector('#editRoomFirstTabLink').click();
+      document.querySelector("#editRoomFirstTabLink").click();
       input.value = "";
 
       // preset the values of the fields with data from server

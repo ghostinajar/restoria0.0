@@ -57,16 +57,6 @@
         }
       }
 
-      function generateNumberSelectOptions(min, max, select) {
-        select.options.length = 0;
-        for (let i = min; i <= max; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i;
-            select.appendChild(option);
-        }
-      }
-
       function appendMessageToTerminal(message) {
         const item = document.createElement("li");
         item.classList.add('message-item'); // Add message-item class

@@ -51,14 +51,16 @@
     </li>
     <li style="display: inline-block">
       <label for="newItemMinimumLevel">MinLvl:</label>
-      <select
-        style="margin-right: 0"
+      <input
+        style="width: 3.9rem; margin-right: 0"
+        type="number"
         id="newItemMinimumLevel"
         name="newItemMinimumLevel"
+        min="0"
+        max="31"
+        value="0"
         required
-      >
-        <!-- populated by script -->
-      </select>
+      />
     </li>
 
     <li style="display: inline-block">
@@ -128,14 +130,6 @@
   const createItemBlueprintForm = document.getElementById(
     "createItemBlueprintForm"
   );
-
-  document.addEventListener("DOMContentLoaded", () => {
-    generateNumberSelectOptions(
-      1,
-      31,
-      document.getElementById("newItemMinimumLevel")
-    );
-  });
 
   createItemBlueprintForm.addEventListener("submit", (e) => {
     e.preventDefault();

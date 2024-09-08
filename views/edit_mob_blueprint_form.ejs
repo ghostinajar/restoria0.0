@@ -26,9 +26,16 @@
   </section>
   <section>
     <label for="editMobLevel">Level:</label>
-    <select id="editMobLevel" name="editMobLevel" type="number" required>
-      <!-- populated by script -->
-    </select>
+    <input
+      style="width: 3.9rem"
+      type="number"
+      id="editMobLevel"
+      name="editMobLevel"
+      min="1"
+      max="31"
+      value="1"
+      required
+    />
     <label for="editMobJob">Job:</label>
     <select id="editMobJob" name="editMobJob" required>
       <option value="cleric">Cleric</option>
@@ -40,27 +47,62 @@
   <!-- statBlock -->
   <section>
     <label for="editMobStr">Str:</label>
-    <select id="editMobStr" name="editMobStr" type="number" required>
-      <!-- populated by script -->
-    </select>
+    <input
+      style="width: 3.9rem"
+      type="number"
+      id="editMobStr"
+      name="editMobStr"
+      min="4"
+      max="18"
+      value="10"
+      required
+    />
     <label for="editMobDex">Dex:</label>
-    <select id="editMobDex" name="editMobDex" type="number" required>
-      <!-- populated by script -->
-    </select>
+    <input
+      style="width: 3.9rem"
+      type="number"
+      id="editMobDex"
+      name="editMobDex"
+      min="4"
+      max="18"
+      value="10"
+      required
+    />
     <label for="editMobCon">Con:</label>
-    <select id="editMobCon" name="editMobCon" type="number" required>
-      <!-- populated by script -->
-    </select>
+    <input
+      style="width: 3.9rem"
+      type="number"
+      id="editMobCon"
+      name="editMobCon"
+      min="4"
+      max="18"
+      value="10"
+      required
+    />
   </section>
   <section>
     <label for="editMobInt">Int:</label>
-    <select id="editMobInt" name="editMobInt" type="number" required>
-      <!-- populated by script -->
-    </select>
+    <input
+      style="width: 3.9rem"
+      type="number"
+      id="editMobInt"
+      name="editMobInt"
+      min="4"
+      max="18"
+      value="10"
+      required
+    />
     <label for="editMobWis">Wis:</label>
-    <select id="editMobWis" name="editMobWis" type="number" required>
-      <!-- populated by script -->
-    </select>
+    <input
+      style="width: 3.9rem"
+      type="number"
+      id="editMobWis"
+      name="editMobWis"
+      min="4"
+      max="18"
+      value="10"
+      required
+    />
     <label for="editMobSpi">Spi:</label>
     <input
       id="editMobSpi"
@@ -69,7 +111,6 @@
       min="-1000"
       max="1000"
       value="0"
-      step="100"
       required
     />
   </section>
@@ -143,15 +184,6 @@
 
 <script>
   const editMobBlueprintForm = document.getElementById("editMobBlueprintForm");
-
-  document.addEventListener("DOMContentLoaded", () => {
-    generateNumberSelectOptions(1, 31, document.getElementById("editMobLevel"));
-    generateNumberSelectOptions(4, 18, document.getElementById("editMobStr"));
-    generateNumberSelectOptions(4, 18, document.getElementById("editMobDex"));
-    generateNumberSelectOptions(4, 18, document.getElementById("editMobCon"));
-    generateNumberSelectOptions(4, 18, document.getElementById("editMobInt"));
-    generateNumberSelectOptions(4, 18, document.getElementById("editMobWis"));
-  });
 
   editMobBlueprintForm.addEventListener("submit", (e) => {
     e.preventDefault();

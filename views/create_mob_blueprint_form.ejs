@@ -43,9 +43,16 @@
       </li>
     <li style="display: inline-block">
       <label for="newMobLevel">Level:</label>
-      <select id="newMobLevel" name="newMobLevel" required>
-        <!-- populated by script -->
-      </select>
+      <input
+        style="width: 3.9rem;"
+        type="number"
+        id="newMobLevel"
+        name="newMobLevel"
+        min="1"
+        max="31"
+        value="1"
+        required
+      />
     </li>
     <li style="display: inline-block">
       <label style="min-width: 0" for="newMobJob">Job:</label>
@@ -57,74 +64,6 @@
       </select>
     </li>
     
-<!--     
-    <li style="display: inline-block">
-      <label for="newMobStr">Str:</label>
-      <select id="newMobStr" name="newMobStr" required>
-      </select>
-    </li>
-    <li style="display: inline-block">
-      <label style="min-width: 0" for="newMobDex">Dex:</label>
-      <select id="newMobDex" name="newMobDex" required>
-      </select>
-    </li>
-    <li style="display: inline-block">
-      <label style="min-width: 0" for="newMobCon">Con:</label>
-      <select id="newMobCon" name="newMobCon" required>
-      </select>
-    </li>
-    <li style="display: inline-block">
-      <label for="newMobInt">Int:</label>
-      <select id="newMobInt" name="newMobInt" required>
-      </select>
-    </li>
-    <li style="display: inline-block">
-      <label style="min-width: 0" for="newMobWis">Wis:</label>
-      <select id="newMobWis" name="newMobWis" required>
-      </select>
-    </li>
-    <li style="display: inline-block">
-      <label style="min-width: 0" for="newMobSpi">Spi:</label>
-      <input
-        style="width: 5rem"
-        id="newMobSpi"
-        name="newMobSpi"
-        type="number"
-        min="-1000"
-        max="1000"
-        value="0"
-        step="100"
-        required
-      />
-    </li>
-    <li style="display: inline-block">
-      <label for="newMobIsUnique">Unique:</label>
-      <input
-        type="checkbox"
-        id="newMobIsUnique"
-        name="newMobIsUnique"
-        value="isUnewMobIsUniquenique"
-      />
-    </li>
-    <li style="display: inline-block">
-      <label for="newMobIsMount">Mount:</label>
-      <input
-        type="checkbox"
-        id="newMobIsMount"
-        name="newMobIsMount"
-        value="newMobIsMount"
-      />
-    </li>
-    <li style="display: inline-block">
-      <label for="newMobIsAggressive">Aggressive:</label>
-      <input
-        type="checkbox"
-        id="newMobIsAggressive"
-        name="newMobIsAggressive"
-        value="newMobIsAggressive"
-      />
-    </li> -->
-
     <h3>Description</h3>
     <li>
       <label for="newLookMob">Look:</label>
@@ -165,15 +104,6 @@
   const createMobBlueprintForm = document.getElementById(
     "createMobBlueprintForm"
   );
-
-  // document.addEventListener("DOMContentLoaded", () => {
-  //   generateNumberSelectOptions(1, 31, document.getElementById("newMobLevel"));
-  //   generateNumberSelectOptions(4, 18, document.getElementById("newMobStr"));
-  //   generateNumberSelectOptions(4, 18, document.getElementById("newMobDex"));
-  //   generateNumberSelectOptions(4, 18, document.getElementById("newMobCon"));
-  //   generateNumberSelectOptions(4, 18, document.getElementById("newMobInt"));
-  //   generateNumberSelectOptions(4, 18, document.getElementById("newMobWis"));
-  // });
 
   createMobBlueprintForm.addEventListener("submit", (e) => {
     e.preventDefault();
