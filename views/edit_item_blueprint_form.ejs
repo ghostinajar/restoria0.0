@@ -32,16 +32,32 @@
     >
       Description
     </button>
-    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemTagsSection">
+    <button
+      type="button"
+      class="tab-link edit-item-tab-link"
+      data-tab="editItemTagsSection"
+    >
       Tags
     </button>
-    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemItemNodesSection">
+    <button
+      type="button"
+      class="tab-link edit-item-tab-link"
+      data-tab="editItemItemNodesSection"
+    >
       ItemNodes
     </button>
-    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemAffixesSection">
+    <button
+      type="button"
+      class="tab-link edit-item-tab-link"
+      data-tab="editItemAffixesSection"
+    >
       Affixes
     </button>
-    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemWearableLocations">
+    <button
+      type="button"
+      class="tab-link edit-item-tab-link"
+      data-tab="editItemWearableLocations"
+    >
       Wear
     </button>
   </div>
@@ -173,27 +189,15 @@
       </li>
       <li>
         <label for="editItemIsLight">Light:</label>
-        <input
-          type="checkbox"
-          id="editItemIsLight"
-          name="editItemIsLight"
-        />
+        <input type="checkbox" id="editItemIsLight" name="editItemIsLight" />
       </li>
       <li>
         <label for="editItemIsReach">Reach:</label>
-        <input
-          type="checkbox"
-          id="editItemIsReach"
-          name="editItemIsReach"
-        />
+        <input type="checkbox" id="editItemIsReach" name="editItemIsReach" />
       </li>
       <li>
         <label for="editItemIsRanged">Ranged:</label>
-        <input
-          type="checkbox"
-          id="editItemIsRanged"
-          name="editItemIsRanged"
-        />
+        <input type="checkbox" id="editItemIsRanged" name="editItemIsRanged" />
       </li>
       <li>
         <label for="editItemIsTwohand">TwoHand:</label>
@@ -365,7 +369,11 @@
       </li>
     </ul>
   </section>
-  <section class="tab-content edit-item-tab-content" id="editItemTagsSection" style="display: none">
+  <section
+    class="tab-content edit-item-tab-content"
+    id="editItemTagsSection"
+    style="display: none"
+  >
     <h3>Tags</h3>
     <ul>
       <li>
@@ -547,15 +555,23 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const editItemBlueprintForm = document.getElementById("editItemBlueprintForm");
+    const editItemBlueprintForm = document.getElementById(
+      "editItemBlueprintForm"
+    );
     const editItemTabLinks = document.querySelectorAll(".edit-item-tab-link");
-    const editItemTabContents = document.querySelectorAll(".edit-item-tab-content");
+    const editItemTabContents = document.querySelectorAll(
+      ".edit-item-tab-content"
+    );
     editItemTabLinks.forEach((link) => {
       link.addEventListener("click", function () {
         // Remove active class from all tab links and sections
         editItemTabLinks.forEach((link) => link.classList.remove("active"));
-        editItemTabContents.forEach((section) => section.classList.remove("active"));
-        editItemTabContents.forEach((section) => (section.style.display = "none"));
+        editItemTabContents.forEach((section) =>
+          section.classList.remove("active")
+        );
+        editItemTabContents.forEach(
+          (section) => (section.style.display = "none")
+        );
 
         // Add active class to the clicked tab and corresponding section
         this.classList.add("active");
@@ -575,9 +591,15 @@
     );
     const editItemType = document.getElementById("editItemType");
 
-    const editItemWeaponProperties = document.getElementById("editItemWeaponProperties");
-    const editItemDamageDieQuantity = document.getElementById("editItemDamageDieQuantity");
-    const editItemDamageDieSides = document.getElementById("editItemDamageDieSides");
+    const editItemWeaponProperties = document.getElementById(
+      "editItemWeaponProperties"
+    );
+    const editItemDamageDieQuantity = document.getElementById(
+      "editItemDamageDieQuantity"
+    );
+    const editItemDamageDieSides = document.getElementById(
+      "editItemDamageDieSides"
+    );
     const editItemDamageType = document.getElementById("editItemDamageType");
     const editItemIsFinesse = document.getElementById("editItemIsFinesse");
     const editItemIsLight = document.getElementById("editItemIsLight");
@@ -585,10 +607,14 @@
     const editItemIsRanged = document.getElementById("editItemIsRanged");
     const editItemIsTwohand = document.getElementById("editItemIsTwohand");
 
-    const editItemSpellProperties = document.getElementById("editItemSpellProperties");
+    const editItemSpellProperties = document.getElementById(
+      "editItemSpellProperties"
+    );
     const editItemSpell = document.getElementById("editItemSpell");
     const editItemSpellLevel = document.getElementById("editItemSpellLevel");
-    const editItemSpellCharges = document.getElementById("editItemSpellCharges");
+    const editItemSpellCharges = document.getElementById(
+      "editItemSpellCharges"
+    );
 
     const editLookItem = document.getElementById("editLookItem");
     const editExamineItem = document.getElementById("editExamineItem");
@@ -643,50 +669,65 @@
       e.preventDefault();
       const itemId = selectedItemId;
       const editItemBlueprintFormData = {
-        name: editItemName,
+        name: editItemName || "no item name",
+        keywords: editItemKeywords || "",
+        price: editItemPrice || 0,
+        minimumLevel: editItemMinimumLevel || 0,
         itemType: editItemType,
-        keywords: editItemKeywords,
-        description: {
-          look: editLookItem,
-          examine: editExamineItem,
-          study: editStudyItem,
-          research: editResearchItem,
+        weaponStats: {
+          damageDieQuantity: editItemDamageDieQuantity || 1,
+          damageDieSides: editItemDamageDieSides || 4,
+          damageType: editItemDamageType || 'bludgeoning',
+          isFinesse: editItemIsFinesse || false,
+          isLight: editItemIsLight || false,
+          isReach: editItemIsReach || false,
+          isRanged: editItemIsRanged || false,
+          isTwohand: editItemIsTwohand || false,
         },
-        price: editItemPrice,
-        minimumLevel: editItemMinimumLevel,
+        spellCharges: {
+          name: editItemSpell || 'none',
+          level: editItemSpellLevel || 1,
+          maxCharges: editItemSpellCharges || 1,
+        },
+        description: {
+          look: editLookItem || '',
+          examine: editExamineItem || '',
+          study: editStudyItem || '',
+          research: editResearchItem || '',
+        },
         tags: {
-          cleric: editItemCleric,
-          mage: editItemMage,
-          rogue: editItemRogue,
-          warrior: editItemWarrior,
-          dark: editItemDark,
-          neutral: editItemNeutral,
-          light: editItemLight,
-          guild: editItemGuild,
-          food: editItemFood,
-          lamp: editItemLamp,
-          hidden: editItemHidden,
-          fixture: editItemFixture,
-          quest: editItemQuest,
-          temporary: editItemTemporary,
-          container: editItemContainer,
+          cleric: editItemCleric || false,
+          mage: editItemMage || false,
+          rogue: editItemRogue || false,
+          warrior: editItemWarrior || false,
+          dark: editItemDark || false,
+          neutral: editItemNeutral || false,
+          light: editItemLight || false,
+          guild: editItemGuild || false,
+          food: editItemFood || false,
+          lamp: editItemLamp || false,
+          hidden: editItemHidden || false,
+          fixture: editItemFixture || false,
+          quest: editItemQuest || false,
+          temporary: editItemTemporary || false,
+          container: editItemContainer || false,
         },
         wearableLocations: {
-          head: editItemHead,
-          ears: editItemEars,
-          neck: editItemNeck,
-          shoulders: editItemShoulders,
-          body: editItemBody,
-          arms: editItemArms,
-          wrist1: editItemWrists,
-          wrist2: editItemWrists,
-          hands: editItemHands,
-          finger1: editItemFingers,
-          finger2: editItemFingers,
-          waist: editItemWaist,
-          legs: editItemLegs,
-          feet: editItemFeet,
-          shield: editItemShield,
+          head: editItemHead || false,
+          ears: editItemEars || false,
+          neck: editItemNeck || false,
+          shoulders: editItemShoulders || false,
+          body: editItemBody || false,
+          arms: editItemArms || false,
+          wrist1: editItemWrists || false,
+          wrist2: editItemWrists || false,
+          hands: editItemHands || false,
+          finger1: editItemFingers || false,
+          finger2: editItemFingers || false,
+          waist: editItemWaist || false,
+          legs: editItemLegs || false,
+          feet: editItemFeet || false,
+          shield: editItemShield || false,
         },
       };
       socket.emit(
@@ -712,7 +753,7 @@
       activeForm.style.display = "none";
       activeForm = editItemBlueprintForm;
       activeForm.style.display = "block";
-      document.querySelector('#editItemFirstTabLink').click();
+      document.querySelector("#editItemFirstTabLink").click();
       input.value = "";
       generateStringSelectOptions(
         formData.itemBlueprintList,
