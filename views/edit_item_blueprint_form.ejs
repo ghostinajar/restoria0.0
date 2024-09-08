@@ -16,7 +16,39 @@
       >Error: Item Id should be here</span
     >
   </h2>
-  <section id="editItemGeneralSection" style="display: block">
+  <div class="tabs">
+    <button
+      type="button"
+      class="tab-link active"
+      data-tab="editItemGeneralSection"
+    >
+      General
+    </button>
+    <button
+      type="button"
+      class="tab-link"
+      data-tab="editItemDescriptionSection"
+    >
+      Description
+    </button>
+    <button type="button" class="tab-link" data-tab="editItemTagsSection">
+      Tags
+    </button>
+    <button type="button" class="tab-link" data-tab="editItemItemNodesSection">
+      ItemNodes
+    </button>
+    <button type="button" class="tab-link" data-tab="editItemAffixesSection">
+      Affixes
+    </button>
+    <button type="button" class="tab-link" data-tab="editItemWearableLocations">
+      Wear
+    </button>
+  </div>
+  <section
+    class="tab-content"
+    id="editItemGeneralSection"
+    style="display: block"
+  >
     <ul>
       <li>
         <label for="editItemSelectItem">Item:</label>
@@ -286,15 +318,12 @@
         </li>
       </ul>
     </div>
-    <ul>
-      <li>
-        <button type="button" data-target="editItemDescriptionSection">
-          Description →
-        </button>
-      </li>
-    </ul>
   </section>
-  <section id="editItemDescriptionSection" style="display: block">
+  <section
+    class="tab-content"
+    id="editItemDescriptionSection"
+    style="display: none"
+  >
     <h3>Description</h3>
     <ul>
       <li>
@@ -333,17 +362,9 @@
           maxlength="1600"
         ></textarea>
       </li>
-      <li>
-        <button type="button" data-target="editItemTagsSection">Tags →</button>
-      </li>
-      <li>
-        <a data-target="editRoomFirstSection" class="secondaryAction">
-          ← Back
-        </a>
-      </li>
     </ul>
   </section>
-  <section id="editItemTags" style="display: block">
+  <section class="tab-content" id="editItemTagsSection" style="display: none">
     <h3>Tags</h3>
     <ul>
       <li>
@@ -414,19 +435,13 @@
           name="editItemContainer"
         />
       </li>
-      <li>
-        <button type="button" data-target="editItemItemNodesSection">
-          Item Nodes →
-        </button>
-      </li>
-      <li>
-        <a data-target="editItemDescriptionSection" class="secondaryAction">
-          ← Description
-        </a>
-      </li>
     </ul>
   </section>
-  <section id="editItemItemNodes" style="display: block">
+  <section
+    class="tab-content"
+    id="editItemItemNodesSection"
+    style="display: none"
+  >
     <h3>Item Nodes</h3>
     <ul>
       <li>
@@ -444,38 +459,22 @@
       </li>
     </ul>
     <!-- TODO implement item nodes container etc -->
-    <ul>
-      <li>
-        <button type="button" data-target="editItemAffixesSection">
-          Affixes →
-        </button>
-      </li>
-      <li>
-        <a data-target="editItemTagsSection" class="secondaryAction">
-          ← Tags
-        </a>
-      </li>
-    </ul>
   </section>
-  <section id="editItemAffixes">
+  <section
+    class="tab-content"
+    id="editItemAffixesSection"
+    style="display: none"
+  >
     <h3>Affixes</h3>
     <ul>
       <li></li>
     </ul>
-    <ul>
-      <li>
-        <button type="button" data-target="editItemWeaponAndSpellSection">
-          Weapon and Spell →
-        </button>
-      </li>
-      <li>
-        <a data-target="editItemItemNodesSection" class="secondaryAction">
-          ← Item Nodes
-        </a>
-      </li>
-    </ul>
   </section>
-  <section id="editItemWearableLocations" style="display: block">
+  <section
+    class="tab-content"
+    id="editItemWearableLocations"
+    style="display: none"
+  >
     <h3>Wearable Locations</h3>
     <ul>
       <li>
@@ -535,14 +534,11 @@
         <input type="checkbox" id="editItemShield" name="editItemShield" />
       </li>
     </ul>
+  </section>
+  <section>
     <ul>
       <li>
         <button type="submit">Update Item</button>
-      </li>
-      <li>
-        <a data-target="editItemWeaponAndSpellSection" class="secondaryAction">
-          ← Weapon and Spell
-        </a>
       </li>
     </ul>
   </section>
@@ -553,6 +549,23 @@
     const editItemBlueprintForm = document.getElementById(
       "editItemBlueprintForm"
     );
+    const tabLinks = document.querySelectorAll(".tab-link");
+    const tabContents = document.querySelectorAll(".tab-content");
+    tabLinks.forEach((link) => {
+      link.addEventListener("click", function () {
+        // Remove active class from all tab links and sections
+        tabLinks.forEach((link) => link.classList.remove("active"));
+        tabContents.forEach((section) => section.classList.remove("active"));
+        tabContents.forEach((section) => (section.style.display = "none"));
+
+        // Add active class to the clicked tab and corresponding section
+        this.classList.add("active");
+        const target = document.getElementById(this.getAttribute("data-tab"));
+        target.classList.add("active");
+        target.style.display = "block";
+      });
+    });
+
     const editItemIdDisplay = document.getElementById("editItemIdDisplay");
     const editItemSelectItem = document.getElementById("editItemSelectItem");
     const editItemName = document.getElementById("editItemName");
@@ -646,11 +659,11 @@
           shoulders: editItemShoulders,
           body: editItemBody,
           arms: editItemArms,
-          wrist1: editItemWrist,
-          wrist2: editItemWrist,
+          wrist1: editItemWrists,
+          wrist2: editItemWrists,
           hands: editItemHands,
-          finger1: editItemFinger,
-          finger2: editItemFinger,
+          finger1: editItemFingers,
+          finger2: editItemFingers,
           waist: editItemWaist,
           legs: editItemLegs,
           feet: editItemFeet,

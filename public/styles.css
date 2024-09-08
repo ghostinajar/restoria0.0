@@ -205,6 +205,37 @@ ul {
   overflow: auto;
 }
 
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+}
+
+.tab-link {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  padding: 9px;
+  cursor: pointer;
+  margin: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.tab-link.active {
+  background-color: #fff;
+  border-bottom: 1px solid #fff;
+  font-weight: bold;
+}
+
+.tab-content {
+  padding: 0;
+  border-radius: 0 4px 4px 4px;
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 .editExitControls {
   margin: 0;
 }
