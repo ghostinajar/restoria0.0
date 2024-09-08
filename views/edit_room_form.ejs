@@ -16,27 +16,28 @@
   </h2>
   <div class="tabs">
     <button
+      id="editRoomFirstTabLink"
       type="button"
-      class="tab-link active"
+      class="tab-link edit-room-tab-link active"
       data-tab="editRoomDescriptionSection"
     >
       Description
     </button>
-    <button type="button" class="tab-link" data-tab="editRoomTagsSection">
+    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomTagsSection">
       Tags
     </button>
-    <button type="button" class="tab-link" data-tab="editRoomExitsSection">
+    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomExitsSection">
       Exits
     </button>
-    <button type="button" class="tab-link" data-tab="editRoomMobNodesSection">
+    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomMobNodesSection">
       MobNodes
     </button>
-    <button type="button" class="tab-link" data-tab="editRoomItemNodesSection">
+    <button type="button" class="tab-link edit-room-tab-link" data-tab="editRoomItemNodesSection">
       ItemNodes
     </button>
   </div>
   <section
-    class="tab-content"
+    class="tab-content edit-room-tab-content"
     id="editRoomDescriptionSection"
     style="display: block"
   >
@@ -75,7 +76,7 @@
     </ul>
   </section>
 
-  <section class="tab-content" id="editRoomTagsSection" style="display: none">
+  <section class="tab-content edit-room-tab-content" id="editRoomTagsSection" style="display: none">
     <h3>Tags</h3>
     <ul>
       <li>
@@ -140,7 +141,7 @@
     </ul>
   </section>
 
-  <section class="tab-content" id="editRoomExitsSection" style="display: none">
+  <section class="tab-content edit-room-tab-content" id="editRoomExitsSection" style="display: none">
     <h3>Exits</h3>
     <ul id="editRoomExitList">
       <!-- loaded via script -->
@@ -148,7 +149,7 @@
   </section>
 
   <section
-    class="tab-content"
+    class="tab-content edit-room-tab-content"
     id="editRoomMobNodesSection"
     style="display: none"
   >
@@ -174,7 +175,7 @@
   </section>
 
   <section
-    class="tab-content"
+    class="tab-content edit-room-tab-content"
     id="editRoomItemNodesSection"
     style="display: none"
   >
@@ -215,15 +216,15 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const tabLinks = document.querySelectorAll(".tab-link");
-    const tabContents = document.querySelectorAll(".tab-content");
     const editRoomForm = document.getElementById("editRoomForm");
-    tabLinks.forEach((link) => {
+    const editRoomTabLinks = document.querySelectorAll(".edit-room-tab-link");
+    const editRoomTabContents = document.querySelectorAll(".edit-room-tab-content");
+    editRoomTabLinks.forEach((link) => {
       link.addEventListener("click", function () {
         // Remove active class from all tab links and sections
-        tabLinks.forEach((link) => link.classList.remove("active"));
-        tabContents.forEach((section) => section.classList.remove("active"));
-        tabContents.forEach((section) => (section.style.display = "none"));
+        editRoomTabLinks.forEach((link) => link.classList.remove("active"));
+        editRoomTabContents.forEach((section) => section.classList.remove("active"));
+        editRoomTabContents.forEach((section) => (section.style.display = "none"));
 
         // Add active class to the clicked tab and corresponding section
         this.classList.add("active");
@@ -383,6 +384,7 @@
       activeForm.style.display = "none";
       activeForm = editRoomForm;
       activeForm.style.display = "block";
+      document.querySelector('#editRoomFirstTabLink').click();
       input.value = "";
 
       // preset the values of the fields with data from server

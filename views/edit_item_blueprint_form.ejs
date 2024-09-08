@@ -18,34 +18,35 @@
   </h2>
   <div class="tabs">
     <button
+      id="editItemFirstTabLink"
       type="button"
-      class="tab-link active"
+      class="tab-link edit-item-tab-link active"
       data-tab="editItemGeneralSection"
     >
       General
     </button>
     <button
       type="button"
-      class="tab-link"
+      class="tab-link edit-item-tab-link"
       data-tab="editItemDescriptionSection"
     >
       Description
     </button>
-    <button type="button" class="tab-link" data-tab="editItemTagsSection">
+    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemTagsSection">
       Tags
     </button>
-    <button type="button" class="tab-link" data-tab="editItemItemNodesSection">
+    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemItemNodesSection">
       ItemNodes
     </button>
-    <button type="button" class="tab-link" data-tab="editItemAffixesSection">
+    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemAffixesSection">
       Affixes
     </button>
-    <button type="button" class="tab-link" data-tab="editItemWearableLocations">
+    <button type="button" class="tab-link edit-item-tab-link" data-tab="editItemWearableLocations">
       Wear
     </button>
   </div>
   <section
-    class="tab-content"
+    class="tab-content edit-item-tab-content"
     id="editItemGeneralSection"
     style="display: block"
   >
@@ -320,7 +321,7 @@
     </div>
   </section>
   <section
-    class="tab-content"
+    class="tab-content edit-item-tab-content"
     id="editItemDescriptionSection"
     style="display: none"
   >
@@ -364,7 +365,7 @@
       </li>
     </ul>
   </section>
-  <section class="tab-content" id="editItemTagsSection" style="display: none">
+  <section class="tab-content edit-item-tab-content" id="editItemTagsSection" style="display: none">
     <h3>Tags</h3>
     <ul>
       <li>
@@ -438,7 +439,7 @@
     </ul>
   </section>
   <section
-    class="tab-content"
+    class="tab-content edit-item-tab-content"
     id="editItemItemNodesSection"
     style="display: none"
   >
@@ -461,7 +462,7 @@
     <!-- TODO implement item nodes container etc -->
   </section>
   <section
-    class="tab-content"
+    class="tab-content edit-item-tab-content"
     id="editItemAffixesSection"
     style="display: none"
   >
@@ -471,7 +472,7 @@
     </ul>
   </section>
   <section
-    class="tab-content"
+    class="tab-content edit-item-tab-content"
     id="editItemWearableLocations"
     style="display: none"
   >
@@ -546,17 +547,15 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const editItemBlueprintForm = document.getElementById(
-      "editItemBlueprintForm"
-    );
-    const tabLinks = document.querySelectorAll(".tab-link");
-    const tabContents = document.querySelectorAll(".tab-content");
-    tabLinks.forEach((link) => {
+    const editItemBlueprintForm = document.getElementById("editItemBlueprintForm");
+    const editItemTabLinks = document.querySelectorAll(".edit-item-tab-link");
+    const editItemTabContents = document.querySelectorAll(".edit-item-tab-content");
+    editItemTabLinks.forEach((link) => {
       link.addEventListener("click", function () {
         // Remove active class from all tab links and sections
-        tabLinks.forEach((link) => link.classList.remove("active"));
-        tabContents.forEach((section) => section.classList.remove("active"));
-        tabContents.forEach((section) => (section.style.display = "none"));
+        editItemTabLinks.forEach((link) => link.classList.remove("active"));
+        editItemTabContents.forEach((section) => section.classList.remove("active"));
+        editItemTabContents.forEach((section) => (section.style.display = "none"));
 
         // Add active class to the clicked tab and corresponding section
         this.classList.add("active");
@@ -693,6 +692,7 @@
       activeForm.style.display = "none";
       activeForm = editItemBlueprintForm;
       activeForm.style.display = "block";
+      document.querySelector('#editItemFirstTabLink').click();
       input.value = "";
       generateStringSelectOptions(
         formData.itemBlueprintList,
