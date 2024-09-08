@@ -164,43 +164,43 @@
         </select>
       </li>
       <li>
-        <label for="editItemFinesseWeapon">Finesse:</label>
+        <label for="editItemIsFinesse">Finesse:</label>
         <input
           type="checkbox"
-          id="editItemFinesseWeapon"
-          name="editItemFinesseWeapon"
+          id="editItemIsFinesse"
+          name="editItemIsFinesse"
         />
       </li>
       <li>
-        <label for="editItemLightWeapon">Light:</label>
+        <label for="editItemIsLight">Light:</label>
         <input
           type="checkbox"
-          id="editItemLightWeapon"
-          name="editItemLightWeapon"
+          id="editItemIsLight"
+          name="editItemIsLight"
         />
       </li>
       <li>
-        <label for="editItemReachWeapon">Reach:</label>
+        <label for="editItemIsReach">Reach:</label>
         <input
           type="checkbox"
-          id="editItemReachWeapon"
-          name="editItemReachWeapon"
+          id="editItemIsReach"
+          name="editItemIsReach"
         />
       </li>
       <li>
-        <label for="editItemRangedWeapon">Ranged:</label>
+        <label for="editItemIsRanged">Ranged:</label>
         <input
           type="checkbox"
-          id="editItemRangedWeapon"
-          name="editItemRangedWeapon"
+          id="editItemIsRanged"
+          name="editItemIsRanged"
         />
       </li>
       <li>
-        <label for="editItemTwoHandWeapon">TwoHand:</label>
+        <label for="editItemIsTwohand">TwoHand:</label>
         <input
           type="checkbox"
-          id="editItemTwoHandWeapon"
-          name="editItemTwoHandWeapon"
+          id="editItemIsTwohand"
+          name="editItemIsTwohand"
         />
       </li>
     </ul>
@@ -564,20 +564,37 @@
         target.style.display = "block";
       });
     });
-
     const editItemIdDisplay = document.getElementById("editItemIdDisplay");
+
     const editItemSelectItem = document.getElementById("editItemSelectItem");
     const editItemName = document.getElementById("editItemName");
-    const editItemType = document.getElementById("editItemType");
     const editItemKeywords = document.getElementById("editItemKeywords");
-    const editLookItem = document.getElementById("editLookItem");
-    const editExamineItem = document.getElementById("editExamineItem");
-    const editStudyItem = document.getElementById("editStudyItem");
-    const editResearchItem = document.getElementById("editResearchItem");
     const editItemPrice = document.getElementById("editItemPrice");
     const editItemMinimumLevel = document.getElementById(
       "editItemMinimumLevel"
     );
+    const editItemType = document.getElementById("editItemType");
+
+    const editItemWeaponProperties = document.getElementById("editItemWeaponProperties");
+    const editItemDamageDieQuantity = document.getElementById("editItemDamageDieQuantity");
+    const editItemDamageDieSides = document.getElementById("editItemDamageDieSides");
+    const editItemDamageType = document.getElementById("editItemDamageType");
+    const editItemIsFinesse = document.getElementById("editItemIsFinesse");
+    const editItemIsLight = document.getElementById("editItemIsLight");
+    const editItemIsReach = document.getElementById("editItemIsReach");
+    const editItemIsRanged = document.getElementById("editItemIsRanged");
+    const editItemIsTwohand = document.getElementById("editItemIsTwohand");
+
+    const editItemSpellProperties = document.getElementById("editItemSpellProperties");
+    const editItemSpell = document.getElementById("editItemSpell");
+    const editItemSpellLevel = document.getElementById("editItemSpellLevel");
+    const editItemSpellCharges = document.getElementById("editItemSpellCharges");
+
+    const editLookItem = document.getElementById("editLookItem");
+    const editExamineItem = document.getElementById("editExamineItem");
+    const editStudyItem = document.getElementById("editStudyItem");
+    const editResearchItem = document.getElementById("editResearchItem");
+
     const editItemCleric = document.getElementById("editItemCleric");
     const editItemMage = document.getElementById("editItemMage");
     const editItemRogue = document.getElementById("editItemRogue");
@@ -593,6 +610,9 @@
     const editItemQuest = document.getElementById("editItemQuest");
     const editItemTemporary = document.getElementById("editItemTemporary");
     const editItemContainer = document.getElementById("editItemContainer");
+
+    const editItemCapacity = document.getElementById("editItemCapacity");
+
     const editItemHead = document.getElementById("editItemHead");
     const editItemEars = document.getElementById("editItemEars");
     const editItemNeck = document.getElementById("editItemNeck");
@@ -621,7 +641,7 @@
 
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const itemId = editItemId;
+      const itemId = selectedItemId;
       const editItemBlueprintFormData = {
         name: editItemName,
         itemType: editItemType,
