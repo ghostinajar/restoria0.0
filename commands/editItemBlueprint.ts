@@ -34,11 +34,11 @@ async function editItemBlueprint(
     );
     return;
   }
-  logger.debug(
-    `editItemBlueprint finding ${itemId} in ${zone.itemBlueprints.map(
-      (blueprint) => blueprint._id
-    )}`
-  );
+  // logger.debug(
+  //   `editItemBlueprint finding ${itemId} in ${zone.itemBlueprints.map(
+  //     (blueprint) => blueprint._id
+  //   )}`
+  // );
   const item = zone.itemBlueprints.find(
     (blueprint) => blueprint._id.toString() === itemId.toString()
   );
@@ -48,7 +48,7 @@ async function editItemBlueprint(
     );
     return;
   }
-  logger.debug(`editItemBlueprint found a match! ${item.name}`);
+  // logger.debug(`editItemBlueprint found a match! ${item.name}`);
 
   //coerce formData property values to correct types
   formData.price = Number(formData.price);
@@ -57,14 +57,31 @@ async function editItemBlueprint(
   //update values and save zone
   item.name = formData.name;
   item.keywords = formData.keywords;
-  item.description = formData.description;
   item.price = formData.price;
   item.minimumLevel = formData.minimumLevel;
-  item.tags.container = formData.isContainer;
+  item.itemType = formData.itemType;
+  if (formData.itemType === "weapon" && formData.weaponStats) {
+    item.weaponStats = formData.weaponStats;
+  }
+  if (
+    (formData.itemType === "potion" ||
+      formData.itemType === "scroll" ||
+      formData.itemType === "wand") &&
+    formData.spellCharges
+  ) {
+    item.spellCharges = formData.spellCharges;
+  }
+  item.description = formData.description;
+  item.tags = formData.tags;
+  if (formData.itemType === "armor" && formData.wearableLocations) {
+    item.wearableLocations = formData.wearableLocations;
+  }
   item.history.modifiedDate = new Date();
 
-  if (formData.isContainer && item.capacity === 0) {
-    logger.debug(`editItemBlueprint: setting capacity to 10 (item is a container without capacity)`)
+  if (formData.tags.container && (item.capacity === 0 || !item.capacity)) {
+    logger.debug(
+      `editItemBlueprint: setting capacity to 10 (item is a container without capacity)`
+    );
     item.capacity = 10;
   }
 

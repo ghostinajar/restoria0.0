@@ -17,22 +17,70 @@ import SPELL from "../constants/SPELL.js";
 
 export interface IItemBlueprintData {
   name: string;
-  itemType: string;
   keywords: string[];
+  price: number;
+  minimumLevel: number;
+  itemType: string;
+  weaponStats?: {
+    damageDieQuantity: number;
+    damageDieSides: number;
+    damageType: string;
+    isFinesse: boolean;
+    isLight: boolean;
+    isReach: boolean;
+    isRanged: boolean;
+    isTwohand: boolean;
+  },
+  spellCharges?: {
+    name: string;
+    level: number;
+    maxCharges: number;
+  },
   description: {
     look: string;
     examine: string;
     study: string;
     research: string;
   };
-  price: number;
-  minimumLevel: number;
-  isContainer: boolean;
+  tags: {
+    cleric: boolean;
+    mage: boolean;
+    rogue: boolean;
+    warrior: boolean;
+    dark: boolean;
+    neutral: boolean;
+    light: boolean; //can be equipped by players with a light aura
+    guild: boolean;
+    food: boolean;
+    lamp: boolean; //lights up the room
+    hidden: boolean;
+    fixture: boolean;
+    quest: boolean;
+    temporary: boolean;
+    container: boolean;
+  };
+  wearableLocations?: {
+    head: boolean;
+    ears: boolean;
+    neck: boolean;
+    shoulders: boolean;
+    body: boolean;
+    arms: boolean;
+    wrist1: boolean;
+    wrist2: boolean;
+    hands: boolean;
+    finger1: boolean;
+    finger2: boolean;
+    waist: boolean;
+    legs: boolean;
+    feet: boolean;
+    shield: boolean;
+  };
 }
 
 // Return item blueprint, or a message explaining failure (if by author, emit message to their socket)
 async function createItemBlueprint(
-  itemFormData: IItemBlueprintData,
+  itemFormData: any,
   author: IUser
 ): Promise<IItemBlueprint | IMessage> {
   try {
@@ -158,7 +206,7 @@ async function createItemBlueprint(
       `Author "${author.name}" created item blueprint "${newItemBlueprint.name}".`
     );
     message.type = "success";
-    message.content = `You created a item blueprint for ${newItemBlueprint.name}. To use blueprints, type 'place item' or 'remove item'.`;
+    message.content = `You made an item blueprint: ${newItemBlueprint.name}. Type EDIT ITEM to modify it, or EDIT ROOM to place one here.`;
     worldEmitter.emit(`messageFor${author.username}`, message);
     await look({ commandWord: "look" }, author);
     return newItemBlueprint;

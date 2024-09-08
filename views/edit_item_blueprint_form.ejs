@@ -107,9 +107,16 @@
       </li>
       <li style="display: inline-block">
         <label style="min-width: 0" for="editItemMinimumLevel">MinLvl:</label>
-        <select id="editItemMinimumLevel" name="editItemMinimumLevel" required>
-          <!-- populated by script -->
-        </select>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editItemMinimumLevel"
+          name="editItemMinimumLevel"
+          min="0"
+          max="31"
+          value="0"
+          required
+        />
       </li>
       <li>
         <label for="editItemType">Type:</label>
@@ -461,7 +468,7 @@
           type="number"
           id="editItemCapacity"
           name="editItemCapacity"
-          min="1"
+          min="0"
           max="200"
           value="1"
           required
@@ -660,80 +667,75 @@
     let itemBlueprintFullData;
     let selectedItemId = "";
 
-    generateNumberSelectOptions(
-      1,
-      31,
-      document.getElementById("editItemMinimumLevel")
-    );
-
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const itemId = selectedItemId;
+      console.log(selectedItemId.toString());
       const editItemBlueprintFormData = {
-        name: editItemName || "no item name",
-        keywords: editItemKeywords || "",
-        price: editItemPrice || 0,
-        minimumLevel: editItemMinimumLevel || 0,
-        itemType: editItemType,
+        name: editItemName.value || "no item name",
+        keywords: editItemKeywords.value.split(/[ ,]+/) || "",
+        price: editItemPrice.value || 0,
+        minimumLevel: editItemMinimumLevel.value || 0,
+        itemType: editItemType.value,
         weaponStats: {
-          damageDieQuantity: editItemDamageDieQuantity || 1,
-          damageDieSides: editItemDamageDieSides || 4,
-          damageType: editItemDamageType || "bludgeoning",
-          isFinesse: editItemIsFinesse || false,
-          isLight: editItemIsLight || false,
-          isReach: editItemIsReach || false,
-          isRanged: editItemIsRanged || false,
-          isTwohand: editItemIsTwohand || false,
+          damageDieQuantity: editItemDamageDieQuantity.value || 1,
+          damageDieSides: editItemDamageDieSides.value || 4,
+          damageType: editItemDamageType.value || "bludgeoning",
+          isFinesse: editItemIsFinesse.checked || false,
+          isLight: editItemIsLight.checked || false,
+          isReach: editItemIsReach.checked || false,
+          isRanged: editItemIsRanged.checked || false,
+          isTwohand: editItemIsTwohand.checked || false,
         },
         spellCharges: {
-          name: editItemSpell || "none",
-          level: editItemSpellLevel || 1,
-          maxCharges: editItemSpellCharges || 1,
+          name: editItemSpell.value || "none",
+          level: editItemSpellLevel.value || 1,
+          maxCharges: editItemSpellCharges.value || 1,
         },
         description: {
-          look: editLookItem || "",
-          examine: editExamineItem || "",
-          study: editStudyItem || "",
-          research: editResearchItem || "",
+          look: editLookItem.value || "",
+          examine: editExamineItem.value || "",
+          study: editStudyItem.value || "",
+          research: editResearchItem.value || "",
         },
         tags: {
-          cleric: editItemCleric || false,
-          mage: editItemMage || false,
-          rogue: editItemRogue || false,
-          warrior: editItemWarrior || false,
-          dark: editItemDark || false,
-          neutral: editItemNeutral || false,
-          light: editItemLight || false,
-          guild: editItemGuild || false,
-          food: editItemFood || false,
-          lamp: editItemLamp || false,
-          hidden: editItemHidden || false,
-          fixture: editItemFixture || false,
-          quest: editItemQuest || false,
-          temporary: editItemTemporary || false,
-          container: editItemContainer || false,
+          cleric: editItemCleric.checked || false,
+          mage: editItemMage.checked || false,
+          rogue: editItemRogue.checked || false,
+          warrior: editItemWarrior.checked || false,
+          dark: editItemDark.checked || false,
+          neutral: editItemNeutral.checked || false,
+          light: editItemLight.checked || false,
+          guild: editItemGuild.checked || false,
+          food: editItemFood.checked || false,
+          lamp: editItemLamp.checked || false,
+          hidden: editItemHidden.checked || false,
+          fixture: editItemFixture.checked || false,
+          quest: editItemQuest.checked || false,
+          temporary: editItemTemporary.checked || false,
+          container: editItemContainer.checked || false,
         },
         wearableLocations: {
-          head: editItemHead || false,
-          ears: editItemEars || false,
-          neck: editItemNeck || false,
-          shoulders: editItemShoulders || false,
-          body: editItemBody || false,
-          arms: editItemArms || false,
-          wrist1: editItemWrists || false,
-          wrist2: editItemWrists || false,
-          hands: editItemHands || false,
-          finger1: editItemFingers || false,
-          finger2: editItemFingers || false,
-          waist: editItemWaist || false,
-          legs: editItemLegs || false,
-          feet: editItemFeet || false,
-          shield: editItemShield || false,
+          head: editItemHead.checked || false,
+          ears: editItemEars.checked || false,
+          neck: editItemNeck.checked || false,
+          shoulders: editItemShoulders.checked || false,
+          body: editItemBody.checked || false,
+          arms: editItemArms.checked || false,
+          wrist1: editItemWrists.checked || false,
+          wrist2: editItemWrists.checked || false,
+          hands: editItemHands.checked || false,
+          finger1: editItemFingers.checked || false,
+          finger2: editItemFingers.checked || false,
+          waist: editItemWaist.checked || false,
+          legs: editItemLegs.checked || false,
+          feet: editItemFeet.checked || false,
+          shield: editItemShield.checked || false,
         },
       };
+      console.log(editItemBlueprintFormData)
       socket.emit(
         "userSubmittedEditItemBlueprint",
-        itemId,
+        selectedItemId,
         editItemBlueprintFormData
       );
       editItemBlueprintForm.reset();
@@ -760,7 +762,8 @@
         formData.itemBlueprintList,
         document.getElementById("editItemSelectItem")
       );
-      populateEditItemFieldsFromId(itemBlueprintList[0].id);
+      selectedItemId = itemBlueprintList[0].id
+      populateEditItemFieldsFromId(selectedItemId);
     });
 
     function populateEditItemFieldsFromId(selectedItemId) {
@@ -789,7 +792,7 @@
           editItemIsReach.checked = selectedItem.weaponStats.isReach;
           editItemIsRanged.checked = selectedItem.weaponStats.isRanged;
           editItemIsTwohand.checked = selectedItem.weaponStats.isTwohand;
-        }
+        } 
 
         if (selectedItem.spellCharges) {
           editItemSpell.value = selectedItem.spellCharges.name || "none";

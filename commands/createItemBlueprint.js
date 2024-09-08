@@ -117,7 +117,7 @@ async function createItemBlueprint(itemFormData, author) {
         // logger.debug(`Saved zone ${originZone.name} with item blueprints for ${originZone.itemBlueprints.map(item => item.name)}`)
         logger.info(`Author "${author.name}" created item blueprint "${newItemBlueprint.name}".`);
         message.type = "success";
-        message.content = `You created a item blueprint for ${newItemBlueprint.name}. To use blueprints, type 'place item' or 'remove item'.`;
+        message.content = `You made an item blueprint: ${newItemBlueprint.name}. Type EDIT ITEM to modify it, or EDIT ROOM to place one here.`;
         worldEmitter.emit(`messageFor${author.username}`, message);
         await look({ commandWord: "look" }, author);
         return newItemBlueprint;
