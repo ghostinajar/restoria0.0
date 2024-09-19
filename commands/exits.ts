@@ -9,10 +9,8 @@ import IMessage from "../types/Message.js";
 import { IZone } from "../model/classes/Zone.js";
 
 async function exits(user: IUser) {
-  // logger.debug(`exits command called, getting user's room...`);
   //get room
   const room: IRoom = await getRoomOfUser(user);
-  // logger.debug(`exits command found user's room: ${room.name}`);
   let exitsArray: Array<IMessage> = [];
   //iterate over exits to push to exitsArray
 

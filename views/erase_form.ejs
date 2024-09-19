@@ -1,0 +1,54 @@
+<!-- erase_form -->
+<form
+  id="eraseForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+<ul>
+  <li>
+    <a class="cancelButton" id="cancelEraseForm"> Cancel </a>
+  </li>
+</ul>
+<h2>
+  Erase
+</h2>
+  <ul>
+    <li></li>
+  </ul>
+
+  <ul>
+    <li>
+      <button class="submitButton" type="submit">Erase It</button>
+    </li>
+  </ul>
+</form>
+
+<script>
+  const eraseForm = document.getElementById("eraseForm");
+
+  createZoneForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const eraseFormData = {
+      
+    };
+    socket.emit("userSubmittedErase", eraseFormData);
+    eraseForm.reset();
+    eraseForm.style.display = "none"; // Hide the form after submission
+  });
+
+  document
+    .getElementById("cancelEraseForm")
+    .addEventListener("click", function () {
+      eraseForm.style.display = "none";
+    });
+
+  socket.on("openEraseForm", (formData) => {
+    console.log(formData)
+    activeForm.reset();
+    activeForm.style.display = "none";
+    activeForm = eraseForm;
+    activeForm.style.display = "block";
+    input.value = "";
+  });
+</script>
