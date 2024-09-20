@@ -32,8 +32,8 @@ import createMobBlueprint, {
 import mongoose from "mongoose";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
-import createItemBlueprint, { IItemBlueprintData } from "./commands/createItemBlueprint.js";
-import editItemBlueprint from "./commands/editItemBlueprint.js";
+import createItemBlueprint, { ICreateItemBlueprintFormData } from "./commands/createItemBlueprint.js";
+import editItemBlueprint, { IEditItemBlueprintFormData } from "./commands/editItemBlueprint.js";
 import createZone, { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 
@@ -140,7 +140,7 @@ const setupSocket = (io: any) => {
         `userSubmittedEditItemBlueprint`,
         async (
           itemId: mongoose.Types.ObjectId,
-          itemBlueprintData: IItemBlueprintData
+          itemBlueprintData: IEditItemBlueprintFormData
         ) => {
           await editItemBlueprint(itemId, itemBlueprintData, user);
           stats(user);
@@ -170,7 +170,7 @@ const setupSocket = (io: any) => {
 
       socket.on(
         `userSubmittedNewItemBlueprint`,
-        async (itemBlueprintData: IItemBlueprintData) => {
+        async (itemBlueprintData: ICreateItemBlueprintFormData) => {
           const newItemBlueprint = await createItemBlueprint(
             itemBlueprintData,
             user

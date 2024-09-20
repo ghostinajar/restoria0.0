@@ -40,6 +40,8 @@
       Tags
     </button>
     <button
+      id="editItemItemNodesTab"
+      style="display: none"
       type="button"
       class="tab-link edit-item-tab-link"
       data-tab="editItemItemNodesSection"
@@ -54,6 +56,8 @@
       Affixes
     </button>
     <button
+      id="editItemWearTab"
+      style="display: none"
       type="button"
       class="tab-link edit-item-tab-link"
       data-tab="editItemWearableLocations"
@@ -135,87 +139,92 @@
         </select>
       </li>
     </ul>
-    <div id="editItemWeaponProperties"></div>
-    <h3>Weapon Properties</h3>
-    <ul>
-      <li style="display: inline-block">
-        <label
-          style="min-width: 0; margin-right: 0"
-          for="editItemDamageDieQuantity"
-          >Damage:</label
-        >
-        <input
-          style="width: 3.4rem"
-          type="number"
-          id="editItemDamageDieQuantity"
-          name="editItemDamageDieQuantity"
-          min="1"
-          max="9"
-          value="1"
-          required
-        />
-      </li>
-      <li style="display: inline-block">
-        <label
-          style="min-width: 0; margin-left: 0; margin-right: 0"
-          for="editItemDamageDieSides"
-          >d</label
-        >
-        <input
-          style="width: 3.9rem"
-          type="number"
-          id="editItemDamageDieSides"
-          name="editItemDamageDieSides"
-          min="4"
-          max="12"
-          value="4"
-          required
-        />
-      </li>
-      <li style="display: inline-block">
-        <label
-          style="min-width: 0; margin-left: 0"
-          for="editItemDamageType"
-        ></label>
-        <select id="editItemDamageType" name="editItemDamageType" required>
-          <option value="bludgeoning">bludgeoning</option>
-          <option value="piercing">piercing</option>
-          <option value="slashing">slashing</option>
-          <option value="fire">fire</option>
-          <option value="cold">cold</option>
-          <option value="electricity">electricity</option>
-        </select>
-      </li>
-      <li>
-        <label for="editItemIsFinesse">Finesse:</label>
-        <input
-          type="checkbox"
-          id="editItemIsFinesse"
-          name="editItemIsFinesse"
-        />
-      </li>
-      <li>
-        <label for="editItemIsLight">Light:</label>
-        <input type="checkbox" id="editItemIsLight" name="editItemIsLight" />
-      </li>
-      <li>
-        <label for="editItemIsReach">Reach:</label>
-        <input type="checkbox" id="editItemIsReach" name="editItemIsReach" />
-      </li>
-      <li>
-        <label for="editItemIsRanged">Ranged:</label>
-        <input type="checkbox" id="editItemIsRanged" name="editItemIsRanged" />
-      </li>
-      <li>
-        <label for="editItemIsTwohand">TwoHand:</label>
-        <input
-          type="checkbox"
-          id="editItemIsTwohand"
-          name="editItemIsTwohand"
-        />
-      </li>
-    </ul>
-    <div id="editItemSpellProperties">
+    <div id="editItemWeaponProperties" style="display: none">
+      <h3>Weapon Properties</h3>
+      <ul>
+        <li style="display: inline-block">
+          <label
+            style="min-width: 0; margin-right: 0"
+            for="editItemDamageDieQuantity"
+            >Damage:</label
+          >
+          <input
+            style="width: 3.4rem"
+            type="number"
+            id="editItemDamageDieQuantity"
+            name="editItemDamageDieQuantity"
+            min="1"
+            max="9"
+            value="1"
+            required
+          />
+        </li>
+        <li style="display: inline-block">
+          <label
+            style="min-width: 0; margin-left: 0; margin-right: 0"
+            for="editItemDamageDieSides"
+            >d</label
+          >
+          <input
+            style="width: 3.9rem"
+            type="number"
+            id="editItemDamageDieSides"
+            name="editItemDamageDieSides"
+            min="4"
+            max="12"
+            value="4"
+            required
+          />
+        </li>
+        <li style="display: inline-block">
+          <label
+            style="min-width: 0; margin-left: 0"
+            for="editItemDamageType"
+          ></label>
+          <select id="editItemDamageType" name="editItemDamageType" required>
+            <option value="bludgeoning">bludgeoning</option>
+            <option value="piercing">piercing</option>
+            <option value="slashing">slashing</option>
+            <option value="fire">fire</option>
+            <option value="cold">cold</option>
+            <option value="electricity">electricity</option>
+          </select>
+        </li>
+        <li>
+          <label for="editItemIsFinesse">Finesse:</label>
+          <input
+            type="checkbox"
+            id="editItemIsFinesse"
+            name="editItemIsFinesse"
+          />
+        </li>
+        <li>
+          <label for="editItemIsLight">Light:</label>
+          <input type="checkbox" id="editItemIsLight" name="editItemIsLight" />
+        </li>
+        <li>
+          <label for="editItemIsReach">Reach:</label>
+          <input type="checkbox" id="editItemIsReach" name="editItemIsReach" />
+        </li>
+        <li>
+          <label for="editItemIsRanged">Ranged:</label>
+          <input
+            type="checkbox"
+            id="editItemIsRanged"
+            name="editItemIsRanged"
+          />
+        </li>
+        <li>
+          <label for="editItemIsTwohand">TwoHand:</label>
+          <input
+            type="checkbox"
+            id="editItemIsTwohand"
+            name="editItemIsTwohand"
+          />
+        </li>
+      </ul>
+    </div>
+    <div id="editItemSpellProperties" style="display: none">
       <h3>Spell Charges</h3>
       <ul>
         <li style="display: inline-block">
@@ -475,7 +484,24 @@
         />
       </li>
     </ul>
-    <!-- TODO implement item nodes container etc -->
+    <ul class="nodeList" id="editItemItemNodeList">
+      <!-- loaded via script -->
+    </ul>
+    <ul class="addNodeContainer">
+      <li>
+        <!-- item select and add button -->
+        <select
+          id="editItemItemNodeSelect"
+          name="editItemItemNodeSelect"
+          required
+        >
+          <!-- populated by script -->
+        </select>
+        <button type="button" class="addNode" id="editItemItemNodeAdd">
+          add
+        </button>
+      </li>
+    </ul>
   </section>
   <section
     class="tab-content edit-item-tab-content"
@@ -566,6 +592,8 @@
     const editItemBlueprintForm = document.getElementById(
       "editItemBlueprintForm"
     );
+
+    // Tab menu
     const editItemTabLinks = document.querySelectorAll(".edit-item-tab-link");
     const editItemTabContents = document.querySelectorAll(
       ".edit-item-tab-content"
@@ -588,6 +616,11 @@
         target.style.display = "block";
       });
     });
+    const editItemItemNodesTab = document.getElementById(
+      "editItemItemNodesTab"
+    );
+    const editItemWearTab = document.getElementById("editItemWearTab");
+
     const editItemIdDisplay = document.getElementById("editItemIdDisplay");
 
     const editItemSelectItem = document.getElementById("editItemSelectItem");
@@ -646,6 +679,13 @@
     const editItemContainer = document.getElementById("editItemContainer");
 
     const editItemCapacity = document.getElementById("editItemCapacity");
+    // nodeList ul elements
+    const editItemItemNodeList = document.getElementById(
+      "editItemItemNodeList"
+    );
+    const editItemItemNodeSelect = document.getElementById(
+      "editItemItemNodeSelect"
+    );
 
     const editItemHead = document.getElementById("editItemHead");
     const editItemEars = document.getElementById("editItemEars");
@@ -670,27 +710,17 @@
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
       console.log(selectedItemId.toString());
+      // TODO move weaponStats, spellCharges, and wearableLocations
+      // out of this object definition, and add them conditionally
+      // based on relevant item type before sending to server
+      // (no need for this object to contain irrelevant properties,
+      // and they are optional in the type)
       const editItemBlueprintFormData = {
         name: editItemName.value || "no item name",
         keywords: editItemKeywords.value.split(/[ ,]+/) || "",
         price: editItemPrice.value || 0,
         minimumLevel: editItemMinimumLevel.value || 0,
         itemType: editItemType.value,
-        weaponStats: {
-          damageDieQuantity: editItemDamageDieQuantity.value || 1,
-          damageDieSides: editItemDamageDieSides.value || 4,
-          damageType: editItemDamageType.value || "bludgeoning",
-          isFinesse: editItemIsFinesse.checked || false,
-          isLight: editItemIsLight.checked || false,
-          isReach: editItemIsReach.checked || false,
-          isRanged: editItemIsRanged.checked || false,
-          isTwohand: editItemIsTwohand.checked || false,
-        },
-        spellCharges: {
-          name: editItemSpell.value || "none",
-          level: editItemSpellLevel.value || 1,
-          maxCharges: editItemSpellCharges.value || 1,
-        },
         description: {
           look: editLookItem.value || "",
           examine: editExamineItem.value || "",
@@ -714,7 +744,32 @@
           temporary: editItemTemporary.checked || false,
           container: editItemContainer.checked || false,
         },
-        wearableLocations: {
+      };
+      if (editItemBlueprintFormData.itemType === "weapon") {
+        editItemBlueprintFormData.weaponStats = {
+          damageDieQuantity: editItemDamageDieQuantity.value || 1,
+          damageDieSides: editItemDamageDieSides.value || 4,
+          damageType: editItemDamageType.value || "bludgeoning",
+          isFinesse: editItemIsFinesse.checked || false,
+          isLight: editItemIsLight.checked || false,
+          isReach: editItemIsReach.checked || false,
+          isRanged: editItemIsRanged.checked || false,
+          isTwohand: editItemIsTwohand.checked || false,
+        };
+      }
+      if (
+        editItemBlueprintFormData.itemType === "potion" ||
+        editItemBlueprintFormData.itemType === "scroll" ||
+        editItemBlueprintFormData.itemType === "wand"
+      ) {
+        editItemBlueprintFormData.spellCharges = {
+          name: editItemSpell.value || "none",
+          level: editItemSpellLevel.value || 1,
+          maxCharges: editItemSpellCharges.value || 1,
+        };
+      }
+      if (editItemBlueprintFormData.itemType === "armor") {
+        editItemBlueprintFormData.wearableLocations = {
           head: editItemHead.checked || false,
           ears: editItemEars.checked || false,
           neck: editItemNeck.checked || false,
@@ -730,9 +785,12 @@
           legs: editItemLegs.checked || false,
           feet: editItemFeet.checked || false,
           shield: editItemShield.checked || false,
-        },
-      };
-      console.log(editItemBlueprintFormData)
+        };
+      }
+      if (editItemBlueprintFormData.tags.container) {
+        editItemBlueprintFormData.capacity = editItemCapacity || 10;
+      }
+      console.log(editItemBlueprintFormData);
       socket.emit(
         "userSubmittedEditItemBlueprint",
         selectedItemId,
@@ -748,10 +806,75 @@
         editItemBlueprintForm.style.display = "none";
       });
 
+    editItemType.addEventListener("change", function (event) {
+      // logic to hide/show parts of form based on item type
+      const selectedValue = event.target.value;
+      switch (selectedValue) {
+        case "potion":
+        case "scroll":
+        case "wand":
+          editItemWeaponProperties.style.display = "none";
+          editItemWearTab.style.display = "none";
+          editItemSpellProperties.style.display = "block";
+          break;
+        case "weapon":
+          editItemWeaponProperties.style.display = "block";
+          editItemWearTab.style.display = "none";
+          editItemSpellProperties.style.display = "none";
+          break;
+        case "armor":
+          editItemWeaponProperties.style.display = "none";
+          editItemWearTab.style.display = "inline-block";
+          editItemSpellProperties.style.display = "none";
+          break;
+        default:
+          editItemWeaponProperties.style.display = "none";
+          editItemWearTab.style.display = "none";
+          editItemSpellProperties.style.display = "none";
+          break;
+      }
+    });
+
+    editItemContainer.addEventListener("change", function (event) {
+      // logic to hide/show parts of form based on item type
+      
+      if (event.target.checked) {
+        editItemItemNodesTab.style.display = "inline-block";
+      } else {
+        editItemItemNodesTab.style.display = "none";
+      }
+    });
+
+    // click listener logic for "Add" button on item node select
+    document
+      .getElementById("editItemItemNodeAdd")
+      .addEventListener("click", () => {
+        //push new node to list
+        selectedItem.itemNodes.push({
+          id: "new", // server will generate legit id on zone save
+          blueprintId: editItemItemNodeSelect.value,
+          value:
+            editItemItemNodeSelect.options[editItemItemNodeSelect.selectedIndex]
+              .text,
+        });
+        //reload nodeList
+        clearUl(editItemItemNodeList);
+        loadNodeList(selectedItem.itemNodes, editItemItemNodeList);
+      });
+
     socket.on("openEditItemBlueprintForm", (formData) => {
       itemBlueprintFullData = formData.itemBlueprintFullData;
       itemBlueprintList = formData.itemBlueprintList;
 
+      // prepare fresh editItemBlueprintForm
+      editItemBlueprintForm.reset();
+      clearUl(editItemItemNodeList);
+      generateStringSelectOptions(
+        itemBlueprintList,
+        document.getElementById("editItemItemNodeSelect")
+      );
+
+      //reset/hide open forms, show editItemBlueprintForm
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = editItemBlueprintForm;
@@ -762,10 +885,11 @@
         formData.itemBlueprintList,
         document.getElementById("editItemSelectItem")
       );
-      selectedItemId = itemBlueprintList[0].id
+      selectedItemId = itemBlueprintList[0].id;
       populateEditItemFieldsFromId(selectedItemId);
     });
 
+    // populate the fields when user selects item from the dropdown
     function populateEditItemFieldsFromId(selectedItemId) {
       // Find the selected item data
       selectedItem = itemBlueprintFullData.find(
@@ -792,7 +916,7 @@
           editItemIsReach.checked = selectedItem.weaponStats.isReach;
           editItemIsRanged.checked = selectedItem.weaponStats.isRanged;
           editItemIsTwohand.checked = selectedItem.weaponStats.isTwohand;
-        } 
+        }
 
         if (selectedItem.spellCharges) {
           editItemSpell.value = selectedItem.spellCharges.name || "none";
@@ -842,6 +966,56 @@
           editItemShield.checked =
             selectedItem.wearableLocations.shield || false;
         }
+      }
+    }
+
+    function clearUl(ul) {
+      while (ul.firstChild) {
+        ul.removeChild(ul.firstChild);
+      }
+    }
+
+    function loadNodeList(nodeList, ulElement) {
+      for (let node of nodeList) {
+        addNodeToList(ulElement, node);
+      }
+    }
+
+    function addNodeToList(ulElement, node) {
+      // Create a new <li> element
+      const liElement = document.createElement("li");
+      liElement.className = "node";
+      // Set the contents of the <li> to show node.value and node.id
+      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${node.value}</span><span class="nodeId">id: ${node.id}</span></div>`;
+
+      // Create a delete button
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "remove";
+      deleteButton.className = "deleteNode";
+      deleteButton.type = "button";
+      deleteButton.onclick = function () {
+        ulElement.removeChild(liElement);
+        deleteNodeById(node.id);
+      };
+
+      // Append the delete button to the <li>
+      liElement.appendChild(deleteButton);
+
+      // Append the <li> to the <ul>
+      ulElement.appendChild(liElement);
+    }
+
+    function deleteNodeById(id) {
+      let index;
+
+      // Check if it's an item node
+      index = selectedItem.itemNodes.findIndex((node) => node.id === id);
+      if (index !== -1) {
+        // Delete the itemNode
+        selectedItem.itemNodes.splice(index, 1);
+        clearUl(editItemItemNodeList);
+        loadNodeList(selectedItem.itemNodes, editItemItemNodeList);
+        return; // Exit the function once found and deleted
       }
     }
 

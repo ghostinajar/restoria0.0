@@ -255,6 +255,8 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const editRoomForm = document.getElementById("editRoomForm");
+
+    // Tab menu
     const editRoomTabLinks = document.querySelectorAll(".edit-room-tab-link");
     const editRoomTabContents = document.querySelectorAll(
       ".edit-room-tab-content"
@@ -291,7 +293,8 @@
     );
     const editRoomExitList = document.getElementById("editRoomExitList");
 
-    // form sections
+    // form sections (TODO is it safe to delete all this functionality 
+    // now that it's been replaced with tabs?)
     const sectionsForEditRoom = {
       editRoomDescriptionSection: document.getElementById(
         "editRoomDescriptionSection"

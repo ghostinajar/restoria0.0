@@ -6,11 +6,73 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
-import { IItemBlueprintData } from "./createItemBlueprint.js";
+
+export interface IEditItemBlueprintFormData {
+  name: string;
+  keywords: string[];
+  price: number;
+  minimumLevel: number;
+  itemType: string;
+  weaponStats?: {
+    damageDieQuantity: number;
+    damageDieSides: number;
+    damageType: string;
+    isFinesse: boolean;
+    isLight: boolean;
+    isReach: boolean;
+    isRanged: boolean;
+    isTwohand: boolean;
+  },
+  spellCharges?: {
+    name: string;
+    level: number;
+    maxCharges: number;
+  },
+  description: {
+    look: string;
+    examine: string;
+    study: string;
+    research: string;
+  };
+  tags: {
+    cleric: boolean;
+    mage: boolean;
+    rogue: boolean;
+    warrior: boolean;
+    dark: boolean;
+    neutral: boolean;
+    light: boolean; //can be equipped by players with a light aura
+    guild: boolean;
+    food: boolean;
+    lamp: boolean; //lights up the room
+    hidden: boolean;
+    fixture: boolean;
+    quest: boolean;
+    temporary: boolean;
+    container: boolean;
+  };
+  wearableLocations?: {
+    head: boolean;
+    ears: boolean;
+    neck: boolean;
+    shoulders: boolean;
+    body: boolean;
+    arms: boolean;
+    wrist1: boolean;
+    wrist2: boolean;
+    hands: boolean;
+    finger1: boolean;
+    finger2: boolean;
+    waist: boolean;
+    legs: boolean;
+    feet: boolean;
+    shield: boolean;
+  };
+}
 
 async function editItemBlueprint(
   itemId: mongoose.Types.ObjectId,
-  formData: IItemBlueprintData,
+  formData: IEditItemBlueprintFormData,
   user: IUser
 ) {
   logger.debug(

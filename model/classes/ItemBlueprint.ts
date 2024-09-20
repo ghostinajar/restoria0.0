@@ -30,7 +30,7 @@ export interface IItemBlueprint {
   name: string;
   itemType: string;
   price: number;
-  capacity: number;
+  capacity?: number;
   minimumLevel: number;
   history: IHistory;
   description: IDescription;

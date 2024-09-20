@@ -47,28 +47,12 @@ async function createItemBlueprint(itemFormData, author) {
                 completionStatus: COMPLETION_STATUS.DRAFT,
             },
             description: itemFormData.description,
-            tags: {
-                cleric: true,
-                container: itemFormData.isContainer,
-                dark: true,
-                fixture: false,
-                food: false,
-                guild: false,
-                hidden: false,
-                lamp: false,
-                light: true,
-                mage: true,
-                neutral: true,
-                quest: false,
-                temporary: false,
-                rogue: true,
-                warrior: true,
-            },
+            tags: itemFormData.tags,
             keywords: itemFormData.keywords,
             tweakDuration: 182,
         };
         // logger.debug(`createItemBlueprint made newItemBlueprint: ${JSON.stringify(newItemBlueprint)}`);
-        if (itemFormData.isContainer) {
+        if (itemFormData.tags.container) {
             newItemBlueprint.capacity = 10;
         }
         if (itemFormData.itemType === ITEM_TYPE.ARMOR) {
