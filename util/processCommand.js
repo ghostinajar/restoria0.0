@@ -11,6 +11,7 @@ import stats from "../commands/stats.js";
 import move from "../commands/move.js";
 import edit from "../commands/edit.js";
 import create from "../commands/create.js";
+import erase from "../commands/erase.js";
 async function processCommand(parsedCommand, user) {
     // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
@@ -20,6 +21,11 @@ async function processCommand(parsedCommand, user) {
         }
         case `edit`: {
             await edit(parsedCommand, user);
+            break;
+        }
+        case `delete`: // we can't make a delete() function, so it calls erase()
+        case `erase`: {
+            await erase(user);
             break;
         }
         case `ex`:

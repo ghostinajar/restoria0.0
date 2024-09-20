@@ -1,5 +1,7 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
+import getItemBlueprintListFromZone from "../util/getItemBlueprintListFromZone.js";
+import getMobBlueprintListFromZone from "../util/getMobBlueprintListFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 async function edit(parsedCommand, user) {
@@ -17,7 +19,7 @@ async function edit(parsedCommand, user) {
         case `item`: {
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editItemBlueprintForm`,
-                itemBlueprintList: getItemBlueprintList(zone),
+                itemBlueprintList: getItemBlueprintListFromZone(zone),
                 itemBlueprintFullData: zone.itemBlueprints,
             });
             break;
@@ -26,14 +28,14 @@ async function edit(parsedCommand, user) {
             const zone = await getZoneOfUser(user);
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editMobSelect`,
-                mobBlueprintList: getMobBlueprintList(zone),
+                mobBlueprintList: getMobBlueprintListFromZone(zone),
             });
             break;
         }
         case `room`: {
             const room = await getRoomOfUser(user);
-            const itemBlueprintList = getItemBlueprintList(zone);
-            const mobBlueprintList = getMobBlueprintList(zone);
+            const itemBlueprintList = getItemBlueprintListFromZone(zone);
+            const mobBlueprintList = getMobBlueprintListFromZone(zone);
             const itemNodesList = getItemNodeList(room, zone);
             const mobNodesList = getMobNodeList(room, zone);
             const roomList = getRoomList(zone);
@@ -89,12 +91,6 @@ async function edit(parsedCommand, user) {
         }
     }
 }
-function getItemBlueprintList(zone) {
-    const itemBlueprintList = zone.itemBlueprints.map((blueprint) => {
-        return { id: blueprint._id, value: blueprint.name };
-    });
-    return itemBlueprintList;
-}
 function getItemNodeList(room, zone) {
     let itemNodesList = [];
     for (let node of room.itemNodes) {
@@ -108,12 +104,6 @@ function getItemNodeList(room, zone) {
         itemNodesList.push(nodeObject);
     }
     return itemNodesList;
-}
-function getMobBlueprintList(zone) {
-    const mobBlueprintList = zone.mobBlueprints.map((blueprint) => {
-        return { id: blueprint._id, value: blueprint.name };
-    });
-    return mobBlueprintList;
 }
 function getMobNodeList(room, zone) {
     let mobNodesList = [];
