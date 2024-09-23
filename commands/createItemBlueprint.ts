@@ -15,27 +15,12 @@ import DAMAGE_TYPE from "../constants/DAMAGE_TYPE.js";
 import ITEM_TYPE from "../constants/ITEM_TYPE.js";
 import SPELL from "../constants/SPELL.js";
 
-export interface IItemBlueprintData {
+export interface ICreateItemBlueprintFormData {
   name: string;
   keywords: string[];
   price: number;
   minimumLevel: number;
   itemType: string;
-  weaponStats?: {
-    damageDieQuantity: number;
-    damageDieSides: number;
-    damageType: string;
-    isFinesse: boolean;
-    isLight: boolean;
-    isReach: boolean;
-    isRanged: boolean;
-    isTwohand: boolean;
-  },
-  spellCharges?: {
-    name: string;
-    level: number;
-    maxCharges: number;
-  },
   description: {
     look: string;
     examine: string;
@@ -59,28 +44,11 @@ export interface IItemBlueprintData {
     temporary: boolean;
     container: boolean;
   };
-  wearableLocations?: {
-    head: boolean;
-    ears: boolean;
-    neck: boolean;
-    shoulders: boolean;
-    body: boolean;
-    arms: boolean;
-    wrist1: boolean;
-    wrist2: boolean;
-    hands: boolean;
-    finger1: boolean;
-    finger2: boolean;
-    waist: boolean;
-    legs: boolean;
-    feet: boolean;
-    shield: boolean;
-  };
 }
 
 // Return item blueprint, or a message explaining failure (if by author, emit message to their socket)
 async function createItemBlueprint(
-  itemFormData: any,
+  itemFormData: ICreateItemBlueprintFormData,
   author: IUser
 ): Promise<IItemBlueprint | IMessage> {
   try {
@@ -126,29 +94,13 @@ async function createItemBlueprint(
         completionStatus: COMPLETION_STATUS.DRAFT,
       },
       description: itemFormData.description,
-      tags: {
-        cleric: true,
-        container: itemFormData.isContainer,
-        dark: true,
-        fixture: false,
-        food: false,
-        guild: false,
-        hidden: false,
-        lamp: false,
-        light: true,
-        mage: true,
-        neutral: true,
-        quest: false,
-        temporary: false,
-        rogue: true,
-        warrior: true,
-      },
+      tags: itemFormData.tags,
       keywords: itemFormData.keywords,
       tweakDuration: 182,
     };
     // logger.debug(`createItemBlueprint made newItemBlueprint: ${JSON.stringify(newItemBlueprint)}`);
 
-    if (itemFormData.isContainer) {
+    if (itemFormData.tags.container) {
       newItemBlueprint.capacity = 10;
     }
 

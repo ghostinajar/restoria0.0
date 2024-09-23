@@ -135,17 +135,33 @@
     e.preventDefault();
     const createItemBlueprintFormData = {
       name: document.getElementById("newItemName").value,
-      itemType: document.getElementById("newItemType").value,
       keywords: document.getElementById("newItemKeywords").value.split(/[ ,]+/),
+      price: document.getElementById("newItemPrice").value,
+      minimumLevel: document.getElementById("newItemMinimumLevel").value,
+      itemType: document.getElementById("newItemType").value,
       description: {
         look: document.getElementById("newLookItem").value,
         examine: document.getElementById("newExamineItem").value,
         study: document.getElementById("newStudyItem").value,
         research: document.getElementById("newResearchItem").value,
       },
-      price: document.getElementById("newItemPrice").value,
-      minimumLevel: document.getElementById("newItemMinimumLevel").value,
-      isContainer: document.getElementById("newItemIsContainer").checked,
+      tags: {
+        cleric: true,
+        mage: true,
+        rogue: true,
+        warrior: true,
+        dark: true,
+        neutral: true,
+        light: true, //can be equipped by players with a light aura
+        guild: false,
+        food: false,
+        lamp: false, //lights up the room
+        hidden: false,
+        fixture: false,
+        quest: false,
+        temporary: false,
+        container: document.getElementById("newItemIsContainer").checked,
+      },
     };
     socket.emit("userSubmittedNewItemBlueprint", createItemBlueprintFormData);
     createItemBlueprintForm.reset();
