@@ -56,13 +56,13 @@
       Affixes
     </button>
     <button
-      id="editItemWearTab"
+      id="editItemArmorTab"
       style="display: none"
       type="button"
       class="tab-link edit-item-tab-link"
       data-tab="editItemWearableLocations"
     >
-      Wear
+      Armor
     </button>
   </div>
   <section
@@ -619,7 +619,7 @@
     const editItemItemNodesTab = document.getElementById(
       "editItemItemNodesTab"
     );
-    const editItemWearTab = document.getElementById("editItemWearTab");
+    const editItemArmorTab = document.getElementById("editItemArmorTab");
 
     const editItemIdDisplay = document.getElementById("editItemIdDisplay");
 
@@ -814,22 +814,22 @@
         case "scroll":
         case "wand":
           editItemWeaponProperties.style.display = "none";
-          editItemWearTab.style.display = "none";
+          editItemArmorTab.style.display = "none";
           editItemSpellProperties.style.display = "block";
           break;
         case "weapon":
           editItemWeaponProperties.style.display = "block";
-          editItemWearTab.style.display = "none";
+          editItemArmorTab.style.display = "none";
           editItemSpellProperties.style.display = "none";
           break;
         case "armor":
           editItemWeaponProperties.style.display = "none";
-          editItemWearTab.style.display = "inline-block";
+          editItemArmorTab.style.display = "inline-block";
           editItemSpellProperties.style.display = "none";
           break;
         default:
           editItemWeaponProperties.style.display = "none";
-          editItemWearTab.style.display = "none";
+          editItemArmorTab.style.display = "none";
           editItemSpellProperties.style.display = "none";
           break;
       }
