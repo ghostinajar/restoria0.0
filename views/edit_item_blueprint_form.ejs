@@ -30,7 +30,7 @@
       class="tab-link edit-item-tab-link"
       data-tab="editItemDescriptionSection"
     >
-      Description
+      Desc.
     </button>
     <button
       type="button"
@@ -49,6 +49,7 @@
       ItemNodes
     </button>
     <button
+      id="editItemAffixesTab"
       type="button"
       class="tab-link edit-item-tab-link"
       data-tab="editItemAffixesSection"
@@ -393,74 +394,74 @@
   >
     <h3>Tags</h3>
     <ul>
-      <li>
-        <label for="editItemCleric">Cleric:</label>
-        <input type="checkbox" id="editItemCleric" name="editItemCleric" />
-      </li>
-      <li>
-        <label for="editItemMage">Mage:</label>
-        <input type="checkbox" id="editItemMage" name="editItemMage" />
-      </li>
-      <li>
-        <label for="editItemRogue">Rogue:</label>
-        <input type="checkbox" id="editItemRogue" name="editItemRogue" />
-      </li>
-      <li>
-        <label for="editItemWarrior">Warrior:</label>
-        <input type="checkbox" id="editItemWarrior" name="editItemWarrior" />
-      </li>
-      <li>
-        <label for="editItemDark">Dark:</label>
-        <input type="checkbox" id="editItemDark" name="editItemDark" />
-      </li>
-      <li>
-        <label for="editItemNeutral">Neutral:</label>
-        <input type="checkbox" id="editItemNeutral" name="editItemNeutral" />
-      </li>
-      <li>
-        <label for="editItemLight">Light:</label>
-        <input type="checkbox" id="editItemLight" name="editItemLight" />
-      </li>
-      <li>
-        <label for="editItemGuild">Guild:</label>
-        <input type="checkbox" id="editItemGuild" name="editItemGuild" />
-      </li>
-      <li>
-        <label for="editItemFood">Food:</label>
-        <input type="checkbox" id="editItemFood" name="editItemFood" />
-      </li>
-      <li>
-        <label for="editItemLamp">Lamp:</label>
-        <input type="checkbox" id="editItemLamp" name="editItemLamp" />
-      </li>
-      <li>
-        <label for="editItemHidden">Hidden:</label>
-        <input type="checkbox" id="editItemHidden" name="editItemHidden" />
-      </li>
-      <li>
-        <label for="editItemFixture">Fixture:</label>
-        <input type="checkbox" id="editItemFixture" name="editItemFixture" />
-      </li>
-      <li>
-        <label for="editItemQuest">Quest:</label>
-        <input type="checkbox" id="editItemQuest" name="editItemQuest" />
-      </li>
-      <li>
-        <label for="editItemTemporary">Temporary:</label>
-        <input
-          type="checkbox"
-          id="editItemTemporary"
-          name="editItemTemporary"
-        />
-      </li>
-      <li>
-        <label for="editItemContainer">Container:</label>
-        <input
-          type="checkbox"
-          id="editItemContainer"
-          name="editItemContainer"
-        />
-      </li>
+      <div style="display: inline-block; width: 48%">
+        <li>
+          <label for="editItemCleric">Cleric:</label>
+          <input type="checkbox" id="editItemCleric" name="editItemCleric" />
+        </li>
+        <li>
+          <label for="editItemMage">Mage:</label>
+          <input type="checkbox" id="editItemMage" name="editItemMage" />
+        </li>
+        <li>
+          <label for="editItemRogue">Rogue:</label>
+          <input type="checkbox" id="editItemRogue" name="editItemRogue" />
+        </li>
+        <li>
+          <label for="editItemWarrior">Warrior:</label>
+          <input type="checkbox" id="editItemWarrior" name="editItemWarrior" />
+        </li>
+        <li>
+          <label for="editItemDark">Dark:</label>
+          <input type="checkbox" id="editItemDark" name="editItemDark" />
+        </li>
+        <li>
+          <label for="editItemNeutral">Neutral:</label>
+          <input type="checkbox" id="editItemNeutral" name="editItemNeutral" />
+        </li>
+        <li>
+          <label for="editItemLight">Light:</label>
+          <input type="checkbox" id="editItemLight" name="editItemLight" />
+        </li>
+      </div>
+      <div style="display: inline-block; width: 48%">
+        <li>
+          <label for="editItemFood">Food:</label>
+          <input type="checkbox" id="editItemFood" name="editItemFood" />
+        </li>
+        <li>
+          <label for="editItemLamp">Lamp:</label>
+          <input type="checkbox" id="editItemLamp" name="editItemLamp" />
+        </li>
+        <li>
+          <label for="editItemHidden">Hidden:</label>
+          <input type="checkbox" id="editItemHidden" name="editItemHidden" />
+        </li>
+        <li>
+          <label for="editItemFixture">Fixture:</label>
+          <input type="checkbox" id="editItemFixture" name="editItemFixture" />
+        </li>
+        <li>
+          <label for="editItemQuest">Quest:</label>
+          <input type="checkbox" id="editItemQuest" name="editItemQuest" />
+        </li>
+        <li>
+          <label for="editItemTemporary">Temporary:</label>
+          <input
+            type="checkbox"
+            id="editItemTemporary"
+            name="editItemTemporary"
+          />
+        </li>
+        <li>
+          <label for="editItemContainer">Container:</label>
+          <input
+            type="checkbox"
+            id="editItemContainer"
+            name="editItemContainer"
+          />
+        </li>
+      </div>
     </ul>
   </section>
   <section
@@ -669,7 +670,6 @@
     const editItemDark = document.getElementById("editItemDark");
     const editItemNeutral = document.getElementById("editItemNeutral");
     const editItemLight = document.getElementById("editItemLight");
-    const editItemGuild = document.getElementById("editItemGuild");
     const editItemFood = document.getElementById("editItemFood");
     const editItemLamp = document.getElementById("editItemLamp");
     const editItemHidden = document.getElementById("editItemHidden");
@@ -735,7 +735,7 @@
           dark: editItemDark.checked || false,
           neutral: editItemNeutral.checked || false,
           light: editItemLight.checked || false,
-          guild: editItemGuild.checked || false,
+          guild: false,
           food: editItemFood.checked || false,
           lamp: editItemLamp.checked || false,
           hidden: editItemHidden.checked || false,
@@ -797,47 +797,29 @@
         editItemBlueprintFormData
       );
       editItemBlueprintForm.reset();
+      editItemWeaponProperties.style.display = "none";
+      editItemArmorTab.style.display = "none";
+      editItemSpellProperties.style.display = "none";
+      editItemAffixesTab.style.display = "none";
       editItemBlueprintForm.style.display = "none"; // Hide the form after submission
     });
 
     document
       .getElementById("cancelEditItemBlueprintForm")
       .addEventListener("click", function () {
+        editItemWeaponProperties.style.display = "none";
+        editItemArmorTab.style.display = "none";
+        editItemSpellProperties.style.display = "none";
+        editItemAffixesTab.style.display = "none";
         editItemBlueprintForm.style.display = "none";
       });
 
     editItemType.addEventListener("change", function (event) {
-      // logic to hide/show parts of form based on item type
-      const selectedValue = event.target.value;
-      switch (selectedValue) {
-        case "potion":
-        case "scroll":
-        case "wand":
-          editItemWeaponProperties.style.display = "none";
-          editItemArmorTab.style.display = "none";
-          editItemSpellProperties.style.display = "block";
-          break;
-        case "weapon":
-          editItemWeaponProperties.style.display = "block";
-          editItemArmorTab.style.display = "none";
-          editItemSpellProperties.style.display = "none";
-          break;
-        case "armor":
-          editItemWeaponProperties.style.display = "none";
-          editItemArmorTab.style.display = "inline-block";
-          editItemSpellProperties.style.display = "none";
-          break;
-        default:
-          editItemWeaponProperties.style.display = "none";
-          editItemArmorTab.style.display = "none";
-          editItemSpellProperties.style.display = "none";
-          break;
-      }
+      hideOrShowEditItemSections();
     });
 
     editItemContainer.addEventListener("change", function (event) {
       // logic to hide/show parts of form based on item type
-      
       if (event.target.checked) {
         editItemItemNodesTab.style.display = "inline-block";
       } else {
@@ -936,7 +918,6 @@
         editItemDark.checked = selectedItem.tags.dark || true;
         editItemNeutral.checked = selectedItem.tags.neutral || true;
         editItemLight.checked = selectedItem.tags.light || true;
-        editItemGuild.checked = selectedItem.tags.guild || false;
         editItemFood.checked = selectedItem.tags.food || false;
         editItemLamp.checked = selectedItem.tags.lamp || false;
         editItemHidden.checked = selectedItem.tags.hidden || false;
@@ -1019,9 +1000,46 @@
       }
     }
 
+    function hideOrShowEditItemSections() {
+      switch (editItemType.value) {
+        case "potion":
+        case "scroll":
+        case "wand":
+          editItemWeaponProperties.style.display = "none";
+          editItemArmorTab.style.display = "none";
+          editItemSpellProperties.style.display = "block";
+          editItemAffixesTab.style.display = "none";
+          break;
+        case "weapon":
+          editItemWeaponProperties.style.display = "block";
+          editItemArmorTab.style.display = "none";
+          editItemSpellProperties.style.display = "none";
+          editItemAffixesTab.style.display = "inline-block";
+          break;
+        case "armor":
+          editItemWeaponProperties.style.display = "none";
+          editItemArmorTab.style.display = "inline-block";
+          editItemSpellProperties.style.display = "none";
+          editItemAffixesTab.style.display = "inline-block";
+          break;
+        default:
+          editItemWeaponProperties.style.display = "none";
+          editItemArmorTab.style.display = "none";
+          editItemSpellProperties.style.display = "none";
+          editItemAffixesTab.style.display = "none";
+          break;
+      }
+      if (editItemContainer.checked) {
+        editItemItemNodesTab.style.display = "inline-block";
+      } else {
+        editItemItemNodesTab.style.display = "none";
+      }
+    }
+
     editItemSelectItem.addEventListener("change", (e) => {
       selectedItemId = e.target.value;
       populateEditItemFieldsFromId(selectedItemId);
+      hideOrShowEditItemSections();
     });
   });
 </script>
