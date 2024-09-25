@@ -928,6 +928,13 @@
         editItemContainer.checked = selectedItem.tags.container || false;
 
         editItemCapacity.value = selectedItem.capacity || 0;
+        if (selectedItem.itemNodes) {
+          loadNodeList(
+            selectedItem.itemNodes,
+            editItemItemNodeList,
+            itemBlueprintList
+          );
+        }
 
         if (selectedItem.wearableLocations) {
           editItemHead.checked = selectedItem.wearableLocations.head || false;
@@ -957,18 +964,25 @@
       }
     }
 
-    function loadNodeList(nodeList, ulElement) {
+    function loadNodeList(nodeList, ulElement, itemBlueprintList) {
       for (let node of nodeList) {
-        addNodeToList(ulElement, node);
+        addNodeToList(ulElement, node, itemBlueprintList);
       }
     }
 
-    function addNodeToList(ulElement, node) {
+    function addNodeToList(ulElement, node, itemBlueprintList) {
       // Create a new <li> element
       const liElement = document.createElement("li");
       liElement.className = "node";
+      console.log(itemBlueprintList);
+      console.log(node.loadsItemBlueprintId);
+      nodeItemName = itemBlueprintList.find(
+        (item) => item.id === node.loadsItemBlueprintId
+      ).value;
+      console.log(nodeItemName)
+      // TODO find item name from itemBlueprintList by id in node.loadsItemBlueprintId
       // Set the contents of the <li> to show node.value and node.id
-      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${node.value}</span><span class="nodeId">id: ${node.id}</span></div>`;
+      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeItemName}</span><span class="nodeId">id: ${node.loadsItemBlueprintId}</span></div>`;
 
       // Create a delete button
       const deleteButton = document.createElement("button");
@@ -1039,6 +1053,7 @@
 
     editItemSelectItem.addEventListener("change", (e) => {
       selectedItemId = e.target.value;
+      clearUl(editItemItemNodeList);
       populateEditItemFieldsFromId(selectedItemId);
       hideOrShowEditItemSections();
     });
