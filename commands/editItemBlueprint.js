@@ -1,3 +1,5 @@
+// editItemBlueprint
+import mongoose from "mongoose";
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
@@ -53,6 +55,20 @@ async function editItemBlueprint(itemId, formData, user) {
     if (formData.tags.container && (item.capacity === 0 || !item.capacity)) {
         logger.debug(`editItemBlueprint: setting capacity to 10 (item is a container without capacity)`);
         item.capacity = 10;
+        item.itemNodes = [];
+    }
+    //clear room.itemNodes and replace with processed roomData.itemNodes
+    if (formData.tags.container && formData.itemNodes) {
+        item.itemNodes = [];
+        formData.itemNodes.forEach((node) => {
+            if (item.itemNodes) {
+                item.itemNodes.push({
+                    _id: new mongoose.Types.ObjectId(),
+                    loadsItemBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+                    fromZoneId: zone._id,
+                });
+            }
+        });
     }
     await zone.save();
     await zone.initRooms();

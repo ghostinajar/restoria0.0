@@ -22,12 +22,12 @@ export interface IEditItemBlueprintFormData {
     isReach: boolean;
     isRanged: boolean;
     isTwohand: boolean;
-  },
+  };
   spellCharges?: {
     name: string;
     level: number;
     maxCharges: number;
-  },
+  };
   description: {
     look: string;
     examine: string;
@@ -68,6 +68,7 @@ export interface IEditItemBlueprintFormData {
     feet: boolean;
     shield: boolean;
   };
+  itemNodes?: Array<{ id: string; blueprintId: string; value: string }>;
 }
 
 async function editItemBlueprint(
@@ -145,6 +146,22 @@ async function editItemBlueprint(
       `editItemBlueprint: setting capacity to 10 (item is a container without capacity)`
     );
     item.capacity = 10;
+    item.itemNodes = [];
+  }
+
+
+  //clear room.itemNodes and replace with processed roomData.itemNodes
+  if (formData.tags.container && formData.itemNodes) {
+    item.itemNodes = [];
+    formData.itemNodes.forEach((node) => {
+      if (item.itemNodes) {
+        item.itemNodes.push({
+          _id: new mongoose.Types.ObjectId(),
+          loadsItemBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+          fromZoneId: zone._id,
+        });
+      }
+    });
   }
 
   await zone.save();

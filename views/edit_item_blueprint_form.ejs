@@ -789,6 +789,7 @@
       }
       if (editItemBlueprintFormData.tags.container) {
         editItemBlueprintFormData.capacity = editItemCapacity || 10;
+        editItemBlueprintFormData.itemNodes = selectedItem.itemNodes;
       }
       console.log(editItemBlueprintFormData);
       socket.emit(
