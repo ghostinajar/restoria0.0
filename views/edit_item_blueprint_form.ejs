@@ -798,22 +798,24 @@
         editItemBlueprintFormData
       );
       editItemBlueprintForm.reset();
-      editItemWeaponProperties.style.display = "none";
-      editItemArmorTab.style.display = "none";
-      editItemSpellProperties.style.display = "none";
-      editItemAffixesTab.style.display = "none";
+      hideEditItemSections();
       editItemBlueprintForm.style.display = "none"; // Hide the form after submission
     });
 
     document
       .getElementById("cancelEditItemBlueprintForm")
       .addEventListener("click", function () {
-        editItemWeaponProperties.style.display = "none";
-        editItemArmorTab.style.display = "none";
-        editItemSpellProperties.style.display = "none";
-        editItemAffixesTab.style.display = "none";
+        hideEditItemSections();
         editItemBlueprintForm.style.display = "none";
       });
+
+    function hideEditItemSections() {
+      editItemWeaponProperties.style.display = "none";
+      editItemArmorTab.style.display = "none";
+      editItemItemNodesTab.style.display = "none";
+      editItemSpellProperties.style.display = "none";
+      editItemAffixesTab.style.display = "none";
+    }
 
     editItemType.addEventListener("change", function (event) {
       hideOrShowEditItemSections();
@@ -870,6 +872,7 @@
       );
       selectedItemId = itemBlueprintList[0].id;
       populateEditItemFieldsFromId(selectedItemId);
+      hideOrShowEditItemSections();
     });
 
     // populate the fields when user selects item from the dropdown
@@ -979,8 +982,6 @@
       nodeItemName = itemBlueprintList.find(
         (item) => item.id === node.loadsItemBlueprintId
       ).value;
-      console.log(nodeItemName)
-      // TODO find item name from itemBlueprintList by id in node.loadsItemBlueprintId
       // Set the contents of the <li> to show node.value and node.id
       liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeItemName}</span><span class="nodeId">id: ${node.loadsItemBlueprintId}</span></div>`;
 
@@ -1016,32 +1017,22 @@
     }
 
     function hideOrShowEditItemSections() {
+      hideEditItemSections();
       switch (editItemType.value) {
         case "potion":
         case "scroll":
         case "wand":
-          editItemWeaponProperties.style.display = "none";
-          editItemArmorTab.style.display = "none";
           editItemSpellProperties.style.display = "block";
-          editItemAffixesTab.style.display = "none";
           break;
         case "weapon":
           editItemWeaponProperties.style.display = "block";
-          editItemArmorTab.style.display = "none";
-          editItemSpellProperties.style.display = "none";
           editItemAffixesTab.style.display = "inline-block";
           break;
         case "armor":
-          editItemWeaponProperties.style.display = "none";
           editItemArmorTab.style.display = "inline-block";
-          editItemSpellProperties.style.display = "none";
           editItemAffixesTab.style.display = "inline-block";
           break;
         default:
-          editItemWeaponProperties.style.display = "none";
-          editItemArmorTab.style.display = "none";
-          editItemSpellProperties.style.display = "none";
-          editItemAffixesTab.style.display = "none";
           break;
       }
       if (editItemContainer.checked) {
