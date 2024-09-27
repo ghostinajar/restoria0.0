@@ -511,7 +511,81 @@
   >
     <h3>Affixes</h3>
     <ul>
-      <li></li>
+      <li>
+        <label for="editItemAffix1">Affix1:</label>
+        <select id="editItemAffix1" name="editItemAffix1" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
+      <li>
+        <label for="editItemAffix2">Affix2:</label>
+        <select id="editItemAffix2" name="editItemAffix2" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
+      <li>
+        <label for="editItemAffix3">Affix3:</label>
+        <select id="editItemAffix3" name="editItemAffix3" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
     </ul>
   </section>
   <section
@@ -709,7 +783,6 @@
 
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      console.log(selectedItemId.toString());
       // TODO move weaponStats, spellCharges, and wearableLocations
       // out of this object definition, and add them conditionally
       // based on relevant item type before sending to server
@@ -977,8 +1050,6 @@
       // Create a new <li> element
       const liElement = document.createElement("li");
       liElement.className = "node";
-      console.log(itemBlueprintList);
-      console.log(node.loadsItemBlueprintId);
       nodeItemName = itemBlueprintList.find(
         (item) => item.id === node.loadsItemBlueprintId
       ).value;
