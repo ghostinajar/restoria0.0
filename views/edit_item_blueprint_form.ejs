@@ -695,6 +695,7 @@
       "editItemItemNodesTab"
     );
     const editItemArmorTab = document.getElementById("editItemArmorTab");
+    const editItemAffixesTab = document.getElementById("editItemAffixesTab");
 
     const editItemIdDisplay = document.getElementById("editItemIdDisplay");
 
@@ -760,6 +761,10 @@
     const editItemItemNodeSelect = document.getElementById(
       "editItemItemNodeSelect"
     );
+
+    const editItemAffix1 = document.getElementById("editItemAffix1");
+    const editItemAffix2 = document.getElementById("editItemAffix2");
+    const editItemAffix3 = document.getElementById("editItemAffix3");
 
     const editItemHead = document.getElementById("editItemHead");
     const editItemEars = document.getElementById("editItemEars");
@@ -863,6 +868,16 @@
       if (editItemBlueprintFormData.tags.container) {
         editItemBlueprintFormData.capacity = editItemCapacity || 10;
         editItemBlueprintFormData.itemNodes = selectedItem.itemNodes;
+      }
+      if (
+        editItemBlueprintFormData.itemType === "armor" ||
+        editItemBlueprintFormData.itemType === "weapon"
+      ) {
+        editItemBlueprintFormData.affixes = [
+          { affixType: editItemAffix1 || "none", value: 1 },
+          { affixType: editItemAffix2 || "none", value: 1 },
+          { affixType: editItemAffix3 || "none", value: 1 },
+        ];
       }
       console.log(editItemBlueprintFormData);
       socket.emit(
@@ -1010,6 +1025,16 @@
             editItemItemNodeList,
             itemBlueprintList
           );
+        }
+
+        if (
+          selectedItem.affixes &&
+          (selectedItem.itemType === "weapon" ||
+            selectedItem.itemType === "armor")
+        ) {
+          editItemAffix1.value = selectedItem.affixes[0] || "none";
+          editItemAffix2.value = selectedItem.affixes[1] || "none";
+          editItemAffix3.value = selectedItem.affixes[2] || "none";
         }
 
         if (selectedItem.wearableLocations) {
