@@ -6,6 +6,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
+import { IAffix } from "../model/classes/Affix.js";
 
 export interface IEditItemBlueprintFormData {
   name: string;
@@ -69,6 +70,7 @@ export interface IEditItemBlueprintFormData {
     shield: boolean;
   };
   itemNodes?: Array<{ id: string; blueprintId: string; value: string }>;
+  affixes?: Array<IAffix>;
 }
 
 async function editItemBlueprint(
@@ -129,7 +131,8 @@ async function editItemBlueprint(
   if (
     (formData.itemType === "potion" ||
       formData.itemType === "scroll" ||
-      formData.itemType === "wand") &&
+      formData.itemType === "wand" ||
+      formData.tags.food) &&
     formData.spellCharges
   ) {
     item.spellCharges = formData.spellCharges;
@@ -149,7 +152,6 @@ async function editItemBlueprint(
     item.itemNodes = [];
   }
 
-
   //clear room.itemNodes and replace with processed roomData.itemNodes
   if (formData.tags.container && formData.itemNodes) {
     item.itemNodes = [];
@@ -162,6 +164,13 @@ async function editItemBlueprint(
         });
       }
     });
+  }
+
+  if (
+    formData.affixes &&
+    (formData.itemType === "armor" || formData.itemType === "weapon")
+  ) {
+    item.affixes = formData.affixes;
   }
 
   await zone.save();

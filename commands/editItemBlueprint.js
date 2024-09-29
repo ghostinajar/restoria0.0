@@ -42,7 +42,8 @@ async function editItemBlueprint(itemId, formData, user) {
     }
     if ((formData.itemType === "potion" ||
         formData.itemType === "scroll" ||
-        formData.itemType === "wand") &&
+        formData.itemType === "wand" ||
+        formData.tags.food) &&
         formData.spellCharges) {
         item.spellCharges = formData.spellCharges;
     }
@@ -69,6 +70,10 @@ async function editItemBlueprint(itemId, formData, user) {
                 });
             }
         });
+    }
+    if (formData.affixes &&
+        (formData.itemType === "armor" || formData.itemType === "weapon")) {
+        item.affixes = formData.affixes;
     }
     await zone.save();
     await zone.initRooms();
