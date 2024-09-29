@@ -75,6 +75,9 @@ async function editItemBlueprint(itemId, formData, user) {
         (formData.itemType === "armor" || formData.itemType === "weapon")) {
         item.affixes = formData.affixes;
     }
+    if (formData.tags.food && (formData.spellCharges?.name === "none" || !formData.spellCharges)) {
+        delete item.spellCharges;
+    }
     await zone.save();
     await zone.initRooms();
     worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Item updated!`));

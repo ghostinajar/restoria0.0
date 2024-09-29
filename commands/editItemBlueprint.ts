@@ -173,6 +173,10 @@ async function editItemBlueprint(
     item.affixes = formData.affixes;
   }
 
+  if (formData.tags.food && (formData.spellCharges?.name === "none" || !formData.spellCharges)) {
+    delete item.spellCharges;
+  }
+
   await zone.save();
   await zone.initRooms();
 

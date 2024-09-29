@@ -869,9 +869,9 @@
           maxCharges: editItemSpellCharges.value || 1,
         };
       }
-      if (editItemFood && editItemSpell.value !== "none") {
+      if (editItemFood) {
         editItemBlueprintFormData.spellCharges = {
-          name: editItemSpell.value || "heal",
+          name: editItemSpell.value || "none",
           level: editItemSpellLevel.value || 1,
           maxCharges: editItemSpellCharges.value || 1,
         };
@@ -921,9 +921,6 @@
             affixType: editItemAffix3.value,
             value: 1,
           });
-        }
-        if (editItemBlueprintFormData.affixes.count === 0) {
-          delete editItemBlueprintFormData.affixes;
         }
       }
       console.log(editItemBlueprintFormData);
