@@ -1,3 +1,4 @@
+// create
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -36,6 +37,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       });
       break;
     }
+    case `character`:
     case `user`: {
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `createUserForm`,

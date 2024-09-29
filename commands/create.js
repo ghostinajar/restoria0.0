@@ -28,6 +28,7 @@ async function create(parsedCommand, user) {
             });
             break;
         }
+        case `character`:
         case `user`: {
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `createUserForm`,
