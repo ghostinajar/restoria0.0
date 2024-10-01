@@ -13,18 +13,22 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
   let target = parsedCommand.directObject;
   const zone: IZone = await getZoneOfUser(user);
 
-  if (target !== "user" && zone.author.toString() !== user._id.toString()) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(`rejection`, `You aren't an author for this zone.`)
-    );
-    return;
-  }
-
   if (!target) {
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage(`rejection`, `Edit what?`)
+    );
+    return;
+  }
+
+  if (
+    target !== "user" &&
+    target !== "character" &&
+    zone.author.toString() !== user._id.toString()
+  ) {
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(`rejection`, `You aren't an author for this zone.`)
     );
     return;
   }
@@ -79,6 +83,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       });
       break;
     }
+    case `character`:
     case `user`: {
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `editUserForm`,
@@ -112,7 +117,10 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
 function getItemNodeList(room: IRoom, zone: IZone) {
   let itemNodesList = [];
   for (let node of room.itemNodes) {
-    const itemName = getNameById(zone.itemBlueprints, node.loadsItemBlueprintId.toString());
+    const itemName = getNameById(
+      zone.itemBlueprints,
+      node.loadsItemBlueprintId.toString()
+    );
     //TODO handle cases where the item originates in another zone
     const nodeObject = {
       id: node._id,
@@ -127,7 +135,10 @@ function getItemNodeList(room: IRoom, zone: IZone) {
 function getMobNodeList(room: IRoom, zone: IZone) {
   let mobNodesList = [];
   for (let node of room.mobNodes) {
-    const mobName = getNameById(zone.mobBlueprints, node.loadsMobBlueprintId.toString());
+    const mobName = getNameById(
+      zone.mobBlueprints,
+      node.loadsMobBlueprintId.toString()
+    );
     //TODO handle cases where the mob originates in another zone
     const nodeObject = {
       id: node._id,
@@ -146,7 +157,7 @@ function getRoomList(zone: IZone) {
   return roomList;
 }
 
-function getNameById(array : any, id : string) {
+function getNameById(array: any, id: string) {
   for (let object of array) {
     if (object._id.toString() === id) {
       return object.name;

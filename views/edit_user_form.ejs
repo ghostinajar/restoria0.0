@@ -5,46 +5,61 @@
   style="display: none"
   autocomplete="off"
 >
-  <section>
-    <label for="examineUser">Examine:</label>
+<ul>
+  <li>
+    <a class="cancelButton" id="cancelEditUserForm"> Cancel </a>
+  </li>
+</ul>
+<h2>Edit User</h2>
+<ul>
+  <li>
+    <label for="editUserExamineUser">Examine:</label>
     <textarea
-      id="examineUser"
-      name="examineUser"
+      id="editUserExamineUser"
+      name="editUserExamineUser"
       type="text"
       maxlength="240"
     ></textarea>
-  </section>
-  <section>
-    <label for="studyUser">Study:</label>
+  </li>
+  <li>
+    <label for="editUserStudyUser">Study:</label>
     <textarea
-      id="studyUser"
-      name="studyUser"
+      id="editUserStudyUser"
+      name="editUserStudyUser"
       type="text"
       maxlength="640"
     ></textarea>
-  </section>
-  <section>
-    <label for="researchUser">Research:</label>
+  </li>
+  <li>
+    <label for="editUserResearchUser">Research:</label>
     <textarea
-      id="researchUser"
-      name="researchUser"
+      id="editUserResearchUser"
+      name="editUserResearchUser"
       type="text"
       maxlength="1600"
     ></textarea>
-  </section>
-  <button type="submit">Update Description</button>
-  <button type="button" id="cancelEditUserForm">Cancel</button>
+  </li>
+</ul>
+<ul>
+  <li>
+    <button type="submit">Update Character</button>
+  </li>
+</ul> 
 </form>
 
 <script>
   const editUserForm = document.getElementById("editUserForm");
+  const editUserExamineUser = document.getElementById("editUserExamineUser")
+  const editUserStudyUser = document.getElementById("editUserStudyUser")
+  const editUserResearchUser = document.getElementById("editUserResearchUser")
+
 
   editUserForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const userDescription = {
-      examine: document.getElementById("examineUser").value,
-      study: document.getElementById("studyUser").value,
-      research: document.getElementById("researchUser").value,
+      examine: editUserExamineUser.value,
+      study: editUserStudyUser.value,
+      research: editUserResearchUser.value,
     };
     socket.emit("userSubmittedUserDescription", userDescription);
     editUserForm.reset();
@@ -64,8 +79,8 @@
     activeForm.style.display = "block";
     input.value = "";
     // Set the values of the textareas based on formData
-    document.getElementById("examineUser").value = formData.examine || "";
-    document.getElementById("studyUser").value = formData.study || "";
-    document.getElementById("researchUser").value = formData.research || "";
+    editUserExamineUser.value = formData.examine || "";
+    editUserStudyUser.value = formData.study || "";
+    editUserResearchUser.value = formData.research || "";
   });
 </script>
