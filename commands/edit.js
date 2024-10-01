@@ -7,12 +7,14 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 async function edit(parsedCommand, user) {
     let target = parsedCommand.directObject;
     const zone = await getZoneOfUser(user);
-    if ((target !== "user" && target !== "character") && zone.author.toString() !== user._id.toString()) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You aren't an author for this zone.`));
-        return;
-    }
     if (!target) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Edit what?`));
+        return;
+    }
+    if (target !== "user" &&
+        target !== "character" &&
+        zone.author.toString() !== user._id.toString()) {
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You aren't an author for this zone.`));
         return;
     }
     switch (target) {
@@ -27,8 +29,9 @@ async function edit(parsedCommand, user) {
         case `mob`: {
             const zone = await getZoneOfUser(user);
             worldEmitter.emit(`formPromptFor${user.username}`, {
-                form: `editMobSelect`,
+                form: `editMobBlueprintForm`,
                 mobBlueprintList: getMobBlueprintListFromZone(zone),
+                itemBlueprintList: getItemBlueprintListFromZone(zone),
             });
             break;
         }

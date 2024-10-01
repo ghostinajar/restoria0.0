@@ -5,265 +5,570 @@
   style="display: none"
   autocomplete="off"
 >
-  <section>
-    <label for="editMobName">Name:</label>
-    <input
-      id="editMobName"
-      name="editMobName"
-      type="text"
-      maxlength="36"
-      required
-    />
-  </section>
-  <section>
-    <label for="editMobPronouns">Pronouns:</label>
-    <select id="editMobPronouns" name="editMobPronouns" type="number" required>
-      <option value="0">He/Him</option>
-      <option value="1">It/It</option>
-      <option value="2">She/Her</option>
-      <option value="3">They/Them</option>
-    </select>
-  </section>
-  <section>
-    <label for="editMobLevel">Level:</label>
-    <input
-      style="width: 3.9rem"
-      type="number"
-      id="editMobLevel"
-      name="editMobLevel"
-      min="1"
-      max="31"
-      value="1"
-      required
-    />
-    <label for="editMobJob">Job:</label>
-    <select id="editMobJob" name="editMobJob" required>
-      <option value="cleric">Cleric</option>
-      <option value="mage">Mage</option>
-      <option value="rogue">Rogue</option>
-      <option value="warrior">Warrior</option>
-    </select>
-  </section>
-  <!-- statBlock -->
-  <section>
-    <label for="editMobStr">Str:</label>
-    <input
-      style="width: 3.9rem"
-      type="number"
-      id="editMobStr"
-      name="editMobStr"
-      min="4"
-      max="18"
-      value="10"
-      required
-    />
-    <label for="editMobDex">Dex:</label>
-    <input
-      style="width: 3.9rem"
-      type="number"
-      id="editMobDex"
-      name="editMobDex"
-      min="4"
-      max="18"
-      value="10"
-      required
-    />
-    <label for="editMobCon">Con:</label>
-    <input
-      style="width: 3.9rem"
-      type="number"
-      id="editMobCon"
-      name="editMobCon"
-      min="4"
-      max="18"
-      value="10"
-      required
-    />
-  </section>
-  <section>
-    <label for="editMobInt">Int:</label>
-    <input
-      style="width: 3.9rem"
-      type="number"
-      id="editMobInt"
-      name="editMobInt"
-      min="4"
-      max="18"
-      value="10"
-      required
-    />
-    <label for="editMobWis">Wis:</label>
-    <input
-      style="width: 3.9rem"
-      type="number"
-      id="editMobWis"
-      name="editMobWis"
-      min="4"
-      max="18"
-      value="10"
-      required
-    />
-    <label for="editMobSpi">Spi:</label>
-    <input
-      id="editMobSpi"
-      name="editMobSpi"
-      type="number"
-      min="-1000"
-      max="1000"
-      value="0"
-      required
-    />
-  </section>
-  <section>
-    <label for="editMobKeywords">Keywords:</label>
-    <input
-      id="editMobKeywords"
-      name="editMobKeywords"
-      maxlength="80"
-      required
-    />
-  </section>
-  <section>
-    <input
-      type="checkbox"
-      id="editMobIsUnique"
-      name="editMobIsUnique"
-      value="editMobIsUnique"
-    />
-    <label for="editMobIsUnique">Unique</label>
-    <input
-      type="checkbox"
-      id="editMobIsMount"
-      name="editMobIsMount"
-      value="editMobIsMount"
-    />
-    <label for="editMobIsMount">Mount</label>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelEditMobBlueprintForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>
+    Edit Mob
+    <span class="nodeId" id="editMobIdDisplay"
+      >Error: Mob Id should be here</span
+    >
+  </h2>
+  <div class="tabs">
+    <button
+      id="editMobFirstTabLink"
+      type="button"
+      class="tab-link edit-mob-tab-link active"
+      data-tab="editMobGeneralSection"
+    >
+      General
+    </button>
+    <button
+      type="button"
+      class="tab-link edit-mob-tab-link"
+      data-tab="editMobDescriptionSection"
+    >
+      Desc.
+    </button>
+    <button
+      id="editMobItemNodesTab"
+      style="display: none"
+      type="button"
+      class="tab-link edit-mob-tab-link"
+      data-tab="editMobItemNodesSection"
+    >
+      ItemNodes
+    </button>
+    <button
+      id="editMobAffixesTab"
+      type="button"
+      class="tab-link edit-mob-tab-link"
+      data-tab="editMobAffixesSection"
+    >
+      Affixes
+    </button>
+    <button
+      id="editMobChatterTab"
+      type="button"
+      class="tab-link edit-mob-tab-link"
+      data-tab="editMobChatterSection"
+    >
+      Chatter
+    </button>
+    <button
+      id="editMobEmoteTab"
+      type="button"
+      class="tab-link edit-mob-tab-link"
+      data-tab="editMobEmoteSection"
+    >
+      Emote
+    </button>
+  </div>
 
-    <input
-      type="checkbox"
-      id="editMobIsAggressive"
-      name="editMobIsAggressive"
-      value="editMobIsAggressive"
-    />
-    <label for="editMobIsAggressive">Aggressive</label>
+  <section
+    class="tab-content edit-mob-tab-content"
+    id="editMobGeneralSection"
+    style="display: block"
+  >
+    <ul>
+      <li>
+        <label for="editMobSelectMob">Mob:</label>
+        <select id="editMobSelectMob" name="editMobSelectMob" required>
+          <!-- populated by script -->
+        </select>
+      </li>
+      <li>
+        <label for="editMobName">Name:</label>
+        <input
+          id="editMobName"
+          name="editMobName"
+          type="text"
+          maxlength="36"
+          required
+        />
+      </li>
+      <li>
+        <label for="editMobKeywords">Keywords:</label>
+        <input
+          id="editMobKeywords"
+          name="editMobKeywords"
+          maxlength="80"
+          required
+        />
+      </li>
+      <li>
+        <label for="editMobPronouns">Pronouns:</label>
+        <select
+          id="editMobPronouns"
+          name="editMobPronouns"
+          type="number"
+          required
+        >
+          <option value="0">He/Him</option>
+          <option value="1">It/It</option>
+          <option value="2">She/Her</option>
+          <option value="3">They/Them</option>
+        </select>
+        <label style="min-width: 3rem" for="editMobLevel">Level:</label>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editMobLevel"
+          name="editMobLevel"
+          min="1"
+          max="31"
+          value="1"
+          required
+        />
+      </li>
+      <li>
+        <label for="editMobJob">Job:</label>
+        <select id="editMobJob" name="editMobJob" required>
+          <option value="cleric">Cleric</option>
+          <option value="mage">Mage</option>
+          <option value="rogue">Rogue</option>
+          <option value="warrior">Warrior</option>
+        </select>
+        <label for="editMobSpi" style="min-width: 3rem">Spirit:</label>
+        <input
+          style="width: 6rem"
+          id="editMobSpi"
+          name="editMobSpi"
+          type="number"
+          min="-1000"
+          max="1000"
+          value="0"
+          required
+        />
+      </li>
+      <!-- statBlock -->
+      <li>
+        <label for="editMobStr">Str:</label>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editMobStr"
+          name="editMobStr"
+          min="4"
+          max="18"
+          value="10"
+          required
+        />
+        <label for="editMobDex" style="min-width: 3rem">Dex:</label>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editMobDex"
+          name="editMobDex"
+          min="4"
+          max="18"
+          value="10"
+          required
+        />
+        <label for="editMobCon" style="min-width: 3rem">Con:</label>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editMobCon"
+          name="editMobCon"
+          min="4"
+          max="18"
+          value="10"
+          required
+        />
+      </li>
+      <li>
+        <label for="editMobInt">Int:</label>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editMobInt"
+          name="editMobInt"
+          min="4"
+          max="18"
+          value="10"
+          required
+        />
+        <label for="editMobWis" style="min-width: 3rem">Wis:</label>
+        <input
+          style="width: 3.9rem"
+          type="number"
+          id="editMobWis"
+          name="editMobWis"
+          min="4"
+          max="18"
+          value="10"
+          required
+        />
+      </li>
+      <li>
+        <label for="editMobIsUnique"> </label>
+        <input
+          type="checkbox"
+          id="editMobIsUnique"
+          name="editMobIsUnique"
+          value="editMobIsUnique"
+        />
+        <label for="editMobIsUnique" style="min-width: 3rem">Unique</label>
+        <input
+          type="checkbox"
+          id="editMobIsMount"
+          name="editMobIsMount"
+          value="editMobIsMount"
+        />
+        <label for="editMobIsMount" style="min-width: 3rem">Mount</label>
+
+        <input
+          type="checkbox"
+          id="editMobIsAggressive"
+          name="editMobIsAggressive"
+          value="editMobIsAggressive"
+        />
+        <label for="editMobIsAggressive" style="min-width: 3rem"
+          >Aggressive</label
+        >
+      </li>
+      <li>
+        <label for="editMobChat2User"> </label>
+        <input
+          type="checkbox"
+          id="editMobChat2User"
+          name="editMobChat2User"
+          value="editMobChat2User"
+        />
+        <label for="editMobChat2User" style="min-width: 3rem">Chat2User</label>
+        <input
+          type="checkbox"
+          id="editMobEmo2User"
+          name="editMobEmo2User"
+          value="editMobEmo2User"
+        />
+        <label for="editMobEmo2User" style="min-width: 3rem">Emo2User</label>
+      </li>
+    </ul>
   </section>
-  <section>
-    <label for="editLookMob">Look:</label>
-    <input id="editLookMob" name="editLookMob" type="text" maxlength="80" />
+
+  <section
+    class="tab-content edit-mob-tab-content"
+    id="editMobDescriptionSection"
+    style="display: none"
+  >
+    <h3>Description</h3>
+    <ul>
+      <li>
+        <label for="editLookMob">Look:</label>
+        <input id="editLookMob" name="editLookMob" type="text" maxlength="80" />
+      </li>
+      <li>
+        <label for="editExamineMob">Examine:</label>
+        <textarea
+          id="editExamineMob"
+          name="editExamineMob"
+          type="text"
+          maxlength="240"
+        ></textarea>
+      </li>
+      <li>
+        <label for="editStudyMob">Study:</label>
+        <textarea
+          id="editStudyMob"
+          name="editStudyMob"
+          type="text"
+          maxlength="640"
+        ></textarea>
+      </li>
+      <li>
+        <label for="editResearchMob">Research:</label>
+        <textarea
+          id="editResearchMob"
+          name="editResearchMob"
+          type="text"
+          maxlength="1600"
+        ></textarea>
+      </li>
+    </ul>
   </section>
-  <section>
-    <label for="editExamineMob">Examine:</label>
-    <textarea
-      id="editExamineMob"
-      name="editExamineMob"
-      type="text"
-      maxlength="240"
-    ></textarea>
+  <section
+    class="tab-content edit-mob-tab-content"
+    id="editMobItemNodesSection"
+    style="display: none"
+  >
+    <h3>Item Nodes</h3>
+    <ul class="nodeList" id="editMobItemNodeList">
+      <!-- loaded via script -->
+    </ul>
+    <ul class="addNodeContainer">
+      <li>
+        <!-- item select and add button -->
+        <select
+          id="editMobItemNodeSelect"
+          name="editMobItemNodeSelect"
+          required
+        >
+          <!-- populated by script -->
+        </select>
+        <button type="button" class="addNode" id="editMobItemNodeAdd">
+          add
+        </button>
+      </li>
+    </ul>
   </section>
-  <section>
-    <label for="editStudyMob">Study:</label>
-    <textarea
-      id="editStudyMob"
-      name="editStudyMob"
-      type="text"
-      maxlength="640"
-    ></textarea>
+  <section
+    class="tab-content edit-mob-tab-content"
+    id="editMobAffixesSection"
+    style="display: none"
+  >
+    <h3>Affixes</h3>
+    <ul>
+      <li>
+        <label for="editMobAffix1">Affix1:</label>
+        <select id="editMobAffix1" name="editMobAffix1" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
+      <li>
+        <label for="editMobAffix2">Affix2:</label>
+        <select id="editMobAffix2" name="editMobAffix2" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
+      <li>
+        <label for="editMobAffix3">Affix3:</label>
+        <select id="editMobAffix3" name="editMobAffix3" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
+      <li>
+        <label for="editMobAffix4">Affix4:</label>
+        <select id="editMobAffix4" name="editMobAffix4" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
+      <li>
+        <label for="editMobAffix5">Affix5:</label>
+        <select id="editMobAffix5" name="editMobAffix5" required>
+          <option value="none">none</option>
+          <option value="armor">armor</option>
+          <option value="charisma">charisma</option>
+          <option value="constitution">constitution</option>
+          <option value="damage_bonus">damage_bonus</option>
+          <option value="dexterity">dexterity</option>
+          <option value="health">health</option>
+          <option value="health_regen">health_regen</option>
+          <option value="hit_bonus">hit_bonus</option>
+          <option value="intelligence">intelligence</option>
+          <option value="mana">mana</option>
+          <option value="mana_regen">mana_regen</option>
+          <option value="movement">movement</option>
+          <option value="resist_cold">resist_cold</option>
+          <option value="resist_electric">resist_electric</option>
+          <option value="resist_fire">resist_fire</option>
+          <option value="spell_save">spell_save</option>
+          <option value="stamina">stamina</option>
+          <option value="strength">strength</option>
+          <option value="wisdom">wisdom</option>
+        </select>
+      </li>
+    </ul>
   </section>
-  <section>
-    <label for="editResearchMob">Research:</label>
-    <textarea
-      id="editResearchMob"
-      name="editResearchMob"
-      type="text"
-      maxlength="1600"
-    ></textarea>
+  <section
+    id="editMobChatterSection"
+    style="display: none"
+    class="tab-content edit-mob-tab-content"
+  >
+    <h3>Chatters</h3>
+    <ul>
+      <li></li>
+    </ul>
   </section>
-  <button type="submit">Update Mob</button>
-  <button type="button" id="cancelEditMobBlueprintForm">Cancel</button>
+  <section
+    id="editMobEmoteSection"
+    style="display: none"
+    class="tab-content edit-mob-tab-content"
+  >
+    <h3>Emotes</h3>
+    <ul>
+      <li></li>
+    </ul>
+  </section>
+  <ul>
+    <li>
+      <button type="submit">Update Mob</button>
+    </li>
+  </ul>
 </form>
 
 <script>
-  const editMobBlueprintForm = document.getElementById("editMobBlueprintForm");
-
-  editMobBlueprintForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const mobId = editMobId;
-    const editMobBlueprintFormData = {
-      name: document.getElementById("editMobName").value,
-      pronouns: Number(document.getElementById("editMobPronouns").value),
-      level: Number(document.getElementById("editMobLevel").value),
-      job: document.getElementById("editMobJob").value,
-      statBlock: {
-        strength: Number(document.getElementById("editMobStr").value),
-        dexterity: Number(document.getElementById("editMobDex").value),
-        constitution: Number(document.getElementById("editMobCon").value),
-        intelligence: Number(document.getElementById("editMobInt").value),
-        wisdom: Number(document.getElementById("editMobWis").value),
-        charisma: 10,
-        spirit: Number(document.getElementById("editMobSpi").value),
-      },
-      keywords: document.getElementById("editMobKeywords").value.split(/[ ,]+/),
-      isUnique: document.getElementById("editMobIsUnique").checked,
-      isMount: document.getElementById("editMobIsMount").checked,
-      isAggressive: document.getElementById("editMobIsAggressive").checked,
-      description: {
-        look: document.getElementById("editLookMob").value,
-        examine: document.getElementById("editExamineMob").value,
-        study: document.getElementById("editStudyMob").value,
-        research: document.getElementById("editResearchMob").value,
-      },
-    };
-    socket.emit(
-      "userSubmittedEditMobBlueprint",
-      mobId,
-      editMobBlueprintFormData
+  document.addEventListener("DOMContentLoaded", () => {
+    const editMobBlueprintForm = document.getElementById(
+      "editMobBlueprintForm"
     );
-    editMobBlueprintForm.reset();
-    editMobBlueprintForm.style.display = "none"; // Hide the form after submission
-  });
+    const editMobIdDisplay = document.getElementById("editMobIdDisplay");
 
-  document
-    .getElementById("cancelEditMobBlueprintForm")
-    .addEventListener("click", function () {
-      editMobBlueprintForm.style.display = "none";
+    //TODO adapt or refactor itemNodeList functions from edit_item_blueprint_form
+
+    editMobBlueprintForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const mobId = editMobId;
+      const editMobBlueprintFormData = {
+        name: document.getElementById("editMobName").value,
+        pronouns: Number(document.getElementById("editMobPronouns").value),
+        level: Number(document.getElementById("editMobLevel").value),
+        job: document.getElementById("editMobJob").value,
+        statBlock: {
+          strength: Number(document.getElementById("editMobStr").value),
+          dexterity: Number(document.getElementById("editMobDex").value),
+          constitution: Number(document.getElementById("editMobCon").value),
+          intelligence: Number(document.getElementById("editMobInt").value),
+          wisdom: Number(document.getElementById("editMobWis").value),
+          charisma: 10,
+          spirit: Number(document.getElementById("editMobSpi").value),
+        },
+        keywords: document
+          .getElementById("editMobKeywords")
+          .value.split(/[ ,]+/),
+        isUnique: document.getElementById("editMobIsUnique").checked,
+        isMount: document.getElementById("editMobIsMount").checked,
+        isAggressive: document.getElementById("editMobIsAggressive").checked,
+        description: {
+          look: document.getElementById("editLookMob").value,
+          examine: document.getElementById("editExamineMob").value,
+          study: document.getElementById("editStudyMob").value,
+          research: document.getElementById("editResearchMob").value,
+        },
+      };
+      socket.emit(
+        "userSubmittedEditMobBlueprint",
+        mobId,
+        editMobBlueprintFormData
+      );
+      editMobBlueprintForm.reset();
+      editMobBlueprintForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("openEditMobBlueprintForm", (formData) => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = editMobBlueprintForm;
-    activeForm.style.display = "block";
-    input.value = "";
-    // Set the values of the fields based on formData
-    document.getElementById("editMobName").value = formData.name || "";
-    document.getElementById("editMobPronouns").value = formData.pronouns || 0;
-    document.getElementById("editMobLevel").value = formData.level || 1;
-    document.getElementById("editMobJob").value = formData.job || "cleric";
-    document.getElementById("editMobStr").value =
-      formData.statBlock.strength || 4;
-    document.getElementById("editMobDex").value =
-      formData.statBlock.dexterity || 4;
-    document.getElementById("editMobCon").value =
-      formData.statBlock.constitution || 4;
-    document.getElementById("editMobInt").value =
-      formData.statBlock.intelligence || 4;
-    document.getElementById("editMobWis").value =
-      formData.statBlock.wisdom || 4;
-    document.getElementById("editMobSpi").value =
-      formData.statBlock.spirit || 0;
-    document.getElementById("editMobKeywords").value = formData.keywords || "";
-    document.getElementById("editMobIsUnique").checked =
-      formData.isUnique || "";
-    document.getElementById("editMobIsMount").checked = formData.isMount || "";
-    document.getElementById("editMobIsAggressive").checked =
-      formData.isAggressive || "";
-    document.getElementById("editLookMob").value =
-      formData.description.look || "";
-    document.getElementById("editExamineMob").value =
-      formData.description.examine || "";
-    document.getElementById("editStudyMob").value =
-      formData.description.study || "";
-    document.getElementById("editResearchMob").value =
-      formData.description.research || "";
+    document
+      .getElementById("cancelEditMobBlueprintForm")
+      .addEventListener("click", function () {
+        editMobBlueprintForm.style.display = "none";
+      });
+
+    socket.on("openEditMobBlueprintForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = editMobBlueprintForm;
+      activeForm.style.display = "block";
+      input.value = "";
+      // Set the values of the fields based on formData
+      document.getElementById("editMobName").value = formData.name || "";
+      document.getElementById("editMobPronouns").value = formData.pronouns || 0;
+      document.getElementById("editMobLevel").value = formData.level || 1;
+      document.getElementById("editMobJob").value = formData.job || "cleric";
+      document.getElementById("editMobStr").value =
+        formData.statBlock.strength || 4;
+      document.getElementById("editMobDex").value =
+        formData.statBlock.dexterity || 4;
+      document.getElementById("editMobCon").value =
+        formData.statBlock.constitution || 4;
+      document.getElementById("editMobInt").value =
+        formData.statBlock.intelligence || 4;
+      document.getElementById("editMobWis").value =
+        formData.statBlock.wisdom || 4;
+      document.getElementById("editMobSpi").value =
+        formData.statBlock.spirit || 0;
+      document.getElementById("editMobKeywords").value =
+        formData.keywords || "";
+      document.getElementById("editMobIsUnique").checked =
+        formData.isUnique || "";
+      document.getElementById("editMobIsMount").checked =
+        formData.isMount || "";
+      document.getElementById("editMobIsAggressive").checked =
+        formData.isAggressive || "";
+      document.getElementById("editLookMob").value =
+        formData.description.look || "";
+      document.getElementById("editExamineMob").value =
+        formData.description.examine || "";
+      document.getElementById("editStudyMob").value =
+        formData.description.study || "";
+      document.getElementById("editResearchMob").value =
+        formData.description.research || "";
+    });
   });
 </script>

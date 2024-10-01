@@ -45,8 +45,9 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
     case `mob`: {
       const zone: IZone = await getZoneOfUser(user);
       worldEmitter.emit(`formPromptFor${user.username}`, {
-        form: `editMobSelect`,
+        form: `editMobBlueprintForm`,
         mobBlueprintList: getMobBlueprintListFromZone(zone),
+        itemBlueprintList: getItemBlueprintListFromZone(zone),
       });
       break;
     }
