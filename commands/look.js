@@ -7,6 +7,11 @@ async function look(parsedCommand, user) {
     const room = await getRoomOfUser(user);
     let lookArray = [];
     let target = parsedCommand.directObject;
+    if (target === "room") {
+        lookRoom(room, user, lookArray);
+        worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
+        return;
+    }
     if (target) {
         // logger.debug(`look command targeting ${target}`);
         lookTarget(target.toLowerCase(), room, lookArray);
