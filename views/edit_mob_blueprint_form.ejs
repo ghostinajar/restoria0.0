@@ -49,22 +49,6 @@
     >
       Affixes
     </button>
-    <button
-      id="editMobChatterTab"
-      type="button"
-      class="tab-link edit-mob-tab-link"
-      data-tab="editMobChatterSection"
-    >
-      Chatter
-    </button>
-    <button
-      id="editMobEmoteTab"
-      type="button"
-      class="tab-link edit-mob-tab-link"
-      data-tab="editMobEmoteSection"
-    >
-      Emote
-    </button>
   </div>
 
   <section
@@ -229,23 +213,6 @@
         <label for="editMobIsAggressive" style="min-width: 3rem"
           >Aggressive</label
         >
-      </li>
-      <li>
-        <label for="editMobChat2User"> </label>
-        <input
-          type="checkbox"
-          id="editMobChat2User"
-          name="editMobChat2User"
-          value="editMobChat2User"
-        />
-        <label for="editMobChat2User" style="min-width: 3rem">Chat2User</label>
-        <input
-          type="checkbox"
-          id="editMobEmo2User"
-          name="editMobEmo2User"
-          value="editMobEmo2User"
-        />
-        <label for="editMobEmo2User" style="min-width: 3rem">Emo2User</label>
       </li>
     </ul>
   </section>
@@ -449,26 +416,6 @@
       </li>
     </ul>
   </section>
-  <section
-    id="editMobChatterSection"
-    style="display: none"
-    class="tab-content edit-mob-tab-content"
-  >
-    <h3>Chatters</h3>
-    <ul>
-      <li></li>
-    </ul>
-  </section>
-  <section
-    id="editMobEmoteSection"
-    style="display: none"
-    class="tab-content edit-mob-tab-content"
-  >
-    <h3>Emotes</h3>
-    <ul>
-      <li></li>
-    </ul>
-  </section>
   <ul>
     <li>
       <button type="submit">Update Mob</button>
@@ -481,43 +428,114 @@
     const editMobBlueprintForm = document.getElementById(
       "editMobBlueprintForm"
     );
+
+    // Tab menu
+    const editMobTabLinks = document.querySelectorAll(".edit-mob-tab-link");
+    const editMobTabContents = document.querySelectorAll(
+      ".edit-mob-tab-content"
+    );
+    editMobTabLinks.forEach((link) => {
+      link.addEventListener("click", function () {
+        // Remove active class from all tab links and sections
+        editMobTabLinks.forEach((link) => link.classList.remove("active"));
+        editMobTabContents.forEach((section) =>
+          section.classList.remove("active")
+        );
+        editMobTabContents.forEach(
+          (section) => (section.style.display = "none")
+        );
+
+        // Add active class to the clicked tab and corresponding section
+        this.classList.add("active");
+        const target = document.getElementById(this.getAttribute("data-tab"));
+        target.classList.add("active");
+        target.style.display = "block";
+      });
+    });
+
     const editMobIdDisplay = document.getElementById("editMobIdDisplay");
 
-    //TODO adapt or refactor itemNodeList functions from edit_item_blueprint_form
+    const editMobGeneralSection = document.getElementById(
+      "editMobGeneralSection"
+    );
+    const editMobSelectMob = document.getElementById("editMobSelectMob");
+    const editMobName = document.getElementById("editMobName");
+    const editMobKeywords = document.getElementById("editMobKeywords");
+    const editMobPronouns = document.getElementById("editMobPronouns");
+    const editMobLevel = document.getElementById("editMobLevel");
+    const editMobJob = document.getElementById("editMobJob");
+    const editMobSpi = document.getElementById("editMobSpi");
+    const editMobStr = document.getElementById("editMobStr");
+    const editMobDex = document.getElementById("editMobDex");
+    const editMobCon = document.getElementById("editMobCon");
+    const editMobInt = document.getElementById("editMobInt");
+    const editMobWis = document.getElementById("editMobWis");
+    const editMobIsUnique = document.getElementById("editMobIsUnique");
+    const editMobIsMount = document.getElementById("editMobIsMount");
+    const editMobIsAggressive = document.getElementById("editMobIsAggressive");
+
+    const editMobDescriptionSection = document.getElementById(
+      "editMobDescriptionSection"
+    );
+    const editLookMob = document.getElementById("editLookMob");
+    const editExamineMob = document.getElementById("editExamineMob");
+    const editStudyMob = document.getElementById("editStudyMob");
+    const editResearchMob = document.getElementById("editResearchMob");
+
+    const editMobItemNodesSection = document.getElementById(
+      "editMobItemNodesSection"
+    );
+    const editMobItemNodeList = document.getElementById("editMobItemNodeList");
+    const editMobItemNodeSelect = document.getElementById(
+      "editMobItemNodeSelect"
+    );
+
+    const editMobAffixesSection = document.getElementById(
+      "editMobAffixesSection"
+    );
+    const editMobAffix1 = document.getElementById("editMobAffix1");
+    const editMobAffix2 = document.getElementById("editMobAffix2");
+    const editMobAffix3 = document.getElementById("editMobAffix3");
+    const editMobAffix4 = document.getElementById("editMobAffix4");
+    const editMobAffix5 = document.getElementById("editMobAffix5");
+
+    // to hold data from server on "edit item" command
+    let selectedMob;
+    let itemBlueprintList;
+    let mobBlueprintFullData;
+    let selectedMobId = "";
 
     editMobBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const mobId = editMobId;
       const editMobBlueprintFormData = {
-        name: document.getElementById("editMobName").value,
-        pronouns: Number(document.getElementById("editMobPronouns").value),
-        level: Number(document.getElementById("editMobLevel").value),
-        job: document.getElementById("editMobJob").value,
+        name: editMobName.value || "no mob name",
+        keywords:
+          document.getElementById("editMobKeywords").value.split(/[ ,]+/) || [],
+        pronouns: Number(editMobPronouns).value || 1,
+        level: Number(editMobLevel.value) || 1,
+        job: editMobJob.value || "warrior",
         statBlock: {
-          strength: Number(document.getElementById("editMobStr").value),
-          dexterity: Number(document.getElementById("editMobDex").value),
-          constitution: Number(document.getElementById("editMobCon").value),
-          intelligence: Number(document.getElementById("editMobInt").value),
-          wisdom: Number(document.getElementById("editMobWis").value),
+          strength: Number(editMobStr.value) || 10,
+          dexterity: Number(editMobDex.value) || 10,
+          constitution: Number(editMobCon.value) || 10,
+          intelligence: Number(editMobInt.value) || 10,
+          wisdom: Number(editMobWis.value) || 10,
           charisma: 10,
-          spirit: Number(document.getElementById("editMobSpi").value),
+          spirit: Number(editMobSpi.value) || 0,
         },
-        keywords: document
-          .getElementById("editMobKeywords")
-          .value.split(/[ ,]+/),
-        isUnique: document.getElementById("editMobIsUnique").checked,
-        isMount: document.getElementById("editMobIsMount").checked,
-        isAggressive: document.getElementById("editMobIsAggressive").checked,
+        isUnique: editMobIsUnique.checked || false,
+        isMount: editMobIsMount.checked || false,
+        isAggressive: editMobIsAggressive.checked || false,
         description: {
-          look: document.getElementById("editLookMob").value,
-          examine: document.getElementById("editExamineMob").value,
-          study: document.getElementById("editStudyMob").value,
-          research: document.getElementById("editResearchMob").value,
+          look: editLookMob.value || "",
+          examine: editExamineMob.value || "",
+          study: editStudyMob.value || "",
+          research: editResearchMob.value || "",
         },
       };
       socket.emit(
         "userSubmittedEditMobBlueprint",
-        mobId,
+        selectedMobId,
         editMobBlueprintFormData
       );
       editMobBlueprintForm.reset();
@@ -530,45 +548,155 @@
         editMobBlueprintForm.style.display = "none";
       });
 
+    // click listener logic for "Add" button on item node select
+    document
+      .getElementById("editMobItemNodeAdd")
+      .addEventListener("click", () => {
+        //push new node to list
+        selectedMob.itemNodes.push({
+          id: "new", // server will generate legit id on zone save
+          blueprintId: editMobItemNodeSelect.value,
+          value:
+            editMobItemNodeSelect.options[editMobItemNodeSelect.selectedIndex]
+              .text,
+        });
+        //reload nodeList
+        clearUl(editMobItemNodeList);
+        loadNodeList(selectedMob.itemNodes, editMobItemNodeList);
+      });
+
     socket.on("openEditMobBlueprintForm", (formData) => {
+      mobBlueprintFullData = formData.mobBlueprintFullData;
+      itemBlueprintList = formData.itemBlueprintList;
+
+      //reset/hide open forms, show editItemBlueprintForm
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = editMobBlueprintForm;
       activeForm.style.display = "block";
       input.value = "";
-      // Set the values of the fields based on formData
-      document.getElementById("editMobName").value = formData.name || "";
-      document.getElementById("editMobPronouns").value = formData.pronouns || 0;
-      document.getElementById("editMobLevel").value = formData.level || 1;
-      document.getElementById("editMobJob").value = formData.job || "cleric";
-      document.getElementById("editMobStr").value =
-        formData.statBlock.strength || 4;
-      document.getElementById("editMobDex").value =
-        formData.statBlock.dexterity || 4;
-      document.getElementById("editMobCon").value =
-        formData.statBlock.constitution || 4;
-      document.getElementById("editMobInt").value =
-        formData.statBlock.intelligence || 4;
-      document.getElementById("editMobWis").value =
-        formData.statBlock.wisdom || 4;
-      document.getElementById("editMobSpi").value =
-        formData.statBlock.spirit || 0;
-      document.getElementById("editMobKeywords").value =
-        formData.keywords || "";
-      document.getElementById("editMobIsUnique").checked =
-        formData.isUnique || "";
-      document.getElementById("editMobIsMount").checked =
-        formData.isMount || "";
-      document.getElementById("editMobIsAggressive").checked =
-        formData.isAggressive || "";
-      document.getElementById("editLookMob").value =
-        formData.description.look || "";
-      document.getElementById("editExamineMob").value =
-        formData.description.examine || "";
-      document.getElementById("editStudyMob").value =
-        formData.description.study || "";
-      document.getElementById("editResearchMob").value =
-        formData.description.research || "";
+      generateStringSelectOptions(
+        formData.itemBlueprintList,
+        document.getElementById("editItemSelectItem")
+      );
+      selectedItemId = itemBlueprintList[0].id;
+      populateEditMobFieldsFromId(selectedItemId);
+    });
+
+    function populateEditMobFieldsFromId(selectedMobId) {
+      // Find the selected mob data
+      selectedMob = mobBlueprintFullData.find(
+        (mob) => mob._id === selectedMobId
+      );
+      if (selectedMob) {
+        // Populate the form fields
+        editMobIdDisplay.textContent =
+          `Id: ${selectedMob._id}` || "error: no mobId";
+        editMobName.value = selectedMob.name || "";
+        editMobKeywords.value = selectedMob.keywords.join(", ") || "";
+        editMobPronouns.value = selectedMob.pronouns || 0;
+        editMobLevel.value = selectedMob.minimumLevel || 0;
+        editMobJob = selectedMob.job || "warrior";
+        editMobSpi = selectedMob.statBlock.spirit || 0;
+        editMobStr = selectedMob.statBlock.strength || 10;
+        editMobDex = selectedMob.statBlock.dexterity || 10;
+        editMobCon = selectedMob.statBlock.constitution || 10;
+        editMobInt = selectedMob.statBlock.intelligence || 10;
+        editMobWis = selectedMob.statBlock.wisdom || 10;
+        editMobIsUnique.checked = selectedMob.isUnique || false;
+        editMobIsMount.checked = selectedMob.IsMount || false;
+        editMobIsAggressive.checked = selectedMob.IsAggressive || false;
+        editLookMob.value = selectedMob.description.look || "";
+        editExamineMob.value = selectedMob.description.examine || "";
+        editStudyMob.value = selectedMob.description.study || "";
+        editResearchMob.value = selectedMob.description.research || "";
+
+        if (selectedMob.itemNodes) {
+          loadNodeList(
+            selectedMob.itemNodes,
+            editMobItemNodeList,
+            itemBlueprintList
+          );
+        }
+
+        if (selectedMob.affixes) {
+          if (selectedMob.affixes[0]) {
+            editMobAffix1.value = selectedMob.affixes[0].affixType || "none";
+          }
+          if (selectedMob.affixes[1]) {
+            editMobAffix2.value = selectedMob.affixes[1].affixType || "none";
+          }
+          if (selectedMob.affixes[2]) {
+            editMobAffix3.value = selectedMob.affixes[2].affixType || "none";
+          }
+          if (selectedMob.affixes[3]) {
+            editMobAffix4.value = selectedMob.affixes[3].affixType || "none";
+          }
+          if (selectedMob.affixes[4]) {
+            editMobAffix5.value = selectedMob.affixes[4].affixType || "none";
+          }
+        }
+      }
+    }
+
+    //TODO refactor & import clearUl, loadNodeList, addNodeToList, deleteNodeById functions from this and edit_item_blueprint_form
+    function clearUl(ul) {
+      while (ul.firstChild) {
+        ul.removeChild(ul.firstChild);
+      }
+    }
+
+    function loadNodeList(nodeList, ulElement, itemBlueprintList) {
+      for (let node of nodeList) {
+        addNodeToList(ulElement, node, itemBlueprintList);
+      }
+    }
+
+    function addNodeToList(ulElement, node, itemBlueprintList) {
+      // Create a new <li> element
+      const liElement = document.createElement("li");
+      liElement.className = "node";
+      nodeItemName = itemBlueprintList.find(
+        (item) => item.id === node.loadsItemBlueprintId
+      ).value;
+      // Set the contents of the <li> to show node.value and node.id
+      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeItemName}</span><span class="nodeId">id: ${node.loadsItemBlueprintId}</span></div>`;
+
+      // Create a delete button
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "remove";
+      deleteButton.className = "deleteNode";
+      deleteButton.type = "button";
+      deleteButton.onclick = function () {
+        ulElement.removeChild(liElement);
+        deleteNodeById(node.id);
+      };
+
+      // Append the delete button to the <li>
+      liElement.appendChild(deleteButton);
+
+      // Append the <li> to the <ul>
+      ulElement.appendChild(liElement);
+    }
+
+    function deleteNodeById(id) {
+      let index;
+
+      // Check if it's an item node
+      index = selectedMob.itemNodes.findIndex((node) => node.id === id);
+      if (index !== -1) {
+        // Delete the itemNode
+        selectedMob.itemNodes.splice(index, 1);
+        clearUl(editItemItemNodeList);
+        loadNodeList(selectedMob.itemNodes, editMobItemNodeList);
+        return; // Exit the function once found and deleted
+      }
+    }
+
+    editMobSelectMob.addEventListener("change", (e) => {
+      selectedMobId = e.target.value;
+      clearUl(editMobItemNodeList);
+      populateEditMobFieldsFromId(selectedMobId);
     });
   });
 </script>

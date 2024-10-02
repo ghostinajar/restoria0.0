@@ -31,6 +31,7 @@ async function edit(parsedCommand, user) {
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editMobBlueprintForm`,
                 mobBlueprintList: getMobBlueprintListFromZone(zone),
+                mobBlueprintFullData: zone.mobBlueprints,
                 itemBlueprintList: getItemBlueprintListFromZone(zone),
             });
             break;

@@ -923,7 +923,6 @@
           });
         }
       }
-      console.log(editItemBlueprintFormData);
       socket.emit(
         "userSubmittedEditItemBlueprint",
         selectedItemId,
@@ -1015,7 +1014,6 @@
       );
       if (selectedItem) {
         // Populate the form fields
-        console.log(selectedItem);
         editItemIdDisplay.textContent =
           `Id: ${selectedItem._id}` || "error: no itemId";
         editItemName.value = selectedItem.name || "";
@@ -1200,6 +1198,7 @@
       populateEditItemFieldsFromId(selectedItemId);
       hideAndShowEditItemTabs();
     });
+    
     editItemFood.addEventListener("change", (e) => {
       hideAndShowEditItemTabs();
     });
