@@ -34,7 +34,6 @@
     </button>
     <button
       id="editMobItemNodesTab"
-      style="display: none"
       type="button"
       class="tab-link edit-mob-tab-link"
       data-tab="editMobItemNodesSection"
@@ -566,6 +565,7 @@
       });
 
     socket.on("openEditMobBlueprintForm", (formData) => {
+      mobBlueprintList = formData.mobBlueprintList;
       mobBlueprintFullData = formData.mobBlueprintFullData;
       itemBlueprintList = formData.itemBlueprintList;
 
@@ -577,10 +577,14 @@
       input.value = "";
       generateStringSelectOptions(
         formData.itemBlueprintList,
-        document.getElementById("editItemSelectItem")
+        document.getElementById("editMobItemNodeSelect")
       );
-      selectedItemId = itemBlueprintList[0].id;
-      populateEditMobFieldsFromId(selectedItemId);
+      generateStringSelectOptions(
+        formData.mobBlueprintList,
+        document.getElementById("editMobSelectMob")
+      );
+      selectedMobId = mobBlueprintList[0].id;
+      populateEditMobFieldsFromId(selectedMobId);
     });
 
     function populateEditMobFieldsFromId(selectedMobId) {
@@ -595,14 +599,14 @@
         editMobName.value = selectedMob.name || "";
         editMobKeywords.value = selectedMob.keywords.join(", ") || "";
         editMobPronouns.value = selectedMob.pronouns || 0;
-        editMobLevel.value = selectedMob.minimumLevel || 0;
-        editMobJob = selectedMob.job || "warrior";
-        editMobSpi = selectedMob.statBlock.spirit || 0;
-        editMobStr = selectedMob.statBlock.strength || 10;
-        editMobDex = selectedMob.statBlock.dexterity || 10;
-        editMobCon = selectedMob.statBlock.constitution || 10;
-        editMobInt = selectedMob.statBlock.intelligence || 10;
-        editMobWis = selectedMob.statBlock.wisdom || 10;
+        editMobLevel.value = selectedMob.level || 0;
+        editMobJob.value = selectedMob.job || "warrior";
+        editMobSpi.value = selectedMob.statBlock.spirit || 0;
+        editMobStr.value = selectedMob.statBlock.strength || 10;
+        editMobDex.value = selectedMob.statBlock.dexterity || 10;
+        editMobCon.value = selectedMob.statBlock.constitution || 10;
+        editMobInt.value = selectedMob.statBlock.intelligence || 10;
+        editMobWis.value = selectedMob.statBlock.wisdom || 10;
         editMobIsUnique.checked = selectedMob.isUnique || false;
         editMobIsMount.checked = selectedMob.IsMount || false;
         editMobIsAggressive.checked = selectedMob.IsAggressive || false;
@@ -680,10 +684,7 @@
     }
 
     function deleteNodeById(id) {
-      let index;
-
-      // Check if it's an item node
-      index = selectedMob.itemNodes.findIndex((node) => node.id === id);
+      let index = selectedMob.itemNodes.findIndex((node) => node.id === id);
       if (index !== -1) {
         // Delete the itemNode
         selectedMob.itemNodes.splice(index, 1);
