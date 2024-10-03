@@ -99,24 +99,6 @@
         maxlength="240"
       ></textarea>
     </li>
-    <li>
-      <label for="newStudyItem">Study:</label>
-      <textarea
-        id="newStudyItem"
-        name="newStudyItem"
-        type="text"
-        maxlength="640"
-      ></textarea>
-    </li>
-    <li>
-      <label for="newResearchItem">Research:</label>
-      <textarea
-        id="newResearchItem"
-        name="newResearchItem"
-        type="text"
-        maxlength="1600"
-      ></textarea>
-    </li>
   </ul>
 
   <ul>
@@ -145,8 +127,8 @@
         description: {
           look: document.getElementById("newLookItem").value,
           examine: document.getElementById("newExamineItem").value,
-          study: document.getElementById("newStudyItem").value,
-          research: document.getElementById("newResearchItem").value,
+          study: "",
+          research: "",
         },
         tags: {
           cleric: true,

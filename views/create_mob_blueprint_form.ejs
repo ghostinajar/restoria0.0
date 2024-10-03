@@ -78,24 +78,6 @@
         maxlength="240"
       ></textarea>
     </li>
-    <li>
-      <label for="newStudyMob">Study:</label>
-      <textarea
-        id="newStudyMob"
-        name="newStudyMob"
-        type="text"
-        maxlength="640"
-      ></textarea>
-    </li>
-    <li>
-      <label for="newResearchMob">Research:</label>
-      <textarea
-        id="newResearchMob"
-        name="newResearchMob"
-        type="text"
-        maxlength="1600"
-      ></textarea>
-    </li>
   </ul>
   <button type="submit">Create Mob</button>
 </form>
@@ -132,8 +114,8 @@
         description: {
           look: document.getElementById("newLookMob").value,
           examine: document.getElementById("newExamineMob").value,
-          study: document.getElementById("newStudyMob").value,
-          research: document.getElementById("newResearchMob").value,
+          study: "",
+          research: "",
         },
       };
       socket.emit("userSubmittedNewMobBlueprint", createMobBlueprintFormData);

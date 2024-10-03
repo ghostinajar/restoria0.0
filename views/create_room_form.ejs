@@ -85,24 +85,6 @@
         maxlength="240"
       ></textarea>
     </li>
-    <li>
-      <label for="newStudyRoom">Study:</label>
-      <textarea
-        id="newStudyRoom"
-        name="newStudyRoom"
-        type="text"
-        maxlength="640"
-      ></textarea>
-    </li>
-    <li>
-      <label for="newResearchRoom">Research:</label>
-      <textarea
-        id="newResearchRoom"
-        name="newResearchRoom"
-        type="text"
-        maxlength="1600"
-      ></textarea>
-    </li>
   </ul>
   <button type="submit">Create Room</button>
 </form>
@@ -126,8 +108,8 @@
         noMagic: false,
         noCombat: false,
         examine: document.getElementById("newExamineRoom").value,
-        study: document.getElementById("newStudyRoom").value,
-        research: document.getElementById("newResearchRoom").value,
+        study: "",
+        research: "",
       };
       socket.emit("userSubmittedNewRoom", roomData);
       createRoomForm.reset();
