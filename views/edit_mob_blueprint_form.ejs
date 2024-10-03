@@ -554,15 +554,16 @@
       .addEventListener("click", () => {
         //push new node to list
         selectedMob.itemNodes.push({
-          id: "new", // server will generate legit id on zone save
-          blueprintId: editMobItemNodeSelect.value,
-          value:
-            editMobItemNodeSelect.options[editMobItemNodeSelect.selectedIndex]
-              .text,
+          _id: Math.floor(Math.random() * 1000000000), // server will generate legit id on zone save
+          loadsBlueprintId: editMobItemNodeSelect.value
         });
         //reload nodeList
         clearUl(editMobItemNodeList);
-        loadNodeList(selectedMob.itemNodes, editMobItemNodeList);
+        loadNodesToUlElement(
+          editMobItemNodeList,
+          selectedMob.itemNodes,
+          itemBlueprintList
+        );
       });
 
     socket.on("openEditMobBlueprintForm", (formData) => {
@@ -623,9 +624,9 @@
         editResearchMob.value = selectedMob.description.research || "";
 
         if (selectedMob.itemNodes) {
-          loadNodeList(
-            selectedMob.itemNodes,
+          loadNodesToUlElement(
             editMobItemNodeList,
+            selectedMob.itemNodes,
             itemBlueprintList
           );
         }
@@ -647,57 +648,6 @@
             editMobAffix5.value = selectedMob.affixes[4].affixType || "none";
           }
         }
-      }
-    }
-
-    //TODO refactor & import clearUl, loadNodeList, addNodeToList, deleteNodeById functions from this and edit_item_blueprint_form
-    function clearUl(ul) {
-      while (ul.firstChild) {
-        ul.removeChild(ul.firstChild);
-      }
-    }
-
-    function loadNodeList(nodeList, ulElement, itemBlueprintList) {
-      for (let node of nodeList) {
-        addNodeToList(ulElement, node, itemBlueprintList);
-      }
-    }
-
-    function addNodeToList(ulElement, node, itemBlueprintList) {
-      // Create a new <li> element
-      const liElement = document.createElement("li");
-      liElement.className = "node";
-      nodeItemName = itemBlueprintList.find(
-        (item) => item.id === node.loadsItemBlueprintId
-      ).value;
-      // Set the contents of the <li> to show node.value and node.id
-      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeItemName}</span><span class="nodeId">id: ${node.loadsItemBlueprintId}</span></div>`;
-
-      // Create a delete button
-      const deleteButton = document.createElement("button");
-      deleteButton.textContent = "remove";
-      deleteButton.className = "deleteNode";
-      deleteButton.type = "button";
-      deleteButton.onclick = function () {
-        ulElement.removeChild(liElement);
-        deleteNodeById(node.id);
-      };
-
-      // Append the delete button to the <li>
-      liElement.appendChild(deleteButton);
-
-      // Append the <li> to the <ul>
-      ulElement.appendChild(liElement);
-    }
-
-    function deleteNodeById(id) {
-      let index = selectedMob.itemNodes.findIndex((node) => node.id === id);
-      if (index !== -1) {
-        // Delete the itemNode
-        selectedMob.itemNodes.splice(index, 1);
-        clearUl(editItemItemNodeList);
-        loadNodeList(selectedMob.itemNodes, editMobItemNodeList);
-        return; // Exit the function once found and deleted
       }
     }
   });

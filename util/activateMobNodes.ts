@@ -27,11 +27,11 @@ async function activateMobNodes(
 
       const blueprint = await zone.mobBlueprints.find(
         (blueprint: IMobBlueprint) =>
-          blueprint._id.toString() === mobNode.loadsMobBlueprintId.toString()
+          blueprint._id.toString() === mobNode.loadsBlueprintId.toString()
       );
       if (!blueprint) {
         logger.error(
-          `activateMobNodes couldn't find blueprint ${mobNode.loadsMobBlueprintId} in zone ${zone.name}.`
+          `activateMobNodes couldn't find blueprint ${mobNode.loadsBlueprintId} in zone ${zone.name}.`
         );
         return null;
       }

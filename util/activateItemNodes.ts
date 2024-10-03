@@ -30,11 +30,11 @@ async function activateItemNodes(
         await zone.itemBlueprints.find(
           (blueprint) =>
             blueprint._id.toString() ===
-            itemNode.loadsItemBlueprintId.toString()
+            itemNode.loadsBlueprintId.toString()
         );
       if (!blueprint) {
         logger.error(
-          `ActivateItemNodes couldn't find blueprint ${itemNode.loadsItemBlueprintId} in zone ${zone.name}.`
+          `ActivateItemNodes couldn't find blueprint ${itemNode.loadsBlueprintId} in zone ${zone.name}.`
         );
         return null;
       }

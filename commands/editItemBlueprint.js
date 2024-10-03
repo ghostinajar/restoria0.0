@@ -65,7 +65,7 @@ async function editItemBlueprint(itemId, formData, user) {
             if (item.itemNodes) {
                 item.itemNodes.push({
                     _id: new mongoose.Types.ObjectId(),
-                    loadsItemBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+                    loadsBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
                     fromZoneId: zone._id,
                 });
             }

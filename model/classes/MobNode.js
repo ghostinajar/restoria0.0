@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 const mobNodeSchema = new Schema({
-    loadsMobBlueprintId: {
+    loadsBlueprintId: {
         type: Schema.Types.ObjectId,
         ref: "MobBlueprint",
     },

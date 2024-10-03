@@ -84,7 +84,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   roomData.mobNodes.forEach((node) => {
     room.mobNodes.push({
       _id: new mongoose.Types.ObjectId(),
-      loadsMobBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+      loadsBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
       fromZoneId: zone._id,
     });
   });
@@ -93,7 +93,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   roomData.itemNodes.forEach((node) => {
     room.itemNodes.push({
       _id: new mongoose.Types.ObjectId(),
-      loadsItemBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+      loadsBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
       fromZoneId: zone._id,
     });
   });

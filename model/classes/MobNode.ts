@@ -5,12 +5,12 @@ const { Schema } = mongoose;
 
 export interface IMobNode {
   _id?: mongoose.Types.ObjectId;
-  loadsMobBlueprintId: mongoose.Types.ObjectId;
+  loadsBlueprintId: mongoose.Types.ObjectId;
   fromZoneId: mongoose.Types.ObjectId;
 }
 
 const mobNodeSchema = new Schema<IMobNode>({
-  loadsMobBlueprintId: {
+  loadsBlueprintId: {
     type: Schema.Types.ObjectId,
     ref: "MobBlueprint",
   },

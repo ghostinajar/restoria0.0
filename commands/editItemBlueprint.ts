@@ -7,6 +7,7 @@ import makeMessage from "../types/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IAffix } from "../model/classes/Affix.js";
+import { IItemNode } from "../model/classes/ItemNode.js";
 
 export interface IEditItemBlueprintFormData {
   name: string;
@@ -69,7 +70,7 @@ export interface IEditItemBlueprintFormData {
     feet: boolean;
     shield: boolean;
   };
-  itemNodes?: Array<{ id: string; blueprintId: string; value: string }>;
+  itemNodes?: Array<IItemNode>;
   affixes?: Array<IAffix>;
 }
 
@@ -159,7 +160,7 @@ async function editItemBlueprint(
       if (item.itemNodes) {
         item.itemNodes.push({
           _id: new mongoose.Types.ObjectId(),
-          loadsItemBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+          loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
           fromZoneId: zone._id,
         });
       }

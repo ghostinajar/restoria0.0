@@ -99,11 +99,11 @@ async function edit(parsedCommand, user) {
 function getItemNodeList(room, zone) {
     let itemNodesList = [];
     for (let node of room.itemNodes) {
-        const itemName = getNameById(zone.itemBlueprints, node.loadsItemBlueprintId.toString());
+        const itemName = getNameById(zone.itemBlueprints, node.loadsBlueprintId.toString());
         //TODO handle cases where the item originates in another zone
         const nodeObject = {
             id: node._id,
-            blueprintId: node.loadsItemBlueprintId,
+            blueprintId: node.loadsBlueprintId,
             value: itemName || "",
         };
         itemNodesList.push(nodeObject);
@@ -113,11 +113,11 @@ function getItemNodeList(room, zone) {
 function getMobNodeList(room, zone) {
     let mobNodesList = [];
     for (let node of room.mobNodes) {
-        const mobName = getNameById(zone.mobBlueprints, node.loadsMobBlueprintId.toString());
+        const mobName = getNameById(zone.mobBlueprints, node.loadsBlueprintId.toString());
         //TODO handle cases where the mob originates in another zone
         const nodeObject = {
             id: node._id,
-            blueprintId: node.loadsMobBlueprintId,
+            blueprintId: node.loadsBlueprintId,
             value: mobName,
         };
         mobNodesList.push(nodeObject);

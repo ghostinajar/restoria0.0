@@ -45,29 +45,12 @@
       const messages = document.getElementById("messages");
       let activeForm = editUserForm;
 
-      //methods definitions (validation and parsing are client version)
-      function generateStringSelectOptions(stringArray, select) {
-        select.options.length = 0;
-        for (let i = 0; i <= stringArray.length-1; i++) {
-            const option = document.createElement('option');
-            option.value = stringArray[i].id;
-            option.textContent = stringArray[i].value;
-            select.appendChild(option);
-        }
-      }
-
-      function appendMessageToTerminal(message) {
-        const item = document.createElement("li");
-        item.classList.add('message-item'); // Add message-item class
-        item.textContent = message.content;
-        item.classList.add(message.type);
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      }
-      
-      //socket event listeners         
+      //socket event listeners
       socket.on("invalid", (rejectionString) => {
-        appendMessageToTerminal({ type: "rejection", content: "Server says invalid command." });
+        appendMessageToTerminal({
+          type: "rejection",
+          content: "Server says invalid command.",
+        });
       });
 
       socket.on("redirectToLogin", () => {
@@ -79,13 +62,84 @@
         appendMessageToTerminal(message);
       });
 
-      window.addEventListener('beforeunload', function (event) {
+      window.addEventListener("beforeunload", function (event) {
         socket.disconnect();
       });
 
-      document.querySelector('#logout').addEventListener('click', function (event) {
-        socket.disconnect();
-      });
+      document
+        .querySelector("#logout")
+        .addEventListener("click", function (event) {
+          socket.disconnect();
+        });
+
+      function generateStringSelectOptions(stringArray, select) {
+        select.options.length = 0;
+        for (let i = 0; i <= stringArray.length - 1; i++) {
+          const option = document.createElement("option");
+          option.value = stringArray[i].id;
+          option.textContent = stringArray[i].value;
+          select.appendChild(option);
+        }
+      }
+
+      function appendMessageToTerminal(message) {
+        const item = document.createElement("li");
+        item.classList.add("message-item"); // Add message-item class
+        item.textContent = message.content;
+        item.classList.add(message.type);
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+
+      function loadNodesToUlElement(ulElement, nodes, blueprints) {
+        for (let node of nodes) {
+          addNodeToUlElement(ulElement, node, nodes, blueprints);
+        }
+      }
+
+      function addNodeToUlElement(ulElement, node, nodes, blueprints) {
+        // Create a new <li> element
+        const liElement = document.createElement("li");
+        liElement.className = "node";
+        console.log(node);
+        console.log(blueprints);
+        nodeName = blueprints.find(
+          (blueprint) => blueprint.id === node.loadsBlueprintId
+        ).value;
+
+        liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeName}</span><span class="nodeId">id: ${node.blueprintId}</span></div>`;
+
+        // Create a delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "remove";
+        deleteButton.className = "deleteNode";
+        deleteButton.type = "button";
+        deleteButton.onclick = function () {
+          ulElement.removeChild(liElement);
+          deleteNodeById(node.id, nodes, ulElement, blueprints);
+        };
+
+        // Append the delete button to the <li>
+        liElement.appendChild(deleteButton);
+
+        // Append the <li> to the <ul>
+        ulElement.appendChild(liElement);
+      }
+
+      function deleteNodeById(id, nodes, ulElement, blueprints) {
+        let index = nodes.findIndex((node) => node.id === id);
+        if (index !== -1) {
+          nodes.splice(index, 1);
+          clearUl(ulElement);
+          loadNodesToUlElement(ulElement, nodes, blueprints);
+        }
+      }
+
+      function clearUl(ul) {
+        while (ul.firstChild) {
+          ul.removeChild(ul.firstChild);
+        }
+      }
     </script>
   </body>
 </html>

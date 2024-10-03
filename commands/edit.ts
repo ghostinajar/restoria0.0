@@ -121,12 +121,12 @@ function getItemNodeList(room: IRoom, zone: IZone) {
   for (let node of room.itemNodes) {
     const itemName = getNameById(
       zone.itemBlueprints,
-      node.loadsItemBlueprintId.toString()
+      node.loadsBlueprintId.toString()
     );
     //TODO handle cases where the item originates in another zone
     const nodeObject = {
       id: node._id,
-      blueprintId: node.loadsItemBlueprintId,
+      blueprintId: node.loadsBlueprintId,
       value: itemName || "",
     };
     itemNodesList.push(nodeObject);
@@ -139,12 +139,12 @@ function getMobNodeList(room: IRoom, zone: IZone) {
   for (let node of room.mobNodes) {
     const mobName = getNameById(
       zone.mobBlueprints,
-      node.loadsMobBlueprintId.toString()
+      node.loadsBlueprintId.toString()
     );
     //TODO handle cases where the mob originates in another zone
     const nodeObject = {
       id: node._id,
-      blueprintId: node.loadsMobBlueprintId,
+      blueprintId: node.loadsBlueprintId,
       value: mobName,
     };
     mobNodesList.push(nodeObject);

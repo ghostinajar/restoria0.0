@@ -354,6 +354,7 @@
       editRoomForm.style.display = "none"; // Hide the form after submission
     });
 
+    //TODO can this be deleted now that it's been replaced by tabs?
     editRoomForm.addEventListener("click", (e) => {
       if (e.target.matches("[data-target]")) {
         hideEditRoomFormSections();
@@ -374,30 +375,32 @@
       .addEventListener("click", () => {
         //push new node to list
         workingEditRoomData.itemNodes.push({
-          id: "new", // server will generate legit id on zone save
-          blueprintId: editRoomItemNodeSelect.value,
-          value:
-            editRoomItemNodeSelect.options[editRoomItemNodeSelect.selectedIndex]
-              .text,
+          _id: Math.floor(Math.random() * 1000000000), // server will generate legit id on zone save
+          loadsBlueprintId: editRoomItemNodeSelect.value,
         });
         //reload nodeList
         clearUl(editRoomItemNodeList);
-        loadNodeList(workingEditRoomData.itemNodes, editRoomItemNodeList);
+        loadNodesToUlElement(
+          editRoomItemNodeList,
+          workingEditRoomData.itemNodes,
+          availableItemBlueprints
+        );
       });
     document
       .getElementById("editRoomMobNodeAdd")
       .addEventListener("click", () => {
         //push new node to list
         workingEditRoomData.mobNodes.push({
-          id: "new", // server will generate legit id on zone save
-          blueprintId: editRoomMobNodeSelect.value,
-          value:
-            editRoomMobNodeSelect.options[editRoomMobNodeSelect.selectedIndex]
-              .text,
+          _id: Math.floor(Math.random() * 1000000000), // server will generate legit id on zone save
+          loadsBlueprintId: editRoomMobNodeSelect.value,
         });
         //reload nodeList
         clearUl(editRoomMobNodeList);
-        loadNodeList(workingEditRoomData.mobNodes, editRoomMobNodeList);
+        loadNodesToUlElement(
+          editRoomMobNodeList,
+          workingEditRoomData.mobNodes,
+          availableMobBlueprints
+        );
       });
 
     socket.on("openEditRoomForm", (formData) => {
@@ -411,10 +414,13 @@
       editRoomForm.reset();
       clearUl(editRoomMobNodeList);
       clearUl(editRoomItemNodeList);
+
+      //TODO can this be deleted now that tabs have replaced it?
       hideEditRoomFormSections();
       activeFormSectionForEditRoom =
         sectionsForEditRoom.editRoomDescriptionSection;
       sectionsForEditRoom.editRoomDescriptionSection.style.display = "block";
+
       generateStringSelectOptions(
         availableMobBlueprints,
         document.getElementById("editRoomMobNodeSelect")
@@ -462,17 +468,12 @@
       document.getElementById("playerCap").value =
         workingEditRoomData.playerCap || 0;
       document.getElementById("mobCap").value = workingEditRoomData.mobCap || 0;
-      loadNodeList(workingEditRoomData.mobNodes, editRoomMobNodeList);
-      loadNodeList(workingEditRoomData.itemNodes, editRoomItemNodeList);
+      loadNodesToUlElement(editRoomMobNodeList, workingEditRoomData.mobNodes, availableMobBlueprints);
+      loadNodesToUlElement(editRoomItemNodeList, workingEditRoomData.itemNodes, availableItemBlueprints);
       loadExitList(workingEditRoomData.exits);
     });
 
-    function clearUl(ul) {
-      while (ul.firstChild) {
-        ul.removeChild(ul.firstChild);
-      }
-    }
-
+    //TODO can this be deleted now that tabs have replaced it?
     function hideEditRoomFormSections() {
       sectionsForEditRoom.editRoomDescriptionSection.style.display = "none";
       sectionsForEditRoom.editRoomTagsSection.style.display = "none";
@@ -566,60 +567,6 @@
       });
 
       return options;
-    }
-
-    function loadNodeList(nodeList, ulElement) {
-      for (let node of nodeList) {
-        addNodeToList(ulElement, node);
-      }
-    }
-
-    function addNodeToList(ulElement, node) {
-      // Create a new <li> element
-      const liElement = document.createElement("li");
-      liElement.className = "node";
-      // Set the contents of the <li> to show node.value and node.id
-      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${node.value}</span><span class="nodeId">id: ${node.id}</span></div>`;
-
-      // Create a delete button
-      const deleteButton = document.createElement("button");
-      deleteButton.textContent = "remove";
-      deleteButton.className = "deleteNode";
-      deleteButton.type = "button";
-      deleteButton.onclick = function () {
-        ulElement.removeChild(liElement);
-        deleteNodeById(node.id);
-      };
-
-      // Append the delete button to the <li>
-      liElement.appendChild(deleteButton);
-
-      // Append the <li> to the <ul>
-      ulElement.appendChild(liElement);
-    }
-
-    function deleteNodeById(id) {
-      let index;
-
-      // Check if it's a mob node
-      index = workingEditRoomData.mobNodes.findIndex((node) => node.id === id);
-      if (index !== -1) {
-        // Delete the mobNode
-        workingEditRoomData.mobNodes.splice(index, 1);
-        clearUl(editRoomMobNodeList);
-        loadNodeList(workingEditRoomData.mobNodes, editRoomMobNodeList);
-        return; // Exit the function once found and deleted
-      }
-
-      // Check if it's an item node
-      index = workingEditRoomData.itemNodes.findIndex((node) => node.id === id);
-      if (index !== -1) {
-        // Delete the itemNode
-        workingEditRoomData.itemNodes.splice(index, 1);
-        clearUl(editRoomItemNodeList);
-        loadNodeList(workingEditRoomData.itemNodes, editRoomItemNodeList);
-        return; // Exit the function once found and deleted
-      }
     }
   });
 </script>

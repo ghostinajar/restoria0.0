@@ -13,9 +13,9 @@ async function activateMobNodes(mobNodes, mobArray) {
                 logger.error(`activateMobNodes couldn't get a zone`);
                 return null;
             }
-            const blueprint = await zone.mobBlueprints.find((blueprint) => blueprint._id.toString() === mobNode.loadsMobBlueprintId.toString());
+            const blueprint = await zone.mobBlueprints.find((blueprint) => blueprint._id.toString() === mobNode.loadsBlueprintId.toString());
             if (!blueprint) {
-                logger.error(`activateMobNodes couldn't find blueprint ${mobNode.loadsMobBlueprintId} in zone ${zone.name}.`);
+                logger.error(`activateMobNodes couldn't find blueprint ${mobNode.loadsBlueprintId} in zone ${zone.name}.`);
                 return null;
             }
             const mob = await new Promise((resolve) => {

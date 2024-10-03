@@ -959,15 +959,16 @@
       .addEventListener("click", () => {
         //push new node to list
         selectedItem.itemNodes.push({
-          id: "new", // server will generate legit id on zone save
-          blueprintId: editItemItemNodeSelect.value,
-          value:
-            editItemItemNodeSelect.options[editItemItemNodeSelect.selectedIndex]
-              .text,
+          _id: Math.floor(Math.random() * 1000000000), // server will generate legit id on zone save
+          loadsBlueprintId: editItemItemNodeSelect.value,
         });
         //reload nodeList
         clearUl(editItemItemNodeList);
-        loadNodeList(selectedItem.itemNodes, editItemItemNodeList);
+        loadNodesToUlElement(
+          editItemItemNodeList,
+          selectedItem.itemNodes,
+          itemBlueprintList
+        );
       });
 
     editItemSelectItem.addEventListener("change", (e) => {
@@ -1073,9 +1074,9 @@
 
         editItemCapacity.value = selectedItem.capacity || 0;
         if (selectedItem.itemNodes) {
-          loadNodeList(
-            selectedItem.itemNodes,
+          loadNodesToUlElement(
             editItemItemNodeList,
+            selectedItem.itemNodes,
             itemBlueprintList
           );
         }
@@ -1115,59 +1116,6 @@
           editItemShield.checked =
             selectedItem.wearableLocations.shield || false;
         }
-      }
-    }
-
-    function clearUl(ul) {
-      while (ul.firstChild) {
-        ul.removeChild(ul.firstChild);
-      }
-    }
-
-    function loadNodeList(nodeList, ulElement, itemBlueprintList) {
-      for (let node of nodeList) {
-        addNodeToList(ulElement, node, itemBlueprintList);
-      }
-    }
-
-    function addNodeToList(ulElement, node, itemBlueprintList) {
-      // Create a new <li> element
-      const liElement = document.createElement("li");
-      liElement.className = "node";
-      nodeItemName = itemBlueprintList.find(
-        (item) => item.id === node.loadsItemBlueprintId
-      ).value;
-      // Set the contents of the <li> to show node.value and node.id
-      liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeItemName}</span><span class="nodeId">id: ${node.loadsItemBlueprintId}</span></div>`;
-
-      // Create a delete button
-      const deleteButton = document.createElement("button");
-      deleteButton.textContent = "remove";
-      deleteButton.className = "deleteNode";
-      deleteButton.type = "button";
-      deleteButton.onclick = function () {
-        ulElement.removeChild(liElement);
-        deleteNodeById(node.id);
-      };
-
-      // Append the delete button to the <li>
-      liElement.appendChild(deleteButton);
-
-      // Append the <li> to the <ul>
-      ulElement.appendChild(liElement);
-    }
-
-    function deleteNodeById(id) {
-      let index;
-
-      // Check if it's an item node
-      index = selectedItem.itemNodes.findIndex((node) => node.id === id);
-      if (index !== -1) {
-        // Delete the itemNode
-        selectedItem.itemNodes.splice(index, 1);
-        clearUl(editItemItemNodeList);
-        loadNodeList(selectedItem.itemNodes, editItemItemNodeList);
-        return; // Exit the function once found and deleted
       }
     }
 
