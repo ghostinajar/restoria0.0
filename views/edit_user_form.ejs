@@ -5,82 +5,85 @@
   style="display: none"
   autocomplete="off"
 >
-<ul>
-  <li>
-    <a class="cancelButton" id="cancelEditUserForm"> Cancel </a>
-  </li>
-</ul>
-<h2>Edit User</h2>
-<ul>
-  <li>
-    <label for="editUserExamineUser">Examine:</label>
-    <textarea
-      id="editUserExamineUser"
-      name="editUserExamineUser"
-      type="text"
-      maxlength="240"
-    ></textarea>
-  </li>
-  <li>
-    <label for="editUserStudyUser">Study:</label>
-    <textarea
-      id="editUserStudyUser"
-      name="editUserStudyUser"
-      type="text"
-      maxlength="640"
-    ></textarea>
-  </li>
-  <li>
-    <label for="editUserResearchUser">Research:</label>
-    <textarea
-      id="editUserResearchUser"
-      name="editUserResearchUser"
-      type="text"
-      maxlength="1600"
-    ></textarea>
-  </li>
-</ul>
-<ul>
-  <li>
-    <button type="submit">Update Character</button>
-  </li>
-</ul> 
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelEditUserForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Edit User</h2>
+  <ul>
+    <li>
+      <label for="editUserExamineUser">Examine:</label>
+      <textarea
+        id="editUserExamineUser"
+        name="editUserExamineUser"
+        type="text"
+        maxlength="240"
+      ></textarea>
+    </li>
+    <li>
+      <label for="editUserStudyUser">Study:</label>
+      <textarea
+        id="editUserStudyUser"
+        name="editUserStudyUser"
+        type="text"
+        maxlength="640"
+      ></textarea>
+    </li>
+    <li>
+      <label for="editUserResearchUser">Research:</label>
+      <textarea
+        id="editUserResearchUser"
+        name="editUserResearchUser"
+        type="text"
+        maxlength="1600"
+      ></textarea>
+    </li>
+  </ul>
+  <ul>
+    <li>
+      <button type="submit">Update Character</button>
+    </li>
+  </ul>
 </form>
 
 <script>
-  const editUserForm = document.getElementById("editUserForm");
-  const editUserExamineUser = document.getElementById("editUserExamineUser")
-  const editUserStudyUser = document.getElementById("editUserStudyUser")
-  const editUserResearchUser = document.getElementById("editUserResearchUser")
+  document.addEventListener("DOMContentLoaded", () => {
+    const editUserForm = document.getElementById("editUserForm");
+    const editUserExamineUser = document.getElementById("editUserExamineUser");
+    const editUserStudyUser = document.getElementById("editUserStudyUser");
+    const editUserResearchUser = document.getElementById(
+      "editUserResearchUser"
+    );
 
-
-  editUserForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const userDescription = {
-      examine: editUserExamineUser.value,
-      study: editUserStudyUser.value,
-      research: editUserResearchUser.value,
-    };
-    socket.emit("userSubmittedUserDescription", userDescription);
-    editUserForm.reset();
-    editUserForm.style.display = "none"; // Hide the form after submission
-  });
-
-  document
-    .getElementById("cancelEditUserForm")
-    .addEventListener("click", function () {
-      editUserForm.style.display = "none";
+    editUserForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const userDescription = {
+        examine: editUserExamineUser.value,
+        study: editUserStudyUser.value,
+        research: editUserResearchUser.value,
+      };
+      socket.emit("userSubmittedUserDescription", userDescription);
+      editUserForm.reset();
+      editUserForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("openEditUserForm", (formData) => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = editUserForm;
-    activeForm.style.display = "block";
-    input.value = "";
-    // Set the values of the textareas based on formData
-    editUserExamineUser.value = formData.examine || "";
-    editUserStudyUser.value = formData.study || "";
-    editUserResearchUser.value = formData.research || "";
+    document
+      .getElementById("cancelEditUserForm")
+      .addEventListener("click", function () {
+        editUserForm.style.display = "none";
+      });
+
+    socket.on("openEditUserForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = editUserForm;
+      activeForm.style.display = "block";
+      input.value = "";
+      // Set the values of the textareas based on formData
+      editUserExamineUser.value = formData.examine || "";
+      editUserStudyUser.value = formData.study || "";
+      editUserResearchUser.value = formData.research || "";
+    });
   });
 </script>

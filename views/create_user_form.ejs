@@ -58,35 +58,37 @@
 </form>
 
 <script>
-  const createUserForm = document.getElementById("createUserForm");
-  const newUserName = document.getElementById("newUserName");
-  const password = document.getElementById("new-password");
+  document.addEventListener("DOMContentLoaded", () => {
+    const createUserForm = document.getElementById("createUserForm");
+    const newUserName = document.getElementById("newUserName");
+    const password = document.getElementById("new-password");
 
-  createUserForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const userData = {
-      username: document.getElementById("newUserName").value.toLowerCase(),
-      name: document.getElementById("newUserName").value,
-      password: document.getElementById("new-password").value,
-      pronouns: document.getElementById("pronouns").value,
-      job: document.getElementById("job").value,
-    };
-    socket.emit("userSubmittedNewUser", userData);
-    createUserForm.reset();
-    createUserForm.style.display = "none"; // Hide the form after submission
-  });
-
-  document
-    .getElementById("cancelCreateUserForm")
-    .addEventListener("click", function () {
-      createUserForm.style.display = "none";
+    createUserForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const userData = {
+        username: document.getElementById("newUserName").value.toLowerCase(),
+        name: document.getElementById("newUserName").value,
+        password: document.getElementById("new-password").value,
+        pronouns: document.getElementById("pronouns").value,
+        job: document.getElementById("job").value,
+      };
+      socket.emit("userSubmittedNewUser", userData);
+      createUserForm.reset();
+      createUserForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("openCreateUserForm", () => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = createUserForm;
-    activeForm.style.display = "block";
-    input.value = "";
+    document
+      .getElementById("cancelCreateUserForm")
+      .addEventListener("click", function () {
+        createUserForm.style.display = "none";
+      });
+
+    socket.on("openCreateUserForm", () => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = createUserForm;
+      activeForm.style.display = "block";
+      input.value = "";
+    });
   });
 </script>

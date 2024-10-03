@@ -261,26 +261,7 @@
     const editRoomTabContents = document.querySelectorAll(
       ".edit-room-tab-content"
     );
-    editRoomTabLinks.forEach((link) => {
-      link.addEventListener("click", function () {
-        // Remove active class from all tab links and sections
-        editRoomTabLinks.forEach((link) => link.classList.remove("active"));
-        editRoomTabContents.forEach((section) =>
-          section.classList.remove("active")
-        );
-        editRoomTabContents.forEach(
-          (section) => (section.style.display = "none")
-        );
 
-        // Add active class to the clicked tab and corresponding section
-        this.classList.add("active");
-        const target = document.getElementById(this.getAttribute("data-tab"));
-        target.classList.add("active");
-        target.style.display = "block";
-      });
-    });
-
-    // nodeList ul elements
     const editRoomItemNodeList = document.getElementById(
       "editRoomItemNodeList"
     );
@@ -293,7 +274,7 @@
     );
     const editRoomExitList = document.getElementById("editRoomExitList");
 
-    // form sections (TODO is it safe to delete all this functionality 
+    // form sections (TODO is it safe to delete all this functionality
     // now that it's been replaced with tabs?)
     const sectionsForEditRoom = {
       editRoomDescriptionSection: document.getElementById(
@@ -318,6 +299,26 @@
     let availableMobBlueprints;
     let availableItemBlueprints;
     let availableRooms;
+
+    // Tab menu listeners
+    editRoomTabLinks.forEach((link) => {
+      link.addEventListener("click", function () {
+        // Remove active class from all tab links and sections
+        editRoomTabLinks.forEach((link) => link.classList.remove("active"));
+        editRoomTabContents.forEach((section) =>
+          section.classList.remove("active")
+        );
+        editRoomTabContents.forEach(
+          (section) => (section.style.display = "none")
+        );
+
+        // Add active class to the clicked tab and corresponding section
+        this.classList.add("active");
+        const target = document.getElementById(this.getAttribute("data-tab"));
+        target.classList.add("active");
+        target.style.display = "block";
+      });
+    });
 
     editRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();

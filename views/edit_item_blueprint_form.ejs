@@ -689,30 +689,10 @@
     const editItemBlueprintForm = document.getElementById(
       "editItemBlueprintForm"
     );
-
-    // Tab menu
     const editItemTabLinks = document.querySelectorAll(".edit-item-tab-link");
     const editItemTabContents = document.querySelectorAll(
       ".edit-item-tab-content"
     );
-    editItemTabLinks.forEach((link) => {
-      link.addEventListener("click", function () {
-        // Remove active class from all tab links and sections
-        editItemTabLinks.forEach((link) => link.classList.remove("active"));
-        editItemTabContents.forEach((section) =>
-          section.classList.remove("active")
-        );
-        editItemTabContents.forEach(
-          (section) => (section.style.display = "none")
-        );
-
-        // Add active class to the clicked tab and corresponding section
-        this.classList.add("active");
-        const target = document.getElementById(this.getAttribute("data-tab"));
-        target.classList.add("active");
-        target.style.display = "block";
-      });
-    });
     const editItemItemNodesTab = document.getElementById(
       "editItemItemNodesTab"
     );
@@ -808,6 +788,26 @@
     let itemBlueprintList;
     let itemBlueprintFullData;
     let selectedItemId = "";
+
+    // Tab menu listeners
+    editItemTabLinks.forEach((link) => {
+      link.addEventListener("click", function () {
+        // Remove active class from all tab links and sections
+        editItemTabLinks.forEach((link) => link.classList.remove("active"));
+        editItemTabContents.forEach((section) =>
+          section.classList.remove("active")
+        );
+        editItemTabContents.forEach(
+          (section) => (section.style.display = "none")
+        );
+
+        // Add active class to the clicked tab and corresponding section
+        this.classList.add("active");
+        const target = document.getElementById(this.getAttribute("data-tab"));
+        target.classList.add("active");
+        target.style.display = "block";
+      });
+    });
 
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -940,14 +940,6 @@
         editItemBlueprintForm.style.display = "none";
       });
 
-    function hideEditItemTabs() {
-      editItemWeaponTab.style.display = "none";
-      editItemArmorTab.style.display = "none";
-      editItemItemNodesTab.style.display = "none";
-      editItemSpellTab.style.display = "none";
-      editItemAffixesTab.style.display = "none";
-    }
-
     editItemType.addEventListener("change", function (event) {
       hideAndShowEditItemTabs();
     });
@@ -978,6 +970,17 @@
         loadNodeList(selectedItem.itemNodes, editItemItemNodeList);
       });
 
+    editItemSelectItem.addEventListener("change", (e) => {
+      selectedItemId = e.target.value;
+      clearUl(editItemItemNodeList);
+      populateEditItemFieldsFromId(selectedItemId);
+      hideAndShowEditItemTabs();
+    });
+
+    editItemFood.addEventListener("change", (e) => {
+      hideAndShowEditItemTabs();
+    });
+
     socket.on("openEditItemBlueprintForm", (formData) => {
       itemBlueprintFullData = formData.itemBlueprintFullData;
       itemBlueprintList = formData.itemBlueprintList;
@@ -1006,7 +1009,14 @@
       hideAndShowEditItemTabs();
     });
 
-    // populate the fields when user selects item from the dropdown
+    function hideEditItemTabs() {
+      editItemWeaponTab.style.display = "none";
+      editItemArmorTab.style.display = "none";
+      editItemItemNodesTab.style.display = "none";
+      editItemSpellTab.style.display = "none";
+      editItemAffixesTab.style.display = "none";
+    }
+
     function populateEditItemFieldsFromId(selectedItemId) {
       // Find the selected item data
       selectedItem = itemBlueprintFullData.find(
@@ -1191,16 +1201,5 @@
         editItemSpellTab.style.display = "none";
       }
     }
-
-    editItemSelectItem.addEventListener("change", (e) => {
-      selectedItemId = e.target.value;
-      clearUl(editItemItemNodeList);
-      populateEditItemFieldsFromId(selectedItemId);
-      hideAndShowEditItemTabs();
-    });
-    
-    editItemFood.addEventListener("change", (e) => {
-      hideAndShowEditItemTabs();
-    });
   });
 </script>

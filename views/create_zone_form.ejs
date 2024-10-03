@@ -5,14 +5,12 @@
   style="display: none"
   autocomplete="off"
 >
-<ul>
-  <li>
-    <a class="cancelButton" id="cancelCreateZoneForm"> Cancel </a>
-  </li>
-</ul>
-<h2>
-  Create Zone
-</h2>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelCreateZoneForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Create Zone</h2>
   <ul>
     <li>
       <label for="newZoneName">Name:</label>
@@ -39,7 +37,7 @@
     <h3>Description</h3>
     <li>
       <label for="newLookZone">Look:</label>
-      <input id="newLookZone" name="newLookZone" type="text" maxlength="80"/>
+      <input id="newLookZone" name="newLookZone" type="text" maxlength="80" />
     </li>
     <li>
       <label for="newExamineZone">Examine:</label>
@@ -78,36 +76,40 @@
 </form>
 
 <script>
-  const createZoneForm = document.getElementById("createZoneForm");
+  document.addEventListener("DOMContentLoaded", () => {
+    const createZoneForm = document.getElementById("createZoneForm");
 
-  createZoneForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const createZoneFormData = {
-      name: document.getElementById("newZoneName").value,
-      minutesToRepop: Number(document.getElementById("newZoneMinutesToRepop").value),
-      description: {
-        look: document.getElementById("newLookZone").value,
-        examine: document.getElementById("newExamineZone").value,
-        study: document.getElementById("newStudyZone").value,
-        research: document.getElementById("newResearchZone").value,
-      },
-    };
-    socket.emit("userSubmittedNewZone", createZoneFormData);
-    createZoneForm.reset();
-    createZoneForm.style.display = "none"; // Hide the form after submission
-  });
-
-  document
-    .getElementById("cancelCreateZoneForm")
-    .addEventListener("click", function () {
-      createZoneForm.style.display = "none";
+    createZoneForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const createZoneFormData = {
+        name: document.getElementById("newZoneName").value,
+        minutesToRepop: Number(
+          document.getElementById("newZoneMinutesToRepop").value
+        ),
+        description: {
+          look: document.getElementById("newLookZone").value,
+          examine: document.getElementById("newExamineZone").value,
+          study: document.getElementById("newStudyZone").value,
+          research: document.getElementById("newResearchZone").value,
+        },
+      };
+      socket.emit("userSubmittedNewZone", createZoneFormData);
+      createZoneForm.reset();
+      createZoneForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("openCreateZoneForm", () => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = createZoneForm;
-    activeForm.style.display = "block";
-    input.value = "";
+    document
+      .getElementById("cancelCreateZoneForm")
+      .addEventListener("click", function () {
+        createZoneForm.style.display = "none";
+      });
+
+    socket.on("openCreateZoneForm", () => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = createZoneForm;
+      activeForm.style.display = "block";
+      input.value = "";
+    });
   });
 </script>

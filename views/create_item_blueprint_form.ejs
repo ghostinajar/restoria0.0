@@ -127,58 +127,62 @@
 </form>
 
 <script>
-  const createItemBlueprintForm = document.getElementById(
-    "createItemBlueprintForm"
-  );
+  document.addEventListener("DOMContentLoaded", () => {
+    const createItemBlueprintForm = document.getElementById(
+      "createItemBlueprintForm"
+    );
 
-  createItemBlueprintForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const createItemBlueprintFormData = {
-      name: document.getElementById("newItemName").value,
-      keywords: document.getElementById("newItemKeywords").value.split(/[ ,]+/),
-      price: document.getElementById("newItemPrice").value,
-      minimumLevel: document.getElementById("newItemMinimumLevel").value,
-      itemType: document.getElementById("newItemType").value,
-      description: {
-        look: document.getElementById("newLookItem").value,
-        examine: document.getElementById("newExamineItem").value,
-        study: document.getElementById("newStudyItem").value,
-        research: document.getElementById("newResearchItem").value,
-      },
-      tags: {
-        cleric: true,
-        mage: true,
-        rogue: true,
-        warrior: true,
-        dark: true,
-        neutral: true,
-        light: true, //can be equipped by players with a light aura
-        guild: false,
-        food: false,
-        lamp: false, //lights up the room
-        hidden: false,
-        fixture: false,
-        quest: false,
-        temporary: false,
-        container: document.getElementById("newItemIsContainer").checked,
-      },
-    };
-    socket.emit("userSubmittedNewItemBlueprint", createItemBlueprintFormData);
-    createItemBlueprintForm.reset();
-    createItemBlueprintForm.style.display = "none"; // Hide the form after submission
-  });
-
-  document
-    .getElementById("cancelCreateItemBlueprintForm")
-    .addEventListener("click", function () {
-      createItemBlueprintForm.style.display = "none";
+    createItemBlueprintForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const createItemBlueprintFormData = {
+        name: document.getElementById("newItemName").value,
+        keywords: document
+          .getElementById("newItemKeywords")
+          .value.split(/[ ,]+/),
+        price: document.getElementById("newItemPrice").value,
+        minimumLevel: document.getElementById("newItemMinimumLevel").value,
+        itemType: document.getElementById("newItemType").value,
+        description: {
+          look: document.getElementById("newLookItem").value,
+          examine: document.getElementById("newExamineItem").value,
+          study: document.getElementById("newStudyItem").value,
+          research: document.getElementById("newResearchItem").value,
+        },
+        tags: {
+          cleric: true,
+          mage: true,
+          rogue: true,
+          warrior: true,
+          dark: true,
+          neutral: true,
+          light: true, //can be equipped by players with a light aura
+          guild: false,
+          food: false,
+          lamp: false, //lights up the room
+          hidden: false,
+          fixture: false,
+          quest: false,
+          temporary: false,
+          container: document.getElementById("newItemIsContainer").checked,
+        },
+      };
+      socket.emit("userSubmittedNewItemBlueprint", createItemBlueprintFormData);
+      createItemBlueprintForm.reset();
+      createItemBlueprintForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("openCreateItemBlueprintForm", (formData) => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = createItemBlueprintForm;
-    activeForm.style.display = "block";
-    input.value = "";
+    document
+      .getElementById("cancelCreateItemBlueprintForm")
+      .addEventListener("click", function () {
+        createItemBlueprintForm.style.display = "none";
+      });
+
+    socket.on("openCreateItemBlueprintForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = createItemBlueprintForm;
+      activeForm.style.display = "block";
+      input.value = "";
+    });
   });
 </script>

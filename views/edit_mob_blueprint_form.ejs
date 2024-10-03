@@ -428,29 +428,10 @@
       "editMobBlueprintForm"
     );
 
-    // Tab menu
     const editMobTabLinks = document.querySelectorAll(".edit-mob-tab-link");
     const editMobTabContents = document.querySelectorAll(
       ".edit-mob-tab-content"
     );
-    editMobTabLinks.forEach((link) => {
-      link.addEventListener("click", function () {
-        // Remove active class from all tab links and sections
-        editMobTabLinks.forEach((link) => link.classList.remove("active"));
-        editMobTabContents.forEach((section) =>
-          section.classList.remove("active")
-        );
-        editMobTabContents.forEach(
-          (section) => (section.style.display = "none")
-        );
-
-        // Add active class to the clicked tab and corresponding section
-        this.classList.add("active");
-        const target = document.getElementById(this.getAttribute("data-tab"));
-        target.classList.add("active");
-        target.style.display = "block";
-      });
-    });
 
     const editMobIdDisplay = document.getElementById("editMobIdDisplay");
 
@@ -503,6 +484,26 @@
     let itemBlueprintList;
     let mobBlueprintFullData;
     let selectedMobId = "";
+
+    // Tab menu listeners
+    editMobTabLinks.forEach((link) => {
+      link.addEventListener("click", function () {
+        // Remove active class from all tab links and sections
+        editMobTabLinks.forEach((link) => link.classList.remove("active"));
+        editMobTabContents.forEach((section) =>
+          section.classList.remove("active")
+        );
+        editMobTabContents.forEach(
+          (section) => (section.style.display = "none")
+        );
+
+        // Add active class to the clicked tab and corresponding section
+        this.classList.add("active");
+        const target = document.getElementById(this.getAttribute("data-tab"));
+        target.classList.add("active");
+        target.style.display = "block";
+      });
+    });
 
     editMobBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -584,6 +585,12 @@
         document.getElementById("editMobSelectMob")
       );
       selectedMobId = mobBlueprintList[0].id;
+      populateEditMobFieldsFromId(selectedMobId);
+    });
+
+    editMobSelectMob.addEventListener("change", (e) => {
+      selectedMobId = e.target.value;
+      clearUl(editMobItemNodeList);
       populateEditMobFieldsFromId(selectedMobId);
     });
 
@@ -693,11 +700,5 @@
         return; // Exit the function once found and deleted
       }
     }
-
-    editMobSelectMob.addEventListener("change", (e) => {
-      selectedMobId = e.target.value;
-      clearUl(editMobItemNodeList);
-      populateEditMobFieldsFromId(selectedMobId);
-    });
   });
 </script>

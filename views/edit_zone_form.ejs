@@ -75,54 +75,51 @@
 </form>
 
 <script>
-  let zoneId;
-  const editZoneForm = document.getElementById("editZoneForm");
-
   document.addEventListener("DOMContentLoaded", () => {
-    // preset values from server data
-  });
-
-  editZoneForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const editZoneFormData = {
-      name: document.getElementById("editZoneName").value,
-      minutesToRepop: document.getElementById("editZoneMinutesToRepop").value,
-      description: {
-        look: document.getElementById("editLookZone").value,
-        examine: document.getElementById("editExamineZone").value,
-        study: document.getElementById("editStudyZone").value,
-        research: document.getElementById("editResearchZone").value,
-      },
-    };
-    socket.emit("userSubmittedEditZone", editZoneFormData);
-    editZoneForm.reset();
-    editZoneForm.style.display = "none"; // Hide the form after submission
-  });
-
-  document
-    .getElementById("cancelEditZoneForm")
-    .addEventListener("click", function () {
-      editZoneForm.style.display = "none";
+    let zoneId;
+    const editZoneForm = document.getElementById("editZoneForm");
+    editZoneForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const editZoneFormData = {
+        name: document.getElementById("editZoneName").value,
+        minutesToRepop: document.getElementById("editZoneMinutesToRepop").value,
+        description: {
+          look: document.getElementById("editLookZone").value,
+          examine: document.getElementById("editExamineZone").value,
+          study: document.getElementById("editStudyZone").value,
+          research: document.getElementById("editResearchZone").value,
+        },
+      };
+      socket.emit("userSubmittedEditZone", editZoneFormData);
+      editZoneForm.reset();
+      editZoneForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("openEditZoneForm", (formData) => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = editZoneForm;
-    activeForm.style.display = "block";
-    input.value = "";
-    // Set the values of the fields based on formData
-    zoneId = formData.zoneId;
-    document.getElementById("editZoneName").value = formData.name || "";
-    document.getElementById("editZoneMinutesToRepop").value =
-      formData.minutesToRepop || 15;
-    document.getElementById("editLookZone").value =
-      formData.description.look || "";
-    document.getElementById("editExamineZone").value =
-      formData.description.examine || "";
-    document.getElementById("editStudyZone").value =
-      formData.description.study || "";
-    document.getElementById("editResearchZone").value =
-      formData.description.research || "";
+    document
+      .getElementById("cancelEditZoneForm")
+      .addEventListener("click", function () {
+        editZoneForm.style.display = "none";
+      });
+
+    socket.on("openEditZoneForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = editZoneForm;
+      activeForm.style.display = "block";
+      input.value = "";
+      // Set the values of the fields based on formData
+      zoneId = formData.zoneId;
+      document.getElementById("editZoneName").value = formData.name || "";
+      document.getElementById("editZoneMinutesToRepop").value =
+        formData.minutesToRepop || 15;
+      document.getElementById("editLookZone").value =
+        formData.description.look || "";
+      document.getElementById("editExamineZone").value =
+        formData.description.examine || "";
+      document.getElementById("editStudyZone").value =
+        formData.description.study || "";
+      document.getElementById("editResearchZone").value =
+        formData.description.research || "";
+    });
   });
 </script>

@@ -22,29 +22,29 @@
         required
       />
     </li>
-      <li>
-        <label for="newMobKeywords">Keywords:</label>
-        <input
-          id="newMobKeywords"
-          name="newMobKeywords"
-          maxlength="80"
-          required
-        />
-      </li>
+    <li>
+      <label for="newMobKeywords">Keywords:</label>
+      <input
+        id="newMobKeywords"
+        name="newMobKeywords"
+        maxlength="80"
+        required
+      />
+    </li>
 
-      <li>
-        <label for="newMobPronouns">Pronouns:</label>
-        <select id="newMobPronouns" name="newMobPronouns" required>
-          <option value="0">He/Him</option>
-          <option value="1">It/It</option>
-          <option value="2">She/Her</option>
-          <option value="3">They/Them</option>
-        </select>
-      </li>
+    <li>
+      <label for="newMobPronouns">Pronouns:</label>
+      <select id="newMobPronouns" name="newMobPronouns" required>
+        <option value="0">He/Him</option>
+        <option value="1">It/It</option>
+        <option value="2">She/Her</option>
+        <option value="3">They/Them</option>
+      </select>
+    </li>
     <li style="display: inline-block">
       <label for="newMobLevel">Level:</label>
       <input
-        style="width: 3.9rem;"
+        style="width: 3.9rem"
         type="number"
         id="newMobLevel"
         name="newMobLevel"
@@ -63,7 +63,7 @@
         <option value="warrior">Warrior</option>
       </select>
     </li>
-    
+
     <h3>Description</h3>
     <li>
       <label for="newLookMob">Look:</label>
@@ -101,54 +101,58 @@
 </form>
 
 <script>
-  const createMobBlueprintForm = document.getElementById(
-    "createMobBlueprintForm"
-  );
+  document.addEventListener("DOMContentLoaded", () => {
+    const createMobBlueprintForm = document.getElementById(
+      "createMobBlueprintForm"
+    );
 
-  createMobBlueprintForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const createMobBlueprintFormData = {
-      _id: "",
-      name: document.getElementById("newMobName").value,
-      pronouns: Number(document.getElementById("newMobPronouns").value),
-      level: Number(document.getElementById("newMobLevel").value),
-      job: document.getElementById("newMobJob").value,
-      statBlock: {
-        strength: 10,
-        dexterity: 10,
-        constitution: 10,
-        intelligence: 10,
-        wisdom: 10,
-        charisma:10,
-        spirit: 0,
-      },
-      keywords: document.getElementById("newMobKeywords").value.split(/[ ,]+/),
-      isUnique: false,
-      isMount: false,
-      isAggressive: false,
-      description: {
-        look: document.getElementById("newLookMob").value,
-        examine: document.getElementById("newExamineMob").value,
-        study: document.getElementById("newStudyMob").value,
-        research: document.getElementById("newResearchMob").value,
-      },
-    };
-    socket.emit("userSubmittedNewMobBlueprint", createMobBlueprintFormData);
-    createMobBlueprintForm.reset();
-    createMobBlueprintForm.style.display = "none"; // Hide the form after submission
-  });
-
-  document
-    .getElementById("cancelCreateMobBlueprintForm")
-    .addEventListener("click", function () {
-      createMobBlueprintForm.style.display = "none";
+    createMobBlueprintForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const createMobBlueprintFormData = {
+        _id: "",
+        name: document.getElementById("newMobName").value,
+        pronouns: Number(document.getElementById("newMobPronouns").value),
+        level: Number(document.getElementById("newMobLevel").value),
+        job: document.getElementById("newMobJob").value,
+        statBlock: {
+          strength: 10,
+          dexterity: 10,
+          constitution: 10,
+          intelligence: 10,
+          wisdom: 10,
+          charisma: 10,
+          spirit: 0,
+        },
+        keywords: document
+          .getElementById("newMobKeywords")
+          .value.split(/[ ,]+/),
+        isUnique: false,
+        isMount: false,
+        isAggressive: false,
+        description: {
+          look: document.getElementById("newLookMob").value,
+          examine: document.getElementById("newExamineMob").value,
+          study: document.getElementById("newStudyMob").value,
+          research: document.getElementById("newResearchMob").value,
+        },
+      };
+      socket.emit("userSubmittedNewMobBlueprint", createMobBlueprintFormData);
+      createMobBlueprintForm.reset();
+      createMobBlueprintForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("opencreateMobBlueprintForm", (formData) => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = createMobBlueprintForm;
-    activeForm.style.display = "block";
-    input.value = "";
+    document
+      .getElementById("cancelCreateMobBlueprintForm")
+      .addEventListener("click", function () {
+        createMobBlueprintForm.style.display = "none";
+      });
+
+    socket.on("opencreateMobBlueprintForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = createMobBlueprintForm;
+      activeForm.style.display = "block";
+      input.value = "";
+    });
   });
 </script>

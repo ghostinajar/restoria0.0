@@ -108,52 +108,54 @@
 </form>
 
 <script>
-  const createRoomForm = document.getElementById("createRoomForm");
-  const directionSelect = document.getElementById("newRoomDirection");
+  document.addEventListener("DOMContentLoaded", () => {
+    const createRoomForm = document.getElementById("createRoomForm");
+    const directionSelect = document.getElementById("newRoomDirection");
 
-  createRoomForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const roomData = {
-      name: document.getElementById("newRoomName").value,
-      direction: document.getElementById("newRoomDirection").value,
-      isDark: document.getElementById("newIsDark").checked,
-      isIndoors: document.getElementById("newIsIndoors").checked,
-      isOnWater: document.getElementById("newIsOnWater").checked,
-      isUnderwater: document.getElementById("newIsUnderwater").checked,
-      noMounts: false,
-      noMobs: false,
-      noMagic: false,
-      noCombat: false,
-      examine: document.getElementById("newExamineRoom").value,
-      study: document.getElementById("newStudyRoom").value,
-      research: document.getElementById("newResearchRoom").value,
-    };
-    socket.emit("userSubmittedNewRoom", roomData);
-    createRoomForm.reset();
-    createRoomForm.style.display = "none"; // Hide the form after submission
-  });
-
-  document
-    .getElementById("cancelCreateRoomForm")
-    .addEventListener("click", function () {
-      createRoomForm.style.display = "none";
+    createRoomForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const roomData = {
+        name: document.getElementById("newRoomName").value,
+        direction: document.getElementById("newRoomDirection").value,
+        isDark: document.getElementById("newIsDark").checked,
+        isIndoors: document.getElementById("newIsIndoors").checked,
+        isOnWater: document.getElementById("newIsOnWater").checked,
+        isUnderwater: document.getElementById("newIsUnderwater").checked,
+        noMounts: false,
+        noMobs: false,
+        noMagic: false,
+        noCombat: false,
+        examine: document.getElementById("newExamineRoom").value,
+        study: document.getElementById("newStudyRoom").value,
+        research: document.getElementById("newResearchRoom").value,
+      };
+      socket.emit("userSubmittedNewRoom", roomData);
+      createRoomForm.reset();
+      createRoomForm.style.display = "none"; // Hide the form after submission
     });
 
-  socket.on("openCreateRoomForm", (formData) => {
-    activeForm.reset();
-    activeForm.style.display = "none";
-    activeForm = createRoomForm;
-    activeForm.style.display = "block";
-    input.value = "";
+    document
+      .getElementById("cancelCreateRoomForm")
+      .addEventListener("click", function () {
+        createRoomForm.style.display = "none";
+      });
 
-    // Update the direction select element
-    directionSelect.innerHTML = ""; // Clear existing options
+    socket.on("openCreateRoomForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = createRoomForm;
+      activeForm.style.display = "block";
+      input.value = "";
 
-    formData.unusedExits.forEach((exit) => {
-      const option = document.createElement("option");
-      option.value = exit;
-      option.textContent = exit;
-      directionSelect.appendChild(option);
+      // Update the direction select element
+      directionSelect.innerHTML = ""; // Clear existing options
+
+      formData.unusedExits.forEach((exit) => {
+        const option = document.createElement("option");
+        option.value = exit;
+        option.textContent = exit;
+        directionSelect.appendChild(option);
+      });
     });
   });
 </script>

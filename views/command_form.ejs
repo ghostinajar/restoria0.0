@@ -5,44 +5,47 @@
 </form>
 
 <script>
-  const commandForm = document.getElementById("commandForm");
   const input = document.getElementById("commandInput");
-  const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
 
-  function isValidCommandWord(commandWord) {
-    if (!validCommandWords.includes(commandWord.toLowerCase())) {
-      return false;
-    }
-    return true;
-  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const commandForm = document.getElementById("commandForm");
+    const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
 
-  function parseCommand(command) {
-    const parsedCommand = {};
-    const splitCommand = command.split(" ");
-    parsedCommand.commandWord = splitCommand[0];
-    if (splitCommand.length > 1) {
-      parsedCommand.string = splitCommand.slice(1).join(" ");
-    }
-    return parsedCommand;
-  }
-
-  commandForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (input.value) {
-      const parsedCommand = parseCommand(input.value);
-      //reject invalid command words
-
-      if (!isValidCommandWord(parsedCommand.commandWord)) {
-        const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
-        appendMessageToTerminal({
-          type: "rejection",
-          content: `Sorry, '${shortenedCommand}' is not a valid command word.`,
-        });
-        input.value = "";
-        return;
+    function isValidCommandWord(commandWord) {
+      if (!validCommandWords.includes(commandWord.toLowerCase())) {
+        return false;
       }
-      socket.emit("userSentCommand", input.value);
-      input.value = "";
+      return true;
     }
+
+    function parseCommand(command) {
+      const parsedCommand = {};
+      const splitCommand = command.split(" ");
+      parsedCommand.commandWord = splitCommand[0];
+      if (splitCommand.length > 1) {
+        parsedCommand.string = splitCommand.slice(1).join(" ");
+      }
+      return parsedCommand;
+    }
+
+    commandForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (input.value) {
+        const parsedCommand = parseCommand(input.value);
+        //reject invalid command words
+
+        if (!isValidCommandWord(parsedCommand.commandWord)) {
+          const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
+          appendMessageToTerminal({
+            type: "rejection",
+            content: `Sorry, '${shortenedCommand}' is not a valid command word.`,
+          });
+          input.value = "";
+          return;
+        }
+        socket.emit("userSentCommand", input.value);
+        input.value = "";
+      }
+    });
   });
 </script>
