@@ -2,6 +2,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone.js";
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
+import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 async function erase(user) {
@@ -11,16 +12,14 @@ async function erase(user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You aren't an author for this zone.`));
         return;
     }
+    const roomNames = getRoomNamesFromZone(zone);
+    //TODO derive exitNames from roomNames and room.exits
+    const exitNames = {};
     worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `eraseForm`,
         itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
         mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
-        //TODO implement getNextRoomListFromRoom (maybe refactor from create room?)
-        //nextRoomList: getNextRoomListFromRoom(room)
-        //TODO implement getUserList
-        //userList: getUserListOfAuthor(user),
-        //TODO implement getZoneListOfAuthor
-        //zoneLIst: getZoneListOfAuthor(user)
+        exitNames: exitNames,
     });
 }
 export default erase;
