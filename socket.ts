@@ -24,7 +24,7 @@ import {
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
-import editRoom, { IEditRoomData } from "./commands/editRoom.js";
+import editRoom, { IEditRoomFormData } from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint, {
   IMobBlueprintData,
@@ -213,7 +213,7 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(`userSubmittedRoomEdit`, async (roomData: IEditRoomData) => {
+      socket.on(`userSubmittedRoomEdit`, async (roomData: IEditRoomFormData) => {
         const room = await getRoomOfUser(user);
         await editRoom(room, roomData, user);
         stats(user);

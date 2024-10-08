@@ -1,7 +1,7 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
-import getItemBlueprintListFromZone from "../util/getItemBlueprintListFromZone.js";
-import getMobBlueprintListFromZone from "../util/getMobBlueprintListFromZone.js";
+import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone.js";
+import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 async function edit(parsedCommand, user) {
@@ -21,7 +21,7 @@ async function edit(parsedCommand, user) {
         case `item`: {
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editItemBlueprintForm`,
-                itemBlueprintList: getItemBlueprintListFromZone(zone),
+                itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
                 itemBlueprintFullData: zone.itemBlueprints,
             });
             break;
@@ -30,18 +30,18 @@ async function edit(parsedCommand, user) {
             const zone = await getZoneOfUser(user);
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editMobBlueprintForm`,
-                mobBlueprintList: getMobBlueprintListFromZone(zone),
+                mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
                 mobBlueprintFullData: zone.mobBlueprints,
-                itemBlueprintList: getItemBlueprintListFromZone(zone),
+                itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
             });
             break;
         }
         case `room`: {
             const room = await getRoomOfUser(user);
-            const itemBlueprintList = getItemBlueprintListFromZone(zone);
-            const mobBlueprintList = getMobBlueprintListFromZone(zone);
-            const itemNodesList = getItemNodeList(room, zone);
-            const mobNodesList = getMobNodeList(room, zone);
+            const itemBlueprintNames = getItemBlueprintNamesFromZone(zone);
+            const mobBlueprintNames = getMobBlueprintNamesFromZone(zone);
+            const itemNodes = getItemNodesFromRoom(room, zone);
+            const mobNodes = getMobNodesFromRoom(room, zone);
             const roomList = getRoomList(zone);
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `editRoomForm`,
@@ -57,13 +57,13 @@ async function edit(parsedCommand, user) {
                     noMobs: room.noMobs,
                     noMagic: room.noMagic,
                     noCombat: room.noCombat,
-                    mobNodes: mobNodesList,
-                    itemNodes: itemNodesList,
+                    mobNodes: mobNodes,
+                    itemNodes: itemNodes,
                     exits: room.exits,
                 },
                 zoneData: {
-                    items: itemBlueprintList,
-                    mobs: mobBlueprintList,
+                    itemBlueprintNames: itemBlueprintNames,
+                    mobBlueprintNames: mobBlueprintNames,
                     rooms: roomList,
                 },
             });
@@ -96,29 +96,29 @@ async function edit(parsedCommand, user) {
         }
     }
 }
-function getItemNodeList(room, zone) {
+function getItemNodesFromRoom(room, zone) {
     let itemNodesList = [];
     for (let node of room.itemNodes) {
         const itemName = getNameById(zone.itemBlueprints, node.loadsBlueprintId.toString());
         //TODO handle cases where the item originates in another zone
         const nodeObject = {
-            id: node._id,
-            blueprintId: node.loadsBlueprintId,
-            value: itemName || "",
+            _id: node._id,
+            loadsBlueprintId: node.loadsBlueprintId,
+            name: itemName || "",
         };
         itemNodesList.push(nodeObject);
     }
     return itemNodesList;
 }
-function getMobNodeList(room, zone) {
+function getMobNodesFromRoom(room, zone) {
     let mobNodesList = [];
     for (let node of room.mobNodes) {
         const mobName = getNameById(zone.mobBlueprints, node.loadsBlueprintId.toString());
         //TODO handle cases where the mob originates in another zone
         const nodeObject = {
-            id: node._id,
-            blueprintId: node.loadsBlueprintId,
-            value: mobName,
+            _id: node._id,
+            loadsBlueprintId: node.loadsBlueprintId,
+            name: mobName,
         };
         mobNodesList.push(nodeObject);
     }

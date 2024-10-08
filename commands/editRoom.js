@@ -6,7 +6,6 @@ import makeMessage from "../types/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 async function editRoom(room, roomData, user) {
-    let changed = false;
     if (!room || !roomData || !user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejected`, `Oops! Can't seem to edit this room.`));
         return;
@@ -41,7 +40,7 @@ async function editRoom(room, roomData, user) {
     roomData.mobNodes.forEach((node) => {
         room.mobNodes.push({
             _id: new mongoose.Types.ObjectId(),
-            loadsBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+            loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
             fromZoneId: zone._id,
         });
     });
@@ -50,7 +49,7 @@ async function editRoom(room, roomData, user) {
     roomData.itemNodes.forEach((node) => {
         room.itemNodes.push({
             _id: new mongoose.Types.ObjectId(),
-            loadsBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+            loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
             fromZoneId: zone._id,
         });
     });

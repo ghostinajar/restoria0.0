@@ -13,7 +13,7 @@ import { IMobNode } from "../model/classes/MobNode.js";
 import { IItemNode } from "../model/classes/ItemNode.js";
 import { IExit } from "../model/classes/Exit.js";
 
-export interface IEditRoomData {
+export interface IEditRoomFormData {
   _id: string | mongoose.Types.ObjectId;
   name: string;
   description: IDescription;
@@ -27,8 +27,8 @@ export interface IEditRoomData {
   noCombat: boolean;
   playerCap: number;
   mobCap: number;
-  mobNodes: Array<{ id: string; blueprintId: string; value: string }>;
-  itemNodes: Array<{ id: string; blueprintId: string; value: string }>;
+  mobNodes: Array<{ _id: string; loadsBlueprintId: string; name: string }>;
+  itemNodes: Array<{ _id: string; loadsBlueprintId: string; name: string }>;
   exits: {
     north?: IExit;
     south?: IExit;
@@ -39,8 +39,7 @@ export interface IEditRoomData {
   };
 }
 
-async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
-  let changed = false;
+async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
   if (!room || !roomData || !user) {
     worldEmitter.emit(
       `messageFor${user.username}`,
@@ -84,7 +83,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   roomData.mobNodes.forEach((node) => {
     room.mobNodes.push({
       _id: new mongoose.Types.ObjectId(),
-      loadsBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+      loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
       fromZoneId: zone._id,
     });
   });
@@ -93,7 +92,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomData, user: IUser) {
   roomData.itemNodes.forEach((node) => {
     room.itemNodes.push({
       _id: new mongoose.Types.ObjectId(),
-      loadsBlueprintId: new mongoose.Types.ObjectId(node.blueprintId),
+      loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
       fromZoneId: zone._id,
     });
   });

@@ -76,8 +76,8 @@
         select.options.length = 0;
         for (let i = 0; i <= stringArray.length - 1; i++) {
           const option = document.createElement("option");
-          option.value = stringArray[i].id;
-          option.textContent = stringArray[i].value;
+          option.value = stringArray[i]._id;
+          option.textContent = stringArray[i].name;
           select.appendChild(option);
         }
       }
@@ -104,10 +104,10 @@
         console.log(node);
         console.log(blueprints);
         nodeName = blueprints.find(
-          (blueprint) => blueprint.id === node.loadsBlueprintId
-        ).value;
+          (blueprint) => blueprint._id === node.loadsBlueprintId
+        ).name;
 
-        liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeName}</span><span class="nodeId">id: ${node.blueprintId}</span></div>`;
+        liElement.innerHTML = `<div class="nodeInfo"><span class="nodeName">${nodeName}</span><span class="nodeId">id: ${node.loadsBlueprintId}</span></div>`;
 
         // Create a delete button
         const deleteButton = document.createElement("button");
@@ -116,7 +116,7 @@
         deleteButton.type = "button";
         deleteButton.onclick = function () {
           ulElement.removeChild(liElement);
-          deleteNodeById(node.id, nodes, ulElement, blueprints);
+          deleteNodeById(node._id, nodes, ulElement, blueprints);
         };
 
         // Append the delete button to the <li>
@@ -127,7 +127,7 @@
       }
 
       function deleteNodeById(id, nodes, ulElement, blueprints) {
-        let index = nodes.findIndex((node) => node.id === id);
+        let index = nodes.findIndex((node) => node._id === id);
         if (index !== -1) {
           nodes.splice(index, 1);
           clearUl(ulElement);

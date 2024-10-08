@@ -785,7 +785,7 @@
 
     // to hold data from server on "edit item" command
     let selectedItem;
-    let itemBlueprintList;
+    let itemBlueprintNames;
     let itemBlueprintFullData;
     let selectedItemId = "";
 
@@ -967,7 +967,7 @@
         loadNodesToUlElement(
           editItemItemNodeList,
           selectedItem.itemNodes,
-          itemBlueprintList
+          itemBlueprintNames
         );
       });
 
@@ -984,13 +984,13 @@
 
     socket.on("openEditItemBlueprintForm", (formData) => {
       itemBlueprintFullData = formData.itemBlueprintFullData;
-      itemBlueprintList = formData.itemBlueprintList;
+      itemBlueprintNames = formData.itemBlueprintNames;
 
       // prepare fresh editItemBlueprintForm
       editItemBlueprintForm.reset();
       clearUl(editItemItemNodeList);
       generateStringSelectOptions(
-        itemBlueprintList,
+        itemBlueprintNames,
         document.getElementById("editItemItemNodeSelect")
       );
 
@@ -1002,10 +1002,10 @@
       document.querySelector("#editItemFirstTabLink").click();
       input.value = "";
       generateStringSelectOptions(
-        formData.itemBlueprintList,
+        formData.itemBlueprintNames,
         document.getElementById("editItemSelectItem")
       );
-      selectedItemId = itemBlueprintList[0].id;
+      selectedItemId = itemBlueprintNames[0]._id;
       populateEditItemFieldsFromId(selectedItemId);
       hideAndShowEditItemTabs();
     });
@@ -1077,7 +1077,7 @@
           loadNodesToUlElement(
             editItemItemNodeList,
             selectedItem.itemNodes,
-            itemBlueprintList
+            itemBlueprintNames
           );
         }
 
@@ -1139,8 +1139,10 @@
           break;
       }
       if (editItemContainer.checked) {
+        console.log("editItemContainer is checked")
         editItemItemNodesTab.style.display = "inline-block";
       } else {
+        console.log("editItemContainer is not checked")
         editItemItemNodesTab.style.display = "none";
       }
       if (editItemFood.checked) {

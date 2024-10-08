@@ -481,7 +481,7 @@
 
     // to hold data from server on "edit item" command
     let selectedMob;
-    let itemBlueprintList;
+    let itemBlueprintNames;
     let mobBlueprintFullData;
     let selectedMobId = "";
 
@@ -562,14 +562,14 @@
         loadNodesToUlElement(
           editMobItemNodeList,
           selectedMob.itemNodes,
-          itemBlueprintList
+          itemBlueprintNames
         );
       });
 
     socket.on("openEditMobBlueprintForm", (formData) => {
-      mobBlueprintList = formData.mobBlueprintList;
+      mobBlueprintNames = formData.mobBlueprintNames;
       mobBlueprintFullData = formData.mobBlueprintFullData;
-      itemBlueprintList = formData.itemBlueprintList;
+      itemBlueprintNames = formData.itemBlueprintNames;
 
       //reset/hide open forms, show editItemBlueprintForm
       activeForm.reset();
@@ -578,14 +578,14 @@
       activeForm.style.display = "block";
       input.value = "";
       generateStringSelectOptions(
-        formData.itemBlueprintList,
+        formData.itemBlueprintNames,
         document.getElementById("editMobItemNodeSelect")
       );
       generateStringSelectOptions(
-        formData.mobBlueprintList,
+        formData.mobBlueprintNames,
         document.getElementById("editMobSelectMob")
       );
-      selectedMobId = mobBlueprintList[0].id;
+      selectedMobId = mobBlueprintNames[0].id;
       populateEditMobFieldsFromId(selectedMobId);
     });
 
@@ -627,7 +627,7 @@
           loadNodesToUlElement(
             editMobItemNodeList,
             selectedMob.itemNodes,
-            itemBlueprintList
+            itemBlueprintNames
           );
         }
 

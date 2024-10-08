@@ -274,31 +274,11 @@
     );
     const editRoomExitList = document.getElementById("editRoomExitList");
 
-    // form sections (TODO is it safe to delete all this functionality
-    // now that it's been replaced with tabs?)
-    const sectionsForEditRoom = {
-      editRoomDescriptionSection: document.getElementById(
-        "editRoomDescriptionSection"
-      ),
-      editRoomTagsSection: document.getElementById("editRoomTagsSection"),
-      editRoomMobNodesSection: document.getElementById(
-        "editRoomMobNodesSection"
-      ),
-      editRoomItemNodesSection: document.getElementById(
-        "editRoomItemNodesSection"
-      ),
-      editRoomExitsSection: document.getElementById("editRoomExitsSection"),
-    };
-
-    // for form pagination
-    let activeFormSectionForEditRoom =
-      sectionsForEditRoom.editRoomDescriptionSection;
-
     // to hold data from server on "edit room" command
     let workingEditRoomData;
-    let availableMobBlueprints;
-    let availableItemBlueprints;
-    let availableRooms;
+    let mobBlueprints;
+    let itemBlueprints;
+    let rooms;
 
     // Tab menu listeners
     editRoomTabLinks.forEach((link) => {
@@ -354,16 +334,6 @@
       editRoomForm.style.display = "none"; // Hide the form after submission
     });
 
-    //TODO can this be deleted now that it's been replaced by tabs?
-    editRoomForm.addEventListener("click", (e) => {
-      if (e.target.matches("[data-target]")) {
-        hideEditRoomFormSections();
-        activeFormSectionForEditRoom =
-          sectionsForEditRoom[e.target.dataset.target];
-        activeFormSectionForEditRoom.style.display = "block";
-      }
-    });
-
     document
       .getElementById("cancelEditRoomForm")
       .addEventListener("click", () => {
@@ -373,7 +343,7 @@
     document
       .getElementById("editRoomItemNodeAdd")
       .addEventListener("click", () => {
-        //push new node to list
+        //push new node to data
         workingEditRoomData.itemNodes.push({
           _id: Math.floor(Math.random() * 1000000000), // server will generate legit id on zone save
           loadsBlueprintId: editRoomItemNodeSelect.value,
@@ -383,13 +353,13 @@
         loadNodesToUlElement(
           editRoomItemNodeList,
           workingEditRoomData.itemNodes,
-          availableItemBlueprints
+          itemBlueprints
         );
       });
     document
       .getElementById("editRoomMobNodeAdd")
       .addEventListener("click", () => {
-        //push new node to list
+        //push new node to data
         workingEditRoomData.mobNodes.push({
           _id: Math.floor(Math.random() * 1000000000), // server will generate legit id on zone save
           loadsBlueprintId: editRoomMobNodeSelect.value,
@@ -399,35 +369,27 @@
         loadNodesToUlElement(
           editRoomMobNodeList,
           workingEditRoomData.mobNodes,
-          availableMobBlueprints
+          mobBlueprints
         );
       });
 
     socket.on("openEditRoomForm", (formData) => {
       // persist the data from server
       workingEditRoomData = formData.roomData;
-      availableMobBlueprints = formData.zoneData.mobs;
-      availableItemBlueprints = formData.zoneData.items;
-      availableRooms = formData.zoneData.rooms;
-
+      mobBlueprints = formData.zoneData.mobBlueprintNames;
+      itemBlueprints = formData.zoneData.itemBlueprintNames;
+      rooms = formData.zoneData.rooms;
       // prepare fresh editRoomForm
       editRoomForm.reset();
       clearUl(editRoomMobNodeList);
       clearUl(editRoomItemNodeList);
-
-      //TODO can this be deleted now that tabs have replaced it?
-      hideEditRoomFormSections();
-      activeFormSectionForEditRoom =
-        sectionsForEditRoom.editRoomDescriptionSection;
-      sectionsForEditRoom.editRoomDescriptionSection.style.display = "block";
-
       generateStringSelectOptions(
-        availableMobBlueprints,
-        document.getElementById("editRoomMobNodeSelect")
+        mobBlueprints,
+        editRoomMobNodeSelect
       );
       generateStringSelectOptions(
-        availableItemBlueprints,
-        document.getElementById("editRoomItemNodeSelect")
+        itemBlueprints,
+        editRoomItemNodeSelect
       );
 
       // reset/hide open forms, show editRoomForm
@@ -468,19 +430,10 @@
       document.getElementById("playerCap").value =
         workingEditRoomData.playerCap || 0;
       document.getElementById("mobCap").value = workingEditRoomData.mobCap || 0;
-      loadNodesToUlElement(editRoomMobNodeList, workingEditRoomData.mobNodes, availableMobBlueprints);
-      loadNodesToUlElement(editRoomItemNodeList, workingEditRoomData.itemNodes, availableItemBlueprints);
+      loadNodesToUlElement(editRoomMobNodeList, workingEditRoomData.mobNodes, mobBlueprints);
+      loadNodesToUlElement(editRoomItemNodeList, workingEditRoomData.itemNodes, itemBlueprints);
       loadExitList(workingEditRoomData.exits);
     });
-
-    //TODO can this be deleted now that tabs have replaced it?
-    function hideEditRoomFormSections() {
-      sectionsForEditRoom.editRoomDescriptionSection.style.display = "none";
-      sectionsForEditRoom.editRoomTagsSection.style.display = "none";
-      sectionsForEditRoom.editRoomMobNodesSection.style.display = "none";
-      sectionsForEditRoom.editRoomItemNodesSection.style.display = "none";
-      sectionsForEditRoom.editRoomExitsSection.style.display = "none";
-    }
 
     function loadExitList(exitList) {
       clearUl(editRoomExitList); // Clear the current list
@@ -493,7 +446,7 @@
           const liElement = document.createElement("li");
 
           // Display the direction and destination room name
-          const destinationRoom = availableRooms.find(
+          const destinationRoom = rooms.find(
             (room) => room.id === exitData.destinationLocation.inRoom
           );
 
@@ -508,7 +461,7 @@
                 <label for="${direction}KeyItemBlueprint">Key:</label>
                 <select class="stubbySelect" id="${direction}KeyItemBlueprint">
                   ${generateExitKeyOptions(
-                    availableItemBlueprints,
+                    itemBlueprints,
                     exitData.keyItemBlueprint
                   )}
                 </select>
