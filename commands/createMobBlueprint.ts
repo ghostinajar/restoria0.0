@@ -10,30 +10,23 @@ import { IZone } from "../model/classes/Zone.js";
 import { IDescription } from "../model/classes/Description.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IMobBlueprint } from "../model/classes/MobBlueprint.js";
-import { IStatBlock } from "../model/classes/StatBlock.js";
 import look from "./look.js";
 
-export interface IMobBlueprintData {
+export interface ICreateMobFormData {
   name: string;
+  keywords: string[];
   pronouns: number;
   level: number;
   job: string;
-  statBlock: IStatBlock;
-  keywords: string[];
-  isUnique: boolean;
-  isMount: boolean;
-  isAggressive: boolean;
   description: {
     look: string;
     examine: string;
-    study: string;
-    research: string;
   };
 }
 
 // Return mob blueprint, or a message explaining failure (if by author, emit message to their socket)
 async function createMobBlueprint(
-  mobFormData: IMobBlueprintData,
+  mobFormData: ICreateMobFormData,
   author: IUser
 ): Promise<IMobBlueprint | IMessage> {
   try {
@@ -58,8 +51,6 @@ async function createMobBlueprint(
     const mobDescription: IDescription = {
       look: mobFormData.description.look,
       examine: mobFormData.description.examine,
-      study: mobFormData.description.study,
-      research: mobFormData.description.research,
     };
     truncateDescription(mobDescription, author);
 
@@ -75,14 +66,22 @@ async function createMobBlueprint(
       },
       level: mobFormData.level,
       job: mobFormData.job,
-      statBlock: mobFormData.statBlock,
+      statBlock: {
+        strength: 10,
+        dexterity: 10,
+        constitution: 10,
+        intelligence: 10,
+        wisdom: 10,
+        charisma: 10,
+        spirit: 0,
+      },
       goldHeld: 0,
-      isUnique: mobFormData.isUnique,
-      isMount: mobFormData.isMount,
-      isAggressive: mobFormData.isAggressive,
+      isUnique: false,
+      isMount: false,
+      isAggressive: false,
       chattersToPlayer: false,
       emotesToPlayer: false,
-      description: mobFormData.description,
+      description: mobDescription,
       keywords: mobFormData.keywords,
       affixes: [],
       chatters: [],

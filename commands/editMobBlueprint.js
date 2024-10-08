@@ -1,3 +1,5 @@
+// editMobBlueprint
+import mongoose from "mongoose";
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
@@ -23,6 +25,8 @@ async function editMobBlueprint(mobId, formData, user) {
     }
     // logger.debug(`editMobBlueprint found a match! ${mob.name}`)
     //coerce formData property values to correct types
+    //TODO is this coercion still necessary now that the form inputs
+    //have type="number"
     formData.pronouns = Number(formData.pronouns);
     formData.level = Number(formData.level);
     formData.statBlock.strength = Number(formData.statBlock.strength);
@@ -34,15 +38,28 @@ async function editMobBlueprint(mobId, formData, user) {
     truncateDescription(formData.description, user);
     //update values and save zone
     mob.name = formData.name;
+    mob.keywords = formData.keywords;
     mob.pronouns = formData.pronouns;
     mob.level = formData.level;
     mob.job = formData.job;
     mob.statBlock = formData.statBlock;
-    mob.keywords = formData.keywords;
     mob.isUnique = formData.isUnique;
     mob.isMount = formData.isMount;
     mob.isAggressive = formData.isAggressive;
     mob.description = formData.description;
+    if (formData.itemNodes) {
+        mob.itemNodes = [];
+        formData.itemNodes.forEach((node) => {
+            mob.itemNodes.push({
+                _id: new mongoose.Types.ObjectId(),
+                loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
+                fromZoneId: zone._id,
+            });
+        });
+    }
+    if (formData.affixes) {
+        mob.affixes = formData.affixes;
+    }
     mob.history.modifiedDate = new Date();
     await zone.save();
     await zone.initRooms();

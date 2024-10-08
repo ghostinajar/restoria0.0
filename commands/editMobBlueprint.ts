@@ -6,11 +6,33 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
-import { IMobBlueprintData } from "./createMobBlueprint.js";
+import { IStatBlock } from "../model/classes/StatBlock.js";
+import { IItemNode } from "../model/classes/ItemNode.js";
+import { IAffix } from "../model/classes/Affix.js";
+
+export interface IEditMobFormData {
+  name: string;
+  keywords: string[];
+  pronouns: number;
+  level: number;
+  job: string;
+  statBlock: IStatBlock;
+  isUnique: boolean;
+  isMount: boolean;
+  isAggressive: boolean;
+  description: {
+    look: string;
+    examine: string;
+    study: string;
+    research: string;
+  };
+  itemNodes?: Array<IItemNode>;
+  affixes?: Array<IAffix>;
+}
 
 async function editMobBlueprint(
   mobId: mongoose.Types.ObjectId,
-  formData: IMobBlueprintData,
+  formData: IEditMobFormData,
   user: IUser
 ) {
   // logger.debug(`editMobBlueprint submitted by user ${user.name} for mob id: ${mobId.toString()}`);
@@ -43,6 +65,8 @@ async function editMobBlueprint(
   // logger.debug(`editMobBlueprint found a match! ${mob.name}`)
 
   //coerce formData property values to correct types
+  //TODO is this coercion still necessary now that the form inputs
+  //have type="number"
   formData.pronouns = Number(formData.pronouns);
   formData.level = Number(formData.level);
   formData.statBlock.strength = Number(formData.statBlock.strength);
@@ -55,20 +79,32 @@ async function editMobBlueprint(
 
   //update values and save zone
   mob.name = formData.name;
+  mob.keywords = formData.keywords;
   mob.pronouns = formData.pronouns;
   mob.level = formData.level;
   mob.job = formData.job;
   mob.statBlock = formData.statBlock;
-  mob.keywords = formData.keywords;
   mob.isUnique = formData.isUnique;
   mob.isMount = formData.isMount;
   mob.isAggressive = formData.isAggressive;
   mob.description = formData.description;
+  if (formData.itemNodes) {
+    mob.itemNodes = [];
+    formData.itemNodes.forEach((node) => {
+      mob.itemNodes.push({
+        _id: new mongoose.Types.ObjectId(),
+        loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
+        fromZoneId: zone._id,
+      });
+    })
+  }
+  if (formData.affixes) {
+    mob.affixes = formData.affixes;
+  }
   mob.history.modifiedDate = new Date();
   await zone.save();
   await zone.initRooms();
 
-  
   worldEmitter.emit(
     `messageFor${user.username}`,
     makeMessage(`success`, `Mob updated!`)

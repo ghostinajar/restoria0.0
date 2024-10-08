@@ -532,7 +532,39 @@
           study: editStudyMob.value || "",
           research: editResearchMob.value || "",
         },
+        itemNodes: selectedMob.itemNodes,
+        affixes: [],
       };
+      if (editMobAffix1.value !== "none") {
+        editMobBlueprintFormData.affixes.push({
+          affixType: editMobAffix1.value,
+          value: 1,
+        });
+      }
+      if (editMobAffix2.value !== "none") {
+        editMobBlueprintFormData.affixes.push({
+          affixType: editMobAffix2.value,
+          value: 1,
+        });
+      }
+      if (editMobAffix3.value !== "none") {
+        editMobBlueprintFormData.affixes.push({
+          affixType: editMobAffix3.value,
+          value: 1,
+        });
+      }
+      if (editMobAffix4.value !== "none") {
+        editMobBlueprintFormData.affixes.push({
+          affixType: editMobAffix4.value,
+          value: 1,
+        });
+      }
+      if (editMobAffix5.value !== "none") {
+        editMobBlueprintFormData.affixes.push({
+          affixType: editMobAffix5.value,
+          value: 1,
+        });
+      }
       socket.emit(
         "userSubmittedEditMobBlueprint",
         selectedMobId,
@@ -553,9 +585,12 @@
       .getElementById("editMobItemNodeAdd")
       .addEventListener("click", () => {
         //push new node to list
+        if (!selectedMob.itemNodes) {
+          selectedMob.itemNodes = [];
+        }
         selectedMob.itemNodes.push({
           _id: Math.floor(Math.random() * 1000000000), // server will generate legit id on zone save
-          loadsBlueprintId: editMobItemNodeSelect.value
+          loadsBlueprintId: editMobItemNodeSelect.value,
         });
         //reload nodeList
         clearUl(editMobItemNodeList);
@@ -571,21 +606,20 @@
       mobBlueprintFullData = formData.mobBlueprintFullData;
       itemBlueprintNames = formData.itemBlueprintNames;
 
-      //reset/hide open forms, show editItemBlueprintForm
+      // prepare fresh editMobBlueprintForm
+      editMobBlueprintForm.reset();
+      clearUl(editMobItemNodeList);
+      generateStringSelectOptions(mobBlueprintNames, editMobSelectMob);
+      generateStringSelectOptions(itemBlueprintNames, editMobItemNodeSelect);
+
+      //reset/hide open forms, show editMobBlueprintForm
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = editMobBlueprintForm;
       activeForm.style.display = "block";
+      document.querySelector("#editMobFirstTabLink").click();
       input.value = "";
-      generateStringSelectOptions(
-        formData.itemBlueprintNames,
-        document.getElementById("editMobItemNodeSelect")
-      );
-      generateStringSelectOptions(
-        formData.mobBlueprintNames,
-        document.getElementById("editMobSelectMob")
-      );
-      selectedMobId = mobBlueprintNames[0].id;
+      selectedMobId = mobBlueprintNames[0]._id;
       populateEditMobFieldsFromId(selectedMobId);
     });
 

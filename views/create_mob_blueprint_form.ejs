@@ -96,26 +96,12 @@
         pronouns: Number(document.getElementById("newMobPronouns").value),
         level: Number(document.getElementById("newMobLevel").value),
         job: document.getElementById("newMobJob").value,
-        statBlock: {
-          strength: 10,
-          dexterity: 10,
-          constitution: 10,
-          intelligence: 10,
-          wisdom: 10,
-          charisma: 10,
-          spirit: 0,
-        },
         keywords: document
           .getElementById("newMobKeywords")
           .value.split(/[ ,]+/),
-        isUnique: false,
-        isMount: false,
-        isAggressive: false,
         description: {
           look: document.getElementById("newLookMob").value,
           examine: document.getElementById("newExamineMob").value,
-          study: "",
-          research: "",
         },
       };
       socket.emit("userSubmittedNewMobBlueprint", createMobBlueprintFormData);

@@ -27,13 +27,19 @@ import stats from "./commands/stats.js";
 import editRoom, { IEditRoomFormData } from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint, {
-  IMobBlueprintData,
+  ICreateMobFormData,
 } from "./commands/createMobBlueprint.js";
 import mongoose from "mongoose";
-import editMobBlueprint from "./commands/editMobBlueprint.js";
+import editMobBlueprint, {
+  IEditMobFormData,
+} from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
-import createItemBlueprint, { ICreateItemBlueprintFormData } from "./commands/createItemBlueprint.js";
-import editItemBlueprint, { IEditItemBlueprintFormData } from "./commands/editItemBlueprint.js";
+import createItemBlueprint, {
+  ICreateItemBlueprintFormData,
+} from "./commands/createItemBlueprint.js";
+import editItemBlueprint, {
+  IEditItemBlueprintFormData,
+} from "./commands/editItemBlueprint.js";
 import createZone, { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 
@@ -151,22 +157,17 @@ const setupSocket = (io: any) => {
         `userSubmittedEditMobBlueprint`,
         async (
           mobId: mongoose.Types.ObjectId,
-          mobBlueprintData: IMobBlueprintData
+          mobBlueprintData: IEditMobFormData
         ) => {
           await editMobBlueprint(mobId, mobBlueprintData, user);
           stats(user);
         }
       );
 
-      socket.on(
-        `userSubmittedEditZone`,
-        async (
-          zoneData: IZoneData
-        ) => {
-          await editZone(zoneData, user);
-          stats(user);
-        }
-      );
+      socket.on(`userSubmittedEditZone`, async (zoneData: IZoneData) => {
+        await editZone(zoneData, user);
+        stats(user);
+      });
 
       socket.on(
         `userSubmittedNewItemBlueprint`,
@@ -181,7 +182,7 @@ const setupSocket = (io: any) => {
 
       socket.on(
         `userSubmittedNewMobBlueprint`,
-        async (mobBlueprintData: IMobBlueprintData) => {
+        async (mobBlueprintData: ICreateMobFormData) => {
           const newMobBlueprint = await createMobBlueprint(
             mobBlueprintData,
             user
@@ -213,11 +214,14 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(`userSubmittedRoomEdit`, async (roomData: IEditRoomFormData) => {
-        const room = await getRoomOfUser(user);
-        await editRoom(room, roomData, user);
-        stats(user);
-      });
+      socket.on(
+        `userSubmittedRoomEdit`,
+        async (roomData: IEditRoomFormData) => {
+          const room = await getRoomOfUser(user);
+          await editRoom(room, roomData, user);
+          stats(user);
+        }
+      );
 
       // On connection, alert room and look
       let userArrivedMessage = makeMessage(

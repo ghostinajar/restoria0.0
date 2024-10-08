@@ -25,8 +25,6 @@ async function createMobBlueprint(mobFormData, author) {
         const mobDescription = {
             look: mobFormData.description.look,
             examine: mobFormData.description.examine,
-            study: mobFormData.description.study,
-            research: mobFormData.description.research,
         };
         truncateDescription(mobDescription, author);
         let newMobBlueprint = {
@@ -41,14 +39,22 @@ async function createMobBlueprint(mobFormData, author) {
             },
             level: mobFormData.level,
             job: mobFormData.job,
-            statBlock: mobFormData.statBlock,
+            statBlock: {
+                strength: 10,
+                dexterity: 10,
+                constitution: 10,
+                intelligence: 10,
+                wisdom: 10,
+                charisma: 10,
+                spirit: 0,
+            },
             goldHeld: 0,
-            isUnique: mobFormData.isUnique,
-            isMount: mobFormData.isMount,
-            isAggressive: mobFormData.isAggressive,
+            isUnique: false,
+            isMount: false,
+            isAggressive: false,
             chattersToPlayer: false,
             emotesToPlayer: false,
-            description: mobFormData.description,
+            description: mobDescription,
             keywords: mobFormData.keywords,
             affixes: [],
             chatters: [],
