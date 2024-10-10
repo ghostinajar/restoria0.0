@@ -1,0 +1,89 @@
+<!-- erase_mob_blueprint_form -->
+<form
+  id="eraseMobBlueprintForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelEraseMobBlueprintForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Erase Mob Blueprint</h2>
+  <ul>
+    <li>
+      <label for="eraseMobSelectMob">Mob:</label>
+      <select id="eraseMobSelectMob" name="eraseMobSelectMob" required>
+        <!-- populated by script -->
+      </select>
+    </li>
+    <li style="display: inline-block">
+      <label style="display: inline-block" for="eraseMobConfirm1"></label>
+      <input
+        style="display: inline-block"
+        type="checkbox"
+        id="eraseMobConfirm1"
+        name="eraseMobConfirm1"
+        required
+      />
+      <label style="display: inline-block" for="eraseMobConfirm1"
+        >I want to erase this mob.</label
+      >
+    </li>
+    <li style="display: inline-block">
+      <label style="display: inline-block" for="eraseMobConfirm2"></label>
+      <input
+        style="display: inline-block"
+        type="checkbox"
+        id="eraseMobConfirm2"
+        name="eraseMobConfirm2"
+        required
+      />
+      <label style="display: inline-block" for="eraseMobConfirm2"
+        >I know I can't undo this.</label
+      >
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <button type="submit">Erase Mob</button>
+    </li>
+  </ul>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const eraseMobBlueprintForm = document.getElementById("eraseMobBlueprintForm");
+    const eraseMobSelectMob = document.getElementById("eraseMobSelectMob");
+
+    eraseMobBlueprintForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const eraseMobBlueprintFormData = eraseMobSelectMob.value;
+      console.log(`submitting ${eraseMobBlueprintFormData} for deletion`);
+      socket.emit("userSubmittedEraseMob", eraseMobBlueprintFormData);
+      eraseMobBlueprintForm.reset();
+      eraseMobBlueprintForm.style.display = "none"; // Hide the form after submission
+    });
+
+    document
+      .getElementById("cancelEraseMobBlueprintForm")
+      .addEventListener("click", function () {
+        eraseMobBlueprintForm.style.display = "none";
+      });
+
+    socket.on("openEraseMobBlueprintForm", (formData) => {
+      console.log(formData);
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = eraseMobBlueprintForm;
+      generateStringSelectOptions(
+        formData.mobBlueprintNames,
+        document.getElementById("eraseMobSelectMob")
+      );
+      activeForm.style.display = "block";
+      input.value = "";
+    });
+  });
+</script>

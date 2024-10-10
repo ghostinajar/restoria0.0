@@ -83,7 +83,7 @@ async function erase(parsedCommand, user) {
                             break;
                     }
                     if (toRoom) {
-                        let exit = { _id: ``, name: `${direction} ${toRoom.name}` };
+                        let exit = { _id: toRoom._id.toString(), name: `${direction} ${toRoom.name}` };
                         exitNames.push(exit);
                     }
                 }

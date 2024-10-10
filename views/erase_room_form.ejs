@@ -1,0 +1,89 @@
+<!-- erase_room_form -->
+<form
+  id="eraseRoomForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelEraseRoomForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Erase Room</h2>
+  <ul>
+    <li>
+      <label for="eraseRoomSelectRoom">Room:</label>
+      <select id="eraseRoomSelectRoom" name="eraseRoomSelectRoom" required>
+        <!-- populated by script -->
+      </select>
+    </li>
+    <li style="display: inline-block">
+      <label style="display: inline-block" for="eraseRoomConfirm1"></label>
+      <input
+        style="display: inline-block"
+        type="checkbox"
+        id="eraseRoomConfirm1"
+        name="eraseRoomConfirm1"
+        required
+      />
+      <label style="display: inline-block" for="eraseRoomConfirm1"
+        >I want to erase this room.</label
+      >
+    </li>
+    <li style="display: inline-block">
+      <label style="display: inline-block" for="eraseRoomConfirm2"></label>
+      <input
+        style="display: inline-block"
+        type="checkbox"
+        id="eraseRoomConfirm2"
+        name="eraseRoomConfirm2"
+        required
+      />
+      <label style="display: inline-block" for="eraseRoomConfirm2"
+        >I know I can't undo this.</label
+      >
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <button type="submit">Erase Room</button>
+    </li>
+  </ul>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const eraseRoomForm = document.getElementById("eraseRoomForm");
+    const eraseRoomSelectRoom = document.getElementById("eraseRoomSelectRoom");
+
+    eraseRoomForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const eraseRoomFormData = eraseRoomSelectRoom.value;
+      console.log(`submitting ${eraseRoomFormData} for deletion`);
+      socket.emit("userSubmittedEraseRoom", eraseRoomFormData);
+      eraseRoomForm.reset();
+      eraseRoomForm.style.display = "none"; // Hide the form after submission
+    });
+
+    document
+      .getElementById("cancelEraseRoomForm")
+      .addEventListener("click", function () {
+        eraseRoomForm.style.display = "none";
+      });
+
+    socket.on("openEraseRoomForm", (formData) => {
+      console.log(formData);
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = eraseRoomForm;
+      generateStringSelectOptions(
+        formData.exitNames,
+        document.getElementById("eraseRoomSelectRoom")
+      );
+      activeForm.style.display = "block";
+      input.value = "";
+    });
+  });
+</script>
