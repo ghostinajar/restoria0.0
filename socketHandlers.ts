@@ -49,8 +49,16 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     socket.emit(`openEditZoneForm`, formData);
     return;
   }
-  if (formData.form === "eraseForm") {
-    socket.emit(`openEraseForm`, formData);
+  if (formData.form === "eraseItemBlueprintForm") {
+    socket.emit(`openEraseItemForm`, formData);
+    return;
+  }
+  if (formData.form === "eraseMobBlueprintForm") {
+    socket.emit(`openEraseMobForm`, formData);
+    return;
+  }
+  if (formData.form === "eraseRoomForm") {
+    socket.emit(`openEraseRoomForm`, formData);
     return;
   }
 };

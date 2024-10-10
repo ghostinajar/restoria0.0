@@ -25,7 +25,7 @@ async function processCommand(parsedCommand, user) {
         }
         case `delete`: // we can't make a delete() function, so it calls erase()
         case `erase`: {
-            await erase(user);
+            await erase(parsedCommand, user);
             break;
         }
         case `ex`:
