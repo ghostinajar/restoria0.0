@@ -95,42 +95,6 @@ export const messageForUsersZoneHandler = async (
   socket.to(user.location.inZone.toString()).emit(`message`, message);
 };
 
-export const userSelectedMobEditHandler = async (
-  user: IUser,
-  mobId: mongoose.Types.ObjectId | string
-) => {
-  const zone = await getZoneOfUser(user);
-  // logger.debug(`userSelectedMobEditHandler found zone ${zone.name}`)
-  const mobBlueprint: IMobBlueprint | undefined = zone.mobBlueprints.find(
-    (blueprint) => blueprint._id.toString() === mobId.toString()
-  );
-  if (!mobBlueprint) {
-    logger.error(
-      `userSelectedMobEditHandler couldn't find blueprint for ${mobId}`
-    );
-    return;
-  }
-  // logger.debug(`userSelectedMobEditHandler found blueprint for ${mobBlueprint.name}`)
-  const editMobBlueprintFormData = {
-    _id: mobBlueprint?._id,
-    name: mobBlueprint?.name,
-    pronouns: mobBlueprint?.pronouns,
-    level: mobBlueprint?.level,
-    job: mobBlueprint?.job,
-    statBlock: mobBlueprint?.statBlock,
-    keywords: mobBlueprint?.keywords,
-    isUnique: mobBlueprint?.isUnique,
-    isMount: mobBlueprint?.isMount,
-    isAggressive: mobBlueprint?.isAggressive,
-    description: mobBlueprint?.description,
-  };
-  // logger.debug(`userSelectedMobEditHandler sending formData ${JSON.stringify(editMobBlueprintFormData)}`);
-  worldEmitter.emit(`formPromptFor${user.username}`, {
-    form: `editMobBlueprintForm`,
-    editMobBlueprintFormData,
-  });
-};
-
 export const userXLeavingGameHandler = async (user: IUser, socket: any) => {
   // logger.debug(
   //   `socket received user${user.name}LeavingGame event. Disconnecting.`

@@ -10,7 +10,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSelectedMobEditHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
@@ -67,10 +67,6 @@ const setupSocket = (io) => {
                 userXChangingRoomsHandler(originRoomId, originZoneId, destinationRoomId, destinationZoneId, socket, user);
             });
             // Listen for client events
-            socket.on(`userSelectedMobEdit`, async (mobId) => {
-                // logger.debug(`User selected MobEdit for ${mobId}.`);
-                userSelectedMobEditHandler(user, mobId);
-            });
             socket.on(`userSentCommand`, async (userInput) => {
                 userSentCommandHandler(socket, userInput, user);
             });
@@ -114,6 +110,21 @@ const setupSocket = (io) => {
                 const room = await getRoomOfUser(user);
                 await editRoom(room, roomData, user);
                 stats(user);
+            });
+            socket.on(`userSubmittedEraseItemBlueprint`, async (itemId) => {
+                //TODO remove references to id in zone (e.g. nodes in items, mobs, rooms)
+                //TODO delete object by id
+                //TODO notify user
+            });
+            socket.on(`userSubmittedEraseMobBlueprint`, async (mobId) => {
+                //TODO remove references to id in zone (e.g. nodes in rooms)
+                //TODO delete object by id
+                //TODO notify user 
+            });
+            socket.on(`userSubmittedEraseRoom`, async (roomId) => {
+                //TODO remove references to id in zone (e.g. exits)
+                //TODO delete object by id
+                //TODO notify user 
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);

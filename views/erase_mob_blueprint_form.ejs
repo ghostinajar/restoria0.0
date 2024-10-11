@@ -62,7 +62,7 @@
       e.preventDefault();
       const eraseMobBlueprintFormData = eraseMobSelectMob.value;
       console.log(`submitting ${eraseMobBlueprintFormData} for deletion`);
-      socket.emit("userSubmittedEraseMob", eraseMobBlueprintFormData);
+      socket.emit("userSubmittedEraseMobBlueprint", eraseMobBlueprintFormData);
       eraseMobBlueprintForm.reset();
       eraseMobBlueprintForm.style.display = "none"; // Hide the form after submission
     });

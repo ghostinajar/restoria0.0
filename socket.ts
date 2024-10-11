@@ -19,7 +19,6 @@ import {
   messageForUserHandler,
   messageForUsersRoomHandler,
   messageForUsersZoneHandler,
-  userSelectedMobEditHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
@@ -130,13 +129,6 @@ const setupSocket = (io: any) => {
       );
 
       // Listen for client events
-      socket.on(
-        `userSelectedMobEdit`,
-        async (mobId: mongoose.Types.ObjectId | string) => {
-          // logger.debug(`User selected MobEdit for ${mobId}.`);
-          userSelectedMobEditHandler(user, mobId);
-        }
-      );
 
       socket.on(`userSentCommand`, async (userInput: string) => {
         userSentCommandHandler(socket, userInput, user);
@@ -222,6 +214,24 @@ const setupSocket = (io: any) => {
           stats(user);
         }
       );
+      
+      socket.on(`userSubmittedEraseItemBlueprint`, async (itemId: string) => {
+        //TODO remove references to id in zone (e.g. nodes in items, mobs, rooms)
+        //TODO delete object by id
+        //TODO notify user
+      });
+
+      socket.on(`userSubmittedEraseMobBlueprint`, async (mobId: string) => {
+        //TODO remove references to id in zone (e.g. nodes in rooms)
+        //TODO delete object by id
+        //TODO notify user 
+      });
+
+      socket.on(`userSubmittedEraseRoom`, async (roomId: string) => {
+        //TODO remove references to id in zone (e.g. exits)
+        //TODO delete object by id
+        //TODO notify user 
+      })
 
       // On connection, alert room and look
       let userArrivedMessage = makeMessage(
