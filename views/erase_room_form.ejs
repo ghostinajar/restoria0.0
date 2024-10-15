@@ -57,9 +57,18 @@
   document.addEventListener("DOMContentLoaded", () => {
     const eraseRoomForm = document.getElementById("eraseRoomForm");
     const eraseRoomSelectRoom = document.getElementById("eraseRoomSelectRoom");
+    let exitNames = [];
 
     eraseRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      if ((exitNames.length = 1)) {
+        appendMessageToTerminal({
+          type: "rejection",
+          content: "Don't orphan this room by deleting its last neighbor!",
+        });
+        activeForm.style = "display: none";
+        return;
+      }
       const selectedOption =
         eraseRoomSelectRoom.options[eraseRoomSelectRoom.selectedIndex];
 
@@ -79,10 +88,10 @@
       });
 
     socket.on("openEraseRoomForm", (formData) => {
-      console.log(formData);
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = eraseRoomForm;
+      exitNames = formData.exitNames;
       generateStringSelectOptions(
         formData.exitNames,
         document.getElementById("eraseRoomSelectRoom")

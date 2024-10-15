@@ -59,9 +59,18 @@
       "eraseItemBlueprintForm"
     );
     const eraseItemSelectItem = document.getElementById("eraseItemSelectItem");
+    let itemBlueprintNames;
 
     eraseItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      if ((itemBlueprintNames.length = 1)) {
+        appendMessageToTerminal({
+          type: "rejection",
+          content: "Don't erase your last itemBlueprint!",
+        });
+        activeForm.style = "display: none";
+        return;
+      }
       const selectedOption =
         eraseItemSelectItem.options[eraseItemSelectItem.selectedIndex];
 
@@ -88,6 +97,7 @@
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = eraseItemBlueprintForm;
+      itemBlueprintNames = formData.itemBlueprintNames;
       generateStringSelectOptions(
         formData.itemBlueprintNames,
         eraseItemSelectItem

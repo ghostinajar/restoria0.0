@@ -59,9 +59,18 @@
       "eraseMobBlueprintForm"
     );
     const eraseMobSelectMob = document.getElementById("eraseMobSelectMob");
+    let mobBlueprintNames = [];
 
     eraseMobBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      if ((mobBlueprintNames.length = 1)) {
+        appendMessageToTerminal({
+          type: "rejection",
+          content: "Don't erase your last mobBlueprint!",
+        });
+        activeForm.style = "display: none";
+        return;
+      }
       const selectedOption =
         eraseMobSelectMob.options[eraseMobSelectMob.selectedIndex];
 
@@ -84,6 +93,7 @@
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = eraseMobBlueprintForm;
+      mobBlueprintNames = formData.mobBlueprintNames;
       generateStringSelectOptions(
         formData.mobBlueprintNames,
         eraseMobSelectMob
