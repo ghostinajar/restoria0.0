@@ -930,7 +930,7 @@
       );
       editItemBlueprintForm.reset();
       hideEditItemTabs();
-      editItemBlueprintForm.style.display = "none"; // Hide the form after submission
+      editItemBlueprintForm.style.display = "none"; 
     });
 
     document
@@ -1139,10 +1139,8 @@
           break;
       }
       if (editItemContainer.checked) {
-        console.log("editItemContainer is checked")
         editItemItemNodesTab.style.display = "inline-block";
       } else {
-        console.log("editItemContainer is not checked")
         editItemItemNodesTab.style.display = "none";
       }
       if (editItemFood.checked) {

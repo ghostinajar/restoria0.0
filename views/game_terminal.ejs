@@ -104,8 +104,6 @@
         // Create a new <li> element
         const liElement = document.createElement("li");
         liElement.className = "node";
-        console.log(node);
-        console.log(blueprints);
         nodeName = blueprints.find(
           (blueprint) => blueprint._id === node.loadsBlueprintId
         ).name;

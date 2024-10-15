@@ -55,16 +55,23 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const eraseMobBlueprintForm = document.getElementById("eraseMobBlueprintForm");
+    const eraseMobBlueprintForm = document.getElementById(
+      "eraseMobBlueprintForm"
+    );
     const eraseMobSelectMob = document.getElementById("eraseMobSelectMob");
 
     eraseMobBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const eraseMobBlueprintFormData = eraseMobSelectMob.value;
-      console.log(`submitting ${eraseMobBlueprintFormData} for deletion`);
+      const selectedOption =
+        eraseMobSelectMob.options[eraseMobSelectMob.selectedIndex];
+
+      const eraseMobBlueprintFormData = {
+        _id: eraseMobSelectMob.value,
+        name: selectedOption ? selectedOption.textContent : "",
+      };
       socket.emit("userSubmittedEraseMobBlueprint", eraseMobBlueprintFormData);
       eraseMobBlueprintForm.reset();
-      eraseMobBlueprintForm.style.display = "none"; // Hide the form after submission
+      eraseMobBlueprintForm.style.display = "none";
     });
 
     document
@@ -74,13 +81,12 @@
       });
 
     socket.on("openEraseMobBlueprintForm", (formData) => {
-      console.log(formData);
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = eraseMobBlueprintForm;
       generateStringSelectOptions(
         formData.mobBlueprintNames,
-        document.getElementById("eraseMobSelectMob")
+        eraseMobSelectMob
       );
       activeForm.style.display = "block";
       input.value = "";

@@ -24,6 +24,9 @@ export interface IZone extends mongoose.Document {
 
   initRooms(): Promise<void>;
   clearRooms(): Promise<void>;
+  eraseItemBlueprintById(id: string): Promise<void>;
+  eraseMobBlueprintById(id: string): Promise<void>;
+  eraseRoomById(id: string): Promise<void>;
 }
 
 const zoneSchema = new Schema({
@@ -103,6 +106,36 @@ zoneSchema.methods.clearRooms = async function () {
   } catch (err: any) {
     logger.error(`Error in zoneSchema.methods.clearRooms(): ${err.message}`);
     throw err;
+  }
+};
+
+zoneSchema.methods.eraseItemBlueprintById = async function (id: string) {
+  try {
+    this.itemBlueprints = this.itemBlueprints.filter(
+      (blueprint: IItemBlueprint) => blueprint._id.toString() !== id.toString()
+    );
+  } catch (err: any) {
+    logger.error(`Error in zoneSchema.methods.eraseItemBlueprintById(): ${err.message}`);
+  }
+};
+
+zoneSchema.methods.eraseMobBlueprintById = async function (id: string) {
+  try {
+    this.mobBlueprints = this.mobBlueprints.filter(
+      (blueprint: IMobBlueprint) => blueprint._id.toString() !== id.toString()
+    );
+  } catch (err: any) {
+    logger.error(`Error in zoneSchema.methods.eraseMobBlueprintById(): ${err.message}`);
+  }
+};
+
+zoneSchema.methods.eraseRoomById = async function (id: string) {
+  try {
+    this.rooms = this.rooms.filter(
+      (room: IRoom) => room._id.toString() !== id.toString()
+    );
+  } catch (err: any) {
+    logger.error(`Error in zoneSchema.methods.eraseRoomById(): ${err.message}`);
   }
 };
 

@@ -60,11 +60,16 @@
 
     eraseRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const eraseRoomFormData = eraseRoomSelectRoom.value;
-      console.log(`submitting ${eraseRoomFormData} for deletion`);
+      const selectedOption =
+        eraseRoomSelectRoom.options[eraseRoomSelectRoom.selectedIndex];
+
+      const eraseRoomFormData = {
+        _id: eraseRoomSelectRoom.value,
+        name: selectedOption ? selectedOption.textContent : "",
+      };
       socket.emit("userSubmittedEraseRoom", eraseRoomFormData);
       eraseRoomForm.reset();
-      eraseRoomForm.style.display = "none"; // Hide the form after submission
+      eraseRoomForm.style.display = "none";
     });
 
     document

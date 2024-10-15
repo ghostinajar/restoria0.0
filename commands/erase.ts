@@ -62,7 +62,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
           key !== "$_id" &&
           key !== "_doc"
         ) {
-          // get the exit's destionation zone (in case it's an external zone)
+          // get the exit's destination zone (in case it's an external zone)
           // logger.debug(`exits command look for destination zone for ${key} exit from ${originRoom.name}...`);
 
           let toZone: IZone = await new Promise((resolve) => {

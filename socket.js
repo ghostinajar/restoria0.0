@@ -21,6 +21,7 @@ import createItemBlueprint from "./commands/createItemBlueprint.js";
 import editItemBlueprint from "./commands/editItemBlueprint.js";
 import createZone from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
+import getZoneOfUser from "./util/getZoneofUser.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -82,6 +83,30 @@ const setupSocket = (io) => {
                 await editZone(zoneData, user);
                 stats(user);
             });
+            socket.on(`userSubmittedEraseItemBlueprint`, async (formData) => {
+                const zone = await getZoneOfUser(user);
+                await zone.eraseItemBlueprintById(formData._id);
+                await zone.save();
+                logger.info(`User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`);
+                let message = makeMessage("success", `You permanently erased the itemBlueprint for ${formData.name}.`);
+                worldEmitter.emit(`messageFor${user.username}`, message);
+            });
+            socket.on(`userSubmittedEraseMobBlueprint`, async (formData) => {
+                const zone = await getZoneOfUser(user);
+                await zone.eraseMobBlueprintById(formData._id);
+                await zone.save();
+                logger.info(`User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`);
+                let message = makeMessage("success", `You permanently erased the mobBlueprint for ${formData.name}.`);
+                worldEmitter.emit(`messageFor${user.username}`, message);
+            });
+            socket.on(`userSubmittedEraseRoom`, async (formData) => {
+                const zone = await getZoneOfUser(user);
+                await zone.eraseRoomById(formData._id);
+                await zone.save();
+                logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
+                let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
+                worldEmitter.emit(`messageFor${user.username}`, message);
+            });
             socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
                 const newItemBlueprint = await createItemBlueprint(itemBlueprintData, user);
                 stats(user);
@@ -110,21 +135,6 @@ const setupSocket = (io) => {
                 const room = await getRoomOfUser(user);
                 await editRoom(room, roomData, user);
                 stats(user);
-            });
-            socket.on(`userSubmittedEraseItemBlueprint`, async (itemId) => {
-                //TODO remove references to id in zone (e.g. nodes in items, mobs, rooms)
-                //TODO delete object by id
-                //TODO notify user
-            });
-            socket.on(`userSubmittedEraseMobBlueprint`, async (mobId) => {
-                //TODO remove references to id in zone (e.g. nodes in rooms)
-                //TODO delete object by id
-                //TODO notify user 
-            });
-            socket.on(`userSubmittedEraseRoom`, async (roomId) => {
-                //TODO remove references to id in zone (e.g. exits)
-                //TODO delete object by id
-                //TODO notify user 
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);

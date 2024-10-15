@@ -55,16 +55,27 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const eraseItemBlueprintForm = document.getElementById("eraseItemBlueprintForm");
+    const eraseItemBlueprintForm = document.getElementById(
+      "eraseItemBlueprintForm"
+    );
     const eraseItemSelectItem = document.getElementById("eraseItemSelectItem");
 
     eraseItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const eraseItemBlueprintFormData = eraseItemSelectItem.value;
-      console.log(`submitting ${eraseItemBlueprintFormData} for deletion`);
-      socket.emit("userSubmittedEraseItemBlueprint", eraseItemBlueprintFormData);
+      const selectedOption =
+        eraseItemSelectItem.options[eraseItemSelectItem.selectedIndex];
+
+      const eraseItemBlueprintFormData = {
+        _id: eraseItemSelectItem.value,
+        name: selectedOption ? selectedOption.textContent : "",
+      };
+
+      socket.emit(
+        "userSubmittedEraseItemBlueprint",
+        eraseItemBlueprintFormData
+      );
       eraseItemBlueprintForm.reset();
-      eraseItemBlueprintForm.style.display = "none"; // Hide the form after submission
+      eraseItemBlueprintForm.style.display = "none";
     });
 
     document
@@ -74,13 +85,12 @@
       });
 
     socket.on("openEraseItemBlueprintForm", (formData) => {
-      console.log(formData);
       activeForm.reset();
       activeForm.style.display = "none";
       activeForm = eraseItemBlueprintForm;
       generateStringSelectOptions(
         formData.itemBlueprintNames,
-        document.getElementById("eraseItemSelectItem")
+        eraseItemSelectItem
       );
       activeForm.style.display = "block";
       input.value = "";

@@ -43,7 +43,7 @@ async function erase(parsedCommand, user) {
                     key !== "$__v" &&
                     key !== "$_id" &&
                     key !== "_doc") {
-                    // get the exit's destionation zone (in case it's an external zone)
+                    // get the exit's destination zone (in case it's an external zone)
                     // logger.debug(`exits command look for destination zone for ${key} exit from ${originRoom.name}...`);
                     let toZone = await new Promise((resolve) => {
                         worldEmitter.once(`zone${value.destinationLocation.inZone.toString()}Loaded`, resolve);

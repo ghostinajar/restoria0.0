@@ -87,5 +87,29 @@ zoneSchema.methods.clearRooms = async function () {
         throw err;
     }
 };
+zoneSchema.methods.eraseItemBlueprintById = async function (id) {
+    try {
+        this.itemBlueprints = this.itemBlueprints.filter((blueprint) => blueprint._id.toString() !== id.toString());
+    }
+    catch (err) {
+        logger.error(`Error in zoneSchema.methods.eraseItemBlueprintById(): ${err.message}`);
+    }
+};
+zoneSchema.methods.eraseMobBlueprintById = async function (id) {
+    try {
+        this.mobBlueprints = this.mobBlueprints.filter((blueprint) => blueprint._id.toString() !== id.toString());
+    }
+    catch (err) {
+        logger.error(`Error in zoneSchema.methods.eraseMobBlueprintById(): ${err.message}`);
+    }
+};
+zoneSchema.methods.eraseRoomById = async function (id) {
+    try {
+        this.rooms = this.rooms.filter((room) => room._id.toString() !== id.toString());
+    }
+    catch (err) {
+        logger.error(`Error in zoneSchema.methods.eraseRoomById(): ${err.message}`);
+    }
+};
 const Zone = mongoose.model("Zone", zoneSchema);
 export default Zone;
