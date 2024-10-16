@@ -63,7 +63,10 @@
 
     eraseItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      if ((itemBlueprintNames.length = 1)) {
+      console.log(itemBlueprintNames);
+      console.log(`length:`)
+      console.log(itemBlueprintNames.length);
+      if ((itemBlueprintNames.length === 1)) {
         appendMessageToTerminal({
           type: "rejection",
           content: "Don't erase your last itemBlueprint!",

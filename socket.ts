@@ -167,7 +167,6 @@ const setupSocket = (io: any) => {
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
           await zone.eraseItemBlueprintById(formData._id);
-          await zone.save();
           logger.info(`User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`)
           let message = makeMessage(
             "success",
@@ -182,7 +181,6 @@ const setupSocket = (io: any) => {
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
           await zone.eraseMobBlueprintById(formData._id);
-          await zone.save();
           logger.info(`User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`)
           let message = makeMessage(
             "success",
@@ -197,7 +195,6 @@ const setupSocket = (io: any) => {
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
           await zone.eraseRoomById(formData._id);
-          await zone.save();
           logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`)
           let message = makeMessage(
             "success",

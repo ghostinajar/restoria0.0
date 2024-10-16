@@ -61,7 +61,7 @@
 
     eraseRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      if ((exitNames.length = 1)) {
+      if ((exitNames.length === 1)) {
         appendMessageToTerminal({
           type: "rejection",
           content: "Don't orphan this room by deleting its last neighbor!",

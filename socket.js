@@ -86,7 +86,6 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedEraseItemBlueprint`, async (formData) => {
                 const zone = await getZoneOfUser(user);
                 await zone.eraseItemBlueprintById(formData._id);
-                await zone.save();
                 logger.info(`User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the itemBlueprint for ${formData.name}.`);
                 worldEmitter.emit(`messageFor${user.username}`, message);
@@ -94,7 +93,6 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedEraseMobBlueprint`, async (formData) => {
                 const zone = await getZoneOfUser(user);
                 await zone.eraseMobBlueprintById(formData._id);
-                await zone.save();
                 logger.info(`User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the mobBlueprint for ${formData.name}.`);
                 worldEmitter.emit(`messageFor${user.username}`, message);
@@ -102,7 +100,6 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedEraseRoom`, async (formData) => {
                 const zone = await getZoneOfUser(user);
                 await zone.eraseRoomById(formData._id);
-                await zone.save();
                 logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
                 worldEmitter.emit(`messageFor${user.username}`, message);

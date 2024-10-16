@@ -89,15 +89,40 @@ zoneSchema.methods.clearRooms = async function () {
 };
 zoneSchema.methods.eraseItemBlueprintById = async function (id) {
     try {
+        // Remove the item blueprint from the zone
         this.itemBlueprints = this.itemBlueprints.filter((blueprint) => blueprint._id.toString() !== id.toString());
+        // Remove its itemNodes from all rooms
+        this.rooms.forEach((room) => {
+            room.itemNodes = removeNodesWithBlueprintId(id, room.itemNodes);
+        });
+        // Remove its itemNodes from other itemBlueprints
+        this.itemBlueprints.forEach((itemBlueprint) => {
+            if (itemBlueprint.itemNodes) {
+                itemBlueprint.itemNodes = removeNodesWithBlueprintId(id, itemBlueprint.itemNodes);
+            }
+        });
+        // Remove its itemNodes from mobBlueprints
+        this.mobBlueprints.forEach((mobBlueprint) => {
+            mobBlueprint.itemNodes = removeNodesWithBlueprintId(id, mobBlueprint.itemNodes);
+        });
+        await this.save();
+        await this.initRooms();
     }
     catch (err) {
         logger.error(`Error in zoneSchema.methods.eraseItemBlueprintById(): ${err.message}`);
+        throw err;
     }
 };
 zoneSchema.methods.eraseMobBlueprintById = async function (id) {
     try {
+        // Remove the mob blueprint from the zone
         this.mobBlueprints = this.mobBlueprints.filter((blueprint) => blueprint._id.toString() !== id.toString());
+        // Remove its mobNodes from all rooms
+        this.rooms.forEach((room) => {
+            room.mobNodes = removeNodesWithBlueprintId(id, room.mobNodes);
+        });
+        await this.save();
+        await this.initRooms();
     }
     catch (err) {
         logger.error(`Error in zoneSchema.methods.eraseMobBlueprintById(): ${err.message}`);
@@ -105,11 +130,37 @@ zoneSchema.methods.eraseMobBlueprintById = async function (id) {
 };
 zoneSchema.methods.eraseRoomById = async function (id) {
     try {
+        // Remove the room from the zone
         this.rooms = this.rooms.filter((room) => room._id.toString() !== id.toString());
+        // Loop through each room and remove exits that lead to the deleted room
+        this.rooms.forEach((room) => {
+            const directions = [
+                "north",
+                "east",
+                "south",
+                "west",
+                "up",
+                "down",
+            ];
+            directions.forEach((direction) => {
+                const exit = room.exits[direction];
+                if (exit &&
+                    exit.destinationLocation &&
+                    exit.destinationLocation.inRoom.toString() === id.toString()) {
+                    delete room.exits[direction]; // Remove the exit if it leads to the deleted room
+                }
+            });
+        });
+        await this.save();
+        await this.initRooms();
     }
     catch (err) {
         logger.error(`Error in zoneSchema.methods.eraseRoomById(): ${err.message}`);
     }
+};
+// Helper function to remove nodes by blueprint id
+const removeNodesWithBlueprintId = (id, nodes) => {
+    return nodes.filter((node) => node.loadsBlueprintId.toString() !== id.toString());
 };
 const Zone = mongoose.model("Zone", zoneSchema);
 export default Zone;

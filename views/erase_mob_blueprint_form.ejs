@@ -63,7 +63,7 @@
 
     eraseMobBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      if ((mobBlueprintNames.length = 1)) {
+      if ((mobBlueprintNames.length === 1)) {
         appendMessageToTerminal({
           type: "rejection",
           content: "Don't erase your last mobBlueprint!",
