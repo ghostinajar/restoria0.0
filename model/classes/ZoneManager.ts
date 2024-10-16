@@ -7,11 +7,12 @@ import { IUser } from "./User.js";
 import mongoose from "mongoose";
 import { IRoom } from "./Room.js";
 import { ILocation } from "./Location.js";
+import COMPLETION_STATUS from "../../constants/COMPLETION_STATUS.js";
 
 class ZoneManager {
   constructor() {
     this.zones = new Map();
-    
+
     worldEmitter.on("roomRequested", this.roomRequestedHandler);
     worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
     worldEmitter.on("placeUserRequest", this.placeUserRequestHandler);
@@ -23,16 +24,20 @@ class ZoneManager {
   roomRequestedHandler = async (location: ILocation) => {
     // logger.debug(`roomRequestedHandler called, with ${JSON.stringify(location)}`);
     //get the room
-    let zone = this.getZoneById(location.inZone) || await this.addZoneById(location.inZone);
+    let zone =
+      this.getZoneById(location.inZone) ||
+      (await this.addZoneById(location.inZone));
     // logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
     // logger.debug(`looking for room id ${location.inRoom.toString()}`);
-    const room = zone?.rooms.find(room => room._id.toString() === location.inRoom.toString());
+    const room = zone?.rooms.find(
+      (room) => room._id.toString() === location.inRoom.toString()
+    );
     if (!room) {
       logger.error(`lookArrayRequestedHandler got an undefined room`);
       return;
     }
     worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);
-  }
+  };
 
   userLogoutHandler = async (user: mongoose.Document & IUser) => {
     // logger.debug(`userLogoutHandler called`);
@@ -103,6 +108,87 @@ class ZoneManager {
       //     Array.from(this.zones.values()).map((zone) => zone.name)
       //   )}`
       // );
+      if (zone.itemBlueprints.length === 0) {
+        zone.itemBlueprints = [
+          {
+            _id: new mongoose.Types.ObjectId(),
+            author: new mongoose.Types.ObjectId("665bc7ca1eeaedf3a5da7446"),
+            name: `an apple`,
+            itemType: `none`,
+            price: 0,
+            minimumLevel: 0,
+            history: {
+              creationDate: new Date(),
+              modifiedDate: new Date(),
+              completionStatus: COMPLETION_STATUS.DRAFT,
+            },
+            description: {
+              look: `There's a basic apple here.`,
+              examine: `It's red and shiny. With this kind of apple, when you've seen one you've seen them all.`,
+            },
+            tags: {
+              cleric: true,
+              mage: true,
+              rogue: true,
+              warrior: true,
+              dark: true,
+              neutral: true,
+              light: true, //can be equipped by players with a light aura
+              guild: false,
+              food: true,
+              lamp: false, //lights up the room
+              hidden: false,
+              fixture: false,
+              quest: false,
+              temporary: false,
+              container: false,
+            },
+            keywords: ["apple"],
+            tweakDuration: 182,
+          },
+        ];
+      }
+      if (zone.mobBlueprints.length === 0) {
+        zone.mobBlueprints = [
+          {
+            _id: new mongoose.Types.ObjectId(),
+            author: new mongoose.Types.ObjectId("665bc7ca1eeaedf3a5da7446"),
+            name: "a goblin",
+            pronouns: 1,
+            history: {
+              creationDate: new Date(),
+              modifiedDate: new Date(),
+              completionStatus: COMPLETION_STATUS.DRAFT,
+            },
+            level: 1,
+            job: "rogue",
+            statBlock: {
+              strength: 10,
+              dexterity: 10,
+              constitution: 10,
+              intelligence: 10,
+              wisdom: 10,
+              charisma: 10,
+              spirit: 10,
+            },
+            goldHeld: 0,
+            isUnique: false,
+            isMount: false,
+            isAggressive: false,
+            chattersToPlayer: false,
+            emotesToPlayer: false,
+            description: {
+              look: `There's a basic goblin here.`,
+              examine: `He's green and mean. With this kind of goblin, when you've seen one you've seen them all.`,
+            },
+            keywords: [`goblin`],
+            affixes: [],
+            chatters: [],
+            emotes: [],
+            itemNodes: [],
+          },
+        ];
+      }
       await zone.initRooms();
       return zone;
     } catch (err: any) {
