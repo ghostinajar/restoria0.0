@@ -43,7 +43,7 @@
           input.value = "";
           return;
         }
-        socket.emit("userSentCommand", input.value);
+        socket.emit("userSentCommand", DOMPurify.sanitize(input.value));
         input.value = "";
       }
     });

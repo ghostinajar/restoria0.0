@@ -507,10 +507,15 @@
 
     editMobBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      const keywords = document
+        .getElementById("editMobKeywords")
+        .value.split(/[ ,]+/);
+      const purifiedKeywords = object.keywords.map((keyword) =>
+        DOMPurify.sanitize(keyword)
+      );
       const editMobBlueprintFormData = {
-        name: editMobName.value || "no mob name",
-        keywords:
-          document.getElementById("editMobKeywords").value.split(/[ ,]+/) || [],
+        name: DOMPurify.sanitize(editMobName.value) || "no mob name",
+        keywords: purifiedKeywords,
         pronouns: Number(editMobPronouns).value || 1,
         level: Number(editMobLevel.value) || 1,
         job: editMobJob.value || "warrior",
@@ -527,10 +532,10 @@
         isMount: editMobIsMount.checked || false,
         isAggressive: editMobIsAggressive.checked || false,
         description: {
-          look: editLookMob.value || "",
-          examine: editExamineMob.value || "",
-          study: editStudyMob.value || "",
-          research: editResearchMob.value || "",
+          look: DOMPurify.sanitize(editLookMob.value) || "",
+          examine: DOMPurify.sanitize(editExamineMob.value) || "",
+          study: DOMPurify.sanitize(editStudyMob.value) || "",
+          research: DOMPurify.sanitize(editResearchMob.value) || "",
         },
         itemNodes: selectedMob.itemNodes,
         affixes: [],
@@ -571,7 +576,7 @@
         editMobBlueprintFormData
       );
       editMobBlueprintForm.reset();
-      editMobBlueprintForm.style.display = "none"; 
+      editMobBlueprintForm.style.display = "none";
     });
 
     document

@@ -116,17 +116,21 @@
 
     createItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      const keywords = document
+        .getElementById("newItemKeywords")
+        .value.split(/[ ,]+/);
+      const purifiedKeywords = object.keywords.map((keyword) =>
+        DOMPurify.sanitize(keyword)
+      );
       const createItemBlueprintFormData = {
-        name: document.getElementById("newItemName").value,
-        keywords: document
-          .getElementById("newItemKeywords")
-          .value.split(/[ ,]+/),
+        name: DOMPurify.sanitize(document.getElementById("newItemName").value),
+        keywords: purifiedKeywords,
         price: document.getElementById("newItemPrice").value,
         minimumLevel: document.getElementById("newItemMinimumLevel").value,
         itemType: document.getElementById("newItemType").value,
         description: {
-          look: document.getElementById("newLookItem").value,
-          examine: document.getElementById("newExamineItem").value,
+          look: DOMPurify.sanitize(document.getElementById("newLookItem").value),
+          examine: DOMPurify.sanitize(document.getElementById("newExamineItem").value),
           study: "",
           research: "",
         },
@@ -150,7 +154,7 @@
       };
       socket.emit("userSubmittedNewItemBlueprint", createItemBlueprintFormData);
       createItemBlueprintForm.reset();
-      createItemBlueprintForm.style.display = "none"; 
+      createItemBlueprintForm.style.display = "none";
     });
 
     document

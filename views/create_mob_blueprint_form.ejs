@@ -90,18 +90,22 @@
 
     createMobBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      const keywords = document
+        .getElementById("newMobKeywords")
+        .value.split(/[ ,]+/);
+      const purifiedKeywords = object.keywords.map((keyword) =>
+        DOMPurify.sanitize(keyword)
+      );
       const createMobBlueprintFormData = {
         _id: "",
-        name: document.getElementById("newMobName").value,
+        name: DOMPurify.sanitize(document.getElementById("newMobName").value),
         pronouns: Number(document.getElementById("newMobPronouns").value),
         level: Number(document.getElementById("newMobLevel").value),
         job: document.getElementById("newMobJob").value,
-        keywords: document
-          .getElementById("newMobKeywords")
-          .value.split(/[ ,]+/),
+        keywords: purifiedKeywords,
         description: {
-          look: document.getElementById("newLookMob").value,
-          examine: document.getElementById("newExamineMob").value,
+          look: DOMPurify.sanitize(document.getElementById("newLookMob").value),
+          examine: DOMPurify.sanitize(document.getElementById("newExamineMob").value),
         },
       };
       socket.emit("userSubmittedNewMobBlueprint", createMobBlueprintFormData);

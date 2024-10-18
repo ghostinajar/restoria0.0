@@ -60,32 +60,36 @@
     <h3>Description</h3>
     <ul>
       <li>
-        <label for="roomName">Name</label>
+        <label for="editRoomName">Name</label>
         <input
-          id="roomName"
-          name="roomName"
+          id="editRoomName"
+          name="editRoomName"
           type="text"
           maxlength="60"
           required
         />
       </li>
       <li>
-        <label for="examineRoom">Examine</label>
+        <label for="editRoomExamine">Examine</label>
         <textarea
-          id="examineRoom"
-          name="examineRoom"
+          id="editRoomExamine"
+          name="editRoomExamine"
           maxlength="240"
         ></textarea>
       </li>
       <li>
-        <label for="studyRoom">Study</label>
-        <textarea id="studyRoom" name="studyRoom" maxlength="640"></textarea>
+        <label for="editRoomStudy">Study</label>
+        <textarea
+          id="editRoomStudy"
+          name="editRoomStudy"
+          maxlength="640"
+        ></textarea>
       </li>
       <li>
-        <label for="researchRoom">Research</label>
+        <label for="editRoomResearch">Research</label>
         <textarea
-          id="researchRoom"
-          name="researchRoom"
+          id="editRoomResearch"
+          name="editRoomResearch"
           maxlength="1600"
         ></textarea>
       </li>
@@ -100,59 +104,84 @@
     <h3>Tags</h3>
     <ul>
       <li>
-        <label for="isDark">Dark</label>
-        <input type="checkbox" id="isDark" name="isDark" value="isDark" />
-      </li>
-      <li>
-        <label for="isIndoors">Indoors</label>
+        <label for="editRoomIsDark">Dark</label>
         <input
           type="checkbox"
-          id="isIndoors"
-          name="isIndoors"
-          value="isIndoors"
+          id="editRoomIsDark"
+          name="editRoomIsDark"
+          value="editRoomIsDark"
         />
       </li>
       <li>
-        <label for="isOnWater">On Water</label>
+        <label for="editRoomIsIndoors">Indoors</label>
         <input
           type="checkbox"
-          id="isOnWater"
-          name="isOnWater"
-          value="isOnWater"
+          id="editRoomIsIndoors"
+          name="editRoomIsIndoors"
+          value="editRoomIsIndoors"
         />
       </li>
       <li>
-        <label for="isUnderwater">Underwater</label>
+        <label for="editRoomIsOnWater">On Water</label>
         <input
           type="checkbox"
-          id="isUnderwater"
-          name="isUnderwater"
-          value="isUnderwater"
+          id="editRoomIsOnWater"
+          name="editRoomIsOnWater"
+          value="editRoomIsOnWater"
         />
       </li>
       <li>
-        <label for="noMounts">No Mounts</label>
-        <input type="checkbox" id="noMounts" name="noMounts" value="noMounts" />
+        <label for="editRoomIsUnderwater">Underwater</label>
+        <input
+          type="checkbox"
+          id="editRoomIsUnderwater"
+          name="editRoomIsUnderwater"
+          value="editRoomIsUnderwater"
+        />
       </li>
       <li>
-        <label for="noMobs">No Mobs</label>
-        <input type="checkbox" id="noMobs" name="noMobs" value="noMobs" />
+        <label for="editRoomNoMounts">No Mounts</label>
+        <input
+          type="checkbox"
+          id="editRoomNoMounts"
+          name="editRoomNoMounts"
+          value="editRoomNoMounts"
+        />
       </li>
       <li>
-        <label for="noMagic">No Magic</label>
-        <input type="checkbox" id="noMagic" name="noMagic" value="noMagic" />
+        <label for="editRoomNoMobs">No Mobs</label>
+        <input
+          type="checkbox"
+          id="editRoomNoMobs"
+          name="editRoomNoMobs"
+          value="editRoomNoMobs"
+        />
       </li>
       <li>
-        <label for="noCombat">No Combat</label>
-        <input type="checkbox" id="noCombat" name="noCombat" value="noCombat" />
+        <label for="editRoomNoMagic">No Magic</label>
+        <input
+          type="checkbox"
+          id="editRoomNoMagic"
+          name="editRoomNoMagic"
+          value="editRoomNoMagic"
+        />
       </li>
       <li>
-        <label for="playerCap">Player Cap</label>
+        <label for="editRoomNoCombat">No Combat</label>
+        <input
+          type="checkbox"
+          id="editRoomNoCombat"
+          name="editRoomNoCombat"
+          value="editRoomNoCombat"
+        />
+      </li>
+      <li>
+        <label for="editRoomPlayerCap">Player Cap</label>
         <input
           style="width: 3.9rem"
           type="number"
-          id="playerCap"
-          name="playerCap"
+          id="editRoomPlayerCap"
+          name="editRoomPlayerCap"
           min="0"
           max="18"
           value="0"
@@ -160,12 +189,12 @@
         />
       </li>
       <li>
-        <label for="mobCap">Mob Cap</label>
+        <label for="editRoomMobCap">Mob Cap</label>
         <input
           style="width: 3.9rem"
           type="number"
-          id="mobCap"
-          name="mobCap"
+          id="editRoomMobCap"
+          name="editRoomMobCap"
           min="0"
           max="18"
           value="0"
@@ -262,6 +291,25 @@
       ".edit-room-tab-content"
     );
 
+    const editRoomName = document.getElementById("editRoomName").value;
+    const editRoomExamine = document.getElementById("editRoomExamine").value;
+    const editRoomStudy = document.getElementById("editRoomStudy").value;
+    const editRoomResearch = document.getElementById("editRoomResearch").value;
+    const editRoomIsDark = document.getElementById("editRoomIsDark").value;
+    const editRoomIsIndoors =
+      document.getElementById("editRoomIsIndoors").value;
+    const editRoomIsOnWater =
+      document.getElementById("editRoomIsOnWater").value;
+    const editRoomIsUnderwater = document.getElementById(
+      "editRoomIsUnderwater"
+    ).value;
+    const editRoomNoMounts = document.getElementById("editRoomNoMounts").value;
+    const editRoomNoMobs = document.getElementById("editRoomNoMobs").value;
+    const editRoomNoMagic = document.getElementById("editRoomNoMagic").value;
+    const editRoomNoCombat = document.getElementById("editRoomNoCombat").value;
+    const editRoomPlayerCap =
+      document.getElementById("editRoomPlayerCap").value;
+    const editRoomMobCap = document.getElementById("editRoomMobCap").value;
     const editRoomItemNodeList = document.getElementById(
       "editRoomItemNodeList"
     );
@@ -302,36 +350,26 @@
 
     editRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      workingEditRoomData.name = document.getElementById("roomName").value;
+      workingEditRoomData.name = DOMPurify.sanitize(editRoomName);
       workingEditRoomData.description.examine =
-        document.getElementById("examineRoom").value;
-      workingEditRoomData.description.study =
-        document.getElementById("studyRoom").value;
+        DOMPurify.sanitize(editRoomExamine);
+      workingEditRoomData.description.study = DOMPurify.sanitize(editRoomStudy);
       workingEditRoomData.description.research =
-        document.getElementById("researchRoom").value;
-      workingEditRoomData.isDark = document.getElementById("isDark").checked;
-      workingEditRoomData.isIndoors =
-        document.getElementById("isIndoors").checked;
-      workingEditRoomData.isOnWater =
-        document.getElementById("isOnWater").checked;
-      workingEditRoomData.isUnderwater =
-        document.getElementById("isUnderwater").checked;
-      workingEditRoomData.noMounts =
-        document.getElementById("noMounts").checked;
-      workingEditRoomData.noMobs = document.getElementById("noMobs").checked;
-      workingEditRoomData.noMagic = document.getElementById("noMagic").checked;
-      workingEditRoomData.noCombat =
-        document.getElementById("noCombat").checked;
-      workingEditRoomData.playerCap = Number(
-        document.getElementById("playerCap").value
-      );
-      workingEditRoomData.mobCap = Number(
-        document.getElementById("mobCap").value
-      );
+        DOMPurify.sanitize(editRoomResearch);
+      workingEditRoomData.isDark = editRoomIsDark.checked;
+      workingEditRoomData.IsIndoors = editRoomIsIndoors.checked;
+      workingEditRoomData.IsOnWater = editRoomIsOnWater.checked;
+      workingEditRoomData.IsUnderwater = editRoomIsUnderwater.checked;
+      workingEditRoomData.NoMounts = editRoomNoMounts.checked;
+      workingEditRoomData.NoMobs = editRoomNoMobs.checked;
+      workingEditRoomData.NoMagic = editRoomNoMagic.checked;
+      workingEditRoomData.NoCombat = editRoomNoCombat.checked;
+      workingEditRoomData.PlayerCap = Number(editRoomPlayerCap.value);
+      workingEditRoomData.MobCap = Number(editRoomMobCap.value);
       saveExitList(workingEditRoomData.exits);
 
       socket.emit("userSubmittedEditRoom", workingEditRoomData);
-      editRoomForm.style.display = "none"; 
+      editRoomForm.style.display = "none";
     });
 
     document
@@ -383,14 +421,8 @@
       editRoomForm.reset();
       clearUl(editRoomMobNodeList);
       clearUl(editRoomItemNodeList);
-      generateStringSelectOptions(
-        mobBlueprints,
-        editRoomMobNodeSelect
-      );
-      generateStringSelectOptions(
-        itemBlueprints,
-        editRoomItemNodeSelect
-      );
+      generateStringSelectOptions(mobBlueprints, editRoomMobNodeSelect);
+      generateStringSelectOptions(itemBlueprints, editRoomItemNodeSelect);
 
       // reset/hide open forms, show editRoomForm
       activeForm.reset();
@@ -413,25 +445,34 @@
         workingEditRoomData.description.research || "";
       document.getElementById("isDark").checked =
         workingEditRoomData.isDark || false;
-      document.getElementById("isIndoors").checked =
-        workingEditRoomData.isIndoors || false;
-      document.getElementById("isOnWater").checked =
-        workingEditRoomData.isOnWater || false;
-      document.getElementById("isUnderwater").checked =
-        workingEditRoomData.isUnderwater || false;
-      document.getElementById("noMounts").checked =
-        workingEditRoomData.noMounts || false;
-      document.getElementById("noMobs").checked =
-        workingEditRoomData.noMobs || false;
-      document.getElementById("noMagic").checked =
-        workingEditRoomData.noMagic || false;
-      document.getElementById("noCombat").checked =
-        workingEditRoomData.noCombat || false;
-      document.getElementById("playerCap").value =
-        workingEditRoomData.playerCap || 0;
-      document.getElementById("mobCap").value = workingEditRoomData.mobCap || 0;
-      loadNodesToUlElement(editRoomMobNodeList, workingEditRoomData.mobNodes, mobBlueprints);
-      loadNodesToUlElement(editRoomItemNodeList, workingEditRoomData.itemNodes, itemBlueprints);
+      document.getElementById("editRoomIsIndoors").checked =
+        workingEditRoomData.editRoomIsIndoors || false;
+      document.getElementById("editRoomIsOnWater").checked =
+        workingEditRoomData.editRoomIsOnWater || false;
+      document.getElementById("editRoomIsUnderwater").checked =
+        workingEditRoomData.editRoomIsUnderwater || false;
+      document.getElementById("editRoomNoMounts").checked =
+        workingEditRoomData.editRoomNoMounts || false;
+      document.getElementById("editRoomNoMobs").checked =
+        workingEditRoomData.editRoomNoMobs || false;
+      document.getElementById("editRoomNoMagic").checked =
+        workingEditRoomData.editRoomNoMagic || false;
+      document.getElementById("editRoomNoCombat").checked =
+        workingEditRoomData.editRoomNoCombat || false;
+      document.getElementById("editRoomPlayerCap").value =
+        workingEditRoomData.editRoomPlayerCap || 0;
+      document.getElementById("editRoomMobCap").value =
+        workingEditRoomData.editRoomMobCap || 0;
+      loadNodesToUlElement(
+        editRoomMobNodeList,
+        workingEditRoomData.mobNodes,
+        mobBlueprints
+      );
+      loadNodesToUlElement(
+        editRoomItemNodeList,
+        workingEditRoomData.itemNodes,
+        itemBlueprints
+      );
       loadExitList(workingEditRoomData.exits);
     });
 

@@ -811,22 +811,26 @@
 
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      const keywords = editItemKeywords.value.split(/[ ,]+/);
+      const purifiedKeywords = object.keywords.map((keyword) =>
+        DOMPurify.sanitize(keyword)
+      );
       // TODO move weaponStats, spellCharges, and wearableLocations
       // out of this object definition, and add them conditionally
       // based on relevant item type before sending to server
       // (no need for this object to contain irrelevant properties,
       // and they are optional in the type)
       const editItemBlueprintFormData = {
-        name: editItemName.value || "no item name",
-        keywords: editItemKeywords.value.split(/[ ,]+/) || "",
+        name: DOMPurify.sanitize(editItemName.value) || "no item name",
+        keywords: purifiedKeywords,
         price: editItemPrice.value || 0,
         minimumLevel: editItemMinimumLevel.value || 0,
         itemType: editItemType.value,
         description: {
-          look: editLookItem.value || "",
-          examine: editExamineItem.value || "",
-          study: editStudyItem.value || "",
-          research: editResearchItem.value || "",
+          look: DOMPurify.sanitize(editLookItem.value) || "",
+          examine: DOMPurify.sanitize(editExamineItem.value) || "",
+          study: DOMPurify.sanitize(editStudyItem.value) || "",
+          research: DOMPurify.sanitize(editResearchItem.value) || "",
         },
         tags: {
           cleric: editItemCleric.checked || false,
@@ -930,7 +934,7 @@
       );
       editItemBlueprintForm.reset();
       hideEditItemTabs();
-      editItemBlueprintForm.style.display = "none"; 
+      editItemBlueprintForm.style.display = "none";
     });
 
     document
@@ -1003,7 +1007,7 @@
       input.value = "";
       generateStringSelectOptions(
         formData.itemBlueprintNames,
-        document.getElementById("editItemSelectItem")
+        editItemSelectItem
       );
       selectedItemId = itemBlueprintNames[0]._id;
       populateEditItemFieldsFromId(selectedItemId);

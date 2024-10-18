@@ -35,32 +35,32 @@
     </li>
     <h3>Description</h3>
     <li>
-      <label for="editLookZone">Look:</label>
-      <input id="editLookZone" name="editLookZone" type="text" maxlength="80" />
+      <label for="editZoneLook">Look:</label>
+      <input id="editZoneLook" name="editZoneLook" type="text" maxlength="80" />
     </li>
     <li>
-      <label for="editExamineZone">Examine:</label>
+      <label for="editZoneExamine">Examine:</label>
       <textarea
-        id="editExamineZone"
-        name="editExamineZone"
+        id="editZoneExamine"
+        name="editZoneExamine"
         type="text"
         maxlength="240"
       ></textarea>
     </li>
     <li>
-      <label for="editStudyZone">Study:</label>
+      <label for="editZoneStudy">Study:</label>
       <textarea
-        id="editStudyZone"
-        name="editStudyZone"
+        id="editZoneStudy"
+        name="editZoneStudy"
         type="text"
         maxlength="640"
       ></textarea>
     </li>
     <li>
-      <label for="editResearchZone">Research:</label>
+      <label for="editZoneResearch">Research:</label>
       <textarea
-        id="editResearchZone"
-        name="editResearchZone"
+        id="editZoneResearch"
+        name="editZoneResearch"
         type="text"
         maxlength="1600"
       ></textarea>
@@ -78,16 +78,23 @@
   document.addEventListener("DOMContentLoaded", () => {
     let zoneId;
     const editZoneForm = document.getElementById("editZoneForm");
+    const editZoneName = document.getElementById("editZoneName");
+    const editZoneMinutesToRepop = getElementById("editZoneMinutesToRepop")
+    const editZoneLook = document.getElementById("editZoneLook")
+    const editZoneExamine = document.getElementById("editZoneExamine")
+    const editZoneStudy = document.getElementById("editZoneStudy")
+    const editZoneResearch = document.getElementById("editZoneResearch")
+
     editZoneForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const editZoneFormData = {
-        name: document.getElementById("editZoneName").value,
-        minutesToRepop: document.getElementById("editZoneMinutesToRepop").value,
+        name: DOMPurify.sanitize(editZoneName.value),
+        minutesToRepop: editZoneMinutesToRepop.value,
         description: {
-          look: document.getElementById("editLookZone").value,
-          examine: document.getElementById("editExamineZone").value,
-          study: document.getElementById("editStudyZone").value,
-          research: document.getElementById("editResearchZone").value,
+          look: DOMPurify.sanitize(editZoneLook.value),
+          examine: DOMPurify.sanitize(editZoneExamine.value),
+          study: DOMPurify.sanitize(editZoneStudy.value),
+          research: DOMPurify.sanitize(editZoneResearch.value),
         },
       };
       socket.emit("userSubmittedEditZone", editZoneFormData);
@@ -109,16 +116,16 @@
       input.value = "";
       // Set the values of the fields based on formData
       zoneId = formData.zoneId;
-      document.getElementById("editZoneName").value = formData.name || "";
-      document.getElementById("editZoneMinutesToRepop").value =
+      editZoneName.value = formData.name || "";
+      editZoneMinutesToRepop.value =
         formData.minutesToRepop || 15;
-      document.getElementById("editLookZone").value =
+      editZoneLook.value =
         formData.description.look || "";
-      document.getElementById("editExamineZone").value =
+      editZoneExamine.value =
         formData.description.examine || "";
-      document.getElementById("editStudyZone").value =
+      editZoneStudy.value =
         formData.description.study || "";
-      document.getElementById("editResearchZone").value =
+      editZoneResearch.value =
         formData.description.research || "";
     });
   });

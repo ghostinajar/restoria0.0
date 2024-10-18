@@ -59,9 +59,9 @@
     editUserForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const userDescription = {
-        examine: editUserExamineUser.value,
-        study: editUserStudyUser.value,
-        research: editUserResearchUser.value,
+        examine: DOMPurify.sanitize(editUserExamineUser.value),
+        study: DOMPurify.sanitize(editUserStudyUser.value),
+        research: DOMPurify.sanitize(editUserResearchUser.value),
       };
       socket.emit("userSubmittedUserDescription", userDescription);
       editUserForm.reset();

@@ -97,7 +97,7 @@
     createRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const roomData = {
-        name: document.getElementById("newRoomName").value,
+        name: DOMPurify.sanitize(document.getElementById("newRoomName").value),
         direction: document.getElementById("newRoomDirection").value,
         isDark: document.getElementById("newIsDark").checked,
         isIndoors: document.getElementById("newIsIndoors").checked,
@@ -107,7 +107,7 @@
         noMobs: false,
         noMagic: false,
         noCombat: false,
-        examine: document.getElementById("newExamineRoom").value,
+        examine: DOMPurify.sanitize(document.getElementById("newExamineRoom").value),
         study: "",
         research: "",
       };

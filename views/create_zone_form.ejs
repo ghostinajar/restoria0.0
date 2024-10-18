@@ -82,15 +82,15 @@
     createZoneForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const createZoneFormData = {
-        name: document.getElementById("newZoneName").value,
+        name: DOMPurify.sanitize(document.getElementById("newZoneName").value),
         minutesToRepop: Number(
           document.getElementById("newZoneMinutesToRepop").value
         ),
         description: {
-          look: document.getElementById("newLookZone").value,
-          examine: document.getElementById("newExamineZone").value,
-          study: document.getElementById("newStudyZone").value,
-          research: document.getElementById("newResearchZone").value,
+          look: DOMPurify.sanitize(document.getElementById("newLookZone").value),
+          examine: DOMPurify.sanitize(document.getElementById("newExamineZone").value),
+          study: DOMPurify.sanitize(document.getElementById("newStudyZone").value),
+          research: DOMPurify.sanitize(document.getElementById("newResearchZone").value),
         },
       };
       socket.emit("userSubmittedNewZone", createZoneFormData);
