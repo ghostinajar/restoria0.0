@@ -6,6 +6,11 @@ const window = new JSDOM("").window;
 const purify = DOMPurify(window);
 export const wordFilter = new Filter();
 
+export function purifyCommandInput(input: string): string {
+  let sanitizedInput = purify.sanitize(input);
+  return wordFilter.clean(sanitizedInput);
+}
+
 export function purifyDescriptionOfObject(object: any) {
   if (object.name) {
     object.name = wordFilter.clean(purify.sanitize(object.name));
@@ -39,6 +44,7 @@ export function purifyDescriptionOfObject(object: any) {
       );
     }
   }
+  return object;
 }
 
 export default purifyDescriptionOfObject;

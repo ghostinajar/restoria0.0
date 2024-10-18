@@ -22,7 +22,7 @@ import editItemBlueprint from "./commands/editItemBlueprint.js";
 import createZone from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
-import purifyDescriptionOfObject from "./util/purify.js";
+import purifyDescriptionOfObject, { purifyCommandInput } from "./util/purify.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -70,6 +70,7 @@ const setupSocket = (io) => {
             });
             // Listen for client events
             socket.on(`userSentCommand`, async (userInput) => {
+                userInput = purifyCommandInput(userInput);
                 userSentCommandHandler(socket, userInput, user);
             });
             socket.on(`userSubmittedEditItemBlueprint`, async (itemId, itemBlueprintData) => {

@@ -4,6 +4,10 @@ import { Filter } from "bad-words";
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
 export const wordFilter = new Filter();
+export function purifyCommandInput(input) {
+    let sanitizedInput = purify.sanitize(input);
+    return wordFilter.clean(sanitizedInput);
+}
 export function purifyDescriptionOfObject(object) {
     if (object.name) {
         object.name = wordFilter.clean(purify.sanitize(object.name));
@@ -25,6 +29,7 @@ export function purifyDescriptionOfObject(object) {
             object.description.research = wordFilter.clean(purify.sanitize(object.description.research));
         }
     }
+    return object;
 }
 export default purifyDescriptionOfObject;
 // to use: const clean = purify.sanitize('<b>hello there</b>');
