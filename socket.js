@@ -22,6 +22,7 @@ import editItemBlueprint from "./commands/editItemBlueprint.js";
 import createZone from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
+import purifyDescriptionOfObject from "./util/purify.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -72,14 +73,23 @@ const setupSocket = (io) => {
                 userSentCommandHandler(socket, userInput, user);
             });
             socket.on(`userSubmittedEditItemBlueprint`, async (itemId, itemBlueprintData) => {
+                purifyDescriptionOfObject(itemBlueprintData);
                 await editItemBlueprint(itemId, itemBlueprintData, user);
                 stats(user);
             });
             socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
+                purifyDescriptionOfObject(mobBlueprintData);
                 await editMobBlueprint(mobId, mobBlueprintData, user);
                 stats(user);
             });
+            socket.on(`userSubmittedEditRoom`, async (roomData) => {
+                const room = await getRoomOfUser(user);
+                purifyDescriptionOfObject(roomData);
+                await editRoom(room, roomData, user);
+                stats(user);
+            });
             socket.on(`userSubmittedEditZone`, async (zoneData) => {
+                purifyDescriptionOfObject(zoneData);
                 await editZone(zoneData, user);
                 stats(user);
             });
@@ -105,32 +115,33 @@ const setupSocket = (io) => {
                 worldEmitter.emit(`messageFor${user.username}`, message);
             });
             socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
+                purifyDescriptionOfObject(itemBlueprintData);
                 const newItemBlueprint = await createItemBlueprint(itemBlueprintData, user);
                 stats(user);
             });
             socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {
+                purifyDescriptionOfObject(mobBlueprintData);
                 const newMobBlueprint = await createMobBlueprint(mobBlueprintData, user);
                 stats(user);
             });
             socket.on(`userSubmittedNewRoom`, async (roomData) => {
+                purifyDescriptionOfObject(roomData);
                 const newRoom = await createRoom(roomData, user);
                 stats(user);
             });
             socket.on(`userSubmittedNewUser`, async (userData) => {
+                purifyDescriptionOfObject(userData);
                 const newUser = await createUser(userData, user);
                 stats(user);
             });
             socket.on(`userSubmittedNewZone`, async (zoneData) => {
+                purifyDescriptionOfObject(zoneData);
                 const newZone = await createZone(zoneData, user);
                 stats(user);
             });
             socket.on(`userSubmittedUserDescription`, async (userDescription) => {
+                purifyDescriptionOfObject(userDescription);
                 await editUser(user, userDescription);
-                stats(user);
-            });
-            socket.on(`userSubmittedRoomEdit`, async (roomData) => {
-                const room = await getRoomOfUser(user);
-                await editRoom(room, roomData, user);
                 stats(user);
             });
             // On connection, alert room and look

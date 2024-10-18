@@ -330,7 +330,7 @@
       );
       saveExitList(workingEditRoomData.exits);
 
-      socket.emit("userSubmittedRoomEdit", workingEditRoomData);
+      socket.emit("userSubmittedEditRoom", workingEditRoomData);
       editRoomForm.style.display = "none"; 
     });
 

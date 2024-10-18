@@ -42,6 +42,7 @@ import editItemBlueprint, {
 import createZone, { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
+import purifyDescriptionOfObject from "./util/purify.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -141,6 +142,7 @@ const setupSocket = (io: any) => {
           itemId: mongoose.Types.ObjectId,
           itemBlueprintData: IEditItemBlueprintFormData
         ) => {
+          purifyDescriptionOfObject(itemBlueprintData);
           await editItemBlueprint(itemId, itemBlueprintData, user);
           stats(user);
         }
@@ -152,12 +154,24 @@ const setupSocket = (io: any) => {
           mobId: mongoose.Types.ObjectId,
           mobBlueprintData: IEditMobFormData
         ) => {
+          purifyDescriptionOfObject(mobBlueprintData);
           await editMobBlueprint(mobId, mobBlueprintData, user);
           stats(user);
         }
       );
 
+      socket.on(
+        `userSubmittedEditRoom`,
+        async (roomData: IEditRoomFormData) => {
+          const room = await getRoomOfUser(user);
+          purifyDescriptionOfObject(roomData);
+          await editRoom(room, roomData, user);
+          stats(user);
+        }
+      );
+
       socket.on(`userSubmittedEditZone`, async (zoneData: IZoneData) => {
+        purifyDescriptionOfObject(zoneData);
         await editZone(zoneData, user);
         stats(user);
       });
@@ -167,7 +181,9 @@ const setupSocket = (io: any) => {
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
           await zone.eraseItemBlueprintById(formData._id);
-          logger.info(`User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`)
+          logger.info(
+            `User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`
+          );
           let message = makeMessage(
             "success",
             `You permanently erased the itemBlueprint for ${formData.name}.`
@@ -181,7 +197,9 @@ const setupSocket = (io: any) => {
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
           await zone.eraseMobBlueprintById(formData._id);
-          logger.info(`User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`)
+          logger.info(
+            `User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`
+          );
           let message = makeMessage(
             "success",
             `You permanently erased the mobBlueprint for ${formData.name}.`
@@ -195,7 +213,9 @@ const setupSocket = (io: any) => {
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
           await zone.eraseRoomById(formData._id);
-          logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`)
+          logger.info(
+            `User ${user.name} erased room ${formData.name}, id: ${formData._id}`
+          );
           let message = makeMessage(
             "success",
             `You permanently erased the room ${formData.name}.`
@@ -207,6 +227,7 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedNewItemBlueprint`,
         async (itemBlueprintData: ICreateItemBlueprintFormData) => {
+          purifyDescriptionOfObject(itemBlueprintData);
           const newItemBlueprint = await createItemBlueprint(
             itemBlueprintData,
             user
@@ -218,6 +239,7 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedNewMobBlueprint`,
         async (mobBlueprintData: ICreateMobFormData) => {
+          purifyDescriptionOfObject(mobBlueprintData);
           const newMobBlueprint = await createMobBlueprint(
             mobBlueprintData,
             user
@@ -227,16 +249,19 @@ const setupSocket = (io: any) => {
       );
 
       socket.on(`userSubmittedNewRoom`, async (roomData: INewRoomData) => {
+        purifyDescriptionOfObject(roomData);
         const newRoom = await createRoom(roomData, user);
         stats(user);
       });
 
       socket.on(`userSubmittedNewUser`, async (userData: IUserData) => {
+        purifyDescriptionOfObject(userData);
         const newUser = await createUser(userData, user);
         stats(user);
       });
 
       socket.on(`userSubmittedNewZone`, async (zoneData: IZoneData) => {
+        purifyDescriptionOfObject(zoneData);
         const newZone = await createZone(zoneData, user);
         stats(user);
       });
@@ -244,16 +269,8 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedUserDescription`,
         async (userDescription: IDescription) => {
+          purifyDescriptionOfObject(userDescription);
           await editUser(user, userDescription);
-          stats(user);
-        }
-      );
-
-      socket.on(
-        `userSubmittedRoomEdit`,
-        async (roomData: IEditRoomFormData) => {
-          const room = await getRoomOfUser(user);
-          await editRoom(room, roomData, user);
           stats(user);
         }
       );
