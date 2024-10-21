@@ -89,6 +89,26 @@
       activeForm = createUserForm;
       activeForm.style.display = "block";
       input.value = "";
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `Create User`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Name: </span> letters only (max. 18), no unique irl names (e.g. no "Obama")</span>`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Password: </span> min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Pronouns: </span> in place of their name ("Ralu attacks you!" vs "<u>He</u> attacks you!")`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Job: </span> determines their abilities, spells, and fighting style in combat`,
+      });
     });
   });
 </script>

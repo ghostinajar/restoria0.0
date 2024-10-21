@@ -16,7 +16,7 @@ import ROOM_TYPE from "../constants/ROOM_TYPE.js";
 
 export interface IZoneData {
   name: string;
-  minutesToRepop: number;
+  minutesToRespawn: number;
   description: IDescription;
 }
 
@@ -91,7 +91,7 @@ async function createZone(
       mobBlueprints: [],
       itemBlueprints: [],
       suggestions: [],
-      minutesToRepop: zoneFormData.minutesToRepop,
+      minutesToRespawn: zoneFormData.minutesToRespawn,
     };
 
     // create and save to db
@@ -121,6 +121,7 @@ async function createZone(
       author.unpublishedZoneTally = 0;
     }
     author.unpublishedZoneTally++;
+    author.save();
     // notify user
     message.type = "success";
     message.content = `You created a zone: ${newZoneData.name}!`;

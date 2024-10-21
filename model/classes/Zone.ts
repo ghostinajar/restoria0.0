@@ -22,7 +22,7 @@ export interface IZone extends mongoose.Document {
   mobBlueprints: Array<IMobBlueprint>;
   itemBlueprints: Array<IItemBlueprint>;
   suggestions: Array<ISuggestion>;
-  minutesToRepop: number;
+  minutesToRespawn: number;
 
   initRooms(): Promise<void>;
   clearRooms(): Promise<void>;
@@ -70,7 +70,7 @@ const zoneSchema = new Schema({
       default: () => ({}),
     },
   ],
-  minutesToRepop: {
+  minutesToRespawn: {
     type: Number,
     default: 15,
     min: [

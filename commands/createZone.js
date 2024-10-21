@@ -75,7 +75,7 @@ async function createZone(zoneFormData, author) {
             mobBlueprints: [],
             itemBlueprints: [],
             suggestions: [],
-            minutesToRepop: zoneFormData.minutesToRepop,
+            minutesToRespawn: zoneFormData.minutesToRespawn,
         };
         // create and save to db
         const newZone = new Zone(newZoneData);
@@ -89,6 +89,7 @@ async function createZone(zoneFormData, author) {
             newZoneData.author = author._id;
         }
         await newZone.save();
+        author.unpublishedZoneTally++;
         logger.info(`Author "${author.name}" created zone "${newZoneData.name}".`);
         const nameToRegister = new Name({ name: newZoneData.name });
         const nameSaved = await nameToRegister.save();
@@ -101,6 +102,7 @@ async function createZone(zoneFormData, author) {
             author.unpublishedZoneTally = 0;
         }
         author.unpublishedZoneTally++;
+        author.save();
         // notify user
         message.type = "success";
         message.content = `You created a zone: ${newZoneData.name}!`;

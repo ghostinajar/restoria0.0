@@ -40,7 +40,7 @@ async function editZone(zoneData: IZoneData, user: IUser) {
     zone.name = zoneData.name;
   }
 
-  zone.minutesToRepop = zoneData.minutesToRepop;
+  zone.minutesToRespawn = zoneData.minutesToRespawn;
   zone.description = zoneData.description;
 
   await zone.save();

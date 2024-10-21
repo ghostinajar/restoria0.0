@@ -47,7 +47,7 @@ const zoneSchema = new Schema({
             default: () => ({}),
         },
     ],
-    minutesToRepop: {
+    minutesToRespawn: {
         type: Number,
         default: 15,
         min: [

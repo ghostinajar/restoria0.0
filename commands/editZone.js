@@ -28,7 +28,7 @@ async function editZone(zoneData, user) {
         }
         zone.name = zoneData.name;
     }
-    zone.minutesToRepop = zoneData.minutesToRepop;
+    zone.minutesToRespawn = zoneData.minutesToRespawn;
     zone.description = zoneData.description;
     await zone.save();
     worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Zone chages saved!`));

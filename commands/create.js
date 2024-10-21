@@ -36,6 +36,10 @@ async function create(parsedCommand, user) {
             break;
         }
         case `zone`: {
+            if (user.unpublishedZoneTally >= 5) {
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You already have 5 zones in progress! Work on publishing one of them first.`));
+                break;
+            }
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `createZoneForm`,
             });

@@ -23,10 +23,10 @@
       />
     </li>
     <li>
-      <label for="newZoneMinutesToRepop">Repop:</label>
+      <label for="newZoneMinutesToRespawn">Respawn:</label>
       <input
-        id="newZoneMinutesToRepop"
-        name="newZoneMinutesToRepop"
+        id="newZoneMinutesToRespawn"
+        name="newZoneMinutesToRespawn"
         type="number"
         min="5"
         max="180"
@@ -83,19 +83,27 @@
       e.preventDefault();
       const createZoneFormData = {
         name: DOMPurify.sanitize(document.getElementById("newZoneName").value),
-        minutesToRepop: Number(
-          document.getElementById("newZoneMinutesToRepop").value
+        minutesToRespawn: Number(
+          document.getElementById("newZoneMinutesToRespawn").value
         ),
         description: {
-          look: DOMPurify.sanitize(document.getElementById("newLookZone").value),
-          examine: DOMPurify.sanitize(document.getElementById("newExamineZone").value),
-          study: DOMPurify.sanitize(document.getElementById("newStudyZone").value),
-          research: DOMPurify.sanitize(document.getElementById("newResearchZone").value),
+          look: DOMPurify.sanitize(
+            document.getElementById("newLookZone").value
+          ),
+          examine: DOMPurify.sanitize(
+            document.getElementById("newExamineZone").value
+          ),
+          study: DOMPurify.sanitize(
+            document.getElementById("newStudyZone").value
+          ),
+          research: DOMPurify.sanitize(
+            document.getElementById("newResearchZone").value
+          ),
         },
       };
       socket.emit("userSubmittedNewZone", createZoneFormData);
       createZoneForm.reset();
-      createZoneForm.style.display = "none"; 
+      createZoneForm.style.display = "none";
     });
 
     document
@@ -110,6 +118,42 @@
       activeForm = createZoneForm;
       activeForm.style.display = "block";
       input.value = "";
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `Create Zone`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Name: </span> the zone's title, e.g. "The Mushroom City"</span>`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Respawn: </span> minutes before most mobs, doors, and items respawn`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Look: </span> player sees this sentence when they survey the wilderness,`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `  e.g. "Clouds of spores and odd, fungal shapes protrude from the horizon."`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Examine: </span> player sees this paragraph when they examine the zone`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Study: </span> player sees more history when they study the zone`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Research: </span> these paragraphs tell the full history of the zone.`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `  A good research text rewards the reader with some secrets about the zone.`,
+      });
     });
   });
 </script>
