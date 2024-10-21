@@ -125,6 +125,38 @@
       activeForm = createMobBlueprintForm;
       activeForm.style.display = "block";
       input.value = "";
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `Create Mob`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Name: </span> e.g '<span style="color: var(--green_light)">a green goblin</span>' or '<span style="color: var(--green_light)">Greg the blacksmith'</span>`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Keywords: </span> e.g 'goblin, green' or 'blacksmith, Greg'`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Pronouns: </span> allows gendered or non-gendered mobs`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Level: </span> same level as a solo player is a good challenge`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Job: </span> abilities and fighting style for combat`,
+      }); 
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Look: </span> player sees this when they look or enter a room`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Examine: </span> player sees this when they examine the mob`,
+      });
     });
   });
 </script>

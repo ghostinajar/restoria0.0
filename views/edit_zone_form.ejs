@@ -79,11 +79,13 @@
     let zoneId;
     const editZoneForm = document.getElementById("editZoneForm");
     const editZoneName = document.getElementById("editZoneName");
-    const editZoneMinutesToRepop = getElementById("editZoneMinutesToRepop")
-    const editZoneLook = document.getElementById("editZoneLook")
-    const editZoneExamine = document.getElementById("editZoneExamine")
-    const editZoneStudy = document.getElementById("editZoneStudy")
-    const editZoneResearch = document.getElementById("editZoneResearch")
+    const editZoneMinutesToRepop = document.getElementById(
+      "editZoneMinutesToRepop"
+    );
+    const editZoneLook = document.getElementById("editZoneLook");
+    const editZoneExamine = document.getElementById("editZoneExamine");
+    const editZoneStudy = document.getElementById("editZoneStudy");
+    const editZoneResearch = document.getElementById("editZoneResearch");
 
     editZoneForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -99,7 +101,7 @@
       };
       socket.emit("userSubmittedEditZone", editZoneFormData);
       editZoneForm.reset();
-      editZoneForm.style.display = "none"; 
+      editZoneForm.style.display = "none";
     });
 
     document
@@ -117,16 +119,11 @@
       // Set the values of the fields based on formData
       zoneId = formData.zoneId;
       editZoneName.value = formData.name || "";
-      editZoneMinutesToRepop.value =
-        formData.minutesToRepop || 15;
-      editZoneLook.value =
-        formData.description.look || "";
-      editZoneExamine.value =
-        formData.description.examine || "";
-      editZoneStudy.value =
-        formData.description.study || "";
-      editZoneResearch.value =
-        formData.description.research || "";
+      editZoneMinutesToRepop.value = formData.minutesToRepop || 15;
+      editZoneLook.value = formData.description.look || "";
+      editZoneExamine.value = formData.description.examine || "";
+      editZoneStudy.value = formData.description.study || "";
+      editZoneResearch.value = formData.description.research || "";
     });
   });
 </script>

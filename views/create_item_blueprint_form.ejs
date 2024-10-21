@@ -129,8 +129,12 @@
         minimumLevel: document.getElementById("newItemMinimumLevel").value,
         itemType: document.getElementById("newItemType").value,
         description: {
-          look: DOMPurify.sanitize(document.getElementById("newLookItem").value),
-          examine: DOMPurify.sanitize(document.getElementById("newExamineItem").value),
+          look: DOMPurify.sanitize(
+            document.getElementById("newLookItem").value
+          ),
+          examine: DOMPurify.sanitize(
+            document.getElementById("newExamineItem").value
+          ),
           study: "",
           research: "",
         },
@@ -169,6 +173,42 @@
       activeForm = createItemBlueprintForm;
       activeForm.style.display = "block";
       input.value = "";
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `Create Item`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Name: </span> e.g '<span style="color: var(--blue_light)">a green potion</span>' or '<span style="color: var(--blue_light)">Excaliburr the Frozen'</span>`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Keywords: </span> e.g 'potion, green' or 'sword, Excaliburr, Frozen`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Type: </span> each has its special features, except 'none'`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">MinLvl: </span> must be this level to use or equip`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Price: </span> how much to purchase (selling price will be less)`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Container: </span> can put or load other items inside`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Look: </span> player sees this when they look or enter a room`,
+      });
+      appendSafeMessageToTerminal({
+        type: "help",
+        content: `<span style="color:var(--red)">Examine: </span> player sees this when they examine the item`,
+      });
     });
   });
 </script>

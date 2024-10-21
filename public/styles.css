@@ -308,6 +308,10 @@ ul {
   color: var(--blue_dark);
 }
 
+.help {
+  color: var(--yellow);
+}
+
 .stats {
   color: var(--blue);
 }

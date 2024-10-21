@@ -7,7 +7,7 @@
     <title>Restoria 0.0.1</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="src/purify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
     <script>
       const socket = io(); // no URL needed for now; defaults to host that serves the page
     </script>
@@ -26,19 +26,14 @@
       <div id="messagesContainer">
         <ul id="messages"></ul>
       </div>
-      <%- include('create_item_blueprint_form'); %>
-      <%- include('create_mob_blueprint_form'); %>
-      <%- include('create_room_form'); %>
-      <%- include('create_user_form'); %>
-      <%- include('create_zone_form'); %>
-      <%- include('edit_item_blueprint_form'); %>
-      <%- include('edit_mob_blueprint_form'); %>
-      <%- include('edit_room_form'); %>
-      <%- include('edit_user_form'); %>
-      <%- include('edit_zone_form'); %>
-      <%- include('erase_item_blueprint_form'); %>
-      <%- include('erase_mob_blueprint_form'); %>
-      <%- include('erase_room_form'); %>
+      <%- include('create_item_blueprint_form'); %> <%-
+      include('create_mob_blueprint_form'); %> <%- include('create_room_form');
+      %> <%- include('create_user_form'); %> <%- include('create_zone_form'); %>
+      <%- include('edit_item_blueprint_form'); %> <%-
+      include('edit_mob_blueprint_form'); %> <%- include('edit_room_form'); %>
+      <%- include('edit_user_form'); %> <%- include('edit_zone_form'); %> <%-
+      include('erase_item_blueprint_form'); %> <%-
+      include('erase_mob_blueprint_form'); %> <%- include('erase_room_form'); %>
     </div>
 
     <!-- User input command form -->
@@ -90,6 +85,15 @@
         const item = document.createElement("li");
         item.classList.add("message-item"); // Add message-item class
         item.textContent = message.content;
+        item.classList.add(message.type);
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+
+      function appendSafeMessageToTerminal(message) {
+        const item = document.createElement("li");
+        item.classList.add("message-item"); // Add message-item class
+        item.innerHTML = message.content;
         item.classList.add(message.type);
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
