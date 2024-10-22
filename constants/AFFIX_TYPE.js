@@ -19,4 +19,5 @@ const AFFIX_TYPE = {
     STRENGTH: 'strength',
     WISDOM: 'wisdom'
 };
+export const affixTypes = Object.values(AFFIX_TYPE);
 export default AFFIX_TYPE;

@@ -75,8 +75,9 @@
         select.options.length = 0;
         for (let i = 0; i <= stringArray.length - 1; i++) {
           const option = document.createElement("option");
-          option.value = stringArray[i]._id;
-          option.textContent = stringArray[i].name;
+          // string array may be Array<{_id: string, name: string}> or Array<string>
+          option.value = stringArray[i]._id ? stringArray[i]._id:  stringArray[i];
+          option.textContent = stringArray[i].name ? stringArray[i].name : stringArray[i];
           select.appendChild(option);
         }
       }

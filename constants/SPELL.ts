@@ -96,4 +96,6 @@ const SPELL = {
   WORD_OF_RECALL: 'word of recall',
 };
 
+export const spells = Object.values(SPELL);
+
 export default SPELL;

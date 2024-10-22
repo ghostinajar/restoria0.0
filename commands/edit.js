@@ -4,6 +4,10 @@ import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
+import { spells } from "../constants/SPELL.js";
+import { itemTypes } from "../constants/ITEM_TYPE.js";
+import { affixTypes } from "../constants/AFFIX_TYPE.js";
+import { damageTypes } from "../constants/DAMAGE_TYPE.js";
 async function edit(parsedCommand, user) {
     let target = parsedCommand.directObject;
     const zone = await getZoneOfUser(user);
@@ -23,6 +27,10 @@ async function edit(parsedCommand, user) {
                 form: `editItemBlueprintForm`,
                 itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
                 itemBlueprintFullData: zone.itemBlueprints,
+                spells: spells,
+                itemTypes: itemTypes,
+                affixTypes: affixTypes,
+                damageTypes: damageTypes,
             });
             break;
         }
@@ -33,6 +41,7 @@ async function edit(parsedCommand, user) {
                 mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
                 mobBlueprintFullData: zone.mobBlueprints,
                 itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
+                affixTypes: affixTypes,
             });
             break;
         }

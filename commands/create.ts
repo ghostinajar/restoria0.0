@@ -1,4 +1,5 @@
 // create
+import { itemTypes } from "../constants/ITEM_TYPE.js";
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -20,6 +21,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
     case `item`: {
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `createItemBlueprintForm`,
+        itemTypes: itemTypes,
       });
       break;
     }

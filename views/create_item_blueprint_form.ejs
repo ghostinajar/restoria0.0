@@ -13,20 +13,20 @@
   <h2>Create Item Blueprint</h2>
   <ul>
     <li>
-      <label for="newItemName">Name:</label>
+      <label for="createItemName">Name:</label>
       <input
-        id="newItemName"
-        name="newItemName"
+        id="createItemName"
+        name="createItemName"
         type="text"
         maxlength="36"
         required
       />
     </li>
     <li>
-      <label for="newItemKeywords">Keywords:</label>
+      <label for="createItemKeywords">Keywords:</label>
       <input
-        id="newItemKeywords"
-        name="newItemKeywords"
+        id="createItemKeywords"
+        name="createItemKeywords"
         type="text"
         maxlength="80"
         required
@@ -34,8 +34,8 @@
     </li>
 
     <li style="display: inline-block">
-      <label for="newItemType">Type:</label>
-      <select id="newItemType" name="newItemType" required>
+      <label for="createItemType">Type:</label>
+      <select id="createItemType" name="createItemType" required>
         <option value="armor">armor</option>
         <option value="fishing_rod">fishing rod</option>
         <option value="gold">gold</option>
@@ -50,12 +50,12 @@
       </select>
     </li>
     <li style="display: inline-block">
-      <label for="newItemMinimumLevel">MinLvl:</label>
+      <label for="createItemMinimumLevel">MinLvl:</label>
       <input
         style="width: 3.9rem; margin-right: 0"
         type="number"
-        id="newItemMinimumLevel"
-        name="newItemMinimumLevel"
+        id="createItemMinimumLevel"
+        name="createItemMinimumLevel"
         min="0"
         max="31"
         value="0"
@@ -64,12 +64,12 @@
     </li>
 
     <li style="display: inline-block">
-      <label for="newItemPrice">Price:</label>
+      <label for="createItemPrice">Price:</label>
       <input
         class="stubbySelect"
         type="number"
-        id="newItemPrice"
-        name="newItemPrice"
+        id="createItemPrice"
+        name="createItemPrice"
         min="0"
         max="100000"
         value="0"
@@ -77,24 +77,24 @@
       />
     </li>
     <li style="display: inline-block">
-      <label for="newItemIsContainer">Container: </label>
+      <label for="createItemIsContainer">Container: </label>
       <input
         type="checkbox"
-        id="newItemIsContainer"
-        name="newItemIsContainer"
+        id="createItemIsContainer"
+        name="createItemIsContainer"
       />
     </li>
 
     <h3>Description</h3>
     <li>
-      <label for="newLookItem">Look:</label>
-      <input id="newLookItem" name="newLookItem" type="text" maxlength="80" />
+      <label for="createItemLook">Look:</label>
+      <input id="createItemLook" name="createItemLook" type="text" maxlength="80" />
     </li>
     <li>
-      <label for="newExamineItem">Examine:</label>
+      <label for="createItemExamine">Examine:</label>
       <textarea
-        id="newExamineItem"
-        name="newExamineItem"
+        id="createItemExamine"
+        name="createItemExamine"
         type="text"
         maxlength="240"
       ></textarea>
@@ -113,27 +113,30 @@
     const createItemBlueprintForm = document.getElementById(
       "createItemBlueprintForm"
     );
+    const createItemType = document.getElementById("createItemType")
+
+    let itemTypes;
 
     createItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const keywords = document
-        .getElementById("newItemKeywords")
+        .getElementById("createItemKeywords")
         .value.split(/[ ,]+/);
       const purifiedKeywords = object.keywords.map((keyword) =>
         DOMPurify.sanitize(keyword)
       );
       const createItemBlueprintFormData = {
-        name: DOMPurify.sanitize(document.getElementById("newItemName").value),
+        name: DOMPurify.sanitize(document.getElementById("createItemName").value),
         keywords: purifiedKeywords,
-        price: document.getElementById("newItemPrice").value,
-        minimumLevel: document.getElementById("newItemMinimumLevel").value,
-        itemType: document.getElementById("newItemType").value,
+        price: document.getElementById("createItemPrice").value,
+        minimumLevel: document.getElementById("createItemMinimumLevel").value,
+        itemType: createItemType.value,
         description: {
           look: DOMPurify.sanitize(
-            document.getElementById("newLookItem").value
+            document.getElementById("createItemLook").value
           ),
           examine: DOMPurify.sanitize(
-            document.getElementById("newExamineItem").value
+            document.getElementById("createItemExamine").value
           ),
           study: "",
           research: "",
@@ -153,7 +156,7 @@
           fixture: false,
           quest: false,
           temporary: false,
-          container: document.getElementById("newItemIsContainer").checked,
+          container: document.getElementById("createItemIsContainer").checked,
         },
       };
       socket.emit("userSubmittedNewItemBlueprint", createItemBlueprintFormData);
@@ -172,6 +175,8 @@
       activeForm.style.display = "none";
       activeForm = createItemBlueprintForm;
       activeForm.style.display = "block";
+      itemTypes = formData.itemTypes;
+      generateStringSelectOptions(itemTypes, createItemType);
       input.value = "";
       appendSafeMessageToTerminal({
         type: "help",

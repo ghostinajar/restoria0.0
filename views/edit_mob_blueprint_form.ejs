@@ -291,126 +291,31 @@
       <li>
         <label for="editMobAffix1">Affix1:</label>
         <select id="editMobAffix1" name="editMobAffix1" required>
-          <option value="none">none</option>
-          <option value="armor">armor</option>
-          <option value="charisma">charisma</option>
-          <option value="constitution">constitution</option>
-          <option value="damage_bonus">damage_bonus</option>
-          <option value="dexterity">dexterity</option>
-          <option value="health">health</option>
-          <option value="health_regen">health_regen</option>
-          <option value="hit_bonus">hit_bonus</option>
-          <option value="intelligence">intelligence</option>
-          <option value="mana">mana</option>
-          <option value="mana_regen">mana_regen</option>
-          <option value="movement">movement</option>
-          <option value="resist_cold">resist_cold</option>
-          <option value="resist_electric">resist_electric</option>
-          <option value="resist_fire">resist_fire</option>
-          <option value="spell_save">spell_save</option>
-          <option value="stamina">stamina</option>
-          <option value="strength">strength</option>
-          <option value="wisdom">wisdom</option>
+          <!-- populated by script -->
         </select>
       </li>
       <li>
         <label for="editMobAffix2">Affix2:</label>
         <select id="editMobAffix2" name="editMobAffix2" required>
-          <option value="none">none</option>
-          <option value="armor">armor</option>
-          <option value="charisma">charisma</option>
-          <option value="constitution">constitution</option>
-          <option value="damage_bonus">damage_bonus</option>
-          <option value="dexterity">dexterity</option>
-          <option value="health">health</option>
-          <option value="health_regen">health_regen</option>
-          <option value="hit_bonus">hit_bonus</option>
-          <option value="intelligence">intelligence</option>
-          <option value="mana">mana</option>
-          <option value="mana_regen">mana_regen</option>
-          <option value="movement">movement</option>
-          <option value="resist_cold">resist_cold</option>
-          <option value="resist_electric">resist_electric</option>
-          <option value="resist_fire">resist_fire</option>
-          <option value="spell_save">spell_save</option>
-          <option value="stamina">stamina</option>
-          <option value="strength">strength</option>
-          <option value="wisdom">wisdom</option>
+          <!-- populated by script -->
         </select>
       </li>
       <li>
         <label for="editMobAffix3">Affix3:</label>
         <select id="editMobAffix3" name="editMobAffix3" required>
-          <option value="none">none</option>
-          <option value="armor">armor</option>
-          <option value="charisma">charisma</option>
-          <option value="constitution">constitution</option>
-          <option value="damage_bonus">damage_bonus</option>
-          <option value="dexterity">dexterity</option>
-          <option value="health">health</option>
-          <option value="health_regen">health_regen</option>
-          <option value="hit_bonus">hit_bonus</option>
-          <option value="intelligence">intelligence</option>
-          <option value="mana">mana</option>
-          <option value="mana_regen">mana_regen</option>
-          <option value="movement">movement</option>
-          <option value="resist_cold">resist_cold</option>
-          <option value="resist_electric">resist_electric</option>
-          <option value="resist_fire">resist_fire</option>
-          <option value="spell_save">spell_save</option>
-          <option value="stamina">stamina</option>
-          <option value="strength">strength</option>
-          <option value="wisdom">wisdom</option>
+          <!-- populated by script -->
         </select>
       </li>
       <li>
         <label for="editMobAffix4">Affix4:</label>
         <select id="editMobAffix4" name="editMobAffix4" required>
-          <option value="none">none</option>
-          <option value="armor">armor</option>
-          <option value="charisma">charisma</option>
-          <option value="constitution">constitution</option>
-          <option value="damage_bonus">damage_bonus</option>
-          <option value="dexterity">dexterity</option>
-          <option value="health">health</option>
-          <option value="health_regen">health_regen</option>
-          <option value="hit_bonus">hit_bonus</option>
-          <option value="intelligence">intelligence</option>
-          <option value="mana">mana</option>
-          <option value="mana_regen">mana_regen</option>
-          <option value="movement">movement</option>
-          <option value="resist_cold">resist_cold</option>
-          <option value="resist_electric">resist_electric</option>
-          <option value="resist_fire">resist_fire</option>
-          <option value="spell_save">spell_save</option>
-          <option value="stamina">stamina</option>
-          <option value="strength">strength</option>
-          <option value="wisdom">wisdom</option>
+          <!-- populated by script -->
         </select>
       </li>
       <li>
         <label for="editMobAffix5">Affix5:</label>
         <select id="editMobAffix5" name="editMobAffix5" required>
-          <option value="none">none</option>
-          <option value="armor">armor</option>
-          <option value="charisma">charisma</option>
-          <option value="constitution">constitution</option>
-          <option value="damage_bonus">damage_bonus</option>
-          <option value="dexterity">dexterity</option>
-          <option value="health">health</option>
-          <option value="health_regen">health_regen</option>
-          <option value="hit_bonus">hit_bonus</option>
-          <option value="intelligence">intelligence</option>
-          <option value="mana">mana</option>
-          <option value="mana_regen">mana_regen</option>
-          <option value="movement">movement</option>
-          <option value="resist_cold">resist_cold</option>
-          <option value="resist_electric">resist_electric</option>
-          <option value="resist_fire">resist_fire</option>
-          <option value="spell_save">spell_save</option>
-          <option value="stamina">stamina</option>
-          <option value="strength">strength</option>
-          <option value="wisdom">wisdom</option>
+          <!-- populated by script -->
         </select>
       </li>
     </ul>
@@ -484,6 +389,7 @@
     let itemBlueprintNames;
     let mobBlueprintFullData;
     let selectedMobId = "";
+    let affixTypes;
 
     // Tab menu listeners
     editMobTabLinks.forEach((link) => {
@@ -610,12 +516,18 @@
       mobBlueprintNames = formData.mobBlueprintNames;
       mobBlueprintFullData = formData.mobBlueprintFullData;
       itemBlueprintNames = formData.itemBlueprintNames;
+      affixTypes = formData.affixTypes;
 
       // prepare fresh editMobBlueprintForm
       editMobBlueprintForm.reset();
       clearUl(editMobItemNodeList);
       generateStringSelectOptions(mobBlueprintNames, editMobSelectMob);
       generateStringSelectOptions(itemBlueprintNames, editMobItemNodeSelect);
+      generateStringSelectOptions(affixTypes, editMobAffix1);
+      generateStringSelectOptions(affixTypes, editMobAffix2);
+      generateStringSelectOptions(affixTypes, editMobAffix3);
+      generateStringSelectOptions(affixTypes, editMobAffix4);
+      generateStringSelectOptions(affixTypes, editMobAffix5);
 
       //reset/hide open forms, show editMobBlueprintForm
       activeForm.reset();

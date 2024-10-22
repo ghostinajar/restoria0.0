@@ -1,3 +1,5 @@
+// create
+import { itemTypes } from "../constants/ITEM_TYPE.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
@@ -11,6 +13,7 @@ async function create(parsedCommand, user) {
         case `item`: {
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `createItemBlueprintForm`,
+                itemTypes: itemTypes,
             });
             break;
         }

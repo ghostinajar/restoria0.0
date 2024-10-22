@@ -12,4 +12,6 @@ const ITEM_TYPE = {
     FISHING_ROD: 'fishing_rod'
 };
 
+export const itemTypes = Object.values(ITEM_TYPE);
+
 export default ITEM_TYPE;

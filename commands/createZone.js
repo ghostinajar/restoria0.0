@@ -89,7 +89,6 @@ async function createZone(zoneFormData, author) {
             newZoneData.author = author._id;
         }
         await newZone.save();
-        author.unpublishedZoneTally++;
         logger.info(`Author "${author.name}" created zone "${newZoneData.name}".`);
         const nameToRegister = new Name({ name: newZoneData.name });
         const nameSaved = await nameToRegister.save();

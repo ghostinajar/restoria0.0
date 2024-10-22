@@ -7,4 +7,6 @@ const DAMAGE_TYPE = {
     ELECTRICITY: 'electricity'
 };
 
+export const damageTypes = Object.values(DAMAGE_TYPE);
+
 export default DAMAGE_TYPE;
