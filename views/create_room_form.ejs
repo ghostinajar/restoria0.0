@@ -107,13 +107,15 @@
         noMobs: false,
         noMagic: false,
         noCombat: false,
-        examine: DOMPurify.sanitize(document.getElementById("newExamineRoom").value),
+        examine: DOMPurify.sanitize(
+          document.getElementById("newExamineRoom").value
+        ),
         study: "",
         research: "",
       };
       socket.emit("userSubmittedNewRoom", roomData);
       createRoomForm.reset();
-      createRoomForm.style.display = "none"; 
+      createRoomForm.style.display = "none";
     });
 
     document
@@ -127,39 +129,20 @@
       activeForm.style.display = "none";
       activeForm = createRoomForm;
       activeForm.style.display = "block";
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `Create Room`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Name: </span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Direction: </span> the location of the new room, from here`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Dark: </span> mobs and items are hidden unless a lamp is in the room`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Indoors: </span> weather won't take effect here`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">On Water: </span> players and mobs can't enter without levitate`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Underwater: </span> players will take drowning damage without magic`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Examine: </span> player sees this when they look or enter a room`,
-      });
       input.value = "";
+      const messageArray = [
+        `Create Room`,
+        `<span style="color:var(--red)">Name: </span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
+        `<span style="color:var(--red)">Direction: </span> the location of the new room, from here`,
+        `<span style="color:var(--red)">Dark: </span> mobs and items are hidden unless a lamp is in the room`,
+        `<span style="color:var(--red)">Indoors: </span> weather won't take effect here`,
+        `<span style="color:var(--red)">On Water: </span> players and mobs can't enter without levitate`,
+        `<span style="color:var(--red)">Underwater: </span> players will take drowning damage without magic`,
+        `<span style="color:var(--red)">Examine: </span> player sees this when they look or enter a room`,
+      ];
+      messageArray.forEach((message) => {
+        appendSafeMessageToTerminal({ type: "help", content: message });
+      });
 
       // Update the direction select element
       directionSelect.innerHTML = ""; // Clear existing options

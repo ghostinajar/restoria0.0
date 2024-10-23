@@ -66,7 +66,9 @@
     createUserForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const userData = {
-        username: DOMPurify.sanitize(document.getElementById("newUserName").value.toLowerCase()),
+        username: DOMPurify.sanitize(
+          document.getElementById("newUserName").value.toLowerCase()
+        ),
         name: DOMPurify.sanitize(document.getElementById("newUserName").value),
         password: document.getElementById("new-password").value,
         pronouns: document.getElementById("pronouns").value,
@@ -74,7 +76,7 @@
       };
       socket.emit("userSubmittedNewUser", userData);
       createUserForm.reset();
-      createUserForm.style.display = "none"; 
+      createUserForm.style.display = "none";
     });
 
     document
@@ -89,25 +91,15 @@
       activeForm = createUserForm;
       activeForm.style.display = "block";
       input.value = "";
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `Create User`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Name: </span> letters only (max. 18), no unique irl names (e.g. no "Obama")</span>`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Password: </span> min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Pronouns: </span> in place of their name ("Ralu attacks you!" vs "<u>He</u> attacks you!")`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Job: </span> determines their abilities, spells, and fighting style in combat`,
+      const messageArray = [
+        `Create User`,
+        `<span style="color:var(--red)">Name: </span> letters only (max. 18), no unique irl names (e.g. no "Obama")</span>`,
+        `<span style="color:var(--red)">Password: </span> min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
+        `<span style="color:var(--red)">Pronouns: </span> in place of their name ("Ralu attacks you!" vs "<u>He</u> attacks you!")`,
+        `<span style="color:var(--red)">Job: </span> determines their abilities, spells, and fighting style in combat`,
+      ];
+      messageArray.forEach((message) => {
+        appendSafeMessageToTerminal({ type: "help", content: message });
       });
     });
   });

@@ -118,41 +118,19 @@
       activeForm = createZoneForm;
       activeForm.style.display = "block";
       input.value = "";
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `Create Zone`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Name: </span> the zone's title, e.g. "The Mushroom City"</span>`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Respawn: </span> minutes before most mobs, doors, and items respawn`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Look: </span> player sees this sentence when they survey the wilderness,`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `  e.g. "Clouds of spores and odd, fungal shapes protrude from the horizon."`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Examine: </span> player sees this paragraph when they examine the zone`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Study: </span> player sees more history when they study the zone`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `<span style="color:var(--red)">Research: </span> these paragraphs tell the full history of the zone.`,
-      });
-      appendSafeMessageToTerminal({
-        type: "help",
-        content: `  A good research text rewards the reader with some secrets about the zone.`,
+      const messageArray = [
+        `Create Zone`,
+        `<span style="color:var(--red)">Name: </span> the zone's title, e.g. "The Mushroom City"</span>`,
+        `<span style="color:var(--red)">Respawn: </span> minutes before most mobs, doors, and items respawn`,
+        `<span style="color:var(--red)">Look: </span> player sees this sentence when they survey the wilderness,`,
+        `  e.g. "Clouds of spores and odd, fungal shapes protrude from the horizon."`,
+        `<span style="color:var(--red)">Examine: </span> player sees this paragraph when they examine the zone`,
+        `<span style="color:var(--red)">Study: </span> player sees more history when they study the zone`,
+        `<span style="color:var(--red)">Research: </span> these paragraphs tell the full history of the zone.`,
+        `  A good research text rewards the reader with some secrets about the zone.`,
+      ];
+      messageArray.forEach((message) => {
+        appendSafeMessageToTerminal({ type: "help", content: message });
       });
     });
   });
