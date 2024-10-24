@@ -18,7 +18,7 @@
   </h2>
   <div class="tabs">
     <button
-      id="editItemFirstTabLink"
+      id="editItemGeneralTab"
       type="button"
       class="tab-link edit-item-tab-link active"
       data-tab="editItemGeneralSection"
@@ -26,6 +26,7 @@
       General
     </button>
     <button
+      id="editItemDescriptionTab"
       type="button"
       class="tab-link edit-item-tab-link"
       data-tab="editItemDescriptionSection"
@@ -33,6 +34,7 @@
       Desc.
     </button>
     <button
+      id="editItemTagsTab"
       type="button"
       class="tab-link edit-item-tab-link"
       data-tab="editItemTagsSection"
@@ -542,6 +544,11 @@
     const editItemTabContents = document.querySelectorAll(
       ".edit-item-tab-content"
     );
+    const editItemGeneralTab = document.getElementById("editItemGeneralTab");
+    const editItemDescriptionTab = document.getElementById(
+      "editItemDescriptionTab"
+    );
+    const editItemTagsTab = document.getElementById("editItemTagsTab");
     const editItemItemNodesTab = document.getElementById(
       "editItemItemNodesTab"
     );
@@ -632,6 +639,79 @@
     const editItemFeet = document.getElementById("editItemFeet");
     const editItemShield = document.getElementById("editItemShield");
 
+    // help arrays to message user when they click each tab
+    const editItemGeneralHelp = [
+      `================================== Edit Item ==================================`,
+      `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--blue_light)">a green potion</span>' or '<span style="color: var(--blue_light)">Excaliburr the Frozen'</span>`,
+      `<span style="color:var(--red)">Keywords:</span> e.g 'potion, green' or 'sword, Excaliburr, Frozen`,
+      `<span style="color:var(--red)">Price:</span> how much to purchase (selling price will be less)`,
+      `<span style="color:var(--red)">MinLvl:</span> must be this level to use or equip`,
+      `<span style="color:var(--red)">Type:</span> each has its special features, except 'none'`,
+    ];
+    const editItemDescriptionHelp = [
+      `============================== Item Description ==============================`,
+      `<span style="color:var(--red)">Look:</span> player sees this when they look or enter a room`,
+      `<span style="color:var(--red)">Examine:</span> player sees this when they examine the item`,
+      `<span style="color:var(--red)">Study:</span> player learns some history when they study the item`,
+      `<span style="color:var(--red)">Research:</span> these paragraphs tell the full history of the item.`,
+      `  A good research text rewards the reader with some secrets about the item.`,
+    ];
+    const editItemTagsHelp = [
+      `================================ Item Tags ====================================`,
+      `<span style="color:var(--red)">Cleric:</span> available to clerics`,
+      `<span style="color:var(--red)">Mage:</span> available to mages`,
+      `<span style="color:var(--red)">Rogue:</span> available to rogues`,
+      `<span style="color:var(--red)">Warrior:</span> available to warriors`,
+      `<span style="color:var(--red)">Dark:</span> available to players with dark aura`,
+      `<span style="color:var(--red)">Neutral:</span> available to players with neutral aura`,
+      `<span style="color:var(--red)">Light:</span> available to players with light aura`,
+      `<span style="color:var(--red)">Food:</span> can be eaten and may hold a spell`,
+      `<span style="color:var(--red)">Lamp:</span> lights up a dark room`,
+      `<span style="color:var(--red)">Hidden:</span> not visible until you search`,
+      `<span style="color:var(--red)">Fixture:</span> cannot be taken or moved (e.g. a cupboard)`,
+      `<span style="color:var(--red)">Quest:</span> needed for a quest`,
+      `<span style="color:var(--red)">Temporary:</span> deleted from inventory when you log out`,
+      `<span style="color:var(--red)">Container:</span> can put or load other items inside`,
+    ];
+    const editItemItemNodesHelp = [
+      `================================ Item Nodes ==================================`,
+      `<span style="color:var(--red)">Capacity:</span> how many items can fit inside`,
+      `An item node spawns that item into the container when the container is spawned.`,
+      `Choose an item and click <span style="color:var(--green)">add</span> to create an item node for it.`,
+      `Click <span style="color:var(--red)">remove</span> next to an existing node to remove it.`,
+      `These changes won't be saved until you click "Update Item".`,
+    ];
+    const editItemAffixesHelp = [
+      `================================ Item Affixes ================================`,
+      `An affix boosts a player's stat while the item is equipped.`,
+      `Each stat has its own help file describing its effects (e.g. HELP DEXTERITY)`,
+      `An item can have up to 3 affixes, and it's okay for some items to have none. `,
+      `It's okay to have more than one affix on the same stat,`,
+      `e.g. for a double or triple boost to dexterity on the same boots.`,
+    ];
+    const editItemWeaponHelp = [
+      `============================= Weapon Properties ==============================`,
+      `<span style="color:var(--red)">Damage:</span>The first number determines how many dice are rolled.`,
+      `  The second is how many sides per die (ie the max roll per die).`,
+      `  e.g. 3d4 Bludgeoning deals between 3-12 bludgeoning damage per hit.`,
+      `<span style="color:var(--red)">Finesse:</span> uses dexterity to determine damage bonus`,
+      `<span style="color:var(--red)">Light:</span> can be thrown or wielded in off-hand`,
+      `<span style="color:var(--red)">Reach:</span> can hit from middle row of formation`,
+      `<span style="color:var(--red)">Ranged:</span> can hit from back row of formation`,
+      `<span style="color:var(--red)">Twohand:</span> can't be paired with a shield or off-hand`,
+    ];
+    const editItemArmorHelp = [
+      `============================= Armor Locations ===============================`,
+      `An item may fit on one location, or have multiple options.`,
+      `(e.g. a long, golden chain might fit around the neck or around the waist)`,
+    ];
+    const editItemSpellHelp = [
+      `============================= Spell Properties ===============================`,
+      `Each spell has its own help file describing its effects (e.g. HELP BLESS)`,
+      `<span style="color:var(--red)">Level:</span> higher can mean stronger effect, more damage, longer duration, etc.`,
+      `<span style="color:var(--red)">Charges:</span> how many times the item can be used before it disappears`,
+    ];
+
     // to hold data from server on "edit item" command
     let selectedItem;
     let itemBlueprintNames;
@@ -661,6 +741,30 @@
         target.style.display = "block";
       });
     });
+    editItemGeneralTab.addEventListener("click", () =>
+      showHelpArray(editItemGeneralHelp)
+    );
+    editItemDescriptionTab.addEventListener("click", () =>
+      showHelpArray(editItemDescriptionHelp)
+    );
+    editItemTagsTab.addEventListener("click", () =>
+      showHelpArray(editItemTagsHelp)
+    );
+    editItemItemNodesTab.addEventListener("click", () =>
+      showHelpArray(editItemItemNodesHelp)
+    );
+    editItemAffixesTab.addEventListener("click", () =>
+      showHelpArray(editItemAffixesHelp)
+    );
+    editItemWeaponTab.addEventListener("click", () =>
+      showHelpArray(editItemWeaponHelp)
+    );
+    editItemArmorTab.addEventListener("click", () =>
+      showHelpArray(editItemArmorHelp)
+    );
+    editItemSpellTab.addEventListener("click", () =>
+      showHelpArray(editItemSpellHelp)
+    );
 
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -845,7 +949,7 @@
       spells = formData.spells;
       itemTypes = formData.itemTypes;
       affixTypes = formData.affixTypes;
-      damageTypes = formData.damageTypes
+      damageTypes = formData.damageTypes;
 
       // prepare fresh editItemBlueprintForm
       editItemBlueprintForm.reset();
@@ -863,7 +967,7 @@
       activeForm.style.display = "none";
       activeForm = editItemBlueprintForm;
       activeForm.style.display = "block";
-      document.querySelector("#editItemFirstTabLink").click();
+      document.querySelector("#editItemGeneralTab").click();
       input.value = "";
       generateStringSelectOptions(
         formData.itemBlueprintNames,

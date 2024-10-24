@@ -1,13 +1,17 @@
 const AFFIX_TYPE = {
-    ARMOR: 'armor',
-    CHARISMA: 'charisma',
-    CONSTITUTION: 'constitution',
-    DAMAGEBONUS: 'damage_bonus',
+    NONE: 'none',
+    STRENGTH: 'strength',
     DEXTERITY: 'dexterity',
+    CONSTITUTION: 'constitution',
+    INTELLIGENCE: 'intelligence',
+    WISDOM: 'wisdom',
+    CHARISMA: 'charisma',
+    STAMINA: 'stamina',
+    HITBONUS: 'hit_bonus',
+    DAMAGEBONUS: 'damage_bonus',
+    ARMOR: 'armor',
     HEALTH: 'health',
     HEALTH_REGEN: 'health_regen',
-    HITBONUS: 'hit_bonus',
-    INTELLIGENCE: 'intelligence',
     MANA: 'mana',
     MANA_REGEN: 'mana_regen',
     MOVEMENT: 'movement',
@@ -15,9 +19,6 @@ const AFFIX_TYPE = {
     RESIST_ELECTRIC: 'resist_electric',
     RESIST_FIRE: 'resist_fire',
     SPELL_SAVE: 'spell_save',
-    STAMINA: 'stamina',
-    STRENGTH: 'strength',
-    WISDOM: 'wisdom'
 };
 export const affixTypes = Object.values(AFFIX_TYPE);
 export default AFFIX_TYPE;
