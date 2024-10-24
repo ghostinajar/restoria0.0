@@ -16,7 +16,7 @@
   </h2>
   <div class="tabs">
     <button
-      id="editRoomFirstTabLink"
+      id="editRoomDescriptionTab"
       type="button"
       class="tab-link edit-room-tab-link active"
       data-tab="editRoomDescriptionSection"
@@ -24,6 +24,7 @@
       Description
     </button>
     <button
+      id="editRoomTagsTab"
       type="button"
       class="tab-link edit-room-tab-link"
       data-tab="editRoomTagsSection"
@@ -31,6 +32,7 @@
       Tags
     </button>
     <button
+      id="editRoomExitsTab"
       type="button"
       class="tab-link edit-room-tab-link"
       data-tab="editRoomExitsSection"
@@ -38,6 +40,7 @@
       Exits
     </button>
     <button
+      id="editRoomMobNodesTab"
       type="button"
       class="tab-link edit-room-tab-link"
       data-tab="editRoomMobNodesSection"
@@ -45,6 +48,7 @@
       MobNodes
     </button>
     <button
+      id="editRoomItemNodesTab"
       type="button"
       class="tab-link edit-room-tab-link"
       data-tab="editRoomItemNodesSection"
@@ -290,6 +294,15 @@
     const editRoomTabContents = document.querySelectorAll(
       ".edit-room-tab-content"
     );
+    const editRoomDescriptionTab = document.getElementById(
+      "editRoomDescriptionTab"
+    );
+    const editRoomTagsTab = document.getElementById("editRoomTagsTab");
+    const editRoomExitsTab = document.getElementById("editRoomExitsTab");
+    const editRoomMobNodesTab = document.getElementById("editRoomMobNodesTab");
+    const editRoomItemNodesTab = document.getElementById(
+      "editRoomItemNodesTab"
+    );
 
     const editRoomName = document.getElementById("editRoomName").value;
     const editRoomExamine = document.getElementById("editRoomExamine").value;
@@ -322,6 +335,46 @@
     );
     const editRoomExitList = document.getElementById("editRoomExitList");
 
+    const editRoomDescriptionHelp = [
+      `============================== Item Description ==============================`,
+      `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
+      `<span style="color:var(--red)">Examine:</span> The player sees this paragraph when they examine the room.`,
+      `<span style="color:var(--red)">Study:</span> player learns some history when they study the room.`,
+      `<span style="color:var(--red)">Research:</span> these paragraphs tell the full history of the room.`,
+      `  A good research text rewards the reader with some secrets about the room.`,
+    ];
+    const editRoomTagsHelp = [
+      `================================ Room Tags ===================================`,
+      `<span style="color:var(--red)">Dark:</span> Items, mobs, and players are hidden unless a lamp is in the room.`,
+      `<span style="color:var(--red)">Indoors:</span> Weather won't take effect here.`,
+      `<span style="color:var(--red)">On Water:</span> Players and mobs can't enter without levitate.`,
+      `<span style="color:var(--red)">Underwater:</span> Players will take drowning damage without magic.`,
+      `<span style="color:var(--red)">No Mounts:</span> No one can enter this room while mounted.`,
+      `<span style="color:var(--red)">No Mobs:</span> Mobs can't enter this room.`,
+      `<span style="color:var(--red)">No Magic:</span> No one can cast spells in this room.`,
+      `<span style="color:var(--red)">No Combat:</span> No one can enter combat in this room.`,
+    ];
+    const editRoomExitsHelp = [
+      `================================== Exits =====================================`,
+      `<span style="color:var(--red)">Key:</span> No one can unlock this door unless this item is in their inventory.`,
+      `<span style="color:var(--red)">Hidden:</span> The exit is hidden unless you search.`,
+      `<span style="color:var(--red)">Closed:</span> This door is closed when the zone is spawned.`,
+    ];
+    const editRoomItemNodesHelp = [
+      `================================ Mob Nodes ===================================`,
+      `An item node spawns that item into the room when the zone is spawned.`,
+      `Choose an item and click <span style="color:var(--green)">add</span> to create an item node for it.`,
+      `Click <span style="color:var(--red)">remove</span> next to an existing node to remove it.`,
+      `These changes won't be saved until you click "Update Item".`,
+    ];
+    const editRoomMobNodesHelp = [
+      `================================ Item Nodes ==================================`,
+      `An mob node spawns that mob into the room when the zone is spawned.`,
+      `Choose a mob and click <span style="color:var(--green)">add</span> to create an mob node for it.`,
+      `Click <span style="color:var(--red)">remove</span> next to an existing node to remove it.`,
+      `These changes won't be saved until you click "Update Room".`,
+    ];
+
     // to hold data from server on "edit room" command
     let workingEditRoomData;
     let mobBlueprints;
@@ -347,6 +400,22 @@
         target.style.display = "block";
       });
     });
+
+    editRoomDescriptionTab.addEventListener("click", () =>
+      showHelpArray(editRoomDescriptionHelp)
+    );
+    editRoomTagsTab.addEventListener("click", () =>
+      showHelpArray(editRoomTagsHelp)
+    );
+    editRoomExitsTab.addEventListener("click", () =>
+      showHelpArray(editRoomExitsHelp)
+    );
+    editRoomMobNodesTab.addEventListener("click", () =>
+      showHelpArray(editRoomMobNodesHelp)
+    );
+    editRoomItemNodesTab.addEventListener("click", () =>
+      showHelpArray(editRoomItemNodesHelp)
+    );
 
     editRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -429,40 +498,29 @@
       activeForm.style.display = "none";
       activeForm = editRoomForm;
       activeForm.style.display = "block";
-      document.querySelector("#editRoomFirstTabLink").click();
+      document.querySelector("#editRoomDescriptionTab").click();
       input.value = "";
 
       // preset the values of the fields with data from server
       document.getElementById("roomId").textContent =
         `Id: ${workingEditRoomData._id}` || "error: room id not found";
-      document.getElementById("roomName").value =
-        workingEditRoomData.name || "";
-      document.getElementById("examineRoom").value =
-        workingEditRoomData.description.examine || "";
-      document.getElementById("studyRoom").value =
-        workingEditRoomData.description.study || "";
-      document.getElementById("researchRoom").value =
-        workingEditRoomData.description.research || "";
-      document.getElementById("isDark").checked =
-        workingEditRoomData.isDark || false;
-      document.getElementById("editRoomIsIndoors").checked =
+      editRoomName.value = workingEditRoomData.name || "";
+      editRoomExamine.value = workingEditRoomData.description.examine || "";
+      editRoomStudy.value = workingEditRoomData.description.study || "";
+      editRoomResearch.value = workingEditRoomData.description.research || "";
+      editRoomIsDark.checked = workingEditRoomData.isDark || false;
+      editRoomIsIndoors.checked =
         workingEditRoomData.editRoomIsIndoors || false;
-      document.getElementById("editRoomIsOnWater").checked =
+      editRoomIsOnWater.checked =
         workingEditRoomData.editRoomIsOnWater || false;
-      document.getElementById("editRoomIsUnderwater").checked =
+      editRoomIsUnderwater.checked =
         workingEditRoomData.editRoomIsUnderwater || false;
-      document.getElementById("editRoomNoMounts").checked =
-        workingEditRoomData.editRoomNoMounts || false;
-      document.getElementById("editRoomNoMobs").checked =
-        workingEditRoomData.editRoomNoMobs || false;
-      document.getElementById("editRoomNoMagic").checked =
-        workingEditRoomData.editRoomNoMagic || false;
-      document.getElementById("editRoomNoCombat").checked =
-        workingEditRoomData.editRoomNoCombat || false;
-      document.getElementById("editRoomPlayerCap").value =
-        workingEditRoomData.editRoomPlayerCap || 0;
-      document.getElementById("editRoomMobCap").value =
-        workingEditRoomData.editRoomMobCap || 0;
+      editRoomNoMounts.checked = workingEditRoomData.editRoomNoMounts || false;
+      editRoomNoMobs.checked = workingEditRoomData.editRoomNoMobs || false;
+      editRoomNoMagic.checked = workingEditRoomData.editRoomNoMagic || false;
+      editRoomNoCombat.checked = workingEditRoomData.editRoomNoCombat || false;
+      editRoomPlayerCap.value = workingEditRoomData.editRoomPlayerCap || 0;
+      editRoomMobCap.value = workingEditRoomData.editRoomMobCap || 0;
       loadNodesToUlElement(
         editRoomMobNodeList,
         workingEditRoomData.mobNodes,

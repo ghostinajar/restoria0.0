@@ -39,7 +39,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
         form: `eraseItemBlueprintForm`,
         itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
       });
-      logger.debug(`user ${user.name} requested erase item form.`)
+      logger.debug(`user ${user.name} requested erase item form.`);
       break;
     }
     case `mob`: {
@@ -113,7 +113,10 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
               break;
           }
           if (toRoom) {
-            let exit = { _id: toRoom._id.toString() , name: `${direction} ${toRoom.name}` };
+            let exit = {
+              _id: toRoom._id.toString(),
+              name: `${direction} ${toRoom.name}`,
+            };
             exitNames.push(exit);
           }
         }
@@ -122,6 +125,16 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
         form: `eraseRoomForm`,
         exitNames: exitNames,
       });
+      break;
+    }
+    case `zone`: {
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          `rejection`,
+          `You can't erase a zone. Instead, you can erase or edit its rooms, items, and mobs.`
+        )
+      );
       break;
     }
     default: {
