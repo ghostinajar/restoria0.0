@@ -12,7 +12,7 @@ import { spells } from "../constants/SPELL.js";
 import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { affixTypes } from "../constants/AFFIX_TYPE.js";
 import { damageTypes } from "../constants/DAMAGE_TYPE.js";
-import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
+import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 
 
 async function edit(parsedCommand: IParsedCommand, user: IUser) {
@@ -31,7 +31,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
     target !== "user" &&
     target !== "character"
   ) {
-    if(!userIsAuthorOfZoneId(zone.author.toString(), user))
+    if(!userHasZoneAuthorId(zone.author.toString(), user))
     {return;}
   }
 

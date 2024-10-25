@@ -1,19 +1,21 @@
 // create
 import { itemTypes } from "../constants/ITEM_TYPE.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
-import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
+import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 async function create(parsedCommand, user) {
     let target = parsedCommand.directObject;
     if (!target) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what?`));
         return;
     }
+    const zone = await getZoneOfUser(user);
     if (target === "item" ||
         target === "mob" ||
         target === "room") {
-        if (!userIsAuthorOfZoneId(user.location.inZone.toString(), user)) {
+        if (!userHasZoneAuthorId(zone.author.toString(), user)) {
             return;
         }
     }

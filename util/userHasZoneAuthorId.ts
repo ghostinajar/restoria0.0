@@ -1,11 +1,15 @@
-// userIsAuthorOfZone
+// userHasZoneAuthorId
 
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "./makeMessage.js";
 
-function userIsAuthorOfZoneId(zoneId: string, user: IUser) {
-  if (zoneId !== user._id.toString()) {
+function userHasZoneAuthorId(zoneAuthorId: string, user: IUser) {
+  console.log("zoneAuthorId:")
+  console.log(zoneAuthorId)
+  console.log("userId")
+  console.log(user._id.toString())
+  if (zoneAuthorId !== user._id.toString()) {
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage(`rejection`, `You aren't an author for this zone.`)
@@ -15,4 +19,4 @@ function userIsAuthorOfZoneId(zoneId: string, user: IUser) {
   return true;
 }
 
-export default userIsAuthorOfZoneId;
+export default userHasZoneAuthorId;

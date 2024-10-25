@@ -8,7 +8,7 @@ import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.j
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
-import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
+import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
   const target = parsedCommand.directObject;
@@ -29,7 +29,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
     target !== "user" &&
     target !== "character"
   ) {
-    if(!userIsAuthorOfZoneId(zone.author.toString(), user))
+    if(!userHasZoneAuthorId(zone.author.toString(), user))
     {return;}
   }
 

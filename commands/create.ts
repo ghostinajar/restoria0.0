@@ -3,10 +3,11 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
-import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
+import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 
 async function create(parsedCommand: IParsedCommand, user: IUser) {
   let target = parsedCommand.directObject;
@@ -18,12 +19,14 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
     return;
   }
 
+  const zone = await getZoneOfUser(user);
+
   if (
     target === "item" ||
     target === "mob" ||
     target === "room"
   ) {
-    if(!userIsAuthorOfZoneId(user.location.inZone.toString(), user))
+    if(!userHasZoneAuthorId(zone.author.toString(), user))
     {return;}
   }
 

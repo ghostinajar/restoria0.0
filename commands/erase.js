@@ -5,7 +5,7 @@ import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
-import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
+import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 async function erase(parsedCommand, user) {
     const target = parsedCommand.directObject;
     const zone = await getZoneOfUser(user);
@@ -15,7 +15,7 @@ async function erase(parsedCommand, user) {
     }
     if (target !== "user" &&
         target !== "character") {
-        if (!userIsAuthorOfZoneId(zone.author.toString(), user)) {
+        if (!userHasZoneAuthorId(zone.author.toString(), user)) {
             return;
         }
     }
