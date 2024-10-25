@@ -1,5 +1,5 @@
 // createZone
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";

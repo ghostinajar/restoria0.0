@@ -1,7 +1,7 @@
 // stats
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 
 function stats(user: IUser) {
   //show user's hp/maxhp mana/maxmana move/maxmove on one line

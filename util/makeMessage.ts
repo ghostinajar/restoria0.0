@@ -1,5 +1,5 @@
 // makeMessage.ts
-import IMessage from "./Message.js";
+import IMessage from "../types/Message.js";
 
 function makeMessage(type : string, content : string | Array<string>) : IMessage {
     let message = {

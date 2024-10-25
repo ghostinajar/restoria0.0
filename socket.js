@@ -3,7 +3,7 @@ import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import createRoom from "./commands/createRoom.js";
 import createUser from "./commands/createUser.js";
-import makeMessage from "./types/makeMessage.js";
+import makeMessage from "./util/makeMessage.js";
 import look from "./commands/look.js";
 import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSocket.js";
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";

@@ -1,5 +1,5 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import truncateDescription from "../util/truncateDescription.js";
 async function editUser(user, userDescription) {
     let changed = false;

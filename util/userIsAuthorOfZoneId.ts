@@ -2,7 +2,7 @@
 
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "./makeMessage.js";
 
 function userIsAuthorOfZoneId(zoneId: string, user: IUser) {
   if (zoneId !== user._id.toString()) {

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IAffix } from "../model/classes/Affix.js";

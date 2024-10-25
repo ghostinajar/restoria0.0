@@ -5,7 +5,7 @@ import { IMob } from "../model/classes/Mob.js";
 import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
 import IMessage from "../types/Message.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 
 function pushTargetEquipped(
   targetObject: IUser | IMob,

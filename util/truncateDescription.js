@@ -1,5 +1,5 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "./makeMessage.js";
 function truncateDescription(description, user) {
     if (description.look && description.look.length > 80) {
         description.look = description.look.substring(0, 80);

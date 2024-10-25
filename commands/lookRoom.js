@@ -1,4 +1,4 @@
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 function lookRoom(room, user, lookArray) {
     //push a message for the room's name into look Array
     let roomNameMessage = makeMessage(`heading`, `${room.name}`);

@@ -1,7 +1,7 @@
 // quit
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import resetUserLocation from "../util/resetUserLocation.js";
 
 async function quit(user: IUser) {

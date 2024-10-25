@@ -1,6 +1,6 @@
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import truncateDescription from "../util/truncateDescription.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import Name from "../model/classes/Name.js";

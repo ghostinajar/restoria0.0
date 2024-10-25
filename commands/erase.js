@@ -1,6 +1,6 @@
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone.js";
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";

@@ -1,4 +1,4 @@
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 function pushTargetEquipped(targetObject, lookArray) {
     lookArray.push(makeMessage(`heading`, `Equipped:`));
     // for every item in target's IEquipped object, push a message with its .name to lookArray

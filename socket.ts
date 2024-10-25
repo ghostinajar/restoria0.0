@@ -5,7 +5,7 @@ import createRoom, { INewRoomData } from "./commands/createRoom.js";
 import createUser, { IUserData } from "./commands/createUser.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
-import makeMessage from "./types/makeMessage.js";
+import makeMessage from "./util/makeMessage.js";
 import look from "./commands/look.js";
 import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSocket.js";
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";

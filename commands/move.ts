@@ -3,7 +3,7 @@ import logger from "../logger.js";
 import { IRoom } from "../model/classes/Room";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import exits from "./exits.js";

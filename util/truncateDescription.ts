@@ -1,7 +1,7 @@
 import { IDescription } from "../model/classes/Description.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "./makeMessage.js";
 
 function truncateDescription(description: IDescription, user: IUser) {
   if (description.look && description.look.length > 80) {

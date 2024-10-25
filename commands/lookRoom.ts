@@ -1,7 +1,7 @@
 import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
 import IMessage from "../types/Message.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 
 function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
   //push a message for the room's name into look Array

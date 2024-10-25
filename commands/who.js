@@ -1,7 +1,7 @@
 // who
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 async function who(user) {
     // logger.debug(`Who command initiated`)
     const whoArray = await new Promise((resolve) => {

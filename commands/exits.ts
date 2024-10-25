@@ -1,7 +1,7 @@
 // exits
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import { IUser } from "../model/classes/User.js";
 import { IRoom } from "../model/classes/Room.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";

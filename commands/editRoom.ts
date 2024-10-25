@@ -6,7 +6,7 @@ import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import { IZone } from "../model/classes/Zone.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IMobNode } from "../model/classes/MobNode.js";

@@ -1,7 +1,7 @@
 // say
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 function say(parsedCommand, user) {
     let message = makeMessage('say', ``);
     if (!parsedCommand.string) {

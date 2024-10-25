@@ -2,7 +2,7 @@ import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import { IZone } from "../model/classes/Zone.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone.js";
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";

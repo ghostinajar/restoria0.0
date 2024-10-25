@@ -3,7 +3,7 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
 import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";

@@ -2,7 +2,7 @@
 
 import logger from "../logger.js";
 import worldEmitter from '../model/classes/WorldEmitter.js';
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import { IUser } from "../model/classes/User.js";
 

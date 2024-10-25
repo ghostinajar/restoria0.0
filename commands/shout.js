@@ -1,7 +1,7 @@
 // shout
 import logger from "../logger.js";
 import worldEmitter from '../model/classes/WorldEmitter.js';
-import makeMessage from "../types/makeMessage.js";
+import makeMessage from "../util/makeMessage.js";
 function shout(parsedCommand, user) {
     let message = makeMessage('shout', ``);
     if (!parsedCommand.string) {
