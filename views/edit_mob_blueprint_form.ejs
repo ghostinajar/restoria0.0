@@ -416,7 +416,7 @@
       const keywords = document
         .getElementById("editMobKeywords")
         .value.split(/[ ,]+/);
-      const purifiedKeywords = object.keywords.map((keyword) =>
+      const purifiedKeywords = keywords.map((keyword) =>
         DOMPurify.sanitize(keyword)
       );
       const editMobBlueprintFormData = {

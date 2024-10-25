@@ -291,25 +291,25 @@
       ".edit-room-tab-content"
     );
 
-    const editRoomName = document.getElementById("editRoomName").value;
-    const editRoomExamine = document.getElementById("editRoomExamine").value;
-    const editRoomStudy = document.getElementById("editRoomStudy").value;
-    const editRoomResearch = document.getElementById("editRoomResearch").value;
-    const editRoomIsDark = document.getElementById("editRoomIsDark").value;
+    const editRoomName = document.getElementById("editRoomName");
+    const editRoomExamine = document.getElementById("editRoomExamine");
+    const editRoomStudy = document.getElementById("editRoomStudy");
+    const editRoomResearch = document.getElementById("editRoomResearch");
+    const editRoomIsDark = document.getElementById("editRoomIsDark");
     const editRoomIsIndoors =
-      document.getElementById("editRoomIsIndoors").value;
+      document.getElementById("editRoomIsIndoors");
     const editRoomIsOnWater =
-      document.getElementById("editRoomIsOnWater").value;
+      document.getElementById("editRoomIsOnWater");
     const editRoomIsUnderwater = document.getElementById(
       "editRoomIsUnderwater"
-    ).value;
-    const editRoomNoMounts = document.getElementById("editRoomNoMounts").value;
-    const editRoomNoMobs = document.getElementById("editRoomNoMobs").value;
-    const editRoomNoMagic = document.getElementById("editRoomNoMagic").value;
-    const editRoomNoCombat = document.getElementById("editRoomNoCombat").value;
+    );
+    const editRoomNoMounts = document.getElementById("editRoomNoMounts");
+    const editRoomNoMobs = document.getElementById("editRoomNoMobs");
+    const editRoomNoMagic = document.getElementById("editRoomNoMagic");
+    const editRoomNoCombat = document.getElementById("editRoomNoCombat");
     const editRoomPlayerCap =
-      document.getElementById("editRoomPlayerCap").value;
-    const editRoomMobCap = document.getElementById("editRoomMobCap").value;
+      document.getElementById("editRoomPlayerCap");
+    const editRoomMobCap = document.getElementById("editRoomMobCap");
     const editRoomItemNodeList = document.getElementById(
       "editRoomItemNodeList"
     );
@@ -435,33 +435,33 @@
       // preset the values of the fields with data from server
       document.getElementById("roomId").textContent =
         `Id: ${workingEditRoomData._id}` || "error: room id not found";
-      document.getElementById("roomName").value =
+      editRoomName.value =
         workingEditRoomData.name || "";
-      document.getElementById("examineRoom").value =
+      editRoomExamine.value =
         workingEditRoomData.description.examine || "";
-      document.getElementById("studyRoom").value =
+      editRoomStudy.value =
         workingEditRoomData.description.study || "";
-      document.getElementById("researchRoom").value =
+      editRoomResearch.value =
         workingEditRoomData.description.research || "";
-      document.getElementById("isDark").checked =
+      editRoomIsDark.checked =
         workingEditRoomData.isDark || false;
-      document.getElementById("editRoomIsIndoors").checked =
+      editRoomIsIndoors.checked =
         workingEditRoomData.editRoomIsIndoors || false;
-      document.getElementById("editRoomIsOnWater").checked =
+      editRoomIsOnWater.checked =
         workingEditRoomData.editRoomIsOnWater || false;
-      document.getElementById("editRoomIsUnderwater").checked =
+      editRoomIsUnderwater.checked =
         workingEditRoomData.editRoomIsUnderwater || false;
-      document.getElementById("editRoomNoMounts").checked =
+      editRoomNoMounts.checked =
         workingEditRoomData.editRoomNoMounts || false;
-      document.getElementById("editRoomNoMobs").checked =
+      editRoomNoMobs.checked =
         workingEditRoomData.editRoomNoMobs || false;
-      document.getElementById("editRoomNoMagic").checked =
+      editRoomNoMagic.checked =
         workingEditRoomData.editRoomNoMagic || false;
-      document.getElementById("editRoomNoCombat").checked =
+      editRoomNoCombat.checked =
         workingEditRoomData.editRoomNoCombat || false;
-      document.getElementById("editRoomPlayerCap").value =
+      editRoomPlayerCap.value =
         workingEditRoomData.editRoomPlayerCap || 0;
-      document.getElementById("editRoomMobCap").value =
+      editRoomMobCap.value =
         workingEditRoomData.editRoomMobCap || 0;
       loadNodesToUlElement(
         editRoomMobNodeList,

@@ -1,4 +1,5 @@
 const SPELL = {
+  NONE: 'none',
   AMBUSH: 'ambush',
   ARCANE_EYE: 'arcane eye',
   ATTUNE: 'attune',

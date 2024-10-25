@@ -684,7 +684,7 @@
     const editItemAffixesHelp = [
       `================================ Item Affixes ================================`,
       `An affix boosts a player's stat while the item is equipped.`,
-      `Each stat has its own help file describing its effects (e.g. HELP DEXTERITY)`,
+      `Each stat has a help file describing its effects (e.g. HELP DEXTERITY)`,
       `An item can have up to 3 affixes, and it's okay for some items to have none. `,
       `It's okay to have more than one affix on the same stat,`,
       `e.g. for a double or triple boost to dexterity on the same boots.`,
@@ -707,7 +707,7 @@
     ];
     const editItemSpellHelp = [
       `============================= Spell Properties ===============================`,
-      `Each spell has its own help file describing its effects (e.g. HELP BLESS)`,
+      `Each spell has a help file describing its effects (e.g. HELP BLESS)`,
       `<span style="color:var(--red)">Level:</span> higher can mean stronger effect, more damage, longer duration, etc.`,
       `<span style="color:var(--red)">Charges:</span> how many times the item can be used before it disappears`,
     ];
@@ -769,7 +769,7 @@
     editItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const keywords = editItemKeywords.value.split(/[ ,]+/);
-      const purifiedKeywords = object.keywords.map((keyword) =>
+      const purifiedKeywords = keywords.map((keyword) =>
         DOMPurify.sanitize(keyword)
       );
       // TODO move weaponStats, spellCharges, and wearableLocations
@@ -1090,11 +1090,6 @@
     function hideAndShowEditItemTabs() {
       hideEditItemTabs();
       switch (editItemType.value) {
-        case "potion":
-        case "scroll":
-        case "wand":
-          editItemSpellTab.style.display = "inline-block";
-          break;
         case "weapon":
           editItemWeaponTab.style.display = "inline-block";
           editItemAffixesTab.style.display = "inline-block";
@@ -1102,6 +1097,11 @@
         case "armor":
           editItemArmorTab.style.display = "inline-block";
           editItemAffixesTab.style.display = "inline-block";
+          break;
+        case "potion":
+        case "scroll":
+        case "wand":
+          editItemSpellTab.style.display = "inline-block";
           break;
         default:
           break;
@@ -1113,8 +1113,6 @@
       }
       if (editItemFood.checked) {
         editItemSpellTab.style.display = "inline-block";
-      } else {
-        editItemSpellTab.style.display = "none";
       }
     }
   });

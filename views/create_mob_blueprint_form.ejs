@@ -93,7 +93,7 @@
       const keywords = document
         .getElementById("newMobKeywords")
         .value.split(/[ ,]+/);
-      const purifiedKeywords = object.keywords.map((keyword) =>
+      const purifiedKeywords = keywords.map((keyword) =>
         DOMPurify.sanitize(keyword)
       );
       const createMobBlueprintFormData = {
