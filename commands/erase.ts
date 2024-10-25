@@ -58,33 +58,18 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
     return;
   }
 
-  worldEmitter.emit(
-    `messageFor${user.username}`,
-    makeMessage(
-      `help`,
-      `<span style="color:var(--red)">Erase cannot be undone!</span> We recommend saving all your writing somewhere,`
-    )
-  );
-  worldEmitter.emit(
-    `messageFor${user.username}`,
-    makeMessage(
-      `help`,
-      `(e.g. Google Drive), so you have a back up copy of your hard work.`
-    )
-  );
-  worldEmitter.emit(
-    `messageFor${user.username}`,
-    makeMessage(
-      `help`,
-      `Why not back it up before erasing, just in case?`
-    )
-  );
+  const helpArray = [
+    `<span style="color:var(--red)">Erase cannot be undone!</span> We recommend saving all your writing somewhere,`,
+    `(e.g. Google Drive), so you have a back up copy of your hard work.`,
+    `Why not back it up now, before erasing, just in case?`,
+  ];
 
   switch (target) {
     case `item`: {
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `eraseItemBlueprintForm`,
         itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
+        helpArray: helpArray,
       });
       logger.debug(`user ${user.name} requested erase item form.`);
       break;
@@ -93,6 +78,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `eraseMobBlueprintForm`,
         mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
+        helpArray: helpArray,
       });
       break;
     }
@@ -171,6 +157,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `eraseRoomForm`,
         exitNames: exitNames,
+        helpArray: helpArray,
       });
       break;
     }
