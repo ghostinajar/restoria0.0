@@ -28,7 +28,7 @@ async function erase(parsedCommand, user) {
     const helpArray = [
         `<span style="color:var(--red)">Erase cannot be undone!</span> We recommend saving all your writing somewhere,`,
         `(e.g. Google Drive), so you have a back up copy of your hard work.`,
-        `Why not back it up before erasing, just in case?`,
+        `Why not back it up now, before erasing, just in case?`,
     ];
     switch (target) {
         case `item`: {

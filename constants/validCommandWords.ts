@@ -18,6 +18,7 @@ export const validCommandWords = [
   "n",
   "north",
   "quit",
+  "recall",
   "say",
   "shout",
   "s",

@@ -12,6 +12,7 @@ import move from "../commands/move.js";
 import edit from "../commands/edit.js";
 import create from "../commands/create.js";
 import erase from "../commands/erase.js";
+import recall from "../commands/recall.js";
 async function processCommand(parsedCommand, user) {
     // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
@@ -60,17 +61,21 @@ async function processCommand(parsedCommand, user) {
             await quit(user);
             break;
         }
+        case `recall`: {
+            await recall(user);
+            break;
+        }
         case `say`: {
             say(parsedCommand, user);
             break;
         }
         case `shout`: {
-            await shout(parsedCommand, user);
+            shout(parsedCommand, user);
             break;
         }
         case `stat`:
         case `stats`: {
-            await stats(user);
+            stats(user);
             break;
         }
         case `t`:

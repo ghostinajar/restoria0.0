@@ -34,13 +34,15 @@ class ZoneManager {
         let { inRoom, inZone } = user.location;
         let zone = this.zones.get(inZone.toString());
         if (!zone) {
-            resetUserLocation(user, "User location not found at logout! Reset to world recall.");
+            logger.error("User location zone not found at logout! Reset to world recall.");
+            await resetUserLocation(user);
             return;
         }
         // logger.debug(`userLogoutHandler has zone ${zone.name}`);
         let room = zone.rooms.find((room) => room._id.toString() == inRoom.toString());
         if (!room) {
-            resetUserLocation(user, "User location not found at logout! Reset to world recall.");
+            logger.error("User location room not found at logout! Reset to world recall.");
+            await resetUserLocation(user);
             return;
         }
         // logger.debug(`userLogoutHandler has room ${room.name}`);
@@ -196,18 +198,14 @@ class ZoneManager {
         }
         // Reset user location if necessary
         if (!user.location.inRoom || !user.location.inZone) {
-            let resetLoc = await resetUserLocation(user, "User location missing, reset to worldRecall.");
-            if (resetLoc) {
-                user.location = resetLoc;
-            }
+            logger.error("User location missing, reset to worldRecall.");
+            await resetUserLocation(user);
         }
         // Load zone if necessary
         let zone = this.zones.get(user.location.inZone.toString());
         if (!zone) {
-            let resetLoc = await resetUserLocation(user, "User location missing, reset to worldRecall.");
-            if (resetLoc) {
-                user.location = resetLoc;
-            }
+            logger.error("User location missing, reset to worldRecall.");
+            await resetUserLocation(user);
             zone = this.zones.get(user.location.inZone.toString());
         }
         // If zone still doesn't exist, log error and return
@@ -219,10 +217,8 @@ class ZoneManager {
         let room = zone.rooms.find((room) => room._id.toString() == user.location.inRoom.toString());
         // If room doesn't exist, reset user location and try to find the room again
         if (!room) {
-            let resetLoc = await resetUserLocation(user, "User location missing, reset to worldRecall.");
-            if (resetLoc) {
-                user.location = resetLoc;
-            }
+            logger.error("User location missing, reset to worldRecall.");
+            await resetUserLocation(user);
             zone = this.zones.get(user.location.inZone.toString());
             room = zone?.rooms.find((room) => room._id.toString() == user.location.inRoom.toString());
         }
