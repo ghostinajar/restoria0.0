@@ -6,6 +6,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
+import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
 
 async function create(parsedCommand: IParsedCommand, user: IUser) {
   let target = parsedCommand.directObject;
@@ -15,6 +16,15 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       makeMessage(`rejection`, `Create what?`)
     );
     return;
+  }
+
+  if (
+    target === "item" ||
+    target === "mob" ||
+    target === "room"
+  ) {
+    if(!userIsAuthorOfZoneId(user.location.inZone.toString(), user))
+    {return;}
   }
 
   switch (target) {

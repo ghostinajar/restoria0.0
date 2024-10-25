@@ -3,11 +3,19 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../types/makeMessage.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
+import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
 async function create(parsedCommand, user) {
     let target = parsedCommand.directObject;
     if (!target) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what?`));
         return;
+    }
+    if (target === "item" ||
+        target === "mob" ||
+        target === "room") {
+        if (!userIsAuthorOfZoneId(user.location.inZone.toString(), user)) {
+            return;
+        }
     }
     switch (target) {
         case `item`: {

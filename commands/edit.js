@@ -8,6 +8,7 @@ import { spells } from "../constants/SPELL.js";
 import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { affixTypes } from "../constants/AFFIX_TYPE.js";
 import { damageTypes } from "../constants/DAMAGE_TYPE.js";
+import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
 async function edit(parsedCommand, user) {
     let target = parsedCommand.directObject;
     const zone = await getZoneOfUser(user);
@@ -16,10 +17,10 @@ async function edit(parsedCommand, user) {
         return;
     }
     if (target !== "user" &&
-        target !== "character" &&
-        zone.author.toString() !== user._id.toString()) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You aren't an author for this zone.`));
-        return;
+        target !== "character") {
+        if (!userIsAuthorOfZoneId(zone.author.toString(), user)) {
+            return;
+        }
     }
     switch (target) {
         case `item`: {

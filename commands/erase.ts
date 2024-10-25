@@ -5,10 +5,10 @@ import { IZone } from "../model/classes/Zone.js";
 import makeMessage from "../types/makeMessage.js";
 import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone.js";
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
-import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
+import userIsAuthorOfZoneId from "../util/userIsAuthorOfZoneId.js";
 
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
   const target = parsedCommand.directObject;
@@ -25,12 +25,12 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
     return;
   }
 
-  if (zone.author.toString() !== user._id.toString()) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(`rejection`, `You aren't an author for this zone.`)
-    );
-    return;
+  if (
+    target !== "user" &&
+    target !== "character"
+  ) {
+    if(!userIsAuthorOfZoneId(zone.author.toString(), user))
+    {return;}
   }
 
   switch (target) {
@@ -132,7 +132,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
         `messageFor${user.username}`,
         makeMessage(
           `rejection`,
-          `You can't erase a zone. Instead, you can erase or edit its rooms, items, and mobs.`
+          `You can't erase a zone. Edit or erase its contents instead.`
         )
       );
       break;
