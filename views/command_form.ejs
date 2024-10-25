@@ -31,9 +31,15 @@
     commandForm.addEventListener("submit", (e) => {
       e.preventDefault();
       if (input.value) {
+        
         const parsedCommand = parseCommand(input.value);
-        //reject invalid command words
 
+        const directions = ["n","e","s","w","u","d","north","east","south","west","up","down"]
+        if (directions.includes(parsedCommand.commandWord)) {
+          activeForm.style.display = "none";
+        }
+        
+        //reject invalid command words
         if (!isValidCommandWord(parsedCommand.commandWord)) {
           const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
           appendMessageToTerminal({
