@@ -13,12 +13,21 @@ async function erase(parsedCommand, user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Erase what? Try ERASE ROOM, ERASE ITEM, or ERASE MOB.`));
         return;
     }
-    if (target !== "user" &&
-        target !== "character") {
-        if (!userHasZoneAuthorId(zone.author.toString(), user)) {
-            return;
-        }
+    if (target === "user" || target === "character") {
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `To erase a user, contact Ralu or another game administrator.`));
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Except under special circumstances, you may only erase one user per month.`));
+        return;
     }
+    if (target === "zone") {
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You can't erase a zone. Edit or erase its contents instead.`));
+        return;
+    }
+    if (!userHasZoneAuthorId(zone.author.toString(), user)) {
+        return;
+    }
+    worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `<span style="color:var(--red)">Erase cannot be undone!</span> We recommend saving all your writing somewhere,`));
+    worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `(e.g. Google Drive), so you have a back up copy of your hard work.`));
+    worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Why not back it up before erasing, just in case?`));
     switch (target) {
         case `item`: {
             worldEmitter.emit(`formPromptFor${user.username}`, {
@@ -98,10 +107,6 @@ async function erase(parsedCommand, user) {
                 form: `eraseRoomForm`,
                 exitNames: exitNames,
             });
-            break;
-        }
-        case `zone`: {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You can't erase a zone. Edit or erase its contents instead.`));
             break;
         }
         default: {
