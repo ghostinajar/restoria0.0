@@ -1,0 +1,85 @@
+<!-- goto_form -->
+<form id="gotoForm" class="sideForm" style="display: none" autocomplete="off">
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelGotoForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Goto</h2>
+  <ul>
+    <li>
+      <label for="gotoSelectZone">Zone:</label>
+      <select id="gotoSelectZone" name="gotoSelectZone" required>
+        <!-- populated by script -->
+      </select>
+    </li>
+    <li>
+      <label for="gotoSelectRoom">Room:</label>
+      <select id="gotoSelectRoom" name="gotoSelectRoom" required>
+        <!-- populated by script -->
+      </select>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <button type="submit">"Go to there!"</button>
+    </li>
+  </ul>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const gotoForm = document.getElementById("gotoForm");
+    const gotoSelectZone = document.getElementById("gotoSelectZone");
+    const gotoSelectRoom = document.getElementById("gotoSelectRoom");
+
+    let zoneNames;
+    let roomNames;
+
+    gotoForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const gotoFormData = {
+        zoneId: gotoSelectZone.value || "ERROR getting roomId from form",
+        roomId: gotoSelectRoom.value || "ERROR getting zoneId from form",
+      };
+      console.log(gotoFormData);
+
+      socket.emit("userSubmittedGoto", gotoFormData);
+      gotoForm.reset();
+      gotoForm.style.display = "none";
+    });
+
+    document
+      .getElementById("cancelGotoForm")
+      .addEventListener("click", function () {
+        gotoForm.style.display = "none";
+      });
+
+    socket.on("openGotoForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = gotoForm;
+      zoneNames = formData.zoneNames;
+      generateStringSelectOptions(zoneNames, gotoSelectZone);
+      generateStringSelectOptions(zoneNames[0].roomNames, gotoSelectRoom);
+      activeForm.style.display = "block";
+      input.value = "";
+      showHelpArray(["Choose any room in any unpublished zone you created."]);
+    });
+
+    gotoSelectZone.addEventListener("change", function (event) {
+  const selectedZoneId = gotoSelectZone.value;
+  const selectedZone = zoneNames.find((zone) => zone._id === selectedZoneId); 
+  
+  gotoSelectRoom.innerHTML = '';
+
+  if (selectedZone && selectedZone.roomNames) {
+    generateStringSelectOptions(selectedZone.roomNames, gotoSelectRoom);
+  } else {
+    console.log('Something went wrong getting rooms');
+  }
+});
+  });
+</script>

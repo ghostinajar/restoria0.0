@@ -1,12 +1,7 @@
 // socketHandlers
-import mongoose from "mongoose";
 import logger from "./logger.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
-import getZoneOfUser from "./util/getZoneofUser.js";
-import worldEmitter from "./model/classes/WorldEmitter.js";
-import { IMobBlueprint } from "./model/classes/MobBlueprint.js";
-import { IItemBlueprint } from "./model/classes/ItemBlueprint.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -59,6 +54,10 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   }
   if (formData.form === "eraseRoomForm") {
     socket.emit(`openEraseRoomForm`, formData);
+    return;
+  }
+  if (formData.form === "gotoForm") {
+    socket.emit(`openGotoForm`, formData);
     return;
   }
 };

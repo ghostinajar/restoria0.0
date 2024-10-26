@@ -51,6 +51,10 @@ export const formPromptForUserHandler = async (formData, socket) => {
         socket.emit(`openEraseRoomForm`, formData);
         return;
     }
+    if (formData.form === "gotoForm") {
+        socket.emit(`openGotoForm`, formData);
+        return;
+    }
 };
 export const messageArrayForUserHandler = async (messageArray, socket) => {
     for (let message of messageArray) {

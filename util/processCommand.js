@@ -13,6 +13,7 @@ import edit from "../commands/edit.js";
 import create from "../commands/create.js";
 import erase from "../commands/erase.js";
 import recall from "../commands/recall.js";
+import goto from "../commands/goto.js";
 async function processCommand(parsedCommand, user) {
     // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
@@ -40,6 +41,10 @@ async function processCommand(parsedCommand, user) {
         case `l`:
         case `look`: {
             await look(parsedCommand, user);
+            break;
+        }
+        case `goto`: {
+            await goto(user);
             break;
         }
         case `n`:
