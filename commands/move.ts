@@ -6,23 +6,12 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
-import exits from "./exits.js";
-import look from "./look.js";
+import relocateUser from "../util/relocateUser.js";
 
 async function move(parsedCommand: IParsedCommand, user: IUser) {
   let requestedDirection = parsedCommand.commandWord;
-  // logger.debug(`move command says ${user.name}'s location is ${JSON.stringify(user.location)}`)
 
-  // Get origin room of user
-  const originRoom: IRoom = await getRoomOfUser(user);
-  if (!originRoom) {
-    logger.error(
-      `Error in move, couldn't find origin room for user ${user.name}`
-    );
-    return;
-  }
-  // logger.debug(`move command got origin room ${originRoom.name}`);
-
+  // expand abbreviations
   switch (requestedDirection) {
     case `n`: {
       requestedDirection = `north`;
@@ -53,6 +42,16 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
   }
   // Ensure requestedDirection is of type keyof IRoom["exits"]
   const direction = requestedDirection as keyof IRoom["exits"];
+
+  // Get origin room of user
+  const originRoom: IRoom = await getRoomOfUser(user);
+  if (!originRoom) {
+    logger.error(
+      `Error in move, couldn't find origin room for user ${user.name}`
+    );
+    return;
+  }
+
   // Check if the exit is defined
   const exit = originRoom.exits[direction];
   // logger.debug(
@@ -92,45 +91,13 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
   }
   // logger.debug(`move command got destination room ${destinationRoom.name}`);
 
-  // Remove user from originRoom users array
-  originRoom.removeEntityFrom(`users`, user);
-  // logger.debug(
-  //   `User ${user.name} removed from ${
-  //     originRoom.name
-  //   }. Users remaining: ${originRoom.users.map((user) => user.name)}`
-  // );
-
-  // Add user to destinationRoom users array
-  destinationRoom.addEntityTo(`users`, user);
-  // logger.debug(
-  //   `User ${user.name} added to ${
-  //     destinationRoom.name
-  //   }. Users in room: ${destinationRoom.users.map((user) => user.name)}`
-  // );
-
   // Message user's origin room
   worldEmitter.emit(
     `messageFor${user.username}sRoom`,
     makeMessage(`userMove`, `${user.name} went ${direction}.`)
   );
 
-  // Update user.location
-  user.location.inRoom = destinationRoom._id;
-  user.location.inZone = destinationRoom.fromZoneId;
-  // logger.debug(
-  //   `move command says ${user.name}'s location changed to ${JSON.stringify(
-  //     user.location
-  //   )}`
-  // );
-
-  // Alert socket to update User's ioRoom
-  worldEmitter.emit(
-    `user${user.username}ChangingRooms`,
-    originRoom._id.toString(),
-    originRoom.fromZoneId.toString(),
-    destinationRoom._id.toString(),
-    destinationRoom.fromZoneId.toString()
-  );
+  await relocateUser(user, originRoom.exits[direction]!.destinationLocation);
 
   // Message user's destination room
   worldEmitter.emit(
@@ -143,9 +110,6 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
     `messageFor${user.username}`,
     makeMessage(`userMove`, `You move ${requestedDirection}.`)
   );
-
-  await look({ commandWord: `look` }, user);
-  await exits(user);
 }
 
 export default move;

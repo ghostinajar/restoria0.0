@@ -87,8 +87,10 @@ export const userXChangingRoomsHandler = (originRoomId, originZoneId, destinatio
     // logger.debug(
     //   `${user.name}'s socket is in rooms: ${Array.from(socket.rooms)}`
     // );
+    // update room chat
     socket.leave(originRoomId);
     socket.join(destinationRoomId);
+    // update zone chat
     if (originZoneId !== destinationZoneId) {
         // logger.debug(
         //   `userChangingRoomsHandler changing users's ioZone to ${destinationZoneId}`

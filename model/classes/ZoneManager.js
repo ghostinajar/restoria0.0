@@ -16,14 +16,13 @@ class ZoneManager {
     zones;
     roomRequestedHandler = async (location) => {
         // logger.debug(`roomRequestedHandler called, with ${JSON.stringify(location)}`);
-        //get the room
-        let zone = this.getZoneById(location.inZone) ||
-            (await this.addZoneById(location.inZone));
+        // get the zone, then get the room
+        let zone = await this.getZoneById(location.inZone);
         // logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
         // logger.debug(`looking for room id ${location.inRoom.toString()}`);
         const room = zone?.rooms.find((room) => room._id.toString() === location.inRoom.toString());
         if (!room) {
-            logger.error(`lookArrayRequestedHandler got an undefined room`);
+            logger.error(`lookArrayRequestedHandler got an undefined room for location ${JSON.stringify(location)}`);
             return;
         }
         worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);
@@ -51,11 +50,14 @@ class ZoneManager {
         worldEmitter.emit("zoneManagerRemovedUser", user);
     };
     placeUserRequestHandler = async (user) => {
-        this.placeUserInLocation(user);
+        this.placeUserInStoredLocation(user);
     };
     zoneRequestedHandler = async (zoneId) => {
         try {
-            const zone = this.addZoneById(zoneId);
+            let zone = await this.getZoneById(zoneId);
+            if (!zone) {
+                logger.error(`zone requested (${zoneId.toString}) that doesn't exist`);
+            }
             worldEmitter.emit(`zone${zoneId.toString()}Loaded`, zone);
         }
         catch (err) {
@@ -64,16 +66,13 @@ class ZoneManager {
     };
     async addZoneById(id) {
         try {
-            if (this.zones.has(id.toString())) {
-                return this.getZoneById(id);
-            }
+            //load from db
             const zone = await Zone.findById(id);
-            //if zone exists and isn't already in zones map
             if (!zone) {
-                logger.error(`addZoneById couldn't get a zone with id ${id}`);
-                return null;
+                logger.error(`addZoneById couldn't get a zone with id ${id} from db`);
+                return undefined;
             }
-            // add zone to zones map
+            // add to zones map
             this.zones.set(zone._id.toString(), zone);
             logger.info(`zoneManager added ${zone.name} to zones.`);
             // logger.log(
@@ -86,6 +85,7 @@ class ZoneManager {
             //     Array.from(this.zones.values()).map((zone) => zone.name)
             //   )}`
             // );
+            // if blueprints are empty, add dummy data (necessary for user forms)
             if (zone.itemBlueprints.length === 0) {
                 zone.itemBlueprints = [
                     {
@@ -175,25 +175,26 @@ class ZoneManager {
             throw err;
         }
     }
-    getZoneById(id) {
+    async getZoneById(id) {
         try {
-            const zone = this.zones.get(id.toString());
-            if (zone) {
-                return zone;
+            let zone = this.zones.get(id.toString());
+            if (!zone) {
+                zone = await this.addZoneById(id);
             }
-            else {
+            if (!zone) {
                 logger.error(`zoneManager can't find zone with id: ${id}.`);
                 return null;
             }
+            return zone;
         }
         catch (err) {
             logger.error(`Error in getZoneById: ${err.message}`);
             throw err;
         }
     }
-    async placeUserInLocation(user) {
+    async placeUserInStoredLocation(user) {
         if (!user) {
-            logger.error(`placeUserInLocation received an undefined user`);
+            logger.error(`placeUserInStoredLocation received an undefined user`);
             return;
         }
         // Reset user location if necessary
@@ -255,6 +256,7 @@ class ZoneManager {
     }
     clearContents() {
         this.zones.clear();
+        worldEmitter.off("roomRequested", this.roomRequestedHandler);
         worldEmitter.off("socketDisconnectedUser", this.userLogoutHandler);
         worldEmitter.off("placeUserRequest", this.placeUserRequestHandler);
         worldEmitter.off("zoneRequested", this.zoneRequestedHandler);
