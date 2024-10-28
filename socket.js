@@ -23,6 +23,7 @@ import createZone from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, { purifyCommandInput } from "./util/purify.js";
+import relocateUser from "./util/relocateUser.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -114,6 +115,12 @@ const setupSocket = (io) => {
                 logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
                 worldEmitter.emit(`messageFor${user.username}`, message);
+            });
+            socket.on(`userSubmittedGoto`, async (gotoFormData) => {
+                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`success`, `${user.name} disappears.`));
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `You close your eyes for a moment, imagine the location, and appear there.`));
+                await relocateUser(user, gotoFormData);
+                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`success`, `${user.name} appears.`));
             });
             socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
                 purifyDescriptionOfObject(itemBlueprintData);

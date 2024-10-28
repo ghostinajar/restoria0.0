@@ -43,6 +43,8 @@ import createZone, { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, { purifyCommandInput } from "./util/purify.js";
+import relocateUser from "./util/relocateUser.js";
+import { ILocation } from "./model/classes/Location.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -222,6 +224,22 @@ const setupSocket = (io: any) => {
             `You permanently erased the room ${formData.name}.`
           );
           worldEmitter.emit(`messageFor${user.username}`, message);
+        }
+      );
+
+      socket.on(
+        `userSubmittedGoto`,
+        async (gotoFormData: ILocation) => {
+          worldEmitter.emit(`messageFor${user.username}sRoom`, 
+            makeMessage(`success`, `${user.name} disappears.`)
+          );
+          worldEmitter.emit(`messageFor${user.username}`, 
+            makeMessage(`success`, `You close your eyes for a moment, imagine the location, and appear there.`)
+          );
+          await relocateUser(user, gotoFormData)
+          worldEmitter.emit(`messageFor${user.username}sRoom`, 
+            makeMessage(`success`, `${user.name} appears.`)
+          );
         }
       );
 
