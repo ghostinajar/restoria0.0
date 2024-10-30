@@ -6,20 +6,10 @@ const suggestionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    //probably won't need to reference Zone ObjectId since suggestions in a zone 
-    //will only refer to things within that zone
-    refersToRoom: {
-        type: Schema.Types.ObjectId,
-        ref: 'Room'
-    },
-    refersToMobBlueprint: {
-        type: Schema.Types.ObjectId,
-        ref: 'MobBlueprint'
-    },
-    refersToItemBlueprint: {
-        type: Schema.Types.ObjectId,
-        ref: 'ItemBlueprint'
-    },
+    refersToId: Schema.Types.ObjectId,
+    isForRoom: Boolean,
+    isForMobBlueprint: Boolean,
+    isForItemBlueprint: Boolean,
     body: String,
     history: {
         type: historySchema,
