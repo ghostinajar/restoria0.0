@@ -1,7 +1,13 @@
 // socketHandlers
+import mongoose from "mongoose";
 import logger from "./logger.js";
+import { SuggestionType } from "./model/classes/Suggestion.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
+import getZoneOfUser from "./util/getZoneofUser.js";
+import { purifyAllStringPropsOfObject } from "./util/purify.js";
+import { historyStartingNow } from "./model/classes/History.js";
+import stats from "./commands/stats.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -22,7 +28,7 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   }
   if (formData.form === "createZoneForm") {
     socket.emit(`openCreateZoneForm`);
-    return; 
+    return;
   }
   if (formData.form === "editItemBlueprintForm") {
     socket.emit(`openEditItemBlueprintForm`, formData);
@@ -60,7 +66,44 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     socket.emit(`openGotoForm`, formData);
     return;
   }
+  if (formData.form === "suggestForm") {
+    socket.emit(`openSuggestForm`, formData);
+    return;
+  }
 };
+
+export async function handleSuggestion(
+  suggestionFormData: {
+    _id: string;
+    suggestionType: SuggestionType;
+    body: string;
+  },
+  user: IUser
+) {
+  suggestionFormData = purifyAllStringPropsOfObject(suggestionFormData);
+  const zone = await getZoneOfUser(user);
+  const suggestion = {
+    author: user._id,
+    refersToId: new mongoose.Types.ObjectId(suggestionFormData._id),
+    suggestionType: suggestionFormData.suggestionType,
+    body: suggestionFormData.body,
+    history: historyStartingNow(),
+  };
+
+  switch (suggestionFormData.suggestionType) {
+    case "room":
+      suggestion.refersToId = user.location.inRoom;
+      break;
+    case "zone":
+      suggestion.refersToId = user.location.inZone;
+      break;
+    default:
+      break;
+  }
+  zone.suggestions.push(suggestion);
+  await zone.save();
+  stats(user);
+}
 
 export const messageArrayForUserHandler = async (
   messageArray: Array<IMessage>,

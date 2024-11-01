@@ -7,9 +7,11 @@ const suggestionSchema = new Schema({
         ref: 'User'
     },
     refersToId: Schema.Types.ObjectId,
-    isForRoom: Boolean,
-    isForMobBlueprint: Boolean,
-    isForItemBlueprint: Boolean,
+    suggestionType: {
+        type: String,
+        enum: ['room', 'itemBlueprint', 'mobBlueprint', 'zone'],
+        required: true
+    },
     body: String,
     history: {
         type: historySchema,

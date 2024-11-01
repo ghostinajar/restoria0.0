@@ -1,0 +1,81 @@
+<!-- suggest_form -->
+
+<form
+  id="suggestForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelSuggestForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Suggest a Change</h2>
+  <ul>
+    <li>
+      <label for="suggestSelect">To:</label>
+      <select id="suggestSelect" name="suggestSelect" required>
+        <!-- populated by script -->
+      </select>
+    </li>
+    <li>
+      <label for="suggestBody">Change:</label>
+      <textarea
+        id="suggestBody"
+        name="suggestBody"
+        type="text"
+        maxlength="640"
+        required
+      ></textarea>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <button type="submit">Send the Suggestion</button>
+    </li>
+  </ul>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const suggestForm = document.getElementById("suggestForm");
+    const suggestSelect = document.getElementById("suggestSelect");
+    const suggestBody = document.getElementById("suggestBody");
+
+    let suggestionType;
+
+    suggestForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const suggestFormData = {
+        _id: suggestSelect.value,
+        suggestionType: suggestionType,
+        body: suggestBody.value,
+      };
+
+      socket.emit("userSubmittedSuggest", suggestFormData);
+      suggestForm.reset();
+      suggestForm.style.display = "none";
+    });
+
+    document
+      .getElementById("cancelSuggestForm")
+      .addEventListener("click", function () {
+        suggestForm.style.display = "none";
+      });
+
+    socket.on("openSuggestForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = suggestForm;
+
+      suggestionType = formData.suggestionType;
+      generateStringSelectOptions(formData.names, suggestSelect);
+      // TODO preselect formData.defaultOption
+      activeForm.style.display = "block";
+      input.value = "";
+    });
+  });
+</script>

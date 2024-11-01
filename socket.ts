@@ -15,6 +15,7 @@ import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import {
   formPromptForUserHandler,
+  handleSuggestion,
   messageArrayForUserHandler,
   messageForUserHandler,
   messageForUsersRoomHandler,
@@ -42,9 +43,14 @@ import editItemBlueprint, {
 import createZone, { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
-import purifyDescriptionOfObject, { purifyCommandInput } from "./util/purify.js";
+import purifyDescriptionOfObject, {
+  purifyAllStringPropsOfObject,
+  purifyCommandInput,
+} from "./util/purify.js";
 import relocateUser from "./util/relocateUser.js";
 import { ILocation } from "./model/classes/Location.js";
+import { historyStartingNow } from "./model/classes/History.js";
+import { SuggestionType } from "./model/classes/Suggestion.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -227,21 +233,24 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(
-        `userSubmittedGoto`,
-        async (gotoFormData: ILocation) => {
-          worldEmitter.emit(`messageFor${user.username}sRoom`, 
-            makeMessage(`success`, `${user.name} disappears.`)
-          );
-          worldEmitter.emit(`messageFor${user.username}`, 
-            makeMessage(`success`, `You close your eyes for a moment, imagine the location, and appear there.`)
-          );
-          await relocateUser(user, gotoFormData)
-          worldEmitter.emit(`messageFor${user.username}sRoom`, 
-            makeMessage(`success`, `${user.name} appears.`)
-          );
-        }
-      );
+      socket.on(`userSubmittedGoto`, async (gotoFormData: ILocation) => {
+        worldEmitter.emit(
+          `messageFor${user.username}sRoom`,
+          makeMessage(`success`, `${user.name} disappears.`)
+        );
+        worldEmitter.emit(
+          `messageFor${user.username}`,
+          makeMessage(
+            `success`,
+            `You close your eyes for a moment, imagine the location, and appear there.`
+          )
+        );
+        await relocateUser(user, gotoFormData);
+        worldEmitter.emit(
+          `messageFor${user.username}sRoom`,
+          makeMessage(`success`, `${user.name} appears.`)
+        );
+      });
 
       socket.on(
         `userSubmittedNewItemBlueprint`,
@@ -291,6 +300,20 @@ const setupSocket = (io: any) => {
           purifyDescriptionOfObject(userDescription);
           await editUser(user, userDescription);
           stats(user);
+        }
+      );
+
+      socket.on(
+        `userSubmittedSuggest`,
+        async (suggestionFormData: {
+          _id: string;
+          suggestionType: SuggestionType;
+          body: string;
+        }) => {
+          handleSuggestion(suggestionFormData, user);
+          socket.emit('message',
+            makeMessage('success', `We saved your suggestion for this ${suggestionFormData.suggestionType}.`)
+          )
         }
       );
 

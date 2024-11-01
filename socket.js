@@ -10,7 +10,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
@@ -22,7 +22,7 @@ import editItemBlueprint from "./commands/editItemBlueprint.js";
 import createZone from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
-import purifyDescriptionOfObject, { purifyCommandInput } from "./util/purify.js";
+import purifyDescriptionOfObject, { purifyCommandInput, } from "./util/purify.js";
 import relocateUser from "./util/relocateUser.js";
 const setupSocket = (io) => {
     try {
@@ -151,6 +151,10 @@ const setupSocket = (io) => {
                 purifyDescriptionOfObject(userDescription);
                 await editUser(user, userDescription);
                 stats(user);
+            });
+            socket.on(`userSubmittedSuggest`, async (suggestionFormData) => {
+                handleSuggestion(suggestionFormData, user);
+                socket.emit('message', makeMessage('success', `We saved your suggestion for this ${suggestionFormData.suggestionType}.`));
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);

@@ -10,6 +10,14 @@ export interface IHistory {
     completionDate?: Date;
 }
 
+export function historyStartingNow() {
+    return {
+        creationDate: new Date(),
+        modifiedDate: new Date(),
+        completionStatus: COMPLETION_STATUS.DRAFT,
+      }
+}
+
 const historySchema = new Schema<IHistory>({
     creationDate: {
         type: Date,

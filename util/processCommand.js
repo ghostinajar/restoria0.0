@@ -14,6 +14,7 @@ import create from "../commands/create.js";
 import erase from "../commands/erase.js";
 import recall from "../commands/recall.js";
 import goto from "../commands/goto.js";
+import suggest from "../commands/suggest.js";
 async function processCommand(parsedCommand, user) {
     // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
@@ -81,6 +82,10 @@ async function processCommand(parsedCommand, user) {
         case `stat`:
         case `stats`: {
             stats(user);
+            break;
+        }
+        case `suggest`: {
+            await suggest(parsedCommand, user);
             break;
         }
         case `t`:

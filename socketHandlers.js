@@ -1,3 +1,9 @@
+// socketHandlers
+import mongoose from "mongoose";
+import getZoneOfUser from "./util/getZoneofUser.js";
+import { purifyAllStringPropsOfObject } from "./util/purify.js";
+import { historyStartingNow } from "./model/classes/History.js";
+import stats from "./commands/stats.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -55,7 +61,35 @@ export const formPromptForUserHandler = async (formData, socket) => {
         socket.emit(`openGotoForm`, formData);
         return;
     }
+    if (formData.form === "suggestForm") {
+        socket.emit(`openSuggestForm`, formData);
+        return;
+    }
 };
+export async function handleSuggestion(suggestionFormData, user) {
+    suggestionFormData = purifyAllStringPropsOfObject(suggestionFormData);
+    const zone = await getZoneOfUser(user);
+    const suggestion = {
+        author: user._id,
+        refersToId: new mongoose.Types.ObjectId(suggestionFormData._id),
+        suggestionType: suggestionFormData.suggestionType,
+        body: suggestionFormData.body,
+        history: historyStartingNow(),
+    };
+    switch (suggestionFormData.suggestionType) {
+        case "room":
+            suggestion.refersToId = user.location.inRoom;
+            break;
+        case "zone":
+            suggestion.refersToId = user.location.inZone;
+            break;
+        default:
+            break;
+    }
+    zone.suggestions.push(suggestion);
+    await zone.save();
+    stats(user);
+}
 export const messageArrayForUserHandler = async (messageArray, socket) => {
     for (let message of messageArray) {
         socket.emit(`message`, message);

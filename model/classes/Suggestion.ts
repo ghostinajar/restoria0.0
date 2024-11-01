@@ -3,7 +3,7 @@ import historySchema, { IHistory } from './History.js';
 
 const { Schema } = mongoose;
 
-export type SuggestionType = 'room' | 'itemBlueprint' | 'mobBlueprint';
+export type SuggestionType = 'room' | 'itemBlueprint' | 'mobBlueprint' | 'zone';
 
 
 export interface ISuggestion {
@@ -22,7 +22,7 @@ const suggestionSchema = new Schema<ISuggestion>({
     refersToId: Schema.Types.ObjectId,
     suggestionType: {
         type: String,
-        enum: ['room', 'itemBlueprint', 'mobBlueprint'],
+        enum: ['room', 'itemBlueprint', 'mobBlueprint', 'zone'],
         required: true
     },
     body: String,

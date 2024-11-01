@@ -8,6 +8,22 @@ export function purifyCommandInput(input) {
     let sanitizedInput = purify.sanitize(input);
     return wordFilter.clean(sanitizedInput);
 }
+export function purifyAllStringPropsOfObject(object) {
+    if (object && typeof object === 'object') {
+        for (const key in object) {
+            if (typeof object[key] === 'string') {
+                object[key] = wordFilter.clean(purify.sanitize(object[key]));
+            }
+            else if (Array.isArray(object[key])) {
+                object[key] = object[key].map(item => typeof item === 'string' ? wordFilter.clean(purify.sanitize(item)) : purifyAllStringPropsOfObject(item));
+            }
+            else if (typeof object[key] === 'object') {
+                purifyAllStringPropsOfObject(object[key]);
+            }
+        }
+    }
+    return object;
+}
 export function purifyDescriptionOfObject(object) {
     if (object.name) {
         object.name = wordFilter.clean(purify.sanitize(object.name));

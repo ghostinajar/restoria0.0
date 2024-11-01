@@ -11,6 +11,23 @@ export function purifyCommandInput(input: string): string {
   return wordFilter.clean(sanitizedInput);
 }
 
+export function purifyAllStringPropsOfObject(object: any) {
+  if (object && typeof object === 'object') {
+    for (const key in object) {
+      if (typeof object[key] === 'string') {
+        object[key] = wordFilter.clean(purify.sanitize(object[key]));
+      } else if (Array.isArray(object[key])) {
+        object[key] = object[key].map(item =>
+          typeof item === 'string' ? wordFilter.clean(purify.sanitize(item)) : purifyAllStringPropsOfObject(item)
+        );
+      } else if (typeof object[key] === 'object') {
+        purifyAllStringPropsOfObject(object[key]);
+      }
+    }
+  }
+  return object;
+}
+
 export function purifyDescriptionOfObject(object: any) {
   if (object.name) {
     object.name = wordFilter.clean(purify.sanitize(object.name));
