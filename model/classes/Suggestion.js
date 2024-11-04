@@ -14,6 +14,11 @@ const suggestionSchema = new Schema({
         required: true
     },
     body: String,
+    status: {
+        type: String,
+        enum: ['pending', 'completed', 'discarded'],
+        required: true
+    },
     history: {
         type: historySchema,
         default: () => ({})

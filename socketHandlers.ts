@@ -1,7 +1,7 @@
 // socketHandlers
 import mongoose from "mongoose";
 import logger from "./logger.js";
-import { refersToObjectType } from "./model/classes/Suggestion.js";
+import { refersToObjectType, suggestionStatusType } from "./model/classes/Suggestion.js";
 import User, { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
@@ -72,6 +72,10 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     socket.emit(`openSuggestForm`, formData);
     return;
   }
+  if (formData.form === "suggestionsForm") {
+    socket.emit(`openSuggestionsForm`, formData);
+    return;
+  }
 };
 
 export async function handleSuggestion(
@@ -100,6 +104,7 @@ export async function handleSuggestion(
     refersToId: new mongoose.Types.ObjectId(suggestionFormData._id),
     refersToObjectType: suggestionFormData.refersToObjectType,
     body: suggestionFormData.body,
+    status: "pending" as suggestionStatusType,
     history: historyStartingNow(),
   };
 

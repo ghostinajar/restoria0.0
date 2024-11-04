@@ -165,13 +165,16 @@ ul {
   background: none;
 }
 .addNode,
-.deleteNode {
+.deleteNode,
+.completeSuggestion
+ {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
   align-self: center; /* Vertically centers the button */
 }
-.addNode {
+.addNode,
+.completeSuggestion {
   background-color: #66ff55;
   color: white;
 }

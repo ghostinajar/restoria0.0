@@ -1,0 +1,246 @@
+<!-- suggestions_form -->
+<form
+  id="suggestionsForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelSuggestions"> Cancel </a>
+    </li>
+  </ul>
+  <h2>
+    Suggestions
+    <span class="nodeId" id="suggestionsIdDisplay"
+      >Error: Zone Name & Id should be here</span
+    >
+  </h2>
+  <!-- <div class="tabs">
+    <button
+      id="suggestionsRoomsTab"
+      type="button"
+      class="tab-link suggestions-tab-link active"
+      data-tab="suggestionsRoomsSection"
+    >
+      Rooms
+    </button>
+    <button
+      id="suggestionsItemBlueprintsTab"
+      type="button"
+      class="tab-link suggestions-tab-link"
+      data-tab="suggestionsItemBlueprintsSection"
+    >
+      Item Blueprints
+    </button>
+    <button
+      id="suggestionsMobBlueprintsTab"
+      type="button"
+      class="tab-link suggestions-tab-link"
+      data-tab="suggestionsMobBlueprintsSection"
+    >
+      Mob Blueprints
+    </button>
+  </div> -->
+
+  <!-- TODO remove this in future when suggestions are grouped by tabs -->
+  <h3>Suggestions</h3>
+  <ul class="nodeList" id="suggestionsNodeList">
+    <!-- loaded via script -->
+  </ul>
+
+  <!-- <section
+    class="tab-content suggestions-tab-content"
+    id="suggestionsRoomsSection"
+    style="display: block"
+  >
+    <h3>Room Suggestions</h3>
+    <ul class="nodeList" id="suggestionsRoomsNodeList">
+    </ul>
+  </section> -->
+
+  <!-- <section
+    class="tab-content suggestions-tab-content"
+    id="suggestionsItemBlueprintsSection"
+    style="display: none"
+  >
+    <h3>Item Blueprint Suggestions</h3>
+    <ul class="nodeList" id="suggestionsItemBlueprintsNodeList">
+    </ul>
+  </section> -->
+
+  <!-- <section
+    class="tab-content suggestions-tab-content"
+    id="suggestionsMobBlueprintsSection"
+    style="display: none"
+  >
+    <h3>Mob Blueprint Suggestions</h3>
+    <ul class="nodeList" id="suggestionsMobBlueprintsNodeList">
+    </ul>
+  </section> -->
+
+  <section>
+    <ul>
+      <li>
+        <button type="submit">Save Suggestions</button>
+      </li>
+    </ul>
+  </section>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const suggestionsForm = document.getElementById("suggestionsForm");
+    // const suggestionsTabLinks = document.querySelectorAll(
+    //   ".suggestions-tab-link"
+    // );
+    // const suggestionsTabContents = document.querySelectorAll(
+    //   ".suggestions-tab-content"
+    // );
+    // const suggestionsRoomsTab = document.getElementById("suggestionsRoomsTab");
+    // const suggestionsItemBlueprintsTab = document.getElementById(
+    //   "suggestionsItemBlueprintsTab"
+    // );
+    // const suggestionsMobBlueprintsTab = document.getElementById(
+    //   "suggestionsMobBlueprintsTab"
+    // );
+
+    const suggestionsIdDisplay = document.getElementById(
+      "suggestionsIdDisplay"
+    );
+
+    const suggestionsNodeList = document.getElementById("suggestionsNodeList");
+
+    // const suggestionsRoomNodeList = document.getElementById(
+    //   "suggestionsRoomNodeList"
+    // );
+    // const suggestionsItemBlueprintsNodeList = document.getElementById(
+    //   "suggestionsItemBlueprintsNodeList"
+    // );
+    // const suggestionsMobBlueprintsNodeList = document.getElementById(
+    //   "suggestionsMobBlueprintsNodeList"
+    // );
+
+    // help arrays to message user when they click each tab
+    const suggestionsHelp = [
+      `================================= Suggestions =================================`,
+      `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--blue_light)">a green potion</span>' or '<span style="color: var(--blue_light)">Excaliburr the Frozen'</span>`,
+      `<span style="color:var(--red)">Keywords:</span> e.g 'potion, green' or 'sword, Excaliburr, Frozen`,
+      `<span style="color:var(--red)">Price:</span> The item costs this much to purchase (selling price will be less).`,
+      `<span style="color:var(--red)">MinLvl:</span> A player must be at least this level to use or equip it.`,
+      `<span style="color:var(--red)">Type:</span> Each has its special features, except 'none'.`,
+    ];
+
+    // to hold data from server on "edit item" command
+    let suggestions;
+    // let roomSuggestions;
+    // let itemBlueprintSuggestions;
+    // let mobBlueprintSuggestions;
+    // let completedSuggestions;
+    // let discardedSuggestions;
+    let roomNames;
+    let itemBlueprintNames;
+    let mobBlueprintNames;
+
+    // // Tab menu listeners
+    // suggestionsTabLinks.forEach((link) => {
+    //   link.addEventListener("click", function () {
+    //     // Remove active class from all tab links and sections
+    //     suggestionsTabLinks.forEach((link) => link.classList.remove("active"));
+    //     suggestionsTabContents.forEach((section) =>
+    //       section.classList.remove("active")
+    //     );
+    //     suggestionsTabContents.forEach(
+    //       (section) => (section.style.display = "none")
+    //     );
+
+    //     // Add active class to the clicked tab and corresponding section
+    //     this.classList.add("active");
+    //     const target = document.getElementById(this.getAttribute("data-tab"));
+    //     target.classList.add("active");
+    //     target.style.display = "block";
+    //   });
+    // });
+
+    editItemBlueprintForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      // suggestions = [
+      //   ...roomSuggestions,
+      //   ...itemBlueprintSuggestions,
+      //   ...mobBlueprintSuggestions,
+      // ];
+
+      socket.emit("userSubmittedSuggestions", suggestions);
+
+      suggestionsForm.reset();
+      suggestionsForm.style.display = "none";
+    });
+
+    document
+      .getElementById("cancelSuggestions")
+      .addEventListener("click", function () {
+        suggestionsForm.style.display = "none";
+      });
+
+    socket.on("openSuggestionsForm", (formData) => {
+      console.log(formData);
+      suggestions = formData.suggestions;
+      itemBlueprintNames = formData.itemBlueprintNames;
+      mobBlueprintNames = formData.mobBlueprintNames;
+      roomNames = formData.roomNames;
+
+      suggestionsForm.reset();
+      clearUl(suggestionsNodeList);
+      //TODO populate suggestionsNodeList
+      loadSuggestionsToUlElement(
+            suggestionsNodeList,
+            suggestions,
+            [...itemBlueprintNames,...mobBlueprintNames,...roomNames]
+          );
+
+      //reset/hide open forms, show suggestionsForm
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = suggestionsForm;
+      activeForm.style.display = "block";
+      // document.querySelector("#suggestionsRoomsTab").click();
+      input.value = "";
+
+      showHelpArray(suggestionsHelp);
+    });
+
+    function loadSuggestionsToUlElement(ulElement, suggestions, objectList) {
+        for (let suggestion of suggestions) {
+          addSuggestionToUlElement(ulElement, suggestion, suggestions, objectList);
+        }
+      }
+
+      function addSuggestionToUlElement(ulElement, suggestion, suggestions, objectList) {
+        // Create a new <li> element
+        const liElement = document.createElement("li");
+        liElement.className = "suggestion";
+        suggestionName = objectList.find(
+          (object) => object._id === suggestion.refersToId
+        ).name;
+
+        liElement.innerHTML = `<div class="nodeInfo"><span class="suggestionStatus">${suggestion.status}: </span><span class="nodeName">${suggestionName}</span><span class="nodeId">${suggestion.refersToObjectType} id: ${suggestion.refersToId}</span><br /><span class="suggestionBody">${suggestion.body}</span></div>`;
+
+        // Create a completed button
+        const completedButton = document.createElement("button");
+        completedButton.textContent = "complete";
+        completedButton.className = "completeSuggestion";
+        completedButton.type = "button";
+        completedButton.onclick = function () {
+          suggestion.status = "completed";
+          //TODO sort completed and discarded suggestions to the bottom
+        };
+
+        // Append the delete button to the <li>
+        liElement.appendChild(completedButton);
+
+        // Append the <li> to the <ul>
+        ulElement.appendChild(liElement);
+      }
+
+  });
+</script>

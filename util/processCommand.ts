@@ -17,6 +17,7 @@ import erase from "../commands/erase.js";
 import recall from "../commands/recall.js";
 import goto from "../commands/goto.js";
 import suggest from "../commands/suggest.js";
+import suggestions from "../commands/suggestions.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
@@ -89,6 +90,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
     }
     case `suggest`: {
       await suggest(parsedCommand, user);
+      break;
+    }
+    case `suggestions`: {
+      await suggestions(user);
       break;
     }
     case `t`:

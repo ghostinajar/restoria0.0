@@ -68,6 +68,10 @@ export const formPromptForUserHandler = async (formData, socket) => {
         socket.emit(`openSuggestForm`, formData);
         return;
     }
+    if (formData.form === "suggestionsForm") {
+        socket.emit(`openSuggestionsForm`, formData);
+        return;
+    }
 };
 export async function handleSuggestion(suggestionFormData, user) {
     suggestionFormData = purifyAllStringPropsOfObject(suggestionFormData);
@@ -84,6 +88,7 @@ export async function handleSuggestion(suggestionFormData, user) {
         refersToId: new mongoose.Types.ObjectId(suggestionFormData._id),
         refersToObjectType: suggestionFormData.refersToObjectType,
         body: suggestionFormData.body,
+        status: "pending",
         history: historyStartingNow(),
     };
     switch (suggestionFormData.refersToObjectType) {

@@ -1,4 +1,4 @@
-async function getRoomNamesFromZone(zone) {
+function getRoomNamesFromZone(zone) {
     const roomNames = zone.rooms.map((room) => {
         return { _id: room._id, name: room.name };
     });
