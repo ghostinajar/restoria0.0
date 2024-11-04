@@ -22,19 +22,19 @@ async function suggest(parsedCommand: IParsedCommand, user: IUser) {
 
   const formData = {
     form: `suggestForm`,
-    suggestionType: target,
+    refersToObjectType: target,
     names: [{ _id: new mongoose.Types.ObjectId(), name: "(current location)" }],
     defaultOption: "",
   };
 
   switch (target) {
     case `item`:
-      formData.suggestionType = 'itemBlueprint'
+      formData.refersToObjectType = 'itemBlueprint'
       formData.names = getItemBlueprintNamesFromZone(zone);
       formData.defaultOption = room.itemNodes[0].loadsBlueprintId.toString();
       break;
     case `mob`:
-      formData.suggestionType = 'mobBlueprint'
+      formData.refersToObjectType = 'mobBlueprint'
       formData.names = getMobBlueprintNamesFromZone(zone);
       formData.defaultOption = room.mobNodes[0].loadsBlueprintId.toString();
       break;

@@ -1,9 +1,12 @@
 // socketHandlers
 import mongoose from "mongoose";
+import User from "./model/classes/User.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import { purifyAllStringPropsOfObject } from "./util/purify.js";
 import { historyStartingNow } from "./model/classes/History.js";
 import stats from "./commands/stats.js";
+import worldEmitter from "./model/classes/WorldEmitter.js";
+import makeMessage from "./util/makeMessage.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -69,14 +72,21 @@ export const formPromptForUserHandler = async (formData, socket) => {
 export async function handleSuggestion(suggestionFormData, user) {
     suggestionFormData = purifyAllStringPropsOfObject(suggestionFormData);
     const zone = await getZoneOfUser(user);
+    const author = await User.findById(zone.author);
+    let authorName = author?.name || "the author";
+    if (zone.history.completionStatus === "published") {
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage('rejection', `This zone is already published! Contact ${authorName} with your suggestion.`));
+        return;
+    }
     const suggestion = {
-        author: user._id,
+        authorId: user._id,
+        authorName: user.name,
         refersToId: new mongoose.Types.ObjectId(suggestionFormData._id),
-        suggestionType: suggestionFormData.suggestionType,
+        refersToObjectType: suggestionFormData.refersToObjectType,
         body: suggestionFormData.body,
         history: historyStartingNow(),
     };
-    switch (suggestionFormData.suggestionType) {
+    switch (suggestionFormData.refersToObjectType) {
         case "room":
             suggestion.refersToId = user.location.inRoom;
             break;
@@ -88,6 +98,7 @@ export async function handleSuggestion(suggestionFormData, user) {
     }
     zone.suggestions.push(suggestion);
     await zone.save();
+    await zone.initRooms();
     stats(user);
 }
 export const messageArrayForUserHandler = async (messageArray, socket) => {

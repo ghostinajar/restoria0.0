@@ -44,14 +44,14 @@
     const suggestSelect = document.getElementById("suggestSelect");
     const suggestBody = document.getElementById("suggestBody");
 
-    let suggestionType;
+    let refersToObjectType;
 
     suggestForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
       const suggestFormData = {
         _id: suggestSelect.value,
-        suggestionType: suggestionType,
+        refersToObjectType: refersToObjectType,
         body: suggestBody.value,
       };
 
@@ -71,7 +71,7 @@
       activeForm.style.display = "none";
       activeForm = suggestForm;
 
-      suggestionType = formData.suggestionType;
+      refersToObjectType = formData.refersToObjectType;
       generateStringSelectOptions(formData.names, suggestSelect);
       // TODO preselect formData.defaultOption
       activeForm.style.display = "block";

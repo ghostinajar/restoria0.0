@@ -50,7 +50,7 @@ import purifyDescriptionOfObject, {
 import relocateUser from "./util/relocateUser.js";
 import { ILocation } from "./model/classes/Location.js";
 import { historyStartingNow } from "./model/classes/History.js";
-import { SuggestionType } from "./model/classes/Suggestion.js";
+import { refersToObjectType } from "./model/classes/Suggestion.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -307,12 +307,12 @@ const setupSocket = (io: any) => {
         `userSubmittedSuggest`,
         async (suggestionFormData: {
           _id: string;
-          suggestionType: SuggestionType;
+          refersToObjectType: refersToObjectType;
           body: string;
         }) => {
           handleSuggestion(suggestionFormData, user);
           socket.emit('message',
-            makeMessage('success', `We saved your suggestion for this ${suggestionFormData.suggestionType}.`)
+            makeMessage('success', `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`)
           )
         }
       );

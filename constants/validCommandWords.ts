@@ -27,6 +27,7 @@ export const validCommandWords = [
   "stat",
   "stats",
   "suggest",
+  "suggestions",
   "t",
   "tel",
   "telepath",

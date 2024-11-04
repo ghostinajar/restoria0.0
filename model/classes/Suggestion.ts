@@ -3,24 +3,26 @@ import historySchema, { IHistory } from './History.js';
 
 const { Schema } = mongoose;
 
-export type SuggestionType = 'room' | 'itemBlueprint' | 'mobBlueprint' | 'zone';
+export type refersToObjectType = 'room' | 'itemBlueprint' | 'mobBlueprint' | 'zone';
 
 
 export interface ISuggestion {
-    author: mongoose.Types.ObjectId;
+    authorId: mongoose.Types.ObjectId;
+    authorName: string;
     refersToId: mongoose.Types.ObjectId;
-    suggestionType: SuggestionType,
+    refersToObjectType: refersToObjectType,
     body: string;
     history: IHistory
 }
 
 const suggestionSchema = new Schema<ISuggestion>({
-    author: {
+    authorId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    authorName: String,
     refersToId: Schema.Types.ObjectId,
-    suggestionType: {
+    refersToObjectType: {
         type: String,
         enum: ['room', 'itemBlueprint', 'mobBlueprint', 'zone'],
         required: true

@@ -154,7 +154,7 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedSuggest`, async (suggestionFormData) => {
                 handleSuggestion(suggestionFormData, user);
-                socket.emit('message', makeMessage('success', `We saved your suggestion for this ${suggestionFormData.suggestionType}.`));
+                socket.emit('message', makeMessage('success', `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`));
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
