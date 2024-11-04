@@ -65,8 +65,8 @@ h2 {
 
 h3 {
   font-size: 1em;
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 form li + li {
@@ -108,7 +108,7 @@ button {
   right: 10px;
   text-align: right;
   cursor: pointer;
-  font-size: .75rem;
+  font-size: 0.75rem;
 }
 
 .noLeftMargin,
@@ -120,7 +120,7 @@ a.noLeftMargin {
   text-decoration: underline;
   color: var(--white);
   margin-left: 6.5rem;
-  font-size: .75rem;
+  font-size: 0.75rem;
 }
 
 input[type="checkbox"],
@@ -139,6 +139,10 @@ ul {
   margin: 2.5px 0px;
 }
 
+.suggestion {
+  display: flex;
+}
+
 .nodeList > li {
   display: flex;
   justify-content: space-between;
@@ -148,14 +152,23 @@ ul {
 .nodeList > li:nth-child(odd) {
   background: #222;
 }
-.nodeInfo {
+.nodeInfo,
+.suggestionInfo {
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
 }
-.nodeId {
-  margin-top: 2px; /* Minimal space between node name and id */
+
+.nodeId,
+.suggestionId {
+  margin-top: 2px;
   font-size: 0.7em;
-  color: #888;
+  color: var(--white);
+}
+.suggestionBody {
+  margin-top: 2px;
+  font-size: 0.7em;
+  color: var(--purple_light);
 }
 .addNodeContainer > li {
   display: flex;
@@ -164,14 +177,15 @@ ul {
   padding: 0 10px 0 0;
   background: none;
 }
+
 .addNode,
 .deleteNode,
-.completeSuggestion
- {
+.completeSuggestion {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
-  align-self: center; /* Vertically centers the button */
+  align-self: center;
+  margin-left: 0;
 }
 .addNode,
 .completeSuggestion {

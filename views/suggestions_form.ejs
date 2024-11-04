@@ -10,12 +10,7 @@
       <a class="cancelButton" id="cancelSuggestions"> Cancel </a>
     </li>
   </ul>
-  <h2>
-    Suggestions
-    <span class="nodeId" id="suggestionsIdDisplay"
-      >Error: Zone Name & Id should be here</span
-    >
-  </h2>
+  <h2>Suggestions</h2>
   <!-- <div class="tabs">
     <button
       id="suggestionsRoomsTab"
@@ -44,8 +39,7 @@
   </div> -->
 
   <!-- TODO remove this in future when suggestions are grouped by tabs -->
-  <h3>Suggestions</h3>
-  <ul class="nodeList" id="suggestionsNodeList">
+  <ul class="suggestionsList" id="suggestionsList">
     <!-- loaded via script -->
   </ul>
 
@@ -55,7 +49,7 @@
     style="display: block"
   >
     <h3>Room Suggestions</h3>
-    <ul class="nodeList" id="suggestionsRoomsNodeList">
+    <ul class="suggestionsList" id="suggestionsRoomsList">
     </ul>
   </section> -->
 
@@ -65,7 +59,7 @@
     style="display: none"
   >
     <h3>Item Blueprint Suggestions</h3>
-    <ul class="nodeList" id="suggestionsItemBlueprintsNodeList">
+    <ul class="suggestionsList" id="suggestionsItemBlueprintsList">
     </ul>
   </section> -->
 
@@ -75,14 +69,14 @@
     style="display: none"
   >
     <h3>Mob Blueprint Suggestions</h3>
-    <ul class="nodeList" id="suggestionsMobBlueprintsNodeList">
+    <ul class="suggestionsList" id="suggestionsMobBlueprintsList">
     </ul>
   </section> -->
 
   <section>
     <ul>
       <li>
-        <button type="submit">Save Suggestions</button>
+        <button style="margin-left:0; margin-top: 0.5rem" type="submit">Save Suggestions</button>
       </li>
     </ul>
   </section>
@@ -105,20 +99,16 @@
     //   "suggestionsMobBlueprintsTab"
     // );
 
-    const suggestionsIdDisplay = document.getElementById(
-      "suggestionsIdDisplay"
-    );
+    const suggestionsList = document.getElementById("suggestionsList");
 
-    const suggestionsNodeList = document.getElementById("suggestionsNodeList");
-
-    // const suggestionsRoomNodeList = document.getElementById(
-    //   "suggestionsRoomNodeList"
+    // const suggestionsRoomList = document.getElementById(
+    //   "suggestionsRoomList"
     // );
-    // const suggestionsItemBlueprintsNodeList = document.getElementById(
-    //   "suggestionsItemBlueprintsNodeList"
+    // const suggestionsItemBlueprintsList = document.getElementById(
+    //   "suggestionsItemBlueprintsList"
     // );
-    // const suggestionsMobBlueprintsNodeList = document.getElementById(
-    //   "suggestionsMobBlueprintsNodeList"
+    // const suggestionsMobBlueprintsList = document.getElementById(
+    //   "suggestionsMobBlueprintsList"
     // );
 
     // help arrays to message user when they click each tab
@@ -190,13 +180,12 @@
       roomNames = formData.roomNames;
 
       suggestionsForm.reset();
-      clearUl(suggestionsNodeList);
-      //TODO populate suggestionsNodeList
-      loadSuggestionsToUlElement(
-            suggestionsNodeList,
-            suggestions,
-            [...itemBlueprintNames,...mobBlueprintNames,...roomNames]
-          );
+      clearUl(suggestionsList);
+      loadSuggestionsToUlElement(suggestionsList, suggestions, [
+        ...itemBlueprintNames,
+        ...mobBlueprintNames,
+        ...roomNames,
+      ]);
 
       //reset/hide open forms, show suggestionsForm
       activeForm.reset();
@@ -210,37 +199,53 @@
     });
 
     function loadSuggestionsToUlElement(ulElement, suggestions, objectList) {
-        for (let suggestion of suggestions) {
-          addSuggestionToUlElement(ulElement, suggestion, suggestions, objectList);
-        }
+      for (let suggestion of suggestions) {
+        addSuggestionToUlElement(
+          ulElement,
+          suggestion,
+          suggestions,
+          objectList
+        );
       }
+    }
 
-      function addSuggestionToUlElement(ulElement, suggestion, suggestions, objectList) {
-        // Create a new <li> element
-        const liElement = document.createElement("li");
-        liElement.className = "suggestion";
-        suggestionName = objectList.find(
-          (object) => object._id === suggestion.refersToId
-        ).name;
+    function addSuggestionToUlElement(
+      ulElement,
+      suggestion,
+      suggestions,
+      objectList
+    ) {
+      // Create a new <li> element
+      const liElement = document.createElement("li");
+      liElement.className = "suggestion";
+      suggestionName = objectList.find(
+        (object) => object._id === suggestion.refersToId
+      ).name;
 
-        liElement.innerHTML = `<div class="nodeInfo"><span class="suggestionStatus">${suggestion.status}: </span><span class="nodeName">${suggestionName}</span><span class="nodeId">${suggestion.refersToObjectType} id: ${suggestion.refersToId}</span><br /><span class="suggestionBody">${suggestion.body}</span></div>`;
+      liElement.innerHTML = `
+        <div class="suggestionInfo">
+          <span class="suggestionName">${suggestionName}</span>
+          <span class="suggestionId">id: ${suggestion.refersToId}</span>
+          <span class="suggestionBody">${suggestion.body}</span>
+        </div>
+        `;
+      // OLD liElement.innerHTML = `<div class="suggestionInfo"><span class="suggestionName">${suggestionName}</span><span class="suggestionId">id: ${suggestion.refersToId}</span><span class="suggestionBody">${suggestion.body}</span></div>`;
 
-        // Create a completed button
-        const completedButton = document.createElement("button");
-        completedButton.textContent = "complete";
-        completedButton.className = "completeSuggestion";
-        completedButton.type = "button";
-        completedButton.onclick = function () {
-          suggestion.status = "completed";
-          //TODO sort completed and discarded suggestions to the bottom
-        };
+      // Create a completed button
+      const completedButton = document.createElement("button");
+      completedButton.textContent = "complete";
+      completedButton.className = "completeSuggestion";
+      completedButton.type = "button";
+      completedButton.onclick = function () {
+        suggestion.status = "completed";
+        //TODO sort completed and discarded suggestions to the bottom
+      };
 
-        // Append the delete button to the <li>
-        liElement.appendChild(completedButton);
+      // Append the delete button to the <li>
+      liElement.appendChild(completedButton);
 
-        // Append the <li> to the <ul>
-        ulElement.appendChild(liElement);
-      }
-
+      // Append the <li> to the <ul>
+      ulElement.appendChild(liElement);
+    }
   });
 </script>
