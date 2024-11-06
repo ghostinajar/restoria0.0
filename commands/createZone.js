@@ -63,7 +63,7 @@ async function createZone(zoneFormData, author) {
                     noCombat: false,
                     itemsForSale: [],
                     mountIdForSale: [],
-                    mapCoords: [0, 0, 0],
+                    mapCoords: [39, 39, 0],
                     description: {
                         examine: `Every new zone starts with one empty room. Type EDIT ROOM to bring it to life, or CREATE ROOM to add`,
                     },
