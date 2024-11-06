@@ -94,6 +94,14 @@ export const userSchema = new Schema({
         required: true,
         default: () => [],
     },
+    editor: {
+        type: Schema.Types.ObjectId, ref: "User",
+        default: null,
+    },
+    editorFor: {
+        type: Schema.Types.ObjectId, ref: "User",
+        default: null,
+    },
 });
 userSchema.pre("save", function (next) {
     // Prevent runtimeProps from being stored in DB

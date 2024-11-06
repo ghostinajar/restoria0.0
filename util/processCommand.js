@@ -16,6 +16,7 @@ import recall from "../commands/recall.js";
 import goto from "../commands/goto.js";
 import suggest from "../commands/suggest.js";
 import suggestions from "../commands/suggestions.js";
+import editor from "../commands/editor.js";
 async function processCommand(parsedCommand, user) {
     // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
     switch (parsedCommand.commandWord) {
@@ -25,6 +26,10 @@ async function processCommand(parsedCommand, user) {
         }
         case `edit`: {
             await edit(parsedCommand, user);
+            break;
+        }
+        case `editor`: {
+            await editor(parsedCommand, user);
             break;
         }
         case `delete`: // we can't make a delete() function, so it calls erase()

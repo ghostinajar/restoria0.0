@@ -54,6 +54,8 @@ export interface IUser extends mongoose.Document {
   storage: Array<IItem>;
   equipped: IEquipped;
   affixes: Array<IAffix>;
+  editor: mongoose.Types.ObjectId | null;
+  editorFor: mongoose.Types.ObjectId | null;
   runtimeProps?: IRuntimeProps;
   comparePassword(candidatePassword: string): Promise<boolean>;
   calculateMaxHp(): number;
@@ -146,6 +148,10 @@ export const userSchema = new Schema<IUser>({
     type: [{ type: affixSchema, required: true, default: () => ({}) }],
     required: true,
     default: () => [],
+  },
+  editor: {
+    type: Schema.Types.ObjectId, ref: "User" ,
+    default: null,
   },
 });
 
