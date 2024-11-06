@@ -135,7 +135,7 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedNewRoom`, async (roomData) => {
                 purifyDescriptionOfObject(roomData);
-                const newRoom = await createRoom(roomData, user);
+                await createRoom(roomData, user);
                 stats(user);
             });
             socket.on(`userSubmittedNewUser`, async (userData) => {

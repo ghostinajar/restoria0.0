@@ -273,7 +273,7 @@ const setupSocket = (io: any) => {
 
       socket.on(`userSubmittedNewRoom`, async (roomData: INewRoomData) => {
         purifyDescriptionOfObject(roomData);
-        const newRoom = await createRoom(roomData, user);
+        await createRoom(roomData, user);
         stats(user);
       });
 

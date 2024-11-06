@@ -5,57 +5,51 @@ import logger from "../logger.js";
 import roomSchema from "../model/classes/Room.js";
 import mongoose from "mongoose";
 import ROOM_TYPE from "../constants/ROOM_TYPE.js";
-import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import createExit from "./createExit.js";
 import unusedExitsForUser from "../util/unusedExitsForUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import exits from "./exits.js";
-// Return room, or a message explaining failure (if by author, emit message to their socket)
-async function createRoom(roomFormData, author) {
+import getZoneOfUser from "../util/getZoneofUser.js";
+import { historyStartingNow } from "../model/classes/History.js";
+// Return room, or a message explaining failure (if by user, emit message to their socket)
+async function createRoom(roomFormData, user) {
     try {
-        let message = makeMessage("rejection", ``);
         if (!roomFormData.direction || roomFormData.direction == ``) {
-            logger.error(`createRoom rejected, No direction selected.`);
-            message.content = `Can't create a room without a direction!`;
-            return message;
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `We need to know which direction to create the room.`));
+            return;
         }
-        // logger.debug(`Trying to create room ${roomFormData.name}, ${roomFormData.direction}.`);
-        let originRoom = await getRoomOfUser(author);
+        let originRoom = await getRoomOfUser(user);
         if (!originRoom) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Can't create the room. There's an error with your location!`));
             logger.error(`Couldn't find origin room to create room.`);
+            return;
         }
-        let originZone = await new Promise((resolve) => {
-            worldEmitter.once(`zone${author.location.inZone.toString()}Loaded`, resolve);
-            worldEmitter.emit(`zoneRequested`, author.location.inZone.toString());
-        });
+        let originZone = await getZoneOfUser(user);
         if (!originZone) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Can't create the room. There's an error with your location!`));
             logger.error(`Couldn't find origin zone to create room.`);
+            return;
         }
-        const unusedExits = await unusedExitsForUser(author);
-        // logger.debug(`createRoom found unusedExitsForUser: ${unusedExits}.`)
+        const unusedExits = await unusedExitsForUser(user);
         if (!unusedExits.includes(roomFormData.direction)) {
-            logger.error(`createRoom rejected, exit already exists (this shouldn't be possible). Author ${author._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`);
-            message.content = `Can't create the room. That exit already goes somewhere!`;
-            return message;
+            logger.error(`createRoom rejected, exit already exists (this shouldn't be possible). Author ${user._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`);
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Can't create the room. That exit already goes somewhere!`));
+            return;
         }
         const roomDescription = {
             examine: roomFormData.examine,
             study: roomFormData.study,
             research: roomFormData.research,
         };
-        truncateDescription(roomDescription, author);
+        truncateDescription(roomDescription, user);
         let newRoomData = {
             _id: new mongoose.Types.ObjectId(),
-            author: author._id,
+            author: user._id,
             fromZoneId: originZone._id,
             roomType: ROOM_TYPE.NONE,
             name: roomFormData.name,
-            history: {
-                creationDate: new Date(),
-                modifiedDate: new Date(),
-                completionStatus: COMPLETION_STATUS.DRAFT,
-            },
+            history: historyStartingNow(),
             playerCap: 30,
             mobCap: 30,
             isDark: roomFormData.isDark,
@@ -79,7 +73,6 @@ async function createRoom(roomFormData, author) {
             addEntityTo: roomSchema.methods.addEntityTo,
             removeEntityFrom: roomSchema.methods.removeEntityFrom,
         };
-        // logger.debug(`createRoom made newRoomData: ${JSON.stringify(newRoomData)}`);
         switch (roomFormData.direction) {
             case "north": {
                 newRoomData.mapCoords = [
@@ -144,23 +137,21 @@ async function createRoom(roomFormData, author) {
             default:
                 break;
         }
-        // logger.debug(`createRoom adjusted mapcoords in newRoom: ${JSON.stringify(newRoomData.mapCoords)}`);
-        // logger.debug(`createRoom adjusted exits in newRoomData ${JSON.stringify(newRoomData.exits)}`);
-        // logger.debug(`createRoom adjusted exits in originRoom ${JSON.stringify(originRoom.exits)}`);
         originZone.rooms.push(newRoomData);
         await originZone.save();
         await originZone.initRooms();
-        // logger.debug(`Saved zone ${originZone.name} with rooms ${originZone.rooms.map(room => room.name)}`)
-        logger.info(`Author "${author.name}" created room "${newRoomData.name}".`);
-        message.type = "success";
-        message.content = `You created ${newRoomData.name}, ${roomFormData.direction} from here!`;
-        worldEmitter.emit(`messageFor${author.username}`, message);
-        await exits(author);
-        return newRoomData;
+        logger.info(`Author "${user.name}" created room "${newRoomData.name}".`);
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created ${newRoomData.name}, ${roomFormData.direction} from here!`));
+        await exits(user);
     }
     catch (error) {
-        logger.error(`Error in createRoom: ${error.message} `);
-        throw error;
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
+        if (error instanceof Error) {
+            logger.error(`error in createRoom, ${error.message}`);
+        }
+        else {
+            logger.error(`error in createRoom, ${error}`);
+        }
     }
 }
 export default createRoom;
