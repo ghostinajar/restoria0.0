@@ -176,6 +176,7 @@
 
     socket.on("openSuggestionsForm", (formData) => {
       suggestions = formData.suggestions;
+      sortSuggestions(suggestions);
       itemBlueprintNames = formData.itemBlueprintNames;
       mobBlueprintNames = formData.mobBlueprintNames;
       roomNames = formData.roomNames;
@@ -296,5 +297,11 @@
       liElement.appendChild(divElement);
       ulElement.appendChild(liElement);
     }
+
+    function sortSuggestions(suggestions) {
+      const order = { "pending": 0, "completed": 1, "declined": 2 };
+      suggestions.sort((a, b) => order[a.status] - order[b.status]);
+    }
+
   });
 </script>
