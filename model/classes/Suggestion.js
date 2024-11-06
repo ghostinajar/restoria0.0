@@ -16,7 +16,7 @@ const suggestionSchema = new Schema({
     body: String,
     status: {
         type: String,
-        enum: ['pending', 'completed', 'discarded'],
+        enum: ['pending', 'completed', 'declined'],
         required: true
     },
     history: {

@@ -50,7 +50,8 @@ import purifyDescriptionOfObject, {
 import relocateUser from "./util/relocateUser.js";
 import { ILocation } from "./model/classes/Location.js";
 import { historyStartingNow } from "./model/classes/History.js";
-import { refersToObjectType } from "./model/classes/Suggestion.js";
+import { ISuggestion, refersToObjectType } from "./model/classes/Suggestion.js";
+import saveSuggestions from "./commands/saveSuggestions.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -311,9 +312,30 @@ const setupSocket = (io: any) => {
           body: string;
         }) => {
           handleSuggestion(suggestionFormData, user);
-          socket.emit('message',
-            makeMessage('success', `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`)
-          )
+          socket.emit(
+            "message",
+            makeMessage(
+              "success",
+              `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`
+            )
+          );
+        }
+      );
+
+      socket.on(
+        `userSubmittedSuggestions`,
+        async (suggestions: Array<ISuggestion>) => {
+          console.log("Received userSubmittedSuggestions event, saving...")
+          console.log(suggestions);
+          const zone = await getZoneOfUser(user)
+          await saveSuggestions(suggestions, zone);
+          socket.emit(
+            "message",
+            makeMessage(
+              "success",
+              `We saved the suggestions for ${zone.name}.`
+            )
+          );
         }
       );
 

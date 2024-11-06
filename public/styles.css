@@ -159,6 +159,13 @@ ul {
   flex-direction: column;
 }
 
+.suggestionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 12rem;
+  margin-left: 10px;
+}
+
 .nodeId,
 .suggestionId {
   margin-top: 2px;
@@ -180,7 +187,9 @@ ul {
 
 .addNode,
 .deleteNode,
-.completeSuggestion {
+.completeSuggestion,
+.declineSuggestion,
+.checkedSuggestion {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
@@ -192,15 +201,28 @@ ul {
   background-color: #66ff55;
   color: white;
 }
-.addNode:hover {
+.addNode:hover,
+.completeSuggestion:hover {
   background-color: #33ff44;
 }
-.deleteNode {
+.deleteNode,
+.declineSuggestion {
   background-color: #ff4d4d;
   color: white;
 }
-.deleteNode:hover {
+.deleteNode:hover,
+.declineSuggestion:hover {
   background-color: #ff3333;
+}
+.completeSuggestion,
+.declineSuggestion {
+  width: 6.5rem;
+  max-width: 6.5rem;
+  min-width: 6.5rem;
+}
+.checkedSuggestion {
+  background-color: black;
+  color: white;
 }
 
 #logout {

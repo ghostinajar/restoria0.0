@@ -5,7 +5,6 @@ import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 async function suggestions(user) {
     const zone = await getZoneOfUser(user);
-    console.log();
     worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `suggestionsForm`,
         suggestions: zone.suggestions,

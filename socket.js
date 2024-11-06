@@ -24,6 +24,7 @@ import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, { purifyCommandInput, } from "./util/purify.js";
 import relocateUser from "./util/relocateUser.js";
+import saveSuggestions from "./commands/saveSuggestions.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -154,7 +155,14 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedSuggest`, async (suggestionFormData) => {
                 handleSuggestion(suggestionFormData, user);
-                socket.emit('message', makeMessage('success', `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`));
+                socket.emit("message", makeMessage("success", `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`));
+            });
+            socket.on(`userSubmittedSuggestions`, async (suggestions) => {
+                console.log("Received userSubmittedSuggestions event, saving...");
+                console.log(suggestions);
+                const zone = await getZoneOfUser(user);
+                await saveSuggestions(suggestions, zone);
+                socket.emit("message", makeMessage("success", `We saved the suggestions for ${zone.name}.`));
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);

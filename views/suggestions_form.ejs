@@ -10,7 +10,17 @@
       <a class="cancelButton" id="cancelSuggestions"> Cancel </a>
     </li>
   </ul>
-  <h2>Suggestions</h2>
+
+  
+  <section >  
+    <ul>
+      <li style="display: inline-block;"><h2style="display: inline-block;">Suggestions</h2>
+        <button style="margin-left: 0; margin-top: 0.5rem; display: inline-block" type="submit">
+          Save Suggestions
+        </button>
+      </li>
+    </ul>
+  </section>
   <!-- <div class="tabs">
     <button
       id="suggestionsRoomsTab"
@@ -73,13 +83,6 @@
     </ul>
   </section> -->
 
-  <section>
-    <ul>
-      <li>
-        <button style="margin-left:0; margin-top: 0.5rem" type="submit">Save Suggestions</button>
-      </li>
-    </ul>
-  </section>
 </form>
 
 <script>
@@ -114,11 +117,10 @@
     // help arrays to message user when they click each tab
     const suggestionsHelp = [
       `================================= Suggestions =================================`,
-      `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--blue_light)">a green potion</span>' or '<span style="color: var(--blue_light)">Excaliburr the Frozen'</span>`,
-      `<span style="color:var(--red)">Keywords:</span> e.g 'potion, green' or 'sword, Excaliburr, Frozen`,
-      `<span style="color:var(--red)">Price:</span> The item costs this much to purchase (selling price will be less).`,
-      `<span style="color:var(--red)">MinLvl:</span> A player must be at least this level to use or equip it.`,
-      `<span style="color:var(--red)">Type:</span> Each has its special features, except 'none'.`,
+      `<span style="color:var(--red)">Complete:</span> marks a suggestion complete. Click after making the suggested change.`,
+      `<span style="color:var(--red)">Decline:</span> marks a suggestion declined. You chose not to take this suggestion.`,
+      `<span style="color:var(--red)">Save Suggestions:</span> After you click complete/decline on suggestions, click this`,
+      `button, or the suggestions will remain on "pending" status.`,
     ];
 
     // to hold data from server on "edit item" command
@@ -152,14 +154,14 @@
     //   });
     // });
 
-    editItemBlueprintForm.addEventListener("submit", (e) => {
+    suggestionsForm.addEventListener("submit", (e) => {
       e.preventDefault();
       // suggestions = [
       //   ...roomSuggestions,
       //   ...itemBlueprintSuggestions,
       //   ...mobBlueprintSuggestions,
       // ];
-
+      console.log(suggestions);
       socket.emit("userSubmittedSuggestions", suggestions);
 
       suggestionsForm.reset();
@@ -173,7 +175,6 @@
       });
 
     socket.on("openSuggestionsForm", (formData) => {
-      console.log(formData);
       suggestions = formData.suggestions;
       itemBlueprintNames = formData.itemBlueprintNames;
       mobBlueprintNames = formData.mobBlueprintNames;
@@ -229,22 +230,70 @@
           <span class="suggestionBody">${suggestion.body}</span>
         </div>
         `;
-      // OLD liElement.innerHTML = `<div class="suggestionInfo"><span class="suggestionName">${suggestionName}</span><span class="suggestionId">id: ${suggestion.refersToId}</span><span class="suggestionBody">${suggestion.body}</span></div>`;
 
-      // Create a completed button
-      const completedButton = document.createElement("button");
-      completedButton.textContent = "complete";
-      completedButton.className = "completeSuggestion";
-      completedButton.type = "button";
-      completedButton.onclick = function () {
-        suggestion.status = "completed";
-        //TODO sort completed and discarded suggestions to the bottom
+      const divElement = document.createElement("div");
+      divElement.className = "suggestionButtonsContainer";
+
+      const completeButton = document.createElement("button");
+      completeButton.textContent = "☐completed";
+      completeButton.className = "completeSuggestion";
+      completeButton.type = "button";
+
+      const declineButton = document.createElement("button");
+      declineButton.textContent = "☐declined";
+      declineButton.className = "declineSuggestion";
+      declineButton.type = "button";
+
+      completeButton.onclick = function (event) {
+        handleSuggestionButtonClick(
+          event,
+          "complete",
+          declineButton,
+          suggestion
+        );
+      };
+      declineButton.onclick = function (event) {
+        handleSuggestionButtonClick(
+          event,
+          "decline",
+          completeButton,
+          suggestion
+        );
       };
 
-      // Append the delete button to the <li>
-      liElement.appendChild(completedButton);
+      if (suggestion.status === "completed") {
+        completeButton.click();
+      }
+      if (suggestion.status === "declined") {
+        declineButton.click();
+      }
 
-      // Append the <li> to the <ul>
+      function handleSuggestionButtonClick(
+        event,
+        buttonType,
+        otherButton,
+        suggestion
+      ) {
+        const buttonClicked = event.target;
+
+        if (buttonType === "complete") {
+          buttonClicked.textContent = "☑completed";
+          buttonClicked.className = "checkedSuggestion";
+          suggestion.status = "completed";
+          otherButton.className = "declineSuggestion";
+          otherButton.textContent = "☐decline";
+        } else if (buttonType === "decline") {
+          buttonClicked.textContent = "☒declined";
+          buttonClicked.className = "checkedSuggestion";
+          suggestion.status = "declined";
+          completeButton.className = "completeSuggestion";
+          completeButton.textContent = "☐complete";
+        }
+      }
+
+      divElement.appendChild(completeButton);
+      divElement.appendChild(declineButton);
+      liElement.appendChild(divElement);
       ulElement.appendChild(liElement);
     }
   });
