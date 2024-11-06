@@ -266,10 +266,7 @@ const setupSocket = (io: any) => {
         `userSubmittedNewMobBlueprint`,
         async (mobBlueprintData: ICreateMobFormData) => {
           purifyDescriptionOfObject(mobBlueprintData);
-          const newMobBlueprint = await createMobBlueprint(
-            mobBlueprintData,
-            user
-          );
+          await createMobBlueprint(mobBlueprintData, user);
           stats(user);
         }
       );

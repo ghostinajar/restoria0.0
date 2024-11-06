@@ -66,9 +66,9 @@ async function suggest(parsedCommand: IParsedCommand, user: IUser) {
       )
     );
     if (error instanceof Error) {
-      logger.error("editor command encountered an error:", error.message);
+      logger.error(`error in suggest, ${error.message}`);
     } else {
-      logger.error("editor command encountered an unknown error:", error);
+      logger.error(`error in suggest, ${error}`);
     }
   }
 }

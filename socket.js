@@ -130,7 +130,7 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {
                 purifyDescriptionOfObject(mobBlueprintData);
-                const newMobBlueprint = await createMobBlueprint(mobBlueprintData, user);
+                await createMobBlueprint(mobBlueprintData, user);
                 stats(user);
             });
             socket.on(`userSubmittedNewRoom`, async (roomData) => {
