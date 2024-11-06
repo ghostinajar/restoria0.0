@@ -1,19 +1,19 @@
 // createItemBlueprint
+// saves incoming data from create_item_blueprint_form user submission
+
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
-import IMessage from "../types/Message.js";
 import mongoose from "mongoose";
 import { IUser } from "../model/classes/User.js";
-import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
-import { IZone } from "../model/classes/Zone.js";
-import { IDescription } from "../model/classes/Description.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IItemBlueprint } from "../model/classes/ItemBlueprint.js";
 import look from "./look.js";
 import DAMAGE_TYPE from "../constants/DAMAGE_TYPE.js";
 import ITEM_TYPE from "../constants/ITEM_TYPE.js";
 import SPELL from "../constants/SPELL.js";
+import getZoneOfUser from "../util/getZoneofUser.js";
+import { historyStartingNow } from "../model/classes/History.js";
 
 export interface ICreateItemBlueprintFormData {
   name: string;
@@ -46,54 +46,35 @@ export interface ICreateItemBlueprintFormData {
   };
 }
 
-// Return item blueprint, or a message explaining failure (if by author, emit message to their socket)
 async function createItemBlueprint(
   itemFormData: ICreateItemBlueprintFormData,
-  author: IUser
-): Promise<IItemBlueprint | IMessage> {
+  user: IUser
+) {
   try {
-    let message = makeMessage("rejection", ``);
-
     // logger.debug(`Trying to create item blueprint ${itemFormData.name}.`);
-    // let originRoom : IRoom = await getRoomOfUser(author);
-    // if (!originRoom) {
-    //   logger.error(`Couldn't find origin room to create room.`);
-    // }
-
-    // find originZone (to save item blueprint to)
-    let originZone: IZone = await new Promise((resolve) => {
-      worldEmitter.once(
-        `zone${author.location.inZone.toString()}Loaded`,
-        resolve
-      );
-      worldEmitter.emit(`zoneRequested`, author.location.inZone.toString());
-    });
-    if (!originZone) {
-      logger.error(`Couldn't find origin zone to create room.`);
+    let zone = await getZoneOfUser(user);
+    if (!zone) {
+      logger.error(`Couldn't find user's zone!`);
+      return;
     }
-
-    const itemDescription: IDescription = {
+    const itemDescription = {
       look: itemFormData.description.look,
       examine: itemFormData.description.examine,
       study: itemFormData.description.study,
       research: itemFormData.description.research,
     };
-    truncateDescription(itemDescription, author);
+    truncateDescription(itemDescription, user);
 
     const newItemBlueprint: IItemBlueprint = {
       _id: new mongoose.Types.ObjectId(),
-      author: author._id,
+      author: user._id,
       name: itemFormData.name,
       itemType: itemFormData.itemType,
       price: itemFormData.price,
       capacity: 0,
       minimumLevel: itemFormData.minimumLevel,
-      history: {
-        creationDate: new Date(),
-        modifiedDate: new Date(),
-        completionStatus: COMPLETION_STATUS.DRAFT,
-      },
-      description: itemFormData.description,
+      history: historyStartingNow(),
+      description: itemDescription,
       tags: itemFormData.tags,
       keywords: itemFormData.keywords,
       tweakDuration: 182,
@@ -149,23 +130,35 @@ async function createItemBlueprint(
       };
     }
 
-    originZone.itemBlueprints.push(newItemBlueprint);
-    await originZone.save();
-    await originZone.initRooms();
+    zone.itemBlueprints.push(newItemBlueprint);
+    await zone.save();
+    await zone.initRooms();
     // logger.debug(`Saved zone ${originZone.name} with item blueprints for ${originZone.itemBlueprints.map(item => item.name)}`)
 
     logger.info(
-      `Author "${author.name}" created item blueprint "${newItemBlueprint.name}".`
+      `Author "${user.name}" created item blueprint "${newItemBlueprint.name}".`
     );
-    message.type = "success";
-    message.content = `You made an item blueprint: ${newItemBlueprint.name}. Type EDIT ITEM to modify it, or EDIT ROOM to place one here.`;
-    worldEmitter.emit(`messageFor${author.username}`, message);
-    await look({ commandWord: "look" }, author);
-    return newItemBlueprint;
-  } catch (error: any) {
-    logger.error(`Error in createItemBlueprint: ${error.message} `);
-    throw error;
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(
+        "success",
+        `You made an item blueprint: ${newItemBlueprint.name}. Type EDIT ITEM to modify it, or EDIT ROOM to place one here.`
+      )
+    );
+    await look({ commandWord: "look" }, user);
+  } catch (error: unknown) {
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(
+        "rejection",
+        `There was an error on our server. Ralu will have a look at it soon!`
+      )
+    );
+    if (error instanceof Error) {
+      logger.error(`error in createItemBlueprint, ${error.message}`);
+    } else {
+      logger.error(`error in createItemBlueprint, ${error}`);
+    }
   }
 }
-
 export default createItemBlueprint;

@@ -125,7 +125,7 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
                 purifyDescriptionOfObject(itemBlueprintData);
-                const newItemBlueprint = await createItemBlueprint(itemBlueprintData, user);
+                await createItemBlueprint(itemBlueprintData, user);
                 stats(user);
             });
             socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {

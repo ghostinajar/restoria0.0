@@ -257,10 +257,7 @@ const setupSocket = (io: any) => {
         `userSubmittedNewItemBlueprint`,
         async (itemBlueprintData: ICreateItemBlueprintFormData) => {
           purifyDescriptionOfObject(itemBlueprintData);
-          const newItemBlueprint = await createItemBlueprint(
-            itemBlueprintData,
-            user
-          );
+          await createItemBlueprint(itemBlueprintData, user);
           stats(user);
         }
       );
@@ -325,16 +322,13 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedSuggestions`,
         async (suggestions: Array<ISuggestion>) => {
-          console.log("Received userSubmittedSuggestions event, saving...")
+          console.log("Received userSubmittedSuggestions event, saving...");
           console.log(suggestions);
-          const zone = await getZoneOfUser(user)
+          const zone = await getZoneOfUser(user);
           await saveSuggestions(suggestions, zone);
           socket.emit(
             "message",
-            makeMessage(
-              "success",
-              `We saved the suggestions for ${zone.name}.`
-            )
+            makeMessage("success", `We saved the suggestions for ${zone.name}.`)
           );
         }
       );
