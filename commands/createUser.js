@@ -8,11 +8,11 @@ import isValidName from "../util/isValidName.js";
 import Name from "../model/classes/Name.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
+import { historyStartingNow } from "../model/classes/History.js";
+import purifyDescriptionOfObject from "../util/purify.js";
 // Return user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
-        // logger.debug(`Trying to create user ${userFormData.name}`);
         let message = makeMessage("rejection", ``);
         // Validate new name
         if (!isValidName(userFormData.username)) {
@@ -66,11 +66,7 @@ async function createUser(userFormData, author) {
                 inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
             },
             pronouns: userFormData.pronouns,
-            history: {
-                creationDate: new Date(),
-                modifiedDate: new Date(),
-                completionStatus: COMPLETION_STATUS.DRAFT,
-            },
+            history: historyStartingNow(),
             hoursPlayed: 0,
             job: userFormData.job,
             level: 1,
@@ -149,11 +145,15 @@ async function createUser(userFormData, author) {
             default:
                 break;
         }
+        purifyDescriptionOfObject(newUserData);
         //create the user in mongoose (objectId will be assigned when user.save())
         const newUser = new User(newUserData);
         if (!newUser) {
             logger.error(`createUser couldn't save new user ${newUserData.name}!`);
             message.content = `Sorry, we ran into a problem saving your user!`;
+            if (author) {
+                worldEmitter.emit(`messageFor${author.username}`, message);
+            }
             return message;
         }
         if (author && author._id) {
@@ -165,6 +165,9 @@ async function createUser(userFormData, author) {
         if (!nameSaved) {
             logger.error(`createZone couldn't save the name ${newUser.name} to Names!`);
             message.content = `Sorry, we ran into a problem saving your user!`;
+            if (author) {
+                worldEmitter.emit(`messageFor${author.username}`, message);
+            }
             return message;
         }
         if (author) {
@@ -182,7 +185,15 @@ async function createUser(userFormData, author) {
         return newUser;
     }
     catch (error) {
-        logger.error(`Error in createUser: ${error.message} `);
+        if (author) {
+            worldEmitter.emit(`messageFor${author.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
+        }
+        if (error instanceof Error) {
+            logger.error(`error in createUser, ${error.message}`);
+        }
+        else {
+            logger.error(`error in createUser, ${error}`);
+        }
         throw error;
     }
 }

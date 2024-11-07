@@ -1,4 +1,6 @@
 // createUser
+// allows user to create new users from the /register page, or from in game
+
 import { Types } from "mongoose";
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -9,7 +11,8 @@ import IMessage from "../types/Message.js";
 import Name from "../model/classes/Name.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import COMPLETION_STATUS from "../constants/COMPLETION_STATUS.js";
+import { historyStartingNow } from "../model/classes/History.js";
+import purifyDescriptionOfObject from "../util/purify.js";
 
 export interface IUserData {
   username: string;
@@ -25,7 +28,6 @@ async function createUser(
   author?: IUser
 ): Promise<IUser | IMessage> {
   try {
-    // logger.debug(`Trying to create user ${userFormData.name}`);
     let message = makeMessage("rejection", ``);
     // Validate new name
     if (!isValidName(userFormData.username)) {
@@ -81,11 +83,7 @@ async function createUser(
         inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
       },
       pronouns: userFormData.pronouns,
-      history: {
-        creationDate: new Date(),
-        modifiedDate: new Date(),
-        completionStatus: COMPLETION_STATUS.DRAFT,
-      },
+      history: historyStartingNow(),
       hoursPlayed: 0,
       job: userFormData.job,
       level: 1,
@@ -165,12 +163,16 @@ async function createUser(
       default:
         break;
     }
+    purifyDescriptionOfObject(newUserData);
 
     //create the user in mongoose (objectId will be assigned when user.save())
     const newUser = new User(newUserData);
     if (!newUser) {
       logger.error(`createUser couldn't save new user ${newUserData.name}!`);
       message.content = `Sorry, we ran into a problem saving your user!`;
+      if (author) {
+        worldEmitter.emit(`messageFor${author.username}`, message);
+      }
       return message;
     }
     if (author && author._id) {
@@ -181,8 +183,13 @@ async function createUser(
     const nameToRegister = new Name({ name: newUser.username });
     const nameSaved = await nameToRegister.save();
     if (!nameSaved) {
-      logger.error(`createZone couldn't save the name ${newUser.name} to Names!`);
+      logger.error(
+        `createZone couldn't save the name ${newUser.name} to Names!`
+      );
       message.content = `Sorry, we ran into a problem saving your user!`;
+      if (author) {
+        worldEmitter.emit(`messageFor${author.username}`, message);
+      }
       return message;
     }
 
@@ -198,8 +205,21 @@ async function createUser(
       logger.info(`New user registered: "${newUser.name}".`);
     }
     return newUser;
-  } catch (error: any) {
-    logger.error(`Error in createUser: ${error.message} `);
+  } catch (error: unknown) {
+    if (author) {
+      worldEmitter.emit(
+        `messageFor${author.username}`,
+        makeMessage(
+          "rejection",
+          `There was an error on our server. Ralu will have a look at it soon!`
+        )
+      );
+    }
+    if (error instanceof Error) {
+      logger.error(`error in createUser, ${error.message}`);
+    } else {
+      logger.error(`error in createUser, ${error}`);
+    }
     throw error;
   }
 }

@@ -1,4 +1,5 @@
 // createRoom
+// saves incoming data from create_room_form user submission
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
