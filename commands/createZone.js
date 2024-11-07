@@ -1,4 +1,5 @@
 // createZone
+// allows user to create a new zone
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";

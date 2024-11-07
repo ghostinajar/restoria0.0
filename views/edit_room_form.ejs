@@ -546,13 +546,13 @@
 
           // Display the direction and destination room name
           const destinationRoom = rooms.find(
-            (room) => room.id === exitData.destinationLocation.inRoom
+            (room) => room._id === exitData.destinationLocation.inRoom
           );
 
           liElement.innerHTML = `
             <div class="exit" style="margin:0;">
               ${direction}: ${
-            destinationRoom ? destinationRoom.value : "Unknown Room"
+            destinationRoom ? destinationRoom.name : "Unknown Room"
           }
             </div>
             <div class="editExitControls">
