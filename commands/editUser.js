@@ -1,36 +1,30 @@
+import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import truncateDescription from "../util/truncateDescription.js";
 async function editUser(user, userDescription) {
-    let changed = false;
-    // logger.debug(
-    //   `editUser received user ${user.name} request for userDescription: ${JSON.stringify(
-    //     userDescription
-    //   )}`
-    // );
-    if (!userDescription) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejected`, `Oops! The form didn't seem to have any new descriptions.`));
-        return;
-    }
-    truncateDescription(userDescription, user);
-    if (userDescription !== user.description) {
-        user.description = userDescription;
-        changed = true;
-    }
-    // logger.debug(
-    //   `editUser updated user ${user.name}'s description: ${JSON.stringify(
-    //     user.description
-    //   )}`
-    // );
-    if (changed) {
+    try {
+        if (!userDescription) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejected`, `Oops! The form didn't seem to have any new descriptions.`));
+            return;
+        }
+        truncateDescription(userDescription, user);
+        if (userDescription !== user.description) {
+            user.description = userDescription;
+        }
         user.history.modifiedDate = new Date();
         await user.save();
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `User description saved! Type 'examine ${user.name}' to view it.`));
         return;
     }
-    else {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejected`, `No change saved to user description.`));
-        return;
+    catch (error) {
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
+        if (error instanceof Error) {
+            logger.error(`editUser error for user ${user.username}: ${error.message}`);
+        }
+        else {
+            logger.error(`editUser error for user ${user.username}: ${error}`);
+        }
     }
 }
 export default editUser;
