@@ -190,10 +190,10 @@ async function createUser(userFormData, author) {
             worldEmitter.emit(`messageFor${author.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         }
         if (error instanceof Error) {
-            logger.error(`error in createUser, ${error.message}`);
+            logger.error(`createUser error: ${error.message}`);
         }
         else {
-            logger.error(`error in createUser, ${error}`);
+            logger.error(`createUser error: ${error}`);
         }
         throw error;
     }

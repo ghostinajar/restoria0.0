@@ -16,8 +16,7 @@ async function createItemBlueprint(itemFormData, user) {
         // logger.debug(`Trying to create item blueprint ${itemFormData.name}.`);
         let zone = await getZoneOfUser(user);
         if (!zone) {
-            logger.error(`Couldn't find user's zone!`);
-            return;
+            throw new Error(`Couldn't find user's zone!`);
         }
         const itemDescription = {
             look: itemFormData.description.look,
@@ -95,10 +94,10 @@ async function createItemBlueprint(itemFormData, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error(`error in createItemBlueprint, ${error.message}`);
+            logger.error(`createItemBlueprint error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error(`error in createItemBlueprint, ${error}`);
+            logger.error(`createItemBlueprint error for user ${user.username}: ${error}`);
         }
     }
 }

@@ -85,6 +85,8 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
             mobNodes: mobNodes,
             itemNodes: itemNodes,
             exits: room.exits,
+            playerCap: room.playerCap,
+            mobCap: room.mobCap,
           },
           zoneData: {
             itemBlueprintNames: itemBlueprintNames,
@@ -132,9 +134,9 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       )
     );
     if (error instanceof Error) {
-      logger.error(`error in edit, ${error.message}`);
+      logger.error(`"edit" function error for user ${user.username}: ${error.message}`);
     } else {
-      logger.error(`error in edit, ${error}`);
+      logger.error(`"edit" function error for user ${user.username}: ${error}`);
     }
   }
 }

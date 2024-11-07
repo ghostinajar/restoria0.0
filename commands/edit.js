@@ -72,6 +72,8 @@ async function edit(parsedCommand, user) {
                         mobNodes: mobNodes,
                         itemNodes: itemNodes,
                         exits: room.exits,
+                        playerCap: room.playerCap,
+                        mobCap: room.mobCap,
                     },
                     zoneData: {
                         itemBlueprintNames: itemBlueprintNames,
@@ -111,10 +113,10 @@ async function edit(parsedCommand, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error(`error in edit, ${error.message}`);
+            logger.error(`"edit" function error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error(`error in edit, ${error}`);
+            logger.error(`"edit" function error for user ${user.username}: ${error}`);
         }
     }
 }

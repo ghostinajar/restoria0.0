@@ -9,8 +9,6 @@ import { IZone } from "../model/classes/Zone.js";
 import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
-import { IMobNode } from "../model/classes/MobNode.js";
-import { IItemNode } from "../model/classes/ItemNode.js";
 import { IExit } from "../model/classes/Exit.js";
 
 export interface IEditRoomFormData {
@@ -40,73 +38,82 @@ export interface IEditRoomFormData {
 }
 
 async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
-  if (!room || !roomData || !user) {
+  try {
+    if (!room) throw new Error("Missing room");
+    if (!roomData) throw new Error("Missing roomData");
+    if (!user) throw new Error("Missing user");
+
+    const newRoomDescription: IDescription = {
+      examine: roomData.description.examine,
+      study: roomData.description.study,
+      research: roomData.description.research,
+    };
+
+    truncateDescription(newRoomDescription, user);
+
+    room.history.modifiedDate = new Date();
+    const zone: IZone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(
+        `couldn't find zone for user ${user.username}'s location.}`
+      );
+    }
+
+    room.name = roomData.name;
+    room.description = newRoomDescription;
+    room.isDark = roomData.isDark;
+    room.isIndoors = roomData.isIndoors;
+    room.isOnWater = roomData.isOnWater;
+    room.isUnderwater = roomData.isUnderwater;
+    room.noMounts = roomData.noMounts;
+    room.noMobs = roomData.noMobs;
+    room.noMagic = roomData.noMagic;
+    room.noCombat = roomData.noCombat;
+    room.playerCap = roomData.playerCap;
+    room.mobCap = roomData.mobCap;
+    //clear room.mobNodes and replace with processed roomData.mobNodes
+    room.mobNodes = [];
+    roomData.mobNodes.forEach((node) => {
+      room.mobNodes.push({
+        _id: new mongoose.Types.ObjectId(),
+        loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
+        fromZoneId: zone._id,
+      });
+    });
+    //clear room.itemNodes and replace with processed roomData.itemNodes
+    room.itemNodes = [];
+    roomData.itemNodes.forEach((node) => {
+      room.itemNodes.push({
+        _id: new mongoose.Types.ObjectId(),
+        loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
+        fromZoneId: zone._id,
+      });
+    });
+
+    room.exits = roomData.exits;
+
+    await zone.save();
+    await zone.initRooms();
     worldEmitter.emit(
       `messageFor${user.username}`,
-      makeMessage(`rejected`, `Oops! Can't seem to edit this room.`)
+      makeMessage(`success`, `Room updated!`)
     );
-    return;
-  }
-
-  const newRoomDescription: IDescription = {
-    examine: roomData.description.examine,
-    study: roomData.description.study,
-    research: roomData.description.research,
-  };
-
-  truncateDescription(newRoomDescription, user);
-
-  room.history.modifiedDate = new Date();
-  const zone: IZone = await getZoneOfUser(user);
-  if (!zone) {
-    logger.error(
-      `editRoom couldn't find zone to save for user ${user.username}'s location.}`
+  } catch (error: unknown) {
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(
+        "rejection",
+        `There was an error on our server. Ralu will have a look at it soon!`
+      )
     );
-    return;
+    if (error instanceof Error) {
+      logger.error(
+        `editRoom error for user ${user.username}: ${error.message}`
+      );
+    } else {
+      logger.error(`editRoom error for user ${user.username}: ${error}`);
+    }
   }
-
-  // make the edits
-  room.name = roomData.name;
-  room.description = newRoomDescription;
-  room.isDark = roomData.isDark;
-  room.isIndoors = roomData.isIndoors;
-  room.isOnWater = roomData.isOnWater;
-  room.isUnderwater = roomData.isUnderwater;
-  room.noMounts = roomData.noMounts;
-  room.noMobs = roomData.noMobs;
-  room.noMagic = roomData.noMagic;
-  room.noCombat = roomData.noCombat;
-  room.playerCap = roomData.playerCap;
-  room.mobCap = roomData.mobCap;
-  //clear room.mobNodes and replace with processed roomData.mobNodes
-  room.mobNodes = [];
-  roomData.mobNodes.forEach((node) => {
-    room.mobNodes.push({
-      _id: new mongoose.Types.ObjectId(),
-      loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
-      fromZoneId: zone._id,
-    });
-  });
-  //clear room.itemNodes and replace with processed roomData.itemNodes
-  room.itemNodes = [];
-  roomData.itemNodes.forEach((node) => {
-    room.itemNodes.push({
-      _id: new mongoose.Types.ObjectId(),
-      loadsBlueprintId: new mongoose.Types.ObjectId(node.loadsBlueprintId),
-      fromZoneId: zone._id,
-    });
-  });
-
-  room.exits = roomData.exits;
-
-  await zone.save();
-  await zone.initRooms();
-  worldEmitter.emit(
-    `messageFor${user.username}`,
-    makeMessage(`success`, `Room updated!`)
-  );
-
-  return;
 }
 
 export default editRoom;

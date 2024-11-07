@@ -8,13 +8,16 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 async function editItemBlueprint(itemId, formData, user) {
     try {
-        if (!itemId || !formData || !user) {
-            throw new Error("itemId, formData, or user missing");
-        }
+        if (!itemId)
+            throw new Error("Missing itemId");
+        if (!formData)
+            throw new Error("Missing formData");
+        if (!user)
+            throw new Error("Missing user");
         //get existing item data
         const zone = await getZoneOfUser(user);
         if (!zone) {
-            throw new Error(`editItemBlueprint couldn't find zone to save for user ${user.username}'s location.}`);
+            throw new Error(`editItemBlueprint couldn't find zone to save for user ${user.username}'s location.`);
         }
         const item = zone.itemBlueprints.find((blueprint) => blueprint._id.toString() === itemId.toString());
         if (!item) {
@@ -78,10 +81,10 @@ async function editItemBlueprint(itemId, formData, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error(`error in server, ${error.message}`);
+            logger.error(`editItemBlueprint error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error(`error in server, ${error}`);
+            logger.error(`editItemBlueprint error for user ${user.username}: ${error}`);
         }
     }
 }

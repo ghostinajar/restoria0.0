@@ -85,8 +85,7 @@ async function createZone(zoneFormData, user) {
         const nameToRegister = new Name({ name: newZoneData.name });
         const nameSaved = await nameToRegister.save();
         if (!nameSaved) {
-            logger.error(`createZone couldn't save the name ${newZoneData.name} to Names!`);
-            return;
+            throw new Error(`createZone couldn't save the name ${newZoneData.name} to Names!`);
         }
         if (!user.unpublishedZoneTally) {
             user.unpublishedZoneTally = 0;
@@ -99,10 +98,10 @@ async function createZone(zoneFormData, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error(`error in createZone, ${error.message}`);
+            logger.error(`createZone error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error(`error in createZone, ${error}`);
+            logger.error(`createZone error for user ${user.username}: ${error}`);
         }
     }
 }

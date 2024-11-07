@@ -309,10 +309,8 @@
     const editRoomStudy = document.getElementById("editRoomStudy");
     const editRoomResearch = document.getElementById("editRoomResearch");
     const editRoomIsDark = document.getElementById("editRoomIsDark");
-    const editRoomIsIndoors =
-      document.getElementById("editRoomIsIndoors");
-    const editRoomIsOnWater =
-      document.getElementById("editRoomIsOnWater");
+    const editRoomIsIndoors = document.getElementById("editRoomIsIndoors");
+    const editRoomIsOnWater = document.getElementById("editRoomIsOnWater");
     const editRoomIsUnderwater = document.getElementById(
       "editRoomIsUnderwater"
     );
@@ -320,8 +318,7 @@
     const editRoomNoMobs = document.getElementById("editRoomNoMobs");
     const editRoomNoMagic = document.getElementById("editRoomNoMagic");
     const editRoomNoCombat = document.getElementById("editRoomNoCombat");
-    const editRoomPlayerCap =
-      document.getElementById("editRoomPlayerCap");
+    const editRoomPlayerCap = document.getElementById("editRoomPlayerCap");
     const editRoomMobCap = document.getElementById("editRoomMobCap");
     const editRoomItemNodeList = document.getElementById(
       "editRoomItemNodeList"
@@ -420,23 +417,26 @@
     editRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
       workingEditRoomData.name = DOMPurify.sanitize(editRoomName.value);
-      workingEditRoomData.description.examine =
-        DOMPurify.sanitize(editRoomExamine.value);
-      workingEditRoomData.description.study = DOMPurify.sanitize(editRoomStudy.value);
-      workingEditRoomData.description.research =
-        DOMPurify.sanitize(editRoomResearch.value);
+      workingEditRoomData.description.examine = DOMPurify.sanitize(
+        editRoomExamine.value
+      );
+      workingEditRoomData.description.study = DOMPurify.sanitize(
+        editRoomStudy.value
+      );
+      workingEditRoomData.description.research = DOMPurify.sanitize(
+        editRoomResearch.value
+      );
       workingEditRoomData.isDark = editRoomIsDark.checked;
-      workingEditRoomData.IsIndoors = editRoomIsIndoors.checked;
-      workingEditRoomData.IsOnWater = editRoomIsOnWater.checked;
-      workingEditRoomData.IsUnderwater = editRoomIsUnderwater.checked;
-      workingEditRoomData.NoMounts = editRoomNoMounts.checked;
-      workingEditRoomData.NoMobs = editRoomNoMobs.checked;
-      workingEditRoomData.NoMagic = editRoomNoMagic.checked;
-      workingEditRoomData.NoCombat = editRoomNoCombat.checked;
-      workingEditRoomData.PlayerCap = Number(editRoomPlayerCap.value);
-      workingEditRoomData.MobCap = Number(editRoomMobCap.value);
+      workingEditRoomData.isIndoors = editRoomIsIndoors.checked;
+      workingEditRoomData.isOnWater = editRoomIsOnWater.checked;
+      workingEditRoomData.isUnderwater = editRoomIsUnderwater.checked;
+      workingEditRoomData.noMounts = editRoomNoMounts.checked;
+      workingEditRoomData.noMobs = editRoomNoMobs.checked;
+      workingEditRoomData.noMagic = editRoomNoMagic.checked;
+      workingEditRoomData.noCombat = editRoomNoCombat.checked;
+      workingEditRoomData.playerCap = editRoomPlayerCap.value;
+      workingEditRoomData.mobCap = editRoomMobCap.value;
       saveExitList(workingEditRoomData.exits);
-
       socket.emit("userSubmittedEditRoom", workingEditRoomData);
       editRoomForm.style.display = "none";
     });
@@ -483,6 +483,8 @@
     socket.on("openEditRoomForm", (formData) => {
       // persist the data from server
       workingEditRoomData = formData.roomData;
+      console.log(workingEditRoomData);
+
       mobBlueprints = formData.zoneData.mobBlueprintNames;
       itemBlueprints = formData.zoneData.itemBlueprintNames;
       rooms = formData.zoneData.rooms;
@@ -509,18 +511,15 @@
       editRoomStudy.value = workingEditRoomData.description.study || "";
       editRoomResearch.value = workingEditRoomData.description.research || "";
       editRoomIsDark.checked = workingEditRoomData.isDark || false;
-      editRoomIsIndoors.checked =
-        workingEditRoomData.editRoomIsIndoors || false;
-      editRoomIsOnWater.checked =
-        workingEditRoomData.editRoomIsOnWater || false;
-      editRoomIsUnderwater.checked =
-        workingEditRoomData.editRoomIsUnderwater || false;
-      editRoomNoMounts.checked = workingEditRoomData.editRoomNoMounts || false;
-      editRoomNoMobs.checked = workingEditRoomData.editRoomNoMobs || false;
-      editRoomNoMagic.checked = workingEditRoomData.editRoomNoMagic || false;
-      editRoomNoCombat.checked = workingEditRoomData.editRoomNoCombat || false;
-      editRoomPlayerCap.value = workingEditRoomData.editRoomPlayerCap || 0;
-      editRoomMobCap.value = workingEditRoomData.editRoomMobCap || 0;
+      editRoomIsIndoors.checked = workingEditRoomData.isIndoors || false;
+      editRoomIsOnWater.checked = workingEditRoomData.isOnWater || false;
+      editRoomIsUnderwater.checked = workingEditRoomData.isUnderwater || false;
+      editRoomNoMounts.checked = workingEditRoomData.noMounts || false;
+      editRoomNoMobs.checked = workingEditRoomData.noMobs || false;
+      editRoomNoMagic.checked = workingEditRoomData.noMagic || false;
+      editRoomNoCombat.checked = workingEditRoomData.noCombat || false;
+      editRoomPlayerCap.value = workingEditRoomData.playerCap || 18;
+      editRoomMobCap.value = workingEditRoomData.mobCap || 18;
       loadNodesToUlElement(
         editRoomMobNodeList,
         workingEditRoomData.mobNodes,

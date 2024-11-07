@@ -113,10 +113,9 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
     const nameToRegister = new Name({ name: newZoneData.name });
     const nameSaved = await nameToRegister.save();
     if (!nameSaved) {
-      logger.error(
+      throw new Error(
         `createZone couldn't save the name ${newZoneData.name} to Names!`
       );
-      return;
     }
 
     if (!user.unpublishedZoneTally) {
@@ -138,9 +137,9 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
       )
     );
     if (error instanceof Error) {
-      logger.error(`error in createZone, ${error.message}`);
+      logger.error(`createZone error for user ${user.username}: ${error.message}`);
     } else {
-      logger.error(`error in createZone, ${error}`);
+      logger.error(`createZone error for user ${user.username}: ${error}`);
     }
   }
 }

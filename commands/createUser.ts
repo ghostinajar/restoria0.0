@@ -216,9 +216,9 @@ async function createUser(
       );
     }
     if (error instanceof Error) {
-      logger.error(`error in createUser, ${error.message}`);
+      logger.error(`createUser error: ${error.message}`);
     } else {
-      logger.error(`error in createUser, ${error}`);
+      logger.error(`createUser error: ${error}`);
     }
     throw error;
   }

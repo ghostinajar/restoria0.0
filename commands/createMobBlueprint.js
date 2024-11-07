@@ -13,8 +13,7 @@ async function createMobBlueprint(mobFormData, user) {
         // logger.debug(`Trying to create mob blueprint ${mobFormData.name}.`);
         let zone = await getZoneOfUser(user);
         if (!zone) {
-            logger.error(`Couldn't find zone to create mob.`);
-            return;
+            throw new Error(`Couldn't find zone to create mob.`);
         }
         const mobDescription = {
             look: mobFormData.description.look,
@@ -63,10 +62,10 @@ async function createMobBlueprint(mobFormData, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error(`error in createMobBlueprint, ${error.message}`);
+            logger.error(`createMobBlueprint error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error(`error in createMobBlueprint, ${error}`);
+            logger.error(`createMobBlueprint error for user ${user.username}: ${error}`);
         }
     }
 }

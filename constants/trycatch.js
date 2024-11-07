@@ -7,9 +7,9 @@ try {
 catch (error) {
     worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
     if (error instanceof Error) {
-        logger.error(`error in server, ${error.message}`);
+        logger.error(`server error for user ${user.username}: ${error.message}`);
     }
     else {
-        logger.error(`error in server, ${error}`);
+        logger.error(`server error for user ${user.username}: ${error}`);
     }
 }

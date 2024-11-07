@@ -22,21 +22,15 @@ async function createRoom(roomFormData, user) {
         }
         let originRoom = await getRoomOfUser(user);
         if (!originRoom) {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Can't create the room. There's an error with your location!`));
-            logger.error(`Couldn't find origin room to create room.`);
-            return;
+            throw new Error(`Couldn't find origin room to create room.`);
         }
         let originZone = await getZoneOfUser(user);
         if (!originZone) {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Can't create the room. There's an error with your location!`));
-            logger.error(`Couldn't find origin zone to create room.`);
-            return;
+            throw new Error(`Couldn't find origin zone to create room.`);
         }
         const unusedExits = await unusedExitsForUser(user);
         if (!unusedExits.includes(roomFormData.direction)) {
-            logger.error(`createRoom rejected, exit already exists (this shouldn't be possible). Author ${user._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`);
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Can't create the room. That exit already goes somewhere!`));
-            return;
+            throw new Error(`exit already exists (this shouldn't be possible). Author ${user._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`);
         }
         const roomDescription = {
             examine: roomFormData.examine,
@@ -148,10 +142,10 @@ async function createRoom(roomFormData, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error(`error in createRoom, ${error.message}`);
+            logger.error(`createRoom error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error(`error in createRoom, ${error}`);
+            logger.error(`createRoom error for user ${user.username}: ${error}`);
         }
     }
 }

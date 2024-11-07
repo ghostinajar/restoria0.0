@@ -93,9 +93,9 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       )
     );
     if (error instanceof Error) {
-      logger.error("editor command encountered an error:", error.message);
+      logger.error(`"create" function error for user ${user.username}: ${error.message}`);
     } else {
-      logger.error("editor command encountered an unknown error:", error);
+      logger.error(`"create" function error for user ${user.username}: ${error}`);
     }
   }
 }

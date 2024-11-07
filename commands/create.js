@@ -68,10 +68,10 @@ async function create(parsedCommand, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error("editor command encountered an error:", error.message);
+            logger.error(`"create" function error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error("editor command encountered an unknown error:", error);
+            logger.error(`"create" function error for user ${user.username}: ${error}`);
         }
     }
 }

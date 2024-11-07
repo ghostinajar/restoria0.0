@@ -34,8 +34,7 @@ async function createMobBlueprint(
 
     let zone = await getZoneOfUser(user);
     if (!zone) {
-      logger.error(`Couldn't find zone to create mob.`);
-      return;
+      throw new Error(`Couldn't find zone to create mob.`)
     }
 
     const mobDescription: IDescription = {
@@ -101,9 +100,9 @@ async function createMobBlueprint(
       )
     );
     if (error instanceof Error) {
-      logger.error(`error in createMobBlueprint, ${error.message}`);
+      logger.error(`createMobBlueprint error for user ${user.username}: ${error.message}`);
     } else {
-      logger.error(`error in createMobBlueprint, ${error}`);
+      logger.error(`createMobBlueprint error for user ${user.username}: ${error}`);
     }
   }
 }

@@ -82,15 +82,15 @@ async function editItemBlueprint(
   user: IUser
 ) {
   try {
-    if (!itemId || !formData || !user) {
-      throw new Error("itemId, formData, or user missing");
-    }
+    if (!itemId) throw new Error("Missing itemId");
+    if (!formData) throw new Error("Missing formData");
+    if (!user) throw new Error("Missing user");
 
     //get existing item data
     const zone = await getZoneOfUser(user);
     if (!zone) {
       throw new Error(
-        `editItemBlueprint couldn't find zone to save for user ${user.username}'s location.}`
+        `editItemBlueprint couldn't find zone to save for user ${user.username}'s location.`
       );
     }
 
@@ -186,9 +186,9 @@ async function editItemBlueprint(
       )
     );
     if (error instanceof Error) {
-      logger.error(`error in server, ${error.message}`);
+      logger.error(`editItemBlueprint error for user ${user.username}: ${error.message}`);
     } else {
-      logger.error(`error in server, ${error}`);
+      logger.error(`editItemBlueprint error for user ${user.username}: ${error}`);
     }
   }
 }
