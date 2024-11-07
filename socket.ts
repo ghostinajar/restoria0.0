@@ -285,7 +285,7 @@ const setupSocket = (io: any) => {
 
       socket.on(`userSubmittedNewZone`, async (zoneData: IZoneData) => {
         purifyDescriptionOfObject(zoneData);
-        const newZone = await createZone(zoneData, user);
+        await createZone(zoneData, user);
         stats(user);
       });
 

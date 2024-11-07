@@ -47,6 +47,7 @@ function truncateDescription(description: IDescription, user: IUser) {
       )
     );
   }
+  return description;
 }
 
 export default truncateDescription;

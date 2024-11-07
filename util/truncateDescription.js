@@ -17,5 +17,6 @@ function truncateDescription(description, user) {
         description.research = description.research.substring(0, 1600);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Research descriptions should be 1600 characters (20 lines) or less. Shortened to '${description.research}'.`));
     }
+    return description;
 }
 export default truncateDescription;

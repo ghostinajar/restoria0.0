@@ -1,4 +1,5 @@
 // createUser
+// allows user to create new users from the /register page, or from in game
 import { Types } from "mongoose";
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
