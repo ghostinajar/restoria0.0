@@ -1,3 +1,5 @@
+// editUser
+// allows user to edit user description
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";

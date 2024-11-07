@@ -11,165 +11,187 @@ import { IParsedCommand } from "../util/parseCommand.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
-  const target = parsedCommand.directObject;
-  const zone: IZone = await getZoneOfUser(user);
-
-  if (!target) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        `rejection`,
-        `Erase what? Try ERASE ROOM, ERASE ITEM, or ERASE MOB.`
-      )
-    );
-    return;
-  }
-
-  if (target === "user" || target === "character") {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        `rejection`,
-        `To erase a user, contact Ralu or another game administrator.`
-      )
-    );
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        `rejection`,
-        `Except under special circumstances, you may only erase one user per month.`
-      )
-    );
-    return;
-  }
-
-  if (target === "zone") {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        `rejection`,
-        `You can't erase a zone. Edit or erase its contents instead.`
-      )
-    );
-    return;
-  }
-
-  if (!userHasZoneAuthorId(zone.author.toString(), user)) {
-    return;
-  }
-
-  const helpArray = [
-    `<span style="color:var(--red)">Erase cannot be undone!</span> We recommend saving all your writing somewhere,`,
-    `(e.g. Google Drive), so you have a back up copy of your hard work.`,
-    `Why not back it up now, before erasing, just in case?`,
-  ];
-
-  switch (target) {
-    case `item`: {
-      worldEmitter.emit(`formPromptFor${user.username}`, {
-        form: `eraseItemBlueprintForm`,
-        itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
-        helpArray: helpArray,
-      });
-      logger.debug(`user ${user.name} requested erase item form.`);
-      break;
+  try {
+    const target = parsedCommand.directObject;
+    if (!target) {
+      throw new Error("parsedCommand missing directObject property")
     }
-    case `mob`: {
-      worldEmitter.emit(`formPromptFor${user.username}`, {
-        form: `eraseMobBlueprintForm`,
-        mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
-        helpArray: helpArray,
-      });
-      break;
-    }
-    case `room`: {
-      const originRoom = await getRoomOfUser(user);
-      let exitNames: Array<{ _id: string; name: string }> = [];
-      for (let [key, value] of Object.entries(originRoom.exits)) {
-        if (
-          value &&
-          key !== "$__parent" &&
-          key !== "$__" &&
-          key !== "$isNew" &&
-          key !== "$__v" &&
-          key !== "$_id" &&
-          key !== "_doc"
-        ) {
-          // get the exit's destination zone (in case it's an external zone)
-          // logger.debug(`exits command look for destination zone for ${key} exit from ${originRoom.name}...`);
+    const zone: IZone = await getZoneOfUser(user);
 
-          let toZone: IZone = await new Promise((resolve) => {
-            worldEmitter.once(
-              `zone${value.destinationLocation.inZone.toString()}Loaded`,
-              resolve
-            );
-            worldEmitter.emit(
-              `zoneRequested`,
-              value.destinationLocation.inZone
-            );
-          });
-          // get room of exit
-          // logger.debug(`exits command found zone ${toZone.name}, finding room for ${key} exit...`);
-          const toRoom = toZone.rooms.find(
-            (room) =>
-              room._id.toString() ===
-              value.destinationLocation.inRoom.toString()
-          );
-
-          let direction: string = ``;
-          switch (key) {
-            case "north": {
-              direction = `North:  `;
-              break;
-            }
-            case "east": {
-              direction = `East:   `;
-              break;
-            }
-            case "south": {
-              direction = `South:  `;
-              break;
-            }
-            case "west": {
-              direction = `West:   `;
-              break;
-            }
-            case "up": {
-              direction = `Up:     `;
-              break;
-            }
-            case "down": {
-              direction = `Down:   `;
-              break;
-            }
-            default:
-              break;
-          }
-          if (toRoom) {
-            let exit = {
-              _id: toRoom._id.toString(),
-              name: `${direction} ${toRoom.name}`,
-            };
-            exitNames.push(exit);
-          }
-        }
-      }
-      worldEmitter.emit(`formPromptFor${user.username}`, {
-        form: `eraseRoomForm`,
-        exitNames: exitNames,
-        helpArray: helpArray,
-      });
-      break;
-    }
-    default: {
+    if (!target) {
       worldEmitter.emit(
         `messageFor${user.username}`,
         makeMessage(
           `rejection`,
-          `Uh, you can't erase that. Try ERASE ROOM, ERASE ITEM, or ERASE MOB.`
+          `Erase what? Try ERASE ROOM, ERASE ITEM, or ERASE MOB.`
         )
       );
       return;
+    }
+
+    if (target === "user" || target === "character") {
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          `rejection`,
+          `To erase a user, contact Ralu or another game administrator.`
+        )
+      );
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          `rejection`,
+          `Except in special circumstances, we'll only erase one of your users per month.`
+        )
+      );
+      return;
+    }
+
+    if (target === "zone") {
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          `rejection`,
+          `You can't erase a zone. Edit or erase its contents instead.`
+        )
+      );
+      return;
+    }
+
+    if (!userHasZoneAuthorId(zone.author.toString(), user)) {
+      return;
+    }
+
+    const helpArray = [
+      `<span style="color:var(--red)">Erase cannot be undone!</span> We recommend saving all your writing somewhere,`,
+      `(e.g. Google Drive), so you have a back up copy of your hard work.`,
+      `Why not back it up now, before erasing, just in case?`,
+    ];
+
+    switch (target) {
+      case `item`: {
+        worldEmitter.emit(`formPromptFor${user.username}`, {
+          form: `eraseItemBlueprintForm`,
+          itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
+          helpArray: helpArray,
+        });
+        logger.debug(`user ${user.name} requested erase item form.`);
+        break;
+      }
+      case `mob`: {
+        worldEmitter.emit(`formPromptFor${user.username}`, {
+          form: `eraseMobBlueprintForm`,
+          mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
+          helpArray: helpArray,
+        });
+        break;
+      }
+      case `room`: {
+        const originRoom = await getRoomOfUser(user);
+        let exitNames: Array<{ _id: string; name: string }> = [];
+        for (let [key, value] of Object.entries(originRoom.exits)) {
+          if (
+            value &&
+            key !== "$__parent" &&
+            key !== "$__" &&
+            key !== "$isNew" &&
+            key !== "$__v" &&
+            key !== "$_id" &&
+            key !== "_doc"
+          ) {
+            // get the exit's destination zone (in case it's an external zone)
+            // logger.debug(`exits command look for destination zone for ${key} exit from ${originRoom.name}...`);
+
+            let toZone: IZone = await new Promise((resolve) => {
+              worldEmitter.once(
+                `zone${value.destinationLocation.inZone.toString()}Loaded`,
+                resolve
+              );
+              worldEmitter.emit(
+                `zoneRequested`,
+                value.destinationLocation.inZone
+              );
+            });
+            // get room of exit
+            // logger.debug(`exits command found zone ${toZone.name}, finding room for ${key} exit...`);
+            const toRoom = toZone.rooms.find(
+              (room) =>
+                room._id.toString() ===
+                value.destinationLocation.inRoom.toString()
+            );
+
+            let direction: string = ``;
+            switch (key) {
+              case "north": {
+                direction = `North:  `;
+                break;
+              }
+              case "east": {
+                direction = `East:   `;
+                break;
+              }
+              case "south": {
+                direction = `South:  `;
+                break;
+              }
+              case "west": {
+                direction = `West:   `;
+                break;
+              }
+              case "up": {
+                direction = `Up:     `;
+                break;
+              }
+              case "down": {
+                direction = `Down:   `;
+                break;
+              }
+              default:
+                break;
+            }
+            if (toRoom) {
+              let exit = {
+                _id: toRoom._id.toString(),
+                name: `${direction} ${toRoom.name}`,
+              };
+              exitNames.push(exit);
+            }
+          }
+        }
+        worldEmitter.emit(`formPromptFor${user.username}`, {
+          form: `eraseRoomForm`,
+          exitNames: exitNames,
+          helpArray: helpArray,
+        });
+        break;
+      }
+      default: {
+        worldEmitter.emit(
+          `messageFor${user.username}`,
+          makeMessage(
+            `rejection`,
+            `Uh, you can't erase that. Try ERASE ROOM, ERASE ITEM, or ERASE MOB.`
+          )
+        );
+        return;
+      }
+    }
+  } catch (error: unknown) {
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(
+        "rejection",
+        `There was an error on our server. Ralu will have a look at it soon!`
+      )
+    );
+    if (error instanceof Error) {
+      logger.error(
+        `"erase" function error for user ${user.username}: ${error.message}`
+      );
+    } else {
+      logger.error(
+        `"erase" function error for user ${user.username}: ${error}`
+      );
     }
   }
 }

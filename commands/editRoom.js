@@ -1,4 +1,5 @@
 // editRoom
+// allows user to edit details of a room
 import mongoose from "mongoose";
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
