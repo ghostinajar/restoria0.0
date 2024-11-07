@@ -1,3 +1,6 @@
+// editUser
+// allows user to edit user description
+
 import logger from "../logger.js";
 import { IDescription } from "../model/classes/Description.js";
 import { IUser } from "../model/classes/User.js";

@@ -1,4 +1,6 @@
 // editRoom
+// allows user to edit details of a room
+
 import mongoose, { Mongoose } from "mongoose";
 import logger from "../logger.js";
 import { IDescription } from "../model/classes/Description.js";
