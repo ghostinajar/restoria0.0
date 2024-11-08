@@ -1,7 +1,7 @@
 // createExit
 // used by createRoom (createRoom will catch and handle error)
 import mongoose from "mongoose";
-import logger from "../logger";
+import logger from "../logger.js";
 
 function createExit(
   toRoomId: mongoose.Types.ObjectId,
