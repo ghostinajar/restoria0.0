@@ -19,7 +19,7 @@ async function erase(parsedCommand, user) {
         }
         if (target === "user" || target === "character") {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `To erase a user, contact Ralu or another game administrator.`));
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Except under special circumstances, we'll only erase one of your users per month.`));
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Except in special circumstances, we'll only erase one of your users per month.`));
             return;
         }
         if (target === "zone") {
