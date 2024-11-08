@@ -1,6 +1,5 @@
 // suggest
 // allows user to leave a writing suggestion for the author of a room/item/mob
-
 import mongoose from "mongoose";
 import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
