@@ -1,3 +1,5 @@
+// recall
+// moves user to world recall
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -12,7 +14,7 @@ async function recall(user: IUser) {
       makeMessage(`success`, `${user.name} disappears.`)
     );
     await resetUserLocation(user);
-    
+
     worldEmitter.emit(
       `messageFor${user.username}sRoom`,
       makeMessage(`success`, `${user.name} appears.`)

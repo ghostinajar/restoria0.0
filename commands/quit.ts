@@ -1,4 +1,5 @@
 // quit
+// quits user from the game
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
