@@ -1,4 +1,4 @@
-import logger from "../logger";
+import logger from "../logger.js";
 function createExit(toRoomId, inZoneId) {
     try {
         const newExit = {
