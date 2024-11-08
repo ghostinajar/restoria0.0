@@ -1,6 +1,5 @@
 // create
 // switch on target to open create form for item, mob, room, zone, or user/character
-
 import { itemTypes } from "../constants/ITEM_TYPE.js";
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";

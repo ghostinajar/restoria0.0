@@ -1,16 +1,24 @@
-// createExit
-// used by createRoom (createRoom will catch and handle error)
+import logger from "../logger";
 function createExit(toRoomId, inZoneId) {
-    const newExit = {
-        destinationLocation: {
-            inZone: inZoneId,
-            inRoom: toRoomId,
-        },
-        toExternalZone: false,
-        isHidden: false,
-        isClosed: false,
-    };
-    return newExit;
+    try {
+        const newExit = {
+            destinationLocation: {
+                inZone: inZoneId,
+                inRoom: toRoomId,
+            },
+            toExternalZone: false,
+            isHidden: false,
+            isClosed: false,
+        };
+        return newExit;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            logger.error(`createExit error: ${error.message}`);
+        }
+        else {
+            logger.error(`createExit error: ${error}`);
+        }
+    }
 }
-;
 export default createExit;

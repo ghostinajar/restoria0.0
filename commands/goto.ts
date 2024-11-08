@@ -60,9 +60,9 @@ async function goto(user: IUser) {
       )
     );
     if (error instanceof Error) {
-      logger.error(`error in goto, ${error.message}`);
+      logger.error(`goto error for user ${user.username}: ${error.message}`);
     } else {
-      logger.error(`error in goto, ${error}`);
+      logger.error(`goto error for user ${user.username}: ${error}`);
     }
   }
 }

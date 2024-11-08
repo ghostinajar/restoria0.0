@@ -11,6 +11,7 @@ import { damageTypes } from "../constants/DAMAGE_TYPE.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import logger from "../logger.js";
 import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
+import getNameById from "../util/getNameById.js";
 async function edit(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject;
@@ -121,39 +122,51 @@ async function edit(parsedCommand, user) {
     }
 }
 function getItemNodesFromRoom(room, zone) {
-    let itemNodesList = [];
-    for (let node of room.itemNodes) {
-        const itemName = getNameById(zone.itemBlueprints, node.loadsBlueprintId.toString());
-        //TODO handle cases where the item originates in another zone?
-        const nodeObject = {
-            _id: node._id,
-            loadsBlueprintId: node.loadsBlueprintId,
-            name: itemName || "",
-        };
-        itemNodesList.push(nodeObject);
+    try {
+        let itemNodesList = [];
+        for (let node of room.itemNodes) {
+            const itemName = getNameById(zone.itemBlueprints, node.loadsBlueprintId.toString());
+            //TODO handle cases where the item originates in another zone?
+            const nodeObject = {
+                _id: node._id,
+                loadsBlueprintId: node.loadsBlueprintId,
+                name: itemName || "",
+            };
+            itemNodesList.push(nodeObject);
+        }
+        return itemNodesList;
     }
-    return itemNodesList;
-}
-function getMobNodesFromRoom(room, zone) {
-    let mobNodesList = [];
-    for (let node of room.mobNodes) {
-        const mobName = getNameById(zone.mobBlueprints, node.loadsBlueprintId.toString());
-        //TODO handle cases where the mob originates in another zone
-        const nodeObject = {
-            _id: node._id,
-            loadsBlueprintId: node.loadsBlueprintId,
-            name: mobName,
-        };
-        mobNodesList.push(nodeObject);
-    }
-    return mobNodesList;
-}
-function getNameById(array, id) {
-    for (let object of array) {
-        if (object._id.toString() === id) {
-            return object.name;
+    catch (error) {
+        if (error instanceof Error) {
+            logger.error(`getItemNodesFromRoom error: ${error.message}`);
+        }
+        else {
+            logger.error(`getItemNodesFromRoom error: ${error}`);
         }
     }
-    return null;
+}
+function getMobNodesFromRoom(room, zone) {
+    try {
+        let mobNodesList = [];
+        for (let node of room.mobNodes) {
+            const mobName = getNameById(zone.mobBlueprints, node.loadsBlueprintId.toString());
+            //TODO handle cases where the mob originates in another zone
+            const nodeObject = {
+                _id: node._id,
+                loadsBlueprintId: node.loadsBlueprintId,
+                name: mobName,
+            };
+            mobNodesList.push(nodeObject);
+        }
+        return mobNodesList;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            logger.error(`getMobNodesFromRoom error: ${error.message}`);
+        }
+        else {
+            logger.error(`getMobNodesFromRoom error: ${error}`);
+        }
+    }
 }
 export default edit;
