@@ -17,7 +17,10 @@ async function suggest(parsedCommand, user) {
             rejectSuggest(user);
             return;
         }
-        //TODO reject if user is not an editor for this zone's author
+        if (zone.author !== user._id) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `If you want to suggest in this zone, ask its author to make you an editor.`));
+            return;
+        }
         const formData = {
             form: `suggestForm`,
             refersToObjectType: target,
@@ -30,7 +33,8 @@ async function suggest(parsedCommand, user) {
             case `item`:
                 formData.refersToObjectType = "itemBlueprint";
                 formData.names = getItemBlueprintNamesFromZone(zone);
-                formData.defaultOption = room.itemNodes[0]?.loadsBlueprintId?.toString();
+                formData.defaultOption =
+                    room.itemNodes[0]?.loadsBlueprintId?.toString();
                 break;
             case `mob`:
                 formData.refersToObjectType = "mobBlueprint";
@@ -50,10 +54,10 @@ async function suggest(parsedCommand, user) {
     catch (error) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
         if (error instanceof Error) {
-            logger.error(`error in suggest, ${error.message}`);
+            logger.error(`"suggest" error for user ${user.username}: ${error.message}`);
         }
         else {
-            logger.error(`error in suggest, ${error}`);
+            logger.error(`"suggest" error for user ${user.username}: ${error}`);
         }
     }
 }
