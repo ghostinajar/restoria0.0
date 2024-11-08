@@ -1,8 +1,6 @@
 // stats
 // shows a user their basic stats on one line
 import logger from "../logger.js";
-// shows a user their basic stats on one line
-import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
