@@ -85,13 +85,13 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
 
-    await relocateUser(user, originRoom.exits[direction]!.destinationLocation);
 
     // Message user's origin room
     worldEmitter.emit(
       `messageFor${user.username}sRoom`,
       makeMessage(`userMove`, `${user.name} went ${direction}.`)
     );
+    await relocateUser(user, originRoom.exits[direction]!.destinationLocation);
 
     // Message user's destination room
     worldEmitter.emit(
