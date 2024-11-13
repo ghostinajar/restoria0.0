@@ -1,4 +1,5 @@
 // who
+// shows user all users signed into Restoria
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
