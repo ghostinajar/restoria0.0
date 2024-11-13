@@ -7,7 +7,7 @@ import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.j
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function suggest(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject;
@@ -52,13 +52,7 @@ async function suggest(parsedCommand, user) {
         worldEmitter.emit(`formPromptFor${user.username}`, formData);
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`"suggest" error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`"suggest" error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("suggest", error, user.name);
     }
 }
 function rejectSuggest(user) {

@@ -1,7 +1,6 @@
 // look
-// shows the user what's in their room, 
+// shows the user what's in their room,
 // or the description and contents of a target
-import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import { IUser } from "../model/classes/User.js";
 import IMessage from "../types/Message.js";
@@ -9,7 +8,7 @@ import { IParsedCommand } from "../util/parseCommand.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import lookRoom from "./lookRoom.js";
 import lookTarget from "./lookTarget.js";
-import makeMessage from "../util/makeMessage.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 async function look(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -32,18 +31,7 @@ async function look(parsedCommand: IParsedCommand, user: IUser) {
 
     worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`"look" error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`"look" error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("look", error, user.name);
   }
 }
 

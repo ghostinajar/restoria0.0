@@ -5,6 +5,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import relocateUser from "../util/relocateUser.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function move(parsedCommand, user) {
     try {
         let requestedDirection = parsedCommand.commandWord;
@@ -69,13 +70,7 @@ async function move(parsedCommand, user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`userMove`, `You move ${requestedDirection}.`));
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`"move" error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`"move" error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("move", error, user.name);
     }
 }
 export default move;

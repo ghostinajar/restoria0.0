@@ -11,7 +11,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 async function suggest(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -67,18 +67,7 @@ async function suggest(parsedCommand: IParsedCommand, user: IUser) {
 
     worldEmitter.emit(`formPromptFor${user.username}`, formData);
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`"suggest" error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`"suggest" error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("suggest", error, user.name)
   }
 }
 

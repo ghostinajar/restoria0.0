@@ -1,4 +1,6 @@
-import logger from "../logger.js";
+// getNameById
+// returns first name string from an array of {name, _id} that matches id
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 function getNameById(array, id) {
     try {
         for (let object of array) {
@@ -9,12 +11,7 @@ function getNameById(array, id) {
         return null;
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`getNameById error: ${error.message}`);
-        }
-        else {
-            logger.error(`getNameById error: ${error}`);
-        }
+        catchErrorHandlerForFunction("getNameById", error);
     }
 }
 export default getNameById;

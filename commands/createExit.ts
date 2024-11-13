@@ -1,7 +1,7 @@
 // createExit
 // used by createRoom (createRoom will catch and handle error)
 import mongoose from "mongoose";
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 function createExit(
   toRoomId: mongoose.Types.ObjectId,
@@ -19,11 +19,7 @@ function createExit(
     };
     return newExit;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      logger.error(`createExit error: ${error.message}`);
-    } else {
-      logger.error(`createExit error: ${error}`);
-    }
+    catchErrorHandlerForFunction("createExit", error)
   }
 }
 

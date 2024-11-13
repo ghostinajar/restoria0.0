@@ -1,4 +1,4 @@
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 function createExit(toRoomId, inZoneId) {
     try {
         const newExit = {
@@ -13,12 +13,7 @@ function createExit(toRoomId, inZoneId) {
         return newExit;
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`createExit error: ${error.message}`);
-        }
-        else {
-            logger.error(`createExit error: ${error}`);
-        }
+        catchErrorHandlerForFunction("createExit", error);
     }
 }
 export default createExit;

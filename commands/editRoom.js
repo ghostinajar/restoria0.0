@@ -1,11 +1,11 @@
 // editRoom
 // allows user to edit details of a room
 import mongoose from "mongoose";
-import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function editRoom(room, roomData, user) {
     try {
         if (!room)
@@ -61,13 +61,7 @@ async function editRoom(room, roomData, user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Room updated!`));
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`editRoom error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`editRoom error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("editRoom", error, user.name);
     }
 }
 export default editRoom;

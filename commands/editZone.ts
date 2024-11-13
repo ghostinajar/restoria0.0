@@ -1,6 +1,5 @@
 // editZone
 // allows user to edit zone details
-
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -9,6 +8,7 @@ import truncateDescription from "../util/truncateDescription.js";
 import { IZoneData } from "./createZone.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import Name from "../model/classes/Name.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 async function editZone(zoneData: IZoneData, user: IUser) {
   try {
@@ -54,20 +54,7 @@ async function editZone(zoneData: IZoneData, user: IUser) {
     );
     return;
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(
-        `editZone error for user ${user.username}: ${error.message}`
-      );
-    } else {
-      logger.error(`editZone error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("editZone", error, user.name)
   }
 }
 

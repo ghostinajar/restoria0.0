@@ -1,3 +1,5 @@
+// erase
+// switch on target to open erase form for item, mob, room
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
@@ -6,6 +8,7 @@ import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.j
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function erase(parsedCommand, user) {
     try {
         const target = parsedCommand.directObject;
@@ -125,13 +128,7 @@ async function erase(parsedCommand, user) {
         }
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`"erase" function error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`"erase" function error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("erase", error, user.name);
     }
 }
 export default erase;

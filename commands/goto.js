@@ -1,8 +1,8 @@
 // goto
 // allows user to transport to any room in a zone they are building or editing
-import logger from "../logger.js";
 import User from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getZonesNamesByAuthorId from "../util/getZoneNamesByAuthorId.js";
 import makeMessage from "../util/makeMessage.js";
 async function goto(user) {
@@ -36,13 +36,7 @@ async function goto(user) {
         });
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`goto error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`goto error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("goto", error, user.name);
     }
 }
 export default goto;

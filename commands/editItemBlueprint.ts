@@ -1,6 +1,5 @@
 // editItemBlueprint
 // processes and saves data from edit_item_blueprint user submission
-
 import mongoose from "mongoose";
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
@@ -10,6 +9,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IAffix } from "../model/classes/Affix.js";
 import { IItemNode } from "../model/classes/ItemNode.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface IEditItemBlueprintFormData {
   name: string;
@@ -178,18 +178,7 @@ async function editItemBlueprint(
       makeMessage(`success`, `Item updated!`)
     );
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`editItemBlueprint error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`editItemBlueprint error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("editItemBlueprint", error, user.name)
   }
 }
 

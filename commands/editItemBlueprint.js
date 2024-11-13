@@ -6,6 +6,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function editItemBlueprint(itemId, formData, user) {
     try {
         if (!itemId)
@@ -79,13 +80,7 @@ async function editItemBlueprint(itemId, formData, user) {
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Item updated!`));
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`editItemBlueprint error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`editItemBlueprint error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("editItemBlueprint", error, user.name);
     }
 }
 export default editItemBlueprint;

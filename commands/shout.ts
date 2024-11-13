@@ -5,6 +5,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import { IUser } from "../model/classes/User.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 function shout(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -25,18 +26,7 @@ function shout(parsedCommand: IParsedCommand, user: IUser) {
       `${user._id} ${user.name} shouted, "${parsedCommand.string}".`
     );
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`shout error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`shout error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("shout", error, user.name);
   }
 }
 

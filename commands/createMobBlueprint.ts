@@ -1,6 +1,5 @@
 // createMobBlueprint
 // saves incoming data from create_mob_blueprint_form user submission
-
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
@@ -12,6 +11,7 @@ import { IMobBlueprint } from "../model/classes/MobBlueprint.js";
 import look from "./look.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface ICreateMobFormData {
   name: string;
@@ -92,18 +92,7 @@ async function createMobBlueprint(
     );
     await look({ commandWord: "look" }, user);
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`createMobBlueprint error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`createMobBlueprint error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("createMobBlueprint", error, user.name)
   }
 }
 

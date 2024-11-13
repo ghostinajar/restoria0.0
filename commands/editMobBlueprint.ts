@@ -1,6 +1,6 @@
 // editMobBlueprint
+// processes and saves data from edit_mob_blueprint user form submission
 import mongoose from "mongoose";
-import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
@@ -9,6 +9,7 @@ import truncateDescription from "../util/truncateDescription.js";
 import { IStatBlock } from "../model/classes/StatBlock.js";
 import { IItemNode } from "../model/classes/ItemNode.js";
 import { IAffix } from "../model/classes/Affix.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface IEditMobFormData {
   name: string;
@@ -91,18 +92,7 @@ async function editMobBlueprint(
       makeMessage(`success`, `Mob updated!`)
     );
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`editMobBlueprint error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`editMobBlueprint error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("editMobBlueprint", error, user.name)
   }
 }
 

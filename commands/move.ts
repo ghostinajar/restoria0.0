@@ -8,6 +8,7 @@ import makeMessage from "../util/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import relocateUser from "../util/relocateUser.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 async function move(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -105,18 +106,7 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
       makeMessage(`userMove`, `You move ${requestedDirection}.`)
     );
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`"move" error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`"move" error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("move", error, user.name)
   }
 }
 

@@ -3,6 +3,7 @@
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 function shout(parsedCommand, user) {
     try {
         let message = makeMessage("shout", ``);
@@ -18,13 +19,7 @@ function shout(parsedCommand, user) {
         logger.log(`comms`, `${user._id} ${user.name} shouted, "${parsedCommand.string}".`);
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`shout error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`shout error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("shout", error, user.name);
     }
 }
 export default shout;

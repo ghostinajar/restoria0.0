@@ -3,6 +3,7 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import makeMessage from "../util/makeMessage.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function telepath(parsedCommand, user) {
     try {
         let message = makeMessage("telepath", ``);
@@ -32,13 +33,7 @@ async function telepath(parsedCommand, user) {
         logger.log(`comms`, `${user._id} (${user.name}) telepathed ${target.name}, "${parsedCommand.string}".`);
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`telepath error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`telepath error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("telepath", error, user.name);
     }
 }
 export default telepath;

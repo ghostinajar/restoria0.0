@@ -6,6 +6,7 @@ import makeMessage from "../util/makeMessage.js";
 import truncateDescription from "../util/truncateDescription.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import Name from "../model/classes/Name.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function editZone(zoneData, user) {
     try {
         truncateDescription(zoneData.description, user);
@@ -39,13 +40,7 @@ async function editZone(zoneData, user) {
         return;
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`editZone error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`editZone error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("editZone", error, user.name);
     }
 }
 export default editZone;

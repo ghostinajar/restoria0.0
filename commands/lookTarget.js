@@ -1,6 +1,4 @@
-// lookTarget
-// populates the lookArray for the look command
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 function pushTargetEquipped(targetObject, lookArray) {
     try {
@@ -20,12 +18,7 @@ function pushTargetEquipped(targetObject, lookArray) {
         }
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`pushTargetEquipped error: ${error.message}`);
-        }
-        else {
-            logger.error(`pushTargetEquipped error: ${error}`);
-        }
+        catchErrorHandlerForFunction("pushTargetEquipped", error);
     }
 }
 function pushTargetInventory(targetObject, lookArray) {
@@ -40,12 +33,7 @@ function pushTargetInventory(targetObject, lookArray) {
         }
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`pushTargetInventory error: ${error.message}`);
-        }
-        else {
-            logger.error(`pushTargetInventory error: ${error}`);
-        }
+        catchErrorHandlerForFunction("pushTargetInventory", error);
     }
 }
 function lookTarget(target, room, lookArray) {
@@ -85,12 +73,7 @@ function lookTarget(target, room, lookArray) {
         lookArray.push(makeMessage(`rejected`, `There doesn't seem to be a '${target}' here.`));
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`lookTarget error for target ${target}: ${error.message}`);
-        }
-        else {
-            logger.error(`lookTarget error for target ${target}: ${error}`);
-        }
+        catchErrorHandlerForFunction("lookTarget", error);
     }
 }
 export default lookTarget;
