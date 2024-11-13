@@ -16,9 +16,6 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
   try {
     const target = parsedCommand.directObject;
-    if (!target) {
-      throw new Error("parsedCommand missing directObject property")
-    }
     const zone: IZone = await getZoneOfUser(user);
 
     if (!target) {

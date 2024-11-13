@@ -12,9 +12,6 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 async function erase(parsedCommand, user) {
     try {
         const target = parsedCommand.directObject;
-        if (!target) {
-            throw new Error("parsedCommand missing directObject property");
-        }
         const zone = await getZoneOfUser(user);
         if (!target) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Erase what? Try ERASE ROOM, ERASE ITEM, or ERASE MOB.`));

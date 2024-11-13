@@ -1,6 +1,6 @@
-import logger from "../logger";
-import worldEmitter from "../model/classes/WorldEmitter";
-import makeMessage from "./makeMessage";
+import logger from "../logger.js";
+import worldEmitter from "../model/classes/WorldEmitter.js";
+import makeMessage from "./makeMessage.js";
 
 function catchErrorHandlerForFunction(functionName: string, error: unknown, username?: string): void {
   const message = makeMessage(
