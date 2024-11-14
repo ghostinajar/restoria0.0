@@ -1,4 +1,5 @@
 // MobManager
+// Manages all loading and destroying of active mob instances in game
 import logger from "../../logger.js";
 import worldEmitter from "./WorldEmitter.js";
 import Mob, { IMob } from "./Mob.js";

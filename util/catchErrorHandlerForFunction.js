@@ -21,4 +21,10 @@ function catchErrorHandlerForFunction(functionName, error, username) {
         }
     }
 }
+let user = { name: "Ralu" };
+try {
+}
+catch (error) {
+    catchErrorHandlerForFunction("functionName", error, user?.name);
+}
 export default catchErrorHandlerForFunction;
