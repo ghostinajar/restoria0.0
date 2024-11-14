@@ -1,4 +1,6 @@
 // Room
+// Class and schema for room blueprint
+// Also allows active room instance to manage its contents (items/mobs/users)
 import mongoose from "mongoose";
 import historySchema from "./History.js";
 import descriptionSchema from "./Description.js";

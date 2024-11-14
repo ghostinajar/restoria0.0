@@ -1,4 +1,6 @@
 // User
+// Class and schema for User objects and documents
+// Also allows state management for an active user instance
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import affixSchema from "./Affix.js";
@@ -7,6 +9,7 @@ import descriptionSchema from "./Description.js";
 import locationSchema from "./Location.js";
 import statBlockSchema from "./StatBlock.js";
 import historySchema from "./History.js";
+import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 const { Schema, Types, model } = mongoose;
 export const userSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -95,7 +98,8 @@ export const userSchema = new Schema({
         default: () => [],
     },
     editor: {
-        type: Schema.Types.ObjectId, ref: "User",
+        type: Schema.Types.ObjectId,
+        ref: "User",
         default: null,
     },
 });
@@ -111,55 +115,70 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     try {
         return await bcrypt.compare(candidatePassword, this.password);
     }
-    catch (err) {
-        throw err;
+    catch (error) {
+        catchErrorHandlerForFunction(`User.comparePassword for user id ${this._id}`, error);
     }
 };
 userSchema.methods.calculateMaxHp = function () {
-    // Implement your logic to calculate max Hp
-    let maxHp = 10; // Base HP
-    maxHp += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
-    if (this.job === "cleric") {
-        maxHp += this.level * 10; // Increase by level
+    try {
+        // Implement your logic to calculate max Hp
+        let maxHp = 10; // Base HP
+        maxHp += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
+        if (this.job === "cleric") {
+            maxHp += this.level * 10; // Increase by level
+        }
+        if (this.job === "mage") {
+            maxHp += this.level * 8; // Increase by level
+        }
+        if (this.job === "thief") {
+            maxHp += this.level * 10; // Increase by level
+        }
+        if (this.job === "warrior") {
+            maxHp += this.level * 12; // Increase by level
+        }
+        // TODO Add HP from equipped items
+        return maxHp;
     }
-    if (this.job === "mage") {
-        maxHp += this.level * 8; // Increase by level
+    catch (error) {
+        catchErrorHandlerForFunction(`User.calculateMaxHp`, error, this.name);
     }
-    if (this.job === "thief") {
-        maxHp += this.level * 10; // Increase by level
-    }
-    if (this.job === "warrior") {
-        maxHp += this.level * 12; // Increase by level
-    }
-    // TODO Add HP from equipped items
-    return maxHp;
 };
 userSchema.methods.calculateMaxMp = function () {
-    // Implement your logic to calculate max Hp
-    let maxMp = 10; // Base Hp
-    if (this.job === "cleric") {
-        maxMp += this.level * 10; // Increase by level
-        maxMp += (this.statBlock.wisdom - 10) * this.level; // Add wisdom bonus * level
+    try {
+        // Implement your logic to calculate max Hp
+        let maxMp = 10; // Base Hp
+        if (this.job === "cleric") {
+            maxMp += this.level * 10; // Increase by level
+            maxMp += (this.statBlock.wisdom - 10) * this.level; // Add wisdom bonus * level
+        }
+        if (this.job === "mage") {
+            maxMp += this.level * 12; // Increase by level
+            maxMp += (this.statBlock.intelligence - 10) * this.level; // Add intelligence bonus * level
+        }
+        if (this.job === "thief") {
+            maxMp += this.level * 10; // Increase by level
+        }
+        if (this.job === "warrior") {
+            maxMp += this.level * 8; // Increase by level
+        }
+        // Add Mp from equipped items
+        return maxMp;
     }
-    if (this.job === "mage") {
-        maxMp += this.level * 12; // Increase by level
-        maxMp += (this.statBlock.intelligence - 10) * this.level; // Add intelligence bonus * level
+    catch (error) {
+        catchErrorHandlerForFunction(`User.calculateMaxMp`, error, this.name);
     }
-    if (this.job === "thief") {
-        maxMp += this.level * 10; // Increase by level
-    }
-    if (this.job === "warrior") {
-        maxMp += this.level * 8; // Increase by level
-    }
-    // Add Mp from equipped items
-    return maxMp;
 };
 userSchema.methods.calculateMaxMv = function () {
-    let MaxMv = 10; // Base Mv
-    MaxMv += this.level * 10; // Increase by level
-    MaxMv += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
-    // TODO Add Mv from equipped items
-    return MaxMv;
+    try {
+        let MaxMv = 10; // Base Mv
+        MaxMv += this.level * 10; // Increase by level
+        MaxMv += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
+        // TODO Add Mv from equipped items
+        return MaxMv;
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`User.calculateMaxMv`, error, this.name);
+    }
 };
 const User = model("User", userSchema);
 export default User;
