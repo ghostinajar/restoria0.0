@@ -9,6 +9,7 @@ import suggestionSchema, { ISuggestion } from "./Suggestion.js";
 import logger from "../../logger.js";
 import { IItemNode } from "./ItemNode.js";
 import { IMobNode } from "./MobNode.js";
+import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 
 const { Schema } = mongoose;
 
@@ -91,9 +92,8 @@ zoneSchema.methods.initRooms = async function () {
       await room.initiate(); //setup room's contents arrays (inventory, mobs, users)
     }
     return;
-  } catch (err: any) {
-    logger.error(`Error in addRooms: ${err.message}`);
-    throw err;
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`Zone.initRooms`, error);
   }
 };
 
@@ -105,9 +105,8 @@ zoneSchema.methods.clearRooms = async function () {
       // logger.debug(`Clearing contents of room "${room.name}"`);
       await room.clearContents();
     }
-  } catch (err: any) {
-    logger.error(`Error in zoneSchema.methods.clearRooms(): ${err.message}`);
-    throw err;
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`Zone.clearRooms`, error);
   }
 };
 
@@ -142,11 +141,8 @@ zoneSchema.methods.eraseItemBlueprintById = async function (id: string) {
     });
     await this.save();
     await this.initRooms();
-  } catch (err: any) {
-    logger.error(
-      `Error in zoneSchema.methods.eraseItemBlueprintById(): ${err.message}`
-    );
-    throw err;
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`Zone.eraseItemBlueprintById`, error);
   }
 };
 
@@ -163,10 +159,8 @@ zoneSchema.methods.eraseMobBlueprintById = async function (id: string) {
     });
     await this.save();
     await this.initRooms();
-  } catch (err: any) {
-    logger.error(
-      `Error in zoneSchema.methods.eraseMobBlueprintById(): ${err.message}`
-    );
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`Zone.eraseMobBlueprintById`, error);
   }
 };
 
@@ -204,8 +198,8 @@ zoneSchema.methods.eraseRoomById = async function (id: string) {
     });
     await this.save();
     await this.initRooms();
-  } catch (err: any) {
-    logger.error(`Error in zoneSchema.methods.eraseRoomById(): ${err.message}`);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`Zone.eraseRoomById`, error);
   }
 };
 
