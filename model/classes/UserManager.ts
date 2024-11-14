@@ -60,7 +60,7 @@ class UserManager {
       }
       worldEmitter.emit(`userManagerReturningWhoArrayFor${username}`, whoArray);
     } catch (error: unknown) {
-      catchErrorHandlerForFunction("functionName", error);
+      catchErrorHandlerForFunction("UserManager.requestingWhoArrayHandler", error);
     }
   };
 

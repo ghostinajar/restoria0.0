@@ -53,7 +53,7 @@ class UserManager {
             worldEmitter.emit(`userManagerReturningWhoArrayFor${username}`, whoArray);
         }
         catch (error) {
-            catchErrorHandlerForFunction("functionName", error);
+            catchErrorHandlerForFunction("UserManager.requestingWhoArrayHandler", error);
         }
     };
     socketCheckingMultiplayHandler = (id) => {

@@ -1,5 +1,6 @@
 // deleteZoneById
 import Zone from "../model/classes/Zone.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 async function deleteZoneById(zoneId) {
     try {
         const result = await Zone.findByIdAndDelete(zoneId);
@@ -11,8 +12,7 @@ async function deleteZoneById(zoneId) {
         }
     }
     catch (error) {
-        console.error("Error deleting zone:", error);
-        throw error;
+        catchErrorHandlerForFunction(`deleteZoneById`, error);
     }
 }
 export default deleteZoneById;
