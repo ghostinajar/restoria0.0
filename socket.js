@@ -87,6 +87,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEditRoom`, async (roomData) => {
                 const room = await getRoomOfUser(user);
+                if (!room) {
+                    throw new Error(`Room not found for user ${user.name}`);
+                }
                 purifyDescriptionOfObject(roomData);
                 await editRoom(room, roomData, user);
                 stats(user);

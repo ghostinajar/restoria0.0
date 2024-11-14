@@ -12,7 +12,13 @@ async function suggest(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject;
         const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Zone not found for user ${user.name}`);
+        }
         const room = await getRoomOfUser(user);
+        if (!room) {
+            throw new Error(`Room not found for user ${user.name}`);
+        }
         if (!target) {
             rejectSuggest(user);
             return;

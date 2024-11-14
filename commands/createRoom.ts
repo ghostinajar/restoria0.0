@@ -47,7 +47,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       return;
     }
 
-    let originRoom: IRoom = await getRoomOfUser(user);
+    let originRoom = await getRoomOfUser(user);
     if (!originRoom) {
       throw new Error(`Couldn't find origin room to create room.`);
     }

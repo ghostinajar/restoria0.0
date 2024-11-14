@@ -13,6 +13,9 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 async function look(parsedCommand: IParsedCommand, user: IUser) {
   try {
     const room = await getRoomOfUser(user);
+    if (!room) {
+      throw new Error(`Room not found for user ${user.name}`)
+    }
     let lookArray: Array<IMessage> = [];
     let target = parsedCommand.directObject;
     if (target === "room") {

@@ -54,6 +54,9 @@ async function erase(parsedCommand, user) {
             }
             case `room`: {
                 const originRoom = await getRoomOfUser(user);
+                if (!originRoom) {
+                    throw new Error(`Room not found for user ${user.name}`);
+                }
                 let exitNames = [];
                 for (let [key, value] of Object.entries(originRoom.exits)) {
                     if (value &&

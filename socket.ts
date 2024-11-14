@@ -174,6 +174,9 @@ const setupSocket = (io: any) => {
         `userSubmittedEditRoom`,
         async (roomData: IEditRoomFormData) => {
           const room = await getRoomOfUser(user);
+          if (!room) {
+            throw new Error(`Room not found for user ${user.name}`)
+          }
           purifyDescriptionOfObject(roomData);
           await editRoom(room, roomData, user);
           stats(user);

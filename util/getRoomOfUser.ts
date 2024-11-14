@@ -12,6 +12,9 @@ async function getRoomOfUser(user: IUser) {
       );
       worldEmitter.emit("roomRequested", user.location);
     });
+    if (!room) {
+      throw new Error(`room for user ${user.name} not found!`)
+    }
     return room;
   } catch (error: unknown) {
     catchErrorHandlerForFunction("functionName", error);

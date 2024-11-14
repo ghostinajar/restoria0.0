@@ -11,6 +11,9 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 async function exits(user: IUser) {
   try {
     const room = await getRoomOfUser(user);
+    if (!room) {
+      throw new Error(`Room not found for user ${user.name}`)
+    }
     let exitsArray: Array<IMessage> = [];
 
     //iterate over exits to push to exitsArray

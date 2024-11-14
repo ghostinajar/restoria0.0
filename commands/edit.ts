@@ -64,6 +64,9 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `room`: {
         const room = await getRoomOfUser(user);
+        if (!room) {
+          throw new Error(`room not found for user ${user.name}`);
+        }
         const itemBlueprintNames = getItemBlueprintNamesFromZone(zone);
         const mobBlueprintNames = getMobBlueprintNamesFromZone(zone);
         const itemNodes = getItemNodesFromRoom(room, zone);

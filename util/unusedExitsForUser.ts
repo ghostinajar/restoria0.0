@@ -1,13 +1,13 @@
 // unusedExits
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
-import { IRoom } from "../model/classes/Room.js";
 import getRoomOfUser from "./getRoomOfUser.js";
 
 async function unusedExitsForUser(user: IUser) {
-  //get user's room
-  const room: IRoom = await getRoomOfUser(user);
-  // logger.debug(`unusedExitsForUser found user's room: ${room.name}`);
+  const room = await getRoomOfUser(user);
+  if (!room) {
+    throw new Error(`Room not found for user ${user.name}`)
+  }
   let unusedExitsArray: Array<string> = [
     "north",
     "east",

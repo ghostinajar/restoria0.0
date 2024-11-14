@@ -88,6 +88,9 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `room`: {
         const originRoom = await getRoomOfUser(user);
+        if (!originRoom) {
+          throw new Error(`Room not found for user ${user.name}`)
+        }
         let exitNames: Array<{ _id: string; name: string }> = [];
         for (let [key, value] of Object.entries(originRoom.exits)) {
           if (
