@@ -2,17 +2,23 @@ import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "./makeMessage.js";
 
-function catchErrorHandlerForFunction(functionName: string, error: unknown, username?: string): void {
+function catchErrorHandlerForFunction(
+  functionName: string,
+  error: unknown,
+  username?: string
+): void {
   const message = makeMessage(
     "rejection",
     `There was an error on our server. Ralu will have a look at it soon!`
   );
-  
+
   if (username) {
     worldEmitter.emit(`messageFor${username}`, message);
 
     if (error instanceof Error) {
-      logger.error(`"${functionName}" error for user ${username}: ${error.message}`);
+      logger.error(
+        `"${functionName}" error for user ${username}: ${error.message}`
+      );
     } else {
       logger.error(`"${functionName}" error for user ${username}: ${error}`);
     }
@@ -23,6 +29,14 @@ function catchErrorHandlerForFunction(functionName: string, error: unknown, user
       logger.error(`"${functionName}" error: ${error}`);
     }
   }
+}
+
+let user = { name: "Ralu" };
+
+try {
+  
+} catch (error: unknown) {
+  catchErrorHandlerForFunction("functionName", error, user?.name);
 }
 
 export default catchErrorHandlerForFunction;

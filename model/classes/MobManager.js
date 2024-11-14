@@ -5,7 +5,7 @@ import Mob from "./Mob.js";
 class MobManager {
     constructor() {
         this.mobs = new Map(); // Stores all mobs with their _id.toString() as key
-        worldEmitter.on("roomDestroyingMob", this.removingMobHandler);
+        worldEmitter.on("roomDestroyingMob", this.roomDestroyingMobHandler);
         worldEmitter.on("roomRequestingNewMob", this.roomRequestingNewMobHandler);
     }
     mobs;
@@ -19,9 +19,9 @@ class MobManager {
         //logger.log(`debug`, `mobManager added ${mob.name} to mobs. Mobs after adding: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`);
         worldEmitter.emit(`mobManagerAddedMobFromBlueprint${blueprint._id}`, mob);
     };
-    removingMobHandler = async (mobId) => {
-        // logger.debug(`removingMobHandler called...`)
-        // logger.debug(`removingMobHandler removing mob with id: ${mobId}`)
+    roomDestroyingMobHandler = async (mobId) => {
+        // logger.debug(`roomDestroyingMobHandler called...`)
+        // logger.debug(`roomDestroyingMobHandler removing mob with id: ${mobId}`)
         await this.removeMobById(mobId);
         worldEmitter.emit(`mobManagerRemovedMob${mobId}`);
     };
@@ -65,7 +65,7 @@ class MobManager {
     }
     clearContents() {
         this.mobs = null;
-        worldEmitter.off("roomDestroyingMob", this.removingMobHandler);
+        worldEmitter.off("roomDestroyingMob", this.roomDestroyingMobHandler);
         worldEmitter.off("roomRequestingNewMob", this.roomRequestingNewMobHandler);
     }
 }
