@@ -32,13 +32,19 @@ async function suggest(parsedCommand, user) {
         switch (target) {
             case `item`:
                 formData.refersToObjectType = "itemBlueprint";
-                formData.names = getItemBlueprintNamesFromZone(zone);
+                let itemBlueprintNames = getItemBlueprintNamesFromZone(zone);
+                if (itemBlueprintNames) {
+                    formData.names = itemBlueprintNames;
+                }
                 formData.defaultOption =
                     room.itemNodes[0]?.loadsBlueprintId?.toString();
                 break;
             case `mob`:
                 formData.refersToObjectType = "mobBlueprint";
-                formData.names = getMobBlueprintNamesFromZone(zone);
+                let mobBlueprintNames = getMobBlueprintNamesFromZone(zone);
+                if (mobBlueprintNames) {
+                    formData.names = mobBlueprintNames;
+                }
                 formData.defaultOption = room.mobNodes[0]?.loadsBlueprintId?.toString();
                 break;
             case `room`:
