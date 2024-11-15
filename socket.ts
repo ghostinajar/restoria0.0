@@ -20,6 +20,7 @@ import {
   messageForUserHandler,
   messageForUsersRoomHandler,
   messageForUsersZoneHandler,
+  userSubmittedEraseItemBlueprintHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
@@ -175,7 +176,7 @@ const setupSocket = (io: any) => {
         async (roomData: IEditRoomFormData) => {
           const room = await getRoomOfUser(user);
           if (!room) {
-            throw new Error(`Room not found for user ${user.name}`)
+            throw new Error(`Room not found for user ${user.name}`);
           }
           purifyDescriptionOfObject(roomData);
           await editRoom(room, roomData, user);
@@ -192,19 +193,7 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedEraseItemBlueprint`,
         async (formData: { _id: string; name: string }) => {
-          const zone = await getZoneOfUser(user);
-          if (!zone) {
-            throw new Error(`Couldn't get ${user.username}'s zone.`);
-          }
-          await zone.eraseItemBlueprintById(formData._id);
-          logger.info(
-            `User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`
-          );
-          let message = makeMessage(
-            "success",
-            `You permanently erased the itemBlueprint for ${formData.name}.`
-          );
-          worldEmitter.emit(`messageFor${user.username}`, message);
+          userSubmittedEraseItemBlueprintHandler(formData, user);
         }
       );
 
