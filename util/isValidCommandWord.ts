@@ -1,14 +1,18 @@
 // isValidCommandWord
-import validCommandWords from '../constants/validCommandWords.js';
-import logger from '../logger.js';
+import validCommandWords from "../constants/validCommandWords.js";
+import logger from "../logger.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
-//TODO accept and log entire command object, not just commandWord
-function isValidCommandWord (commandWord: string) {
+function isValidCommandWord(commandWord: string) {
+  try {
     if (!validCommandWords.includes(commandWord.toLowerCase())) {
-        logger.error(`Server detected invalid commandWord: ${commandWord}`);
-        return false;
+      logger.error(`Server detected invalid commandWord: ${commandWord}`);
+      return false;
     }
     return true;
-};
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`isValidCommandWord`, error);
+  }
+}
 
 export default isValidCommandWord;
