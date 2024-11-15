@@ -17,101 +17,106 @@ import goto from "../commands/goto.js";
 import suggest from "../commands/suggest.js";
 import suggestions from "../commands/suggestions.js";
 import editor from "../commands/editor.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 async function processCommand(parsedCommand, user) {
-    // logger.debug(`Processing command: ${JSON.stringify(parsedCommand)}`);
-    switch (parsedCommand.commandWord) {
-        case `create`: {
-            await create(parsedCommand, user);
-            break;
+    try {
+        switch (parsedCommand.commandWord) {
+            case `create`: {
+                await create(parsedCommand, user);
+                break;
+            }
+            case `edit`: {
+                await edit(parsedCommand, user);
+                break;
+            }
+            case `editor`: {
+                await editor(parsedCommand, user);
+                break;
+            }
+            case `delete`: // we can't make a delete() function, so it calls erase()
+            case `erase`: {
+                await erase(parsedCommand, user);
+                break;
+            }
+            case `ex`:
+            case `exit`:
+            case `exits`: {
+                await exits(user);
+                break;
+            }
+            case `exa`:
+            case `examine`:
+            case `l`:
+            case `look`: {
+                await look(parsedCommand, user);
+                break;
+            }
+            case `goto`: {
+                await goto(user);
+                break;
+            }
+            case `n`:
+            case `north`:
+            case `e`:
+            case `east`:
+            case `s`:
+            case `south`:
+            case `w`:
+            case `west`:
+            case `u`:
+            case `up`:
+            case `d`:
+            case `down`: {
+                await move(parsedCommand, user);
+                break;
+            }
+            case `quit`: {
+                await quit(user);
+                break;
+            }
+            case `recall`: {
+                await recall(user);
+                break;
+            }
+            case `say`: {
+                say(parsedCommand, user);
+                break;
+            }
+            case `shout`: {
+                shout(parsedCommand, user);
+                break;
+            }
+            case `stat`:
+            case `stats`: {
+                stats(user);
+                break;
+            }
+            case `suggest`: {
+                await suggest(parsedCommand, user);
+                break;
+            }
+            case `suggestions`: {
+                await suggestions(user);
+                break;
+            }
+            case `t`:
+            case `tel`:
+            case `telepath`:
+            case `tell`: {
+                await telepath(parsedCommand, user);
+                break;
+            }
+            case `who`: {
+                await who(user);
+                break;
+            }
+            default: {
+                logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`);
+            }
         }
-        case `edit`: {
-            await edit(parsedCommand, user);
-            break;
-        }
-        case `editor`: {
-            await editor(parsedCommand, user);
-            break;
-        }
-        case `delete`: // we can't make a delete() function, so it calls erase()
-        case `erase`: {
-            await erase(parsedCommand, user);
-            break;
-        }
-        case `ex`:
-        case `exit`:
-        case `exits`: {
-            await exits(user);
-            break;
-        }
-        case `exa`:
-        case `examine`:
-        case `l`:
-        case `look`: {
-            await look(parsedCommand, user);
-            break;
-        }
-        case `goto`: {
-            await goto(user);
-            break;
-        }
-        case `n`:
-        case `north`:
-        case `e`:
-        case `east`:
-        case `s`:
-        case `south`:
-        case `w`:
-        case `west`:
-        case `u`:
-        case `up`:
-        case `d`:
-        case `down`: {
-            await move(parsedCommand, user);
-            break;
-        }
-        case `quit`: {
-            await quit(user);
-            break;
-        }
-        case `recall`: {
-            await recall(user);
-            break;
-        }
-        case `say`: {
-            say(parsedCommand, user);
-            break;
-        }
-        case `shout`: {
-            shout(parsedCommand, user);
-            break;
-        }
-        case `stat`:
-        case `stats`: {
-            stats(user);
-            break;
-        }
-        case `suggest`: {
-            await suggest(parsedCommand, user);
-            break;
-        }
-        case `suggestions`: {
-            await suggestions(user);
-            break;
-        }
-        case `t`:
-        case `tel`:
-        case `telepath`:
-        case `tell`: {
-            await telepath(parsedCommand, user);
-            break;
-        }
-        case `who`: {
-            await who(user);
-            break;
-        }
-        default: {
-            logger.error(`processCommand couldn't process a valid command: ${parsedCommand.commandWord}`);
-        }
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`processCommand`, error, user?.name);
     }
 }
 export default processCommand;
