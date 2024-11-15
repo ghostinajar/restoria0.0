@@ -1,12 +1,23 @@
 // makeMessage.ts
+import { rejections } from "winston";
 import IMessage from "../types/Message.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 function makeMessage(type : string, content : string | Array<string>) : IMessage {
-    let message = {
+    try {
+   let message = {
         type : type,
         content : content
     }
     return message;
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction(`functionName`, error);
+      return {
+        type: `rejection`,
+        content : `System error in creating message!`
+      }
+    }
+   
 }
 
 export default makeMessage;
