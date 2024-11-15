@@ -23,6 +23,9 @@ async function exits(user) {
                 key !== "_doc") {
                 // TODO if exit.toExternalZone, use user's location.inZone
                 let zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 const room = zone.rooms.find((room) => room._id.toString() === value.destinationLocation.inRoom.toString());
                 let direction = ``;
                 switch (key) {

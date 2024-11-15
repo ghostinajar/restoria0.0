@@ -193,6 +193,9 @@ const setupSocket = (io: any) => {
         `userSubmittedEraseItemBlueprint`,
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
+          if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+          }
           await zone.eraseItemBlueprintById(formData._id);
           logger.info(
             `User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`
@@ -209,6 +212,9 @@ const setupSocket = (io: any) => {
         `userSubmittedEraseMobBlueprint`,
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
+          if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+          }
           await zone.eraseMobBlueprintById(formData._id);
           logger.info(
             `User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`
@@ -225,6 +231,9 @@ const setupSocket = (io: any) => {
         `userSubmittedEraseRoom`,
         async (formData: { _id: string; name: string }) => {
           const zone = await getZoneOfUser(user);
+          if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+          }
           await zone.eraseRoomById(formData._id);
           logger.info(
             `User ${user.name} erased room ${formData.name}, id: ${formData._id}`
@@ -325,6 +334,9 @@ const setupSocket = (io: any) => {
           console.log("Received userSubmittedSuggestions event, saving...");
           console.log(suggestions);
           const zone = await getZoneOfUser(user);
+          if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+          }
           await saveSuggestions(suggestions, zone);
           socket.emit(
             "message",

@@ -22,6 +22,9 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
 
     if (target === "item" || target === "mob" || target === "room") {
       if (!userHasZoneAuthorId(zone.author.toString(), user)) {
@@ -84,7 +87,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       }
     }
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("create", error, user.name)
+    catchErrorHandlerForFunction("create", error, user.name);
   }
 }
 

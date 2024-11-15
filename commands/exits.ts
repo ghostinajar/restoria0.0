@@ -12,7 +12,7 @@ async function exits(user: IUser) {
   try {
     const room = await getRoomOfUser(user);
     if (!room) {
-      throw new Error(`Room not found for user ${user.name}`)
+      throw new Error(`Room not found for user ${user.name}`);
     }
     let exitsArray: Array<IMessage> = [];
 
@@ -29,6 +29,9 @@ async function exits(user: IUser) {
       ) {
         // TODO if exit.toExternalZone, use user's location.inZone
         let zone = await getZoneOfUser(user);
+        if (!zone) {
+          throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         const room = zone.rooms.find(
           (room) =>
             room._id.toString() === value.destinationLocation.inRoom.toString()
@@ -73,7 +76,7 @@ async function exits(user: IUser) {
     }
     worldEmitter.emit(`messageArrayFor${user.username}`, exitsArray);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("exits", error, user.name)
+    catchErrorHandlerForFunction("exits", error, user.name);
   }
 }
 

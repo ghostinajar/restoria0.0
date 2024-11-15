@@ -16,7 +16,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 async function suggest(parsedCommand: IParsedCommand, user: IUser) {
   try {
     let target = parsedCommand.directObject;
-    const zone: IZone = await getZoneOfUser(user);
+    const zone = await getZoneOfUser(user);
     if (!zone) {
       throw new Error(`Zone not found for user ${user.name}`)
     }

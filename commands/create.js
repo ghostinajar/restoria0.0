@@ -15,6 +15,9 @@ async function create(parsedCommand, user) {
             return;
         }
         const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         if (target === "item" || target === "mob" || target === "room") {
             if (!userHasZoneAuthorId(zone.author.toString(), user)) {
                 return;

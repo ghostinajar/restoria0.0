@@ -53,7 +53,10 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
     truncateDescription(newRoomDescription, user);
 
     room.history.modifiedDate = new Date();
-    const zone: IZone = await getZoneOfUser(user);
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
     if (!zone) {
       throw new Error(
         `couldn't find zone for user ${user.username}'s location.}`

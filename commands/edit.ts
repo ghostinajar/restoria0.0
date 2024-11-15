@@ -22,7 +22,10 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 async function edit(parsedCommand: IParsedCommand, user: IUser) {
   try {
     let target = parsedCommand.directObject;
-    const zone: IZone = await getZoneOfUser(user);
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
 
     if (!target) {
       worldEmitter.emit(
@@ -52,7 +55,10 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `mob`: {
-        const zone: IZone = await getZoneOfUser(user);
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+          throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `editMobBlueprintForm`,
           mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
@@ -111,7 +117,10 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `zone`: {
-        const zone: IZone = await getZoneOfUser(user);
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+          throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `editZoneForm`,
           zoneId: zone._id,

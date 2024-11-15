@@ -101,6 +101,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEraseItemBlueprint`, async (formData) => {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 await zone.eraseItemBlueprintById(formData._id);
                 logger.info(`User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the itemBlueprint for ${formData.name}.`);
@@ -108,6 +111,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEraseMobBlueprint`, async (formData) => {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 await zone.eraseMobBlueprintById(formData._id);
                 logger.info(`User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the mobBlueprint for ${formData.name}.`);
@@ -115,6 +121,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEraseRoom`, async (formData) => {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 await zone.eraseRoomById(formData._id);
                 logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
@@ -164,6 +173,9 @@ const setupSocket = (io) => {
                 console.log("Received userSubmittedSuggestions event, saving...");
                 console.log(suggestions);
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 await saveSuggestions(suggestions, zone);
                 socket.emit("message", makeMessage("success", `We saved the suggestions for ${zone.name}.`));
             });

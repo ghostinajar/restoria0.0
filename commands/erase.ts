@@ -16,7 +16,10 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
   try {
     const target = parsedCommand.directObject;
-    const zone: IZone = await getZoneOfUser(user);
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
 
     if (!target) {
       worldEmitter.emit(

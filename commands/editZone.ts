@@ -14,6 +14,9 @@ async function editZone(zoneData: IZoneData, user: IUser) {
   try {
     truncateDescription(zoneData.description, user);
     const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
     zone.history.modifiedDate = new Date();
 
     if (zoneData.name !== zone.name) {
@@ -54,7 +57,7 @@ async function editZone(zoneData: IZoneData, user: IUser) {
     );
     return;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("editZone", error, user.name)
+    catchErrorHandlerForFunction("editZone", error, user.name);
   }
 }
 

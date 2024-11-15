@@ -23,6 +23,9 @@ async function editRoom(room, roomData, user) {
         room.history.modifiedDate = new Date();
         const zone = await getZoneOfUser(user);
         if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
+        if (!zone) {
             throw new Error(`couldn't find zone for user ${user.username}'s location.}`);
         }
         room.name = roomData.name;

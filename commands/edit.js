@@ -16,6 +16,9 @@ async function edit(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject;
         const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         if (!target) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Edit what?`));
             return;
@@ -40,6 +43,9 @@ async function edit(parsedCommand, user) {
             }
             case `mob`: {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `editMobBlueprintForm`,
                     mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
@@ -99,6 +105,9 @@ async function edit(parsedCommand, user) {
             }
             case `zone`: {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `editZoneForm`,
                     zoneId: zone._id,

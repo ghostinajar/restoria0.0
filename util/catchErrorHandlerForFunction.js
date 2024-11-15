@@ -25,6 +25,6 @@ let user = { name: "Ralu" };
 try {
 }
 catch (error) {
-    catchErrorHandlerForFunction("functionName", error, user?.name);
+    catchErrorHandlerForFunction(`functionName`, error, user?.name);
 }
 export default catchErrorHandlerForFunction;

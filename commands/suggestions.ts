@@ -12,6 +12,9 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 async function suggestions(user: IUser) {
   try {
     const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
     worldEmitter.emit(`formPromptFor${user.username}`, {
       form: `suggestionsForm`,
       suggestions: zone.suggestions,

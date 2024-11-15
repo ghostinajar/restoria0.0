@@ -11,6 +11,9 @@ async function editZone(zoneData, user) {
     try {
         truncateDescription(zoneData.description, user);
         const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         zone.history.modifiedDate = new Date();
         if (zoneData.name !== zone.name) {
             // check updated zone name for duplicate in Names

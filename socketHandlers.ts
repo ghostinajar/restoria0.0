@@ -88,6 +88,9 @@ export async function handleSuggestion(
 ) {
   suggestionFormData = purifyAllStringPropsOfObject(suggestionFormData);
   const zone = await getZoneOfUser(user);
+  if (!zone) {
+    throw new Error(`Couldn't get ${user.username}'s zone.`);
+  }
   const author = await User.findById(zone.author);
   let authorName = author?.name || "the author"
 
