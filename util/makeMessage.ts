@@ -1,5 +1,5 @@
 // makeMessage.ts
-import { rejections } from "winston";
+// creates a message object (usually for emitting to a user socket)
 import IMessage from "../types/Message.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
