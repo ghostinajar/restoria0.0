@@ -7,14 +7,16 @@ import getZonesNamesByAuthorId from "../util/getZoneNamesByAuthorId.js";
 import makeMessage from "../util/makeMessage.js";
 async function goto(user) {
     try {
-        let zonesNames = await getZonesNamesByAuthorId(user._id.toString());
+        let zonesNames = (await getZonesNamesByAuthorId(user._id.toString())) ?? [];
+        // TODO handle possible undefined zonesNames for legit case where user
+        // hasn't created any zones yet
         const usersWithThisEditor = await User.find({ editor: user._id });
         // await promise array for the zones of each otherUser
         const userZoneNamesPromises = usersWithThisEditor.map((otherUser) => getZonesNamesByAuthorId(otherUser._id.toString()));
         const userZoneNamesArray = await Promise.all(userZoneNamesPromises);
         // add arrays from resolved promises to zonesNames
         userZoneNamesArray.forEach((userZoneNames) => {
-            zonesNames = [...zonesNames, ...userZoneNames];
+            zonesNames = [...zonesNames, ...(userZoneNames ?? [])];
         });
         if (zonesNames.length === 0) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `It seems you aren't the author or editor of any zones. Try CREATE ZONE`));
