@@ -20,7 +20,7 @@ async function getZoneNamesByAuthorId(authorId) {
     }
     catch (error) {
         catchErrorHandlerForFunction(`getZoneNamesByAuthorId`, error);
-        return []; // Ensure the function always returns an array even on error
+        return [];
     }
 }
 export default getZoneNamesByAuthorId;

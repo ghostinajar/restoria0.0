@@ -26,6 +26,7 @@ async function disconnectMultiplayerOnSocket(socket: any) {
     return false;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`disconnectMultiplayerOnSocket`, error);
+    return false;
   }
 }
 

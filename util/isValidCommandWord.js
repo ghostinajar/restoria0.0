@@ -12,6 +12,7 @@ function isValidCommandWord(commandWord) {
     }
     catch (error) {
         catchErrorHandlerForFunction(`isValidCommandWord`, error);
+        return false;
     }
 }
 export default isValidCommandWord;

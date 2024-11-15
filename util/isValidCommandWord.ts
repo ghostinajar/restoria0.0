@@ -12,6 +12,7 @@ function isValidCommandWord(commandWord: string) {
     return true;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`isValidCommandWord`, error);
+    return false;
   }
 }
 
