@@ -1,6 +1,6 @@
 import { IUser } from "../model/classes/User.js";
-import logger from "../logger.js";
 import IRuntimeProps from "../types/RuntimeProps.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 function initRuntimePropsForAgent(agent: IUser) {
   try {
@@ -13,8 +13,8 @@ function initRuntimePropsForAgent(agent: IUser) {
       maxMv: agent.calculateMaxMv(),
     };
     agent.runtimeProps = runtimeProps;
-  } catch (err) {
-    logger.error(`initRuntimePropsForAgent failed in agent ${agent.name}`);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`functionName`, error, agent.name);
   }
 }
 
