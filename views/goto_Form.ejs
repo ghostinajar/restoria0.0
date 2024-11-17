@@ -44,7 +44,6 @@
         inZone: gotoSelectZone.value || "ERROR getting roomId from form",
         inRoom: gotoSelectRoom.value || "ERROR getting zoneId from form",
       };
-      console.log(gotoFormData);
 
       socket.emit("userSubmittedGoto", gotoFormData);
       gotoForm.reset();

@@ -483,8 +483,6 @@
     socket.on("openEditRoomForm", (formData) => {
       // persist the data from server
       workingEditRoomData = formData.roomData;
-      console.log(workingEditRoomData);
-
       mobBlueprints = formData.zoneData.mobBlueprintNames;
       itemBlueprints = formData.zoneData.itemBlueprintNames;
       rooms = formData.zoneData.rooms;

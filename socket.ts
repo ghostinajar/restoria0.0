@@ -21,6 +21,7 @@ import {
   messageForUsersRoomHandler,
   messageForUsersZoneHandler,
   userSubmittedEditItemBlueprintHandler,
+  userSubmittedEditMobBlueprintHandler,
   userSubmittedEraseItemBlueprintHandler,
   userSubmittedEraseMobBlueprintHandler,
   userXChangingRoomsHandler,
@@ -33,9 +34,7 @@ import createMobBlueprint, {
   ICreateMobFormData,
 } from "./commands/createMobBlueprint.js";
 import mongoose from "mongoose";
-import editMobBlueprint, {
-  IEditMobFormData,
-} from "./commands/editMobBlueprint.js";
+import { IEditMobFormData } from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createItemBlueprint, {
   ICreateItemBlueprintFormData,
@@ -47,7 +46,6 @@ import createZone, { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, {
-  purifyAllStringPropsOfObject,
   purifyCommandInput,
 } from "./util/purify.js";
 import relocateUser from "./util/relocateUser.js";
@@ -152,9 +150,9 @@ const setupSocket = (io: any) => {
         `userSubmittedEditItemBlueprint`,
         async (
           itemId: mongoose.Types.ObjectId,
-          itemBlueprintData: IEditItemBlueprintFormData,
+          itemBlueprintData: IEditItemBlueprintFormData
         ) => {
-          userSubmittedEditItemBlueprintHandler(
+          await userSubmittedEditItemBlueprintHandler(
             itemId,
             itemBlueprintData,
             user
@@ -168,9 +166,11 @@ const setupSocket = (io: any) => {
           mobId: mongoose.Types.ObjectId,
           mobBlueprintData: IEditMobFormData
         ) => {
-          purifyDescriptionOfObject(mobBlueprintData);
-          await editMobBlueprint(mobId, mobBlueprintData, user);
-          stats(user);
+          await userSubmittedEditMobBlueprintHandler(
+            mobId,
+            mobBlueprintData,
+            user
+          );
         }
       );
 
@@ -311,8 +311,6 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedSuggestions`,
         async (suggestions: Array<ISuggestion>) => {
-          console.log("Received userSubmittedSuggestions event, saving...");
-          console.log(suggestions);
           const zone = await getZoneOfUser(user);
           if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);

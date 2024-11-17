@@ -10,6 +10,7 @@ import worldEmitter from "./model/classes/WorldEmitter.js";
 import makeMessage from "./util/makeMessage.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
 import editItemBlueprint from "./commands/editItemBlueprint.js";
+import editMobBlueprint from "./commands/editMobBlueprint.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -131,16 +132,22 @@ export const messageForUsersZoneHandler = async (message, socket, user) => {
 };
 export const userSubmittedEditItemBlueprintHandler = async (itemId, itemBlueprintData, user) => {
     try {
-        console.log(itemId);
-        console.log(itemBlueprintData);
-        console.log(user);
         purifyDescriptionOfObject(itemBlueprintData);
-        console.log(itemBlueprintData);
         await editItemBlueprint(itemId, itemBlueprintData, user);
         stats(user);
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEditItemBlueprintHandler`, error);
+    }
+};
+export const userSubmittedEditMobBlueprintHandler = async (mobId, mobBlueprintData, user) => {
+    try {
+        purifyDescriptionOfObject(mobBlueprintData);
+        await editMobBlueprint(mobId, mobBlueprintData, user);
+        stats(user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`functionName`, error, user?.name);
     }
 };
 export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => {

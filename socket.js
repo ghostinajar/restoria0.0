@@ -10,12 +10,11 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
-import editMobBlueprint from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
 import createZone from "./commands/createZone.js";
@@ -75,12 +74,10 @@ const setupSocket = (io) => {
                 userSentCommandHandler(socket, userInput, user);
             });
             socket.on(`userSubmittedEditItemBlueprint`, async (itemId, itemBlueprintData) => {
-                userSubmittedEditItemBlueprintHandler(itemId, itemBlueprintData, user);
+                await userSubmittedEditItemBlueprintHandler(itemId, itemBlueprintData, user);
             });
             socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
-                purifyDescriptionOfObject(mobBlueprintData);
-                await editMobBlueprint(mobId, mobBlueprintData, user);
-                stats(user);
+                await userSubmittedEditMobBlueprintHandler(mobId, mobBlueprintData, user);
             });
             socket.on(`userSubmittedEditRoom`, async (roomData) => {
                 const room = await getRoomOfUser(user);

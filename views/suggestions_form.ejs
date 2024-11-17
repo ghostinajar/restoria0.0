@@ -161,7 +161,6 @@
       //   ...itemBlueprintSuggestions,
       //   ...mobBlueprintSuggestions,
       // ];
-      console.log(suggestions);
       socket.emit("userSubmittedSuggestions", suggestions);
 
       suggestionsForm.reset();

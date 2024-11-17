@@ -19,6 +19,9 @@ import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js
 import editItemBlueprint, {
   IEditItemBlueprintFormData,
 } from "./commands/editItemBlueprint.js";
+import editMobBlueprint, {
+  IEditMobFormData,
+} from "./commands/editMobBlueprint.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -178,15 +181,28 @@ export const userSubmittedEditItemBlueprintHandler = async (
   user: IUser
 ) => {
   try {
-    console.log(itemId);
-    console.log(itemBlueprintData);
-    console.log(user);
     purifyDescriptionOfObject(itemBlueprintData);
-    console.log(itemBlueprintData);
     await editItemBlueprint(itemId, itemBlueprintData, user);
     stats(user);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`userSubmittedEditItemBlueprintHandler`, error);
+    catchErrorHandlerForFunction(
+      `userSubmittedEditItemBlueprintHandler`,
+      error
+    );
+  }
+};
+
+export const userSubmittedEditMobBlueprintHandler = async (
+  mobId: mongoose.Types.ObjectId,
+  mobBlueprintData: IEditMobFormData,
+  user: IUser
+) => {
+  try {
+    purifyDescriptionOfObject(mobBlueprintData);
+    await editMobBlueprint(mobId, mobBlueprintData, user);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`functionName`, error, user?.name);
   }
 };
 
