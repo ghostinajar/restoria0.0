@@ -24,7 +24,7 @@ export function purifyAllStringPropsOfObject(object: any) {
         if (typeof object[key] === "string") {
           object[key] = wordFilter.clean(purify.sanitize(object[key]));
         } else if (Array.isArray(object[key])) {
-          object[key] = object[key].map((item) =>
+          object[key] = object[key].map((item: any) =>
             typeof item === "string"
               ? wordFilter.clean(purify.sanitize(item))
               : purifyAllStringPropsOfObject(item)

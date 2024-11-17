@@ -1,7 +1,10 @@
 // socketHandlers
 import mongoose from "mongoose";
 import logger from "./logger.js";
-import { refersToObjectType, suggestionStatusType } from "./model/classes/Suggestion.js";
+import {
+  refersToObjectType,
+  suggestionStatusType,
+} from "./model/classes/Suggestion.js";
 import User, { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
@@ -93,11 +96,15 @@ export async function handleSuggestion(
     throw new Error(`Couldn't get ${user.username}'s zone.`);
   }
   const author = await User.findById(zone.author);
-  let authorName = author?.name || "the author"
+  let authorName = author?.name || "the author";
 
   if (zone.history.completionStatus === "published") {
-    worldEmitter.emit(`messageFor${user.username}`, 
-      makeMessage('rejection', `This zone is already published! Contact ${authorName} with your suggestion.`)
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(
+        "rejection",
+        `This zone is already published! Contact ${authorName} with your suggestion.`
+      )
     );
     return;
   }
@@ -160,7 +167,10 @@ export const messageForUsersZoneHandler = async (
   socket.to(user.location.inZone.toString()).emit(`message`, message);
 };
 
-export const userSubmittedEraseItemBlueprintHandler = async (formData: { _id: string; name: string }, user: IUser) => {
+export const userSubmittedEraseItemBlueprintHandler = async (
+  formData: { _id: string; name: string },
+  user: IUser
+) => {
   try {
     const zone = await getZoneOfUser(user);
     if (!zone) {
@@ -176,9 +186,40 @@ export const userSubmittedEraseItemBlueprintHandler = async (formData: { _id: st
     );
     worldEmitter.emit(`messageFor${user.username}`, message);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`userSubmittedEraseItemBlueprintHandler`, error, user?.name);
+    catchErrorHandlerForFunction(
+      `userSubmittedEraseItemBlueprintHandler`,
+      error,
+      user?.name
+    );
   }
-}
+};
+
+export const userSubmittedEraseMobBlueprintHandler = async (
+  formData: { _id: string; name: string },
+  user: IUser
+) => {
+  try {
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
+    await zone.eraseMobBlueprintById(formData._id);
+    logger.info(
+      `User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`
+    );
+    let message = makeMessage(
+      "success",
+      `You permanently erased the mobBlueprint for ${formData.name}.`
+    );
+    worldEmitter.emit(`messageFor${user.username}`, message);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedEraseMobBlueprintHandler`,
+      error,
+      user?.name
+    );
+  }
+};
 
 export const userXLeavingGameHandler = async (user: IUser, socket: any) => {
   // logger.debug(

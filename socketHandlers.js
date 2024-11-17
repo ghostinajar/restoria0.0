@@ -84,7 +84,7 @@ export async function handleSuggestion(suggestionFormData, user) {
     const author = await User.findById(zone.author);
     let authorName = author?.name || "the author";
     if (zone.history.completionStatus === "published") {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage('rejection', `This zone is already published! Contact ${authorName} with your suggestion.`));
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `This zone is already published! Contact ${authorName} with your suggestion.`));
         return;
     }
     const suggestion = {
@@ -141,6 +141,21 @@ export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => 
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEraseItemBlueprintHandler`, error, user?.name);
+    }
+};
+export const userSubmittedEraseMobBlueprintHandler = async (formData, user) => {
+    try {
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
+        await zone.eraseMobBlueprintById(formData._id);
+        logger.info(`User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`);
+        let message = makeMessage("success", `You permanently erased the mobBlueprint for ${formData.name}.`);
+        worldEmitter.emit(`messageFor${user.username}`, message);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEraseMobBlueprintHandler`, error, user?.name);
     }
 };
 export const userXLeavingGameHandler = async (user, socket) => {
