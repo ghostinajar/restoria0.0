@@ -8,7 +8,7 @@ function isValidName(name: string): boolean {
       return true;
     }
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`functionName`, error);
+    catchErrorHandlerForFunction(`isValidName`, error);
     return false;
   }
 }

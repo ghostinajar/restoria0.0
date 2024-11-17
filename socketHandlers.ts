@@ -8,12 +8,17 @@ import {
 import User, { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
-import { purifyAllStringPropsOfObject } from "./util/purify.js";
+import purifyDescriptionOfObject, {
+  purifyAllStringPropsOfObject,
+} from "./util/purify.js";
 import { historyStartingNow } from "./model/classes/History.js";
 import stats from "./commands/stats.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import makeMessage from "./util/makeMessage.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
+import editItemBlueprint, {
+  IEditItemBlueprintFormData,
+} from "./commands/editItemBlueprint.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -165,6 +170,24 @@ export const messageForUsersZoneHandler = async (
   user: IUser
 ) => {
   socket.to(user.location.inZone.toString()).emit(`message`, message);
+};
+
+export const userSubmittedEditItemBlueprintHandler = async (
+  itemId: mongoose.Types.ObjectId,
+  itemBlueprintData: IEditItemBlueprintFormData,
+  user: IUser
+) => {
+  try {
+    console.log(itemId);
+    console.log(itemBlueprintData);
+    console.log(user);
+    purifyDescriptionOfObject(itemBlueprintData);
+    console.log(itemBlueprintData);
+    await editItemBlueprint(itemId, itemBlueprintData, user);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`userSubmittedEditItemBlueprintHandler`, error);
+  }
 };
 
 export const userSubmittedEraseItemBlueprintHandler = async (

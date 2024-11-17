@@ -11,7 +11,7 @@ function makeMessage(type : string, content : string | Array<string>) : IMessage
     }
     return message;
     } catch (error: unknown) {
-      catchErrorHandlerForFunction(`functionName`, error);
+      catchErrorHandlerForFunction(`makeMessage`, error);
       return {
         type: `rejection`,
         content : `System error in creating message!`

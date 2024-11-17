@@ -8,7 +8,7 @@ function makeMessage(type, content) {
         return message;
     }
     catch (error) {
-        catchErrorHandlerForFunction(`functionName`, error);
+        catchErrorHandlerForFunction(`makeMessage`, error);
         return {
             type: `rejection`,
             content: `System error in creating message!`

@@ -12,7 +12,7 @@ function initRuntimePropsForAgent(agent) {
         agent.runtimeProps = runtimeProps;
     }
     catch (error) {
-        catchErrorHandlerForFunction(`functionName`, error, agent.name);
+        catchErrorHandlerForFunction(`initRuntimePropsForAgent`, error, agent.name);
     }
 }
 export default initRuntimePropsForAgent;

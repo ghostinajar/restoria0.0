@@ -11,7 +11,7 @@ export function purifyCommandInput(input) {
         return wordFilter.clean(sanitizedInput);
     }
     catch (error) {
-        catchErrorHandlerForFunction(`functionName`, error);
+        catchErrorHandlerForFunction(`purifyCommandInput`, error);
         return "purify-command-input-error";
     }
 }
@@ -35,7 +35,7 @@ export function purifyAllStringPropsOfObject(object) {
         return object;
     }
     catch (error) {
-        catchErrorHandlerForFunction(`functionName`, error);
+        catchErrorHandlerForFunction(`purifyAllStringPropsOfObject`, error);
         return object;
     }
 }
@@ -64,7 +64,7 @@ export function purifyDescriptionOfObject(object) {
         return object;
     }
     catch (error) {
-        catchErrorHandlerForFunction(`functionName`, error);
+        catchErrorHandlerForFunction(`purifyDescriptionOfObject`, error);
         return {
             look: '',
             examine: '',

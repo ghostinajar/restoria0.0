@@ -9,7 +9,7 @@ function isValidName(name) {
         }
     }
     catch (error) {
-        catchErrorHandlerForFunction(`functionName`, error);
+        catchErrorHandlerForFunction(`isValidName`, error);
         return false;
     }
 }

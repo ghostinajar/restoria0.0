@@ -20,6 +20,7 @@ import {
   messageForUserHandler,
   messageForUsersRoomHandler,
   messageForUsersZoneHandler,
+  userSubmittedEditItemBlueprintHandler,
   userSubmittedEraseItemBlueprintHandler,
   userSubmittedEraseMobBlueprintHandler,
   userXChangingRoomsHandler,
@@ -51,7 +52,6 @@ import purifyDescriptionOfObject, {
 } from "./util/purify.js";
 import relocateUser from "./util/relocateUser.js";
 import { ILocation } from "./model/classes/Location.js";
-import { historyStartingNow } from "./model/classes/History.js";
 import { ISuggestion, refersToObjectType } from "./model/classes/Suggestion.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 
@@ -152,11 +152,13 @@ const setupSocket = (io: any) => {
         `userSubmittedEditItemBlueprint`,
         async (
           itemId: mongoose.Types.ObjectId,
-          itemBlueprintData: IEditItemBlueprintFormData
+          itemBlueprintData: IEditItemBlueprintFormData,
         ) => {
-          purifyDescriptionOfObject(itemBlueprintData);
-          await editItemBlueprint(itemId, itemBlueprintData, user);
-          stats(user);
+          userSubmittedEditItemBlueprintHandler(
+            itemId,
+            itemBlueprintData,
+            user
+          );
         }
       );
 

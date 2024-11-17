@@ -12,7 +12,7 @@ export function purifyCommandInput(input: string): string {
     let sanitizedInput = purify.sanitize(input);
     return wordFilter.clean(sanitizedInput);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`functionName`, error);
+    catchErrorHandlerForFunction(`purifyCommandInput`, error);
     return "purify-command-input-error";
   }
 }
@@ -36,7 +36,7 @@ export function purifyAllStringPropsOfObject(object: any) {
     }
     return object;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`functionName`, error);
+    catchErrorHandlerForFunction(`purifyAllStringPropsOfObject`, error);
     return object;
   }
 }
@@ -77,7 +77,7 @@ export function purifyDescriptionOfObject(object: any) {
     }
     return object;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`functionName`, error);
+    catchErrorHandlerForFunction(`purifyDescriptionOfObject`, error);
     return {
       look: '',
       examine: '',

@@ -14,7 +14,7 @@ function initRuntimePropsForAgent(agent: IUser) {
     };
     agent.runtimeProps = runtimeProps;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`functionName`, error, agent.name);
+    catchErrorHandlerForFunction(`initRuntimePropsForAgent`, error, agent.name);
   }
 }
 
