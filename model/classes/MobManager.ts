@@ -1,39 +1,60 @@
 // MobManager
+// Manages all loading and destroying of active mob instances in game
 import logger from "../../logger.js";
 import worldEmitter from "./WorldEmitter.js";
 import Mob, { IMob } from "./Mob.js";
 import { IMobBlueprint } from "./MobBlueprint.js";
+import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 
 class MobManager {
   constructor() {
     this.mobs = new Map(); // Stores all mobs with their _id.toString() as key
-    worldEmitter.on("roomDestroyingMob", this.removingMobHandler);
+    worldEmitter.on("roomDestroyingMob", this.roomDestroyingMobHandler);
     worldEmitter.on("roomRequestingNewMob", this.roomRequestingNewMobHandler);
   }
 
   mobs: Map<string, IMob> | null;
 
   roomRequestingNewMobHandler = async (blueprint: IMobBlueprint) => {
-    if (!this.mobs) {
-      return null;
+    try {
+      if (!this.mobs) {
+        logger.warn(
+          "MobManager 'mobs' map is null when attempting to add a new mob."
+        );
+        return null;
+      }
+      if (!blueprint || !blueprint._id) {
+        logger.error(
+          "Invalid blueprint provided to roomRequestingNewMobHandler."
+        );
+        return null;
+      }
+      // Create a copy of the blueprint and give its own unique Id
+      const mob = new Mob(blueprint);
+      this.mobs.set(mob._id.toString(), mob);
+      worldEmitter.emit(`mobManagerAddedMobFromBlueprint${blueprint._id}`, mob);
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction("roomRequestingNewMobHandler", error);
     }
-    // Create a copy of the blueprint and give its own unique Id
-    const mob = new Mob(blueprint);
-    this.mobs.set(mob._id.toString(), mob);
-    //logger.log(`debug`, `mobManager added ${mob.name} to mobs. Mobs after adding: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`);
-    worldEmitter.emit(`mobManagerAddedMobFromBlueprint${blueprint._id}`, mob);
   };
 
-  removingMobHandler = async (mobId: string) => {
-    // logger.debug(`removingMobHandler called...`)
-    // logger.debug(`removingMobHandler removing mob with id: ${mobId}`)
-    await this.removeMobById(mobId);
-    worldEmitter.emit(`mobManagerRemovedMob${mobId}`);
+  roomDestroyingMobHandler = async (mobId: string) => {
+    try {
+      if (!mobId) {
+        logger.warn("roomDestroyingMobHandler called with invalid mobId.");
+        return;
+      }
+      await this.removeMobById(mobId);
+      worldEmitter.emit(`mobManagerRemovedMob${mobId}`);
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction("roomDestroyingMobHandler", error);
+    }
   };
 
   async getMobById(id: string) {
     try {
       if (!this.mobs) {
+        logger.warn("MobManager attempted to get mob from null 'mobs' map.");
         return null;
       }
       const mob = this.mobs.get(id.toString());
@@ -43,24 +64,25 @@ class MobManager {
         logger.error(`mobManager can't find mob with id: ${id}.`);
         return null;
       }
-    } catch (err: any) {
-      logger.error(`Error in getMobById: ${err.message}`);
-      throw err;
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction("roomDestroyingMobHandler", error);
     }
   }
 
   async removeMobById(id: string) {
     try {
       if (!this.mobs) {
+        logger.warn(
+          "MobManager attempted to remove mob from null 'mobs' map."
+        );
         return null;
       }
-      // logger.debug(`Removing mob with id "${id}"`);
       if (this.mobs.has(id)) {
         this.mobs.delete(id);
+        logger.info(`MobManager removed mob with id "${id}".`);
       } else {
-        logger.warn(`Mob with id "${id}" does not exist.`);
+        logger.warn(`MobManager: mob with id "${id}" does not exist.`);
       }
-      //logger.info(`Mob Removed. Active mobs remaining: ${JSON.stringify(Array.from(this.mobs.values()).map(mob => mob.name))}`)
     } catch (err: any) {
       logger.error(`Error in removeMobById: ${err.message}`);
       throw err;
@@ -68,8 +90,9 @@ class MobManager {
   }
 
   clearContents() {
+    logger.info("MobManager clearing all mobs and event listeners.");
     this.mobs = null;
-    worldEmitter.off("roomDestroyingMob", this.removingMobHandler);
+    worldEmitter.off("roomDestroyingMob", this.roomDestroyingMobHandler);
     worldEmitter.off("roomRequestingNewMob", this.roomRequestingNewMobHandler);
   }
 }

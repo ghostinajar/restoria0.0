@@ -1,11 +1,11 @@
 // lookTarget
 // populates the lookArray for the look command
-import logger from "../logger.js";
 import { IItem } from "../model/classes/Item.js";
 import { IMob } from "../model/classes/Mob.js";
 import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
 import IMessage from "../types/Message.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 
 function pushTargetEquipped(
@@ -30,11 +30,7 @@ function pushTargetEquipped(
       }
     }
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      logger.error(`pushTargetEquipped error: ${error.message}`);
-    } else {
-      logger.error(`pushTargetEquipped error: ${error}`);
-    }
+    catchErrorHandlerForFunction("pushTargetEquipped", error)
   }
 }
 
@@ -52,11 +48,7 @@ function pushTargetInventory(
       }
     }
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      logger.error(`pushTargetInventory error: ${error.message}`);
-    } else {
-      logger.error(`pushTargetInventory error: ${error}`);
-    }
+    catchErrorHandlerForFunction("pushTargetInventory", error)
   }
 }
 
@@ -110,11 +102,7 @@ function lookTarget(target: string, room: IRoom, lookArray: Array<IMessage>) {
       makeMessage(`rejected`, `There doesn't seem to be a '${target}' here.`)
     );
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      logger.error(`lookTarget error for target ${target}: ${error.message}`);
-    } else {
-      logger.error(`lookTarget error for target ${target}: ${error}`);
-    }
+    catchErrorHandlerForFunction("lookTarget", error)
   }
 }
 

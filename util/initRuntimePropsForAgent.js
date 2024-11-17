@@ -1,4 +1,4 @@
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 function initRuntimePropsForAgent(agent) {
     try {
         const runtimeProps = {
@@ -11,8 +11,8 @@ function initRuntimePropsForAgent(agent) {
         };
         agent.runtimeProps = runtimeProps;
     }
-    catch (err) {
-        logger.error(`initRuntimePropsForAgent failed in agent ${agent.name}`);
+    catch (error) {
+        catchErrorHandlerForFunction(`functionName`, error, agent.name);
     }
 }
 export default initRuntimePropsForAgent;

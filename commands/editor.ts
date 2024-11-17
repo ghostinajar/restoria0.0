@@ -1,9 +1,8 @@
 // editor
 // allows user to change the person who has access to edit their zones
-
-import logger from "../logger.js";
 import User, { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 
@@ -80,18 +79,7 @@ async function editor(parsedCommand: IParsedCommand, user: IUser) {
     );
     worldEmitter.emit(`messageArrayFor${user.username}`, editorHelpArray);
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`"editor" function error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`"editor" function error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("editor", error, user.name)
   }
 }
 

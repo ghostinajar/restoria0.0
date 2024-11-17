@@ -1,4 +1,6 @@
 // Room
+// Class and schema for room blueprint
+// Also allows active room instance to manage its contents (items/mobs/users)
 import mongoose from "mongoose";
 import historySchema, { IHistory } from "./History.js";
 import descriptionSchema, { IDescription } from "./Description.js";
@@ -13,6 +15,7 @@ import { IMob } from "./Mob.js";
 import { IItem } from "./Item.js";
 import { IUser } from "./User.js";
 import ROOM_TYPE from "../../constants/ROOM_TYPE.js";
+import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 
 const { Schema } = mongoose;
 
@@ -188,15 +191,25 @@ roomSchema.methods.addEntityTo = function (
   entityType: string,
   instance: IMob | IItem | IUser
 ) {
-  //if the array exists, and the instance doesn't already exist in the array, add it
-  if (
-    this[entityType] &&
-    !this[entityType].find(
-      (el: IMob | IItem | IUser) =>
-        el._id.toString() === instance._id.toString()
-    )
-  ) {
-    this[entityType].push(instance);
+  try {
+    if (
+      this[entityType] &&
+      !this[entityType].find(
+        (el: IMob | IItem | IUser) =>
+          el._id.toString() === instance._id.toString()
+      )
+    ) {
+      this[entityType].push(instance);
+    } else {
+      logger.warn(
+        `Entity ${instance._id} already exists in ${entityType} for room ${this._id}`
+      );
+    }
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `Room.addEntityTo for room id ${this._id}, entityType: ${entityType}`,
+      error
+    );
   }
 };
 
@@ -204,41 +217,42 @@ roomSchema.methods.removeEntityFrom = function (
   entityType: string,
   instance: IMob | IItem | IUser
 ) {
-  if (this[entityType]) {
-    this[entityType] = this[entityType].filter(function (
-      entity: IMob | IItem | IUser
-    ) {
-      return entity !== instance;
-    });
+  try {
+    if (this[entityType]) {
+      this[entityType] = this[entityType].filter(function (
+        entity: IMob | IItem | IUser
+      ) {
+        return entity !== instance;
+      });
+    }
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `Room.removeEntityFrom for room id ${this._id}`,
+      error
+    );
   }
 };
 
 roomSchema.methods.initiate = async function () {
-  //loadout mobs array
-  this.mobs = [];
-  if (this.mobNodes) {
-    await activateMobNodes(this.mobNodes, this.mobs);
-  } else {
-    //logger.log(`loadout`, `No mobnodes in ${this.name}.`);
+  try {
+    //loadout mobs array
+    this.mobs = [];
+    if (this.mobNodes) {
+      await activateMobNodes(this.mobNodes, this.mobs);
+    }
+
+    //loadout inventory array
+    this.inventory = [];
+    await activateItemNodes(this.itemNodes, this.inventory);
+
+    //open users array
+    this.users = [];
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `Room.initiate for room id ${this._id}`,
+      error
+    );
   }
-  // logger.log(`loadout`,
-  //   `Mobs in room "${this.name}": ${this.mobs.map((mob: IMob) => {
-  //     return mob.name;
-  //   })}`
-  // );
-
-  //loadout inventory array
-  this.inventory = [];
-  await activateItemNodes(this.itemNodes, this.inventory);
-  // logger.log(
-  //   `loadout`,
-  //   `Inventory in room "${this.name}": ${JSON.stringify(
-  //     this.inventory.map((item: IItem) => item.name)
-  //   )}`
-  // );
-
-  //open users array
-  this.users = [];
 };
 
 roomSchema.pre("save", function (next) {
@@ -249,10 +263,17 @@ roomSchema.pre("save", function (next) {
 });
 
 roomSchema.methods.clearContents = async function () {
-  await destroyMobs(this.mobs);
-  this.mobs = [];
-  this.inventory = [];
-  this.users = [];
+  try {
+    await destroyMobs(this.mobs);
+    this.mobs = [];
+    this.inventory = [];
+    this.users = [];
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `Room.clearContents for room id ${this._id}`,
+      error
+    );
+  }
 };
 
 export default roomSchema;

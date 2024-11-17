@@ -13,6 +13,7 @@ import truncateDescription from "../util/truncateDescription.js";
 import exits from "./exits.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 // Return room, or a message explaining failure (if by user, emit message to their socket)
 async function createRoom(roomFormData, user) {
     try {
@@ -140,13 +141,7 @@ async function createRoom(roomFormData, user) {
         await exits(user);
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`createRoom error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`createRoom error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("createRoom", error, user.name);
     }
 }
 export default createRoom;

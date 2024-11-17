@@ -1,3 +1,5 @@
+// erase
+// switch on target to open erase form for item, mob, room
 import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -9,14 +11,15 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
   try {
     const target = parsedCommand.directObject;
-    if (!target) {
-      throw new Error("parsedCommand missing directObject property")
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
     }
-    const zone: IZone = await getZoneOfUser(user);
 
     if (!target) {
       worldEmitter.emit(
@@ -88,6 +91,9 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `room`: {
         const originRoom = await getRoomOfUser(user);
+        if (!originRoom) {
+          throw new Error(`Room not found for user ${user.name}`)
+        }
         let exitNames: Array<{ _id: string; name: string }> = [];
         for (let [key, value] of Object.entries(originRoom.exits)) {
           if (
@@ -177,22 +183,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       }
     }
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(
-        `"erase" function error for user ${user.username}: ${error.message}`
-      );
-    } else {
-      logger.error(
-        `"erase" function error for user ${user.username}: ${error}`
-      );
-    }
+    catchErrorHandlerForFunction("erase", error, user.name)
   }
 }
 

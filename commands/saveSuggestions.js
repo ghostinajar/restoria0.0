@@ -1,6 +1,4 @@
-// saveSuggestions
-// saves changes to suggestions from a user suggestions form submission
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function saveSuggestions(suggestions, zone) {
     try {
         zone.suggestions = suggestions;
@@ -8,12 +6,7 @@ async function saveSuggestions(suggestions, zone) {
         zone.initRooms();
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`server error for zone ${zone.name}: ${error.message}`);
-        }
-        else {
-            logger.error(`server error for zone ${zone.name}: ${error}`);
-        }
+        catchErrorHandlerForFunction("saveSuggestions", error);
     }
 }
 export default saveSuggestions;

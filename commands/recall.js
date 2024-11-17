@@ -1,7 +1,5 @@
-// recall
-// moves user to world recall
-import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 import resetUserLocation from "../util/resetUserLocation.js";
 import look from "./look.js";
@@ -14,13 +12,7 @@ async function recall(user) {
         await look({ commandWord: "look" }, user);
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`recall error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`recall error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("recall", error, user.name);
     }
 }
 export default recall;

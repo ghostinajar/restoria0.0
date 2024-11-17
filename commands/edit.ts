@@ -15,14 +15,17 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { affixTypes } from "../constants/AFFIX_TYPE.js";
 import { damageTypes } from "../constants/DAMAGE_TYPE.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
-import logger from "../logger.js";
 import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getNameById from "../util/getNameById.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 async function edit(parsedCommand: IParsedCommand, user: IUser) {
   try {
     let target = parsedCommand.directObject;
-    const zone: IZone = await getZoneOfUser(user);
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
 
     if (!target) {
       worldEmitter.emit(
@@ -52,7 +55,10 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `mob`: {
-        const zone: IZone = await getZoneOfUser(user);
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+          throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `editMobBlueprintForm`,
           mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
@@ -64,6 +70,9 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `room`: {
         const room = await getRoomOfUser(user);
+        if (!room) {
+          throw new Error(`room not found for user ${user.name}`);
+        }
         const itemBlueprintNames = getItemBlueprintNamesFromZone(zone);
         const mobBlueprintNames = getMobBlueprintNamesFromZone(zone);
         const itemNodes = getItemNodesFromRoom(room, zone);
@@ -108,7 +117,10 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `zone`: {
-        const zone: IZone = await getZoneOfUser(user);
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+          throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `editZoneForm`,
           zoneId: zone._id,
@@ -127,20 +139,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       }
     }
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(
-        `"edit" function error for user ${user.username}: ${error.message}`
-      );
-    } else {
-      logger.error(`"edit" function error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("edit", error, user.name);
   }
 }
 
@@ -162,11 +161,7 @@ function getItemNodesFromRoom(room: IRoom, zone: IZone) {
     }
     return itemNodesList;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      logger.error(`getItemNodesFromRoom error: ${error.message}`);
-    } else {
-      logger.error(`getItemNodesFromRoom error: ${error}`);
-    }
+    catchErrorHandlerForFunction("getItemNodesFromRoom", error);
   }
 }
 
@@ -182,17 +177,13 @@ function getMobNodesFromRoom(room: IRoom, zone: IZone) {
       const nodeObject = {
         _id: node._id,
         loadsBlueprintId: node.loadsBlueprintId,
-        name: mobName,
+        name: mobName || "",
       };
       mobNodesList.push(nodeObject);
     }
     return mobNodesList;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      logger.error(`getMobNodesFromRoom error: ${error.message}`);
-    } else {
-      logger.error(`getMobNodesFromRoom error: ${error}`);
-    }
+    catchErrorHandlerForFunction("getMobNodesFromRoom", error);
   }
 }
 

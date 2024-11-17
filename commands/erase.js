@@ -1,3 +1,5 @@
+// erase
+// switch on target to open erase form for item, mob, room
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
@@ -6,13 +8,14 @@ import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.j
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function erase(parsedCommand, user) {
     try {
         const target = parsedCommand.directObject;
-        if (!target) {
-            throw new Error("parsedCommand missing directObject property");
-        }
         const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         if (!target) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Erase what? Try ERASE ROOM, ERASE ITEM, or ERASE MOB.`));
             return;
@@ -54,6 +57,9 @@ async function erase(parsedCommand, user) {
             }
             case `room`: {
                 const originRoom = await getRoomOfUser(user);
+                if (!originRoom) {
+                    throw new Error(`Room not found for user ${user.name}`);
+                }
                 let exitNames = [];
                 for (let [key, value] of Object.entries(originRoom.exits)) {
                     if (value &&
@@ -125,13 +131,7 @@ async function erase(parsedCommand, user) {
         }
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`"erase" function error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`"erase" function error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("erase", error, user.name);
     }
 }
 export default erase;

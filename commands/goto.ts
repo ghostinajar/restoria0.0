@@ -1,25 +1,17 @@
 // goto
 // allows user to transport to any room in a zone they are building or editing
-
-import logger from "../logger.js";
 import User, { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getZonesNamesByAuthorId from "../util/getZoneNamesByAuthorId.js";
 import makeMessage from "../util/makeMessage.js";
 
 async function goto(user: IUser) {
   try {
-    let zonesNames = await getZonesNamesByAuthorId(user._id.toString());
-    console.log("zonesNames before adding editor zones");
-    console.log(zonesNames);
-
+    let zonesNames = (await getZonesNamesByAuthorId(user._id.toString())) ?? [];
+    // TODO handle possible undefined zonesNames for legit case where user
+    // hasn't created any zones yet
     const usersWithThisEditor = await User.find({ editor: user._id });
-    console.log("names of users with this editor:");
-    console.log(
-      usersWithThisEditor.map((user) => {
-        return user.name;
-      })
-    );
 
     // await promise array for the zones of each otherUser
     const userZoneNamesPromises = usersWithThisEditor.map((otherUser) =>
@@ -28,13 +20,8 @@ async function goto(user: IUser) {
     const userZoneNamesArray = await Promise.all(userZoneNamesPromises);
     // add arrays from resolved promises to zonesNames
     userZoneNamesArray.forEach((userZoneNames) => {
-      console.log("userZoneNames to add:");
-      console.log(userZoneNames);
-      zonesNames = [...zonesNames, ...userZoneNames];
+      zonesNames = [...zonesNames, ...(userZoneNames ?? [])];
     });
-
-    console.log("zonesNames after adding editor zones");
-    console.log(zonesNames);
 
     if (zonesNames.length === 0) {
       worldEmitter.emit(
@@ -52,18 +39,7 @@ async function goto(user: IUser) {
       zoneNames: zonesNames,
     });
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`goto error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`goto error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("goto", error, user.name);
   }
 }
 export default goto;

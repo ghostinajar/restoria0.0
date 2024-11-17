@@ -1,5 +1,6 @@
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 async function disconnectMultiplayerOnSocket(socket) {
     try {
         // User multiplaying sockets? Disconnect.
@@ -15,9 +16,9 @@ async function disconnectMultiplayerOnSocket(socket) {
         }
         return false;
     }
-    catch (err) {
-        logger.error(`Error in disconnectMultiplayer: ${err.message}`);
-        throw err;
+    catch (error) {
+        catchErrorHandlerForFunction(`disconnectMultiplayerOnSocket`, error);
+        return false;
     }
 }
 export default disconnectMultiplayerOnSocket;

@@ -8,6 +8,7 @@ import truncateDescription from "../util/truncateDescription.js";
 import look from "./look.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function createMobBlueprint(mobFormData, user) {
     try {
         // logger.debug(`Trying to create mob blueprint ${mobFormData.name}.`);
@@ -60,13 +61,7 @@ async function createMobBlueprint(mobFormData, user) {
         await look({ commandWord: "look" }, user);
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`createMobBlueprint error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`createMobBlueprint error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("createMobBlueprint", error, user.name);
     }
 }
 export default createMobBlueprint;

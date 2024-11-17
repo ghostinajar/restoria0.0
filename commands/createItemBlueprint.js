@@ -11,6 +11,7 @@ import ITEM_TYPE from "../constants/ITEM_TYPE.js";
 import SPELL from "../constants/SPELL.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function createItemBlueprint(itemFormData, user) {
     try {
         // logger.debug(`Trying to create item blueprint ${itemFormData.name}.`);
@@ -92,13 +93,7 @@ async function createItemBlueprint(itemFormData, user) {
         await look({ commandWord: "look" }, user);
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`createItemBlueprint error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`createItemBlueprint error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("createItemBlueprint", error, user.name);
     }
 }
 export default createItemBlueprint;

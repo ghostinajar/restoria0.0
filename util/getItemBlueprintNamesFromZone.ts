@@ -1,11 +1,17 @@
 // getItemBlueprintNamesFromZone
 import { IZone } from "../model/classes/Zone.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 function getItemBlueprintNamesFromZone(zone: IZone) {
-  const itemBlueprintNames = zone.itemBlueprints.map((blueprint) => {
-    return { _id: blueprint._id, name: blueprint.name };
-  });
-  return itemBlueprintNames;
+  try {
+    const itemBlueprintNames = zone.itemBlueprints.map((blueprint) => {
+      return { _id: blueprint._id, name: blueprint.name };
+    });
+    
+    return itemBlueprintNames;
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction("functionName", error);
+  }
 }
 
-export default getItemBlueprintNamesFromZone
+export default getItemBlueprintNamesFromZone;

@@ -1,7 +1,13 @@
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 function getMobBlueprintNamesFromZone(zone) {
-    const mobBlueprintNames = zone.mobBlueprints.map((blueprint) => {
-        return { _id: blueprint._id, name: blueprint.name };
-    });
-    return mobBlueprintNames;
+    try {
+        const mobBlueprintNames = zone.mobBlueprints.map((blueprint) => {
+            return { _id: blueprint._id, name: blueprint.name };
+        });
+        return mobBlueprintNames;
+    }
+    catch (error) {
+        catchErrorHandlerForFunction("functionName", error);
+    }
 }
 export default getMobBlueprintNamesFromZone;

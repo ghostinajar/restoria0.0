@@ -1,7 +1,5 @@
-// editUser
-// allows user to edit user description
-import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 import truncateDescription from "../util/truncateDescription.js";
 async function editUser(user, userDescription) {
@@ -20,13 +18,7 @@ async function editUser(user, userDescription) {
         return;
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`editUser error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`editUser error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("editUser", error, user.name);
     }
 }
 export default editUser;

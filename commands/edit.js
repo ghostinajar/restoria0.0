@@ -9,13 +9,16 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { affixTypes } from "../constants/AFFIX_TYPE.js";
 import { damageTypes } from "../constants/DAMAGE_TYPE.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
-import logger from "../logger.js";
 import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getNameById from "../util/getNameById.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function edit(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject;
         const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
         if (!target) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Edit what?`));
             return;
@@ -40,6 +43,9 @@ async function edit(parsedCommand, user) {
             }
             case `mob`: {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `editMobBlueprintForm`,
                     mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
@@ -51,6 +57,9 @@ async function edit(parsedCommand, user) {
             }
             case `room`: {
                 const room = await getRoomOfUser(user);
+                if (!room) {
+                    throw new Error(`room not found for user ${user.name}`);
+                }
                 const itemBlueprintNames = getItemBlueprintNamesFromZone(zone);
                 const mobBlueprintNames = getMobBlueprintNamesFromZone(zone);
                 const itemNodes = getItemNodesFromRoom(room, zone);
@@ -96,6 +105,9 @@ async function edit(parsedCommand, user) {
             }
             case `zone`: {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `editZoneForm`,
                     zoneId: zone._id,
@@ -112,13 +124,7 @@ async function edit(parsedCommand, user) {
         }
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`"edit" function error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`"edit" function error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("edit", error, user.name);
     }
 }
 function getItemNodesFromRoom(room, zone) {
@@ -137,12 +143,7 @@ function getItemNodesFromRoom(room, zone) {
         return itemNodesList;
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`getItemNodesFromRoom error: ${error.message}`);
-        }
-        else {
-            logger.error(`getItemNodesFromRoom error: ${error}`);
-        }
+        catchErrorHandlerForFunction("getItemNodesFromRoom", error);
     }
 }
 function getMobNodesFromRoom(room, zone) {
@@ -154,19 +155,14 @@ function getMobNodesFromRoom(room, zone) {
             const nodeObject = {
                 _id: node._id,
                 loadsBlueprintId: node.loadsBlueprintId,
-                name: mobName,
+                name: mobName || "",
             };
             mobNodesList.push(nodeObject);
         }
         return mobNodesList;
     }
     catch (error) {
-        if (error instanceof Error) {
-            logger.error(`getMobNodesFromRoom error: ${error.message}`);
-        }
-        else {
-            logger.error(`getMobNodesFromRoom error: ${error}`);
-        }
+        catchErrorHandlerForFunction("getMobNodesFromRoom", error);
     }
 }
 export default edit;

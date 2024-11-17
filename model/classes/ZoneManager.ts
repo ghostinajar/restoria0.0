@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import { IRoom } from "./Room.js";
 import { ILocation } from "./Location.js";
 import COMPLETION_STATUS from "../../constants/COMPLETION_STATUS.js";
+import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 
 class ZoneManager {
   constructor() {
@@ -22,54 +23,56 @@ class ZoneManager {
   zones: Map<string, IZone>;
 
   roomRequestedHandler = async (location: ILocation) => {
-    // logger.debug(`roomRequestedHandler called, with ${JSON.stringify(location)}`);
-    // get the zone, then get the room
-    let zone = await this.getZoneById(location.inZone);
-    // logger.debug(`roomRequestedHandler found zone ${zone?.name}`);
-    // logger.debug(`looking for room id ${location.inRoom.toString()}`);
-    const room = zone?.rooms.find(
-      (room) => room._id.toString() === location.inRoom.toString()
-    );
-    if (!room) {
-      logger.error(
-        `lookArrayRequestedHandler got an undefined room for location ${JSON.stringify(
-          location
-        )}`
+    try {
+      // get the zone, then get the room
+      let zone = await this.getZoneById(location.inZone);
+      const room = zone?.rooms.find(
+        (room) => room._id.toString() === location.inRoom.toString()
       );
-      return;
+      if (!room) {
+        logger.error(
+          `lookArrayRequestedHandler got an undefined room for location ${JSON.stringify(
+            location
+          )}`
+        );
+        return;
+      }
+      worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction("ZoneManager.roomRequestedHandler", error);
     }
-    worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);
   };
 
   userLogoutHandler = async (user: mongoose.Document & IUser) => {
-    // logger.debug(`userLogoutHandler called`);
-    // find (or reset) user's location on logout
-    let { inRoom, inZone } = user.location;
-    let zone: IZone | undefined = this.zones.get(inZone.toString());
-    if (!zone) {
-      logger.error(
-        "User location zone not found at logout! Reset to world recall."
-      );
-      await resetUserLocation(user);
-      return;
-    }
-    // logger.debug(`userLogoutHandler has zone ${zone.name}`);
+    try {
+      // find (or reset) user's location on logout
+      let { inRoom, inZone } = user.location;
+      let zone: IZone | undefined = this.zones.get(inZone.toString());
+      if (!zone) {
+        logger.error(
+          "User location zone not found at logout! Reset to world recall."
+        );
+        await resetUserLocation(user);
+        return;
+      }
 
-    let room: IRoom | undefined = zone.rooms.find(
-      (room) => room._id.toString() == inRoom.toString()
-    );
-    if (!room) {
-      logger.error(
-        "User location room not found at logout! Reset to world recall."
+      let room: IRoom | undefined = zone.rooms.find(
+        (room) => room._id.toString() == inRoom.toString()
       );
-      await resetUserLocation(user);
-      return;
-    }
-    // logger.debug(`userLogoutHandler has room ${room.name}`);
+      if (!room) {
+        logger.error(
+          "User location room not found at logout! Reset to world recall."
+        );
+        await resetUserLocation(user);
+        return;
+      }
 
-    //remove user from location
-    room.removeEntityFrom("users", user);
-    worldEmitter.emit("zoneManagerRemovedUser", user);
+      //remove user from location
+      room.removeEntityFrom("users", user);
+      worldEmitter.emit("zoneManagerRemovedUser", user);
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction("ZoneManager.userLogoutHandler", error);
+    }
   };
 
   placeUserRequestHandler = async (user: IUser) => {
@@ -83,8 +86,8 @@ class ZoneManager {
         logger.error(`zone requested (${zoneId.toString}) that doesn't exist`);
       }
       worldEmitter.emit(`zone${zoneId.toString()}Loaded`, zone);
-    } catch (err: any) {
-      logger.error(`Error in zoneRequestedHandler: ${err.message}`);
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction(`ZoneManager.zoneRequestedHandler`, error);
     }
   };
 
@@ -196,9 +199,8 @@ class ZoneManager {
 
       await zone.initRooms();
       return zone;
-    } catch (err: any) {
-      logger.error(`Error in addZoneById: ${err.message}`);
-      throw err;
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction(`ZoneManager.addZoneById`, error);
     }
   }
 
@@ -213,62 +215,68 @@ class ZoneManager {
         return null;
       }
       return zone;
-    } catch (err: any) {
-      logger.error(`Error in getZoneById: ${err.message}`);
-      throw err;
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction(`ZoneManager.getZoneById`, error);
     }
   }
 
   async placeUserInStoredLocation(user: IUser) {
-    if (!user) {
-      logger.error(`placeUserInStoredLocation received an undefined user`);
-      return;
-    }
+    try {
+      if (!user) {
+        logger.error(`placeUserInStoredLocation received an undefined user`);
+        return;
+      }
 
-    // Reset user location if necessary
-    if (!user.location.inRoom || !user.location.inZone) {
-      logger.error("User location missing, reset to worldRecall.");
-      await resetUserLocation(user);
-    }
+      // Reset user location if necessary
+      if (!user.location.inRoom || !user.location.inZone) {
+        logger.error("User location missing, reset to worldRecall.");
+        await resetUserLocation(user);
+      }
 
-    // Load zone if necessary
-    let zone = this.zones.get(user.location.inZone.toString());
-    if (!zone) {
-      logger.error("User location missing, reset to worldRecall.");
-      await resetUserLocation(user);
-      zone = this.zones.get(user.location.inZone.toString());
-    }
+      // Load zone if necessary
+      let zone = await this.getZoneById(user.location.inZone);
+      if (!zone) {
+        logger.error("User location missing, reset to worldRecall.");
+        await resetUserLocation(user);
+        zone = this.zones.get(user.location.inZone.toString());
+      }
 
-    // If zone still doesn't exist, log error and return
-    if (!zone) {
-      logger.error(`Couldn't reset user location. Failed to place user.`);
-      return;
-    }
+      // If zone still doesn't exist, log error and return
+      if (!zone) {
+        logger.error(`Couldn't reset user location. Failed to place user.`);
+        return;
+      }
 
-    // Find room in the zone
-    let room: IRoom | undefined = zone.rooms.find(
-      (room) => room._id.toString() == user.location.inRoom.toString()
-    );
-
-    // If room doesn't exist, reset user location and try to find the room again
-    if (!room) {
-      logger.error("User location missing, reset to worldRecall.");
-      await resetUserLocation(user);
-      zone = this.zones.get(user.location.inZone.toString());
-      room = zone?.rooms.find(
+      // Find room in the zone
+      let room: IRoom | undefined = zone.rooms.find(
         (room) => room._id.toString() == user.location.inRoom.toString()
       );
-    }
 
-    // If room or zone still doesn't exist, log error and return
-    if (!room || !zone) {
-      logger.error(`Couldn't reset user location. Failed to place user.`);
-      return;
-    }
+      // If room doesn't exist, reset user location and try to find the room again
+      if (!room) {
+        logger.error("User location missing, reset to worldRecall.");
+        await resetUserLocation(user);
+        zone = this.zones.get(user.location.inZone.toString());
+        room = zone?.rooms.find(
+          (room) => room._id.toString() == user.location.inRoom.toString()
+        );
+      }
 
-    // Place user in room
-    room.addEntityTo("users", user);
-    logger.info(`User ${user.name} placed in ${room.name}.`);
+      // If room or zone still doesn't exist, log error and return
+      if (!room || !zone) {
+        logger.error(`Couldn't reset user location. Failed to place user.`);
+        return;
+      }
+
+      // Place user in room
+      room.addEntityTo("users", user);
+      logger.info(`User ${user.name} placed in ${room.name}.`);
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction(
+        "ZoneManager.placeUserInStoredLocation",
+        error
+      );
+    }
   }
 
   async removeZoneById(id: mongoose.Types.ObjectId) {
@@ -276,19 +284,12 @@ class ZoneManager {
       const zone = this.zones.get(id.toString());
       if (zone) {
         await zone.clearRooms();
-        // logger.debug(`Removing zone "${zone.name}" from zones...`);
         this.zones.delete(id.toString());
-        // logger.debug(
-        //   `Active zones: ${JSON.stringify(
-        //     Array.from(this.zones.values()).map((zone) => zone.name)
-        //   )}`
-        // );
       } else {
         logger.warn(`Zone with id ${id} does not exist in zones.`);
       }
-    } catch (err: any) {
-      logger.error(`Error in removeZoneById: ${err.message}`);
-      throw err;
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction(`ZoneManager.removeZoneById`, error);
     }
   }
 

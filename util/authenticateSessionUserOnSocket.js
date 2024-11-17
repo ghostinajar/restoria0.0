@@ -1,5 +1,6 @@
 // authenticateSessionUserOnSocket
 import logger from "../logger.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 function authenticateSessionUserOnSocket(socket) {
     try {
         // Not authenticated? Disconnect.
@@ -17,9 +18,8 @@ function authenticateSessionUserOnSocket(socket) {
         // );
         return true;
     }
-    catch (err) {
-        logger.error(`Error in authenticateSessionUserOnSocket: ${err.message}`);
-        throw err;
+    catch (error) {
+        catchErrorHandlerForFunction(`authenticateSessionUserOnSocket`, error);
     }
 }
 export default authenticateSessionUserOnSocket;

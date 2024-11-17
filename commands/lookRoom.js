@@ -1,7 +1,4 @@
-// lookRoom
-// populates the lookArray for the look command
-import logger from "../logger.js";
-import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 function lookRoom(room, user, lookArray) {
     try {
@@ -24,13 +21,7 @@ function lookRoom(room, user, lookArray) {
         }
     }
     catch (error) {
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        if (error instanceof Error) {
-            logger.error(`lookRoom error for user ${user.username}: ${error.message}`);
-        }
-        else {
-            logger.error(`lookRoom error for user ${user.username}: ${error}`);
-        }
+        catchErrorHandlerForFunction("lookRoom", error, user.name);
     }
 }
 export default lookRoom;

@@ -1,5 +1,6 @@
 // authenticateSessionUserOnSocket
 import logger from "../logger.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 function authenticateSessionUserOnSocket(socket: any) {
   try {
@@ -22,9 +23,8 @@ function authenticateSessionUserOnSocket(socket: any) {
     //   )}`
     // );
     return true;
-  } catch (err: any) {
-    logger.error(`Error in authenticateSessionUserOnSocket: ${err.message}`);
-    throw err;
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`authenticateSessionUserOnSocket`, error)
   }
 }
 

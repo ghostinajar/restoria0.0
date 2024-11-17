@@ -10,7 +10,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEraseItemBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
@@ -87,6 +87,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEditRoom`, async (roomData) => {
                 const room = await getRoomOfUser(user);
+                if (!room) {
+                    throw new Error(`Room not found for user ${user.name}`);
+                }
                 purifyDescriptionOfObject(roomData);
                 await editRoom(room, roomData, user);
                 stats(user);
@@ -97,14 +100,13 @@ const setupSocket = (io) => {
                 stats(user);
             });
             socket.on(`userSubmittedEraseItemBlueprint`, async (formData) => {
-                const zone = await getZoneOfUser(user);
-                await zone.eraseItemBlueprintById(formData._id);
-                logger.info(`User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`);
-                let message = makeMessage("success", `You permanently erased the itemBlueprint for ${formData.name}.`);
-                worldEmitter.emit(`messageFor${user.username}`, message);
+                userSubmittedEraseItemBlueprintHandler(formData, user);
             });
             socket.on(`userSubmittedEraseMobBlueprint`, async (formData) => {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 await zone.eraseMobBlueprintById(formData._id);
                 logger.info(`User ${user.name} erased mobBlueprint ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the mobBlueprint for ${formData.name}.`);
@@ -112,6 +114,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEraseRoom`, async (formData) => {
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 await zone.eraseRoomById(formData._id);
                 logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
                 let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
@@ -161,6 +166,9 @@ const setupSocket = (io) => {
                 console.log("Received userSubmittedSuggestions event, saving...");
                 console.log(suggestions);
                 const zone = await getZoneOfUser(user);
+                if (!zone) {
+                    throw new Error(`Couldn't get ${user.username}'s zone.`);
+                }
                 await saveSuggestions(suggestions, zone);
                 socket.emit("message", makeMessage("success", `We saved the suggestions for ${zone.name}.`));
             });

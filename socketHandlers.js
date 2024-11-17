@@ -1,5 +1,6 @@
 // socketHandlers
 import mongoose from "mongoose";
+import logger from "./logger.js";
 import User from "./model/classes/User.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import { purifyAllStringPropsOfObject } from "./util/purify.js";
@@ -7,6 +8,7 @@ import { historyStartingNow } from "./model/classes/History.js";
 import stats from "./commands/stats.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import makeMessage from "./util/makeMessage.js";
+import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -76,6 +78,9 @@ export const formPromptForUserHandler = async (formData, socket) => {
 export async function handleSuggestion(suggestionFormData, user) {
     suggestionFormData = purifyAllStringPropsOfObject(suggestionFormData);
     const zone = await getZoneOfUser(user);
+    if (!zone) {
+        throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
     const author = await User.findById(zone.author);
     let authorName = author?.name || "the author";
     if (zone.history.completionStatus === "published") {
@@ -122,6 +127,21 @@ export const messageForUsersRoomHandler = async (message, socket, user) => {
 };
 export const messageForUsersZoneHandler = async (message, socket, user) => {
     socket.to(user.location.inZone.toString()).emit(`message`, message);
+};
+export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => {
+    try {
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
+        await zone.eraseItemBlueprintById(formData._id);
+        logger.info(`User ${user.name} erased itemBlueprint ${formData.name}, id: ${formData._id}`);
+        let message = makeMessage("success", `You permanently erased the itemBlueprint for ${formData.name}.`);
+        worldEmitter.emit(`messageFor${user.username}`, message);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEraseItemBlueprintHandler`, error, user?.name);
+    }
 };
 export const userXLeavingGameHandler = async (user, socket) => {
     // logger.debug(

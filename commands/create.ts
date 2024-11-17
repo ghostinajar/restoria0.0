@@ -1,9 +1,9 @@
 // create
 // switch on target to open create form for item, mob, room, zone, or user/character
 import { itemTypes } from "../constants/ITEM_TYPE.js";
-import logger from "../logger.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
@@ -22,6 +22,9 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
 
     if (target === "item" || target === "mob" || target === "room") {
       if (!userHasZoneAuthorId(zone.author.toString(), user)) {
@@ -84,18 +87,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       }
     }
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`"create" function error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`"create" function error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("create", error, user.name);
   }
 }
 

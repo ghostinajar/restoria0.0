@@ -6,7 +6,7 @@ import roomSchema from "./Room.js";
 import mobBlueprintSchema from "./MobBlueprint.js";
 import itemBlueprintSchema from "./ItemBlueprint.js";
 import suggestionSchema from "./Suggestion.js";
-import logger from "../../logger.js";
+import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 const { Schema } = mongoose;
 const zoneSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -68,9 +68,8 @@ zoneSchema.methods.initRooms = async function () {
         }
         return;
     }
-    catch (err) {
-        logger.error(`Error in addRooms: ${err.message}`);
-        throw err;
+    catch (error) {
+        catchErrorHandlerForFunction(`Zone.initRooms`, error);
     }
 };
 zoneSchema.methods.clearRooms = async function () {
@@ -82,9 +81,8 @@ zoneSchema.methods.clearRooms = async function () {
             await room.clearContents();
         }
     }
-    catch (err) {
-        logger.error(`Error in zoneSchema.methods.clearRooms(): ${err.message}`);
-        throw err;
+    catch (error) {
+        catchErrorHandlerForFunction(`Zone.clearRooms`, error);
     }
 };
 zoneSchema.methods.eraseItemBlueprintById = async function (id) {
@@ -108,9 +106,8 @@ zoneSchema.methods.eraseItemBlueprintById = async function (id) {
         await this.save();
         await this.initRooms();
     }
-    catch (err) {
-        logger.error(`Error in zoneSchema.methods.eraseItemBlueprintById(): ${err.message}`);
-        throw err;
+    catch (error) {
+        catchErrorHandlerForFunction(`Zone.eraseItemBlueprintById`, error);
     }
 };
 zoneSchema.methods.eraseMobBlueprintById = async function (id) {
@@ -124,8 +121,8 @@ zoneSchema.methods.eraseMobBlueprintById = async function (id) {
         await this.save();
         await this.initRooms();
     }
-    catch (err) {
-        logger.error(`Error in zoneSchema.methods.eraseMobBlueprintById(): ${err.message}`);
+    catch (error) {
+        catchErrorHandlerForFunction(`Zone.eraseMobBlueprintById`, error);
     }
 };
 zoneSchema.methods.eraseRoomById = async function (id) {
@@ -154,8 +151,8 @@ zoneSchema.methods.eraseRoomById = async function (id) {
         await this.save();
         await this.initRooms();
     }
-    catch (err) {
-        logger.error(`Error in zoneSchema.methods.eraseRoomById(): ${err.message}`);
+    catch (error) {
+        catchErrorHandlerForFunction(`Zone.eraseRoomById`, error);
     }
 };
 // Helper function to remove nodes by blueprint id

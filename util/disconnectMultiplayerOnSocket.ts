@@ -1,12 +1,19 @@
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
-async function disconnectMultiplayerOnSocket (socket : any) {
+async function disconnectMultiplayerOnSocket(socket: any) {
   try {
     // User multiplaying sockets? Disconnect.
     const isMultiplaying = await new Promise((resolve) => {
-      worldEmitter.once(`userManagerCheckedMultiplayFor${socket.request.session.passport.user._id}`, resolve);
-      worldEmitter.emit(`socketCheckingMultiplay`, socket.request.session.passport.user._id);
+      worldEmitter.once(
+        `userManagerCheckedMultiplayFor${socket.request.session.passport.user._id}`,
+        resolve
+      );
+      worldEmitter.emit(
+        `socketCheckingMultiplay`,
+        socket.request.session.passport.user._id
+      );
     });
     if (isMultiplaying) {
       logger.warn(
@@ -17,9 +24,9 @@ async function disconnectMultiplayerOnSocket (socket : any) {
       return true;
     }
     return false;
-  } catch (err: any) {
-    logger.error(`Error in disconnectMultiplayer: ${err.message}`);
-    throw err;
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`disconnectMultiplayerOnSocket`, error);
+    return false;
   }
 }
 

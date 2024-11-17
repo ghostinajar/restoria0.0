@@ -1,5 +1,6 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 async function setupUserOnSocket(socket) {
     try {
         // Get user, alert userManager
@@ -18,8 +19,8 @@ async function setupUserOnSocket(socket) {
         socket.join(user.location.inZone.toString());
         return user;
     }
-    catch (err) {
-        logger.error(`Error in setupUserOnSocket: ${err.message}`);
+    catch (error) {
+        catchErrorHandlerForFunction(`setupUserOnSocket`, error);
     }
 }
 export default setupUserOnSocket;

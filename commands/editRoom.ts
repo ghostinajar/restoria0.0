@@ -1,8 +1,6 @@
 // editRoom
 // allows user to edit details of a room
-
-import mongoose, { Mongoose } from "mongoose";
-import logger from "../logger.js";
+import mongoose from "mongoose";
 import { IDescription } from "../model/classes/Description.js";
 import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
@@ -12,6 +10,7 @@ import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IExit } from "../model/classes/Exit.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface IEditRoomFormData {
   _id: string | mongoose.Types.ObjectId;
@@ -54,7 +53,10 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
     truncateDescription(newRoomDescription, user);
 
     room.history.modifiedDate = new Date();
-    const zone: IZone = await getZoneOfUser(user);
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
     if (!zone) {
       throw new Error(
         `couldn't find zone for user ${user.username}'s location.}`
@@ -101,20 +103,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
       makeMessage(`success`, `Room updated!`)
     );
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(
-        `editRoom error for user ${user.username}: ${error.message}`
-      );
-    } else {
-      logger.error(`editRoom error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("editRoom", error, user.name)
   }
 }
 

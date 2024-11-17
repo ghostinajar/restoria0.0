@@ -1,6 +1,6 @@
 // deleteZoneById
-
 import Zone from "../model/classes/Zone.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 async function deleteZoneById(zoneId: string): Promise<void> {
   try {
@@ -10,10 +10,9 @@ async function deleteZoneById(zoneId: string): Promise<void> {
     } else {
       console.log(`Zone with _id: ${zoneId} not found.`);
     }
-  } catch (error) {
-    console.error("Error deleting zone:", error);
-    throw error;
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`deleteZoneById`, error);
   }
 }
 
-export default deleteZoneById
+export default deleteZoneById;

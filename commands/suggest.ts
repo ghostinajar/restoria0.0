@@ -11,13 +11,19 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
-import logger from "../logger.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 async function suggest(parsedCommand: IParsedCommand, user: IUser) {
   try {
     let target = parsedCommand.directObject;
-    const zone: IZone = await getZoneOfUser(user);
-    const room: IRoom = await getRoomOfUser(user);
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Zone not found for user ${user.name}`)
+    }
+    const room = await getRoomOfUser(user);
+    if (!room) {
+      throw new Error(`Room not found for user ${user.name}`)
+    }
 
     if (!target) {
       rejectSuggest(user);
@@ -47,13 +53,19 @@ async function suggest(parsedCommand: IParsedCommand, user: IUser) {
     switch (target) {
       case `item`:
         formData.refersToObjectType = "itemBlueprint";
-        formData.names = getItemBlueprintNamesFromZone(zone);
+        let itemBlueprintNames = getItemBlueprintNamesFromZone(zone);
+        if (itemBlueprintNames) {
+          formData.names = itemBlueprintNames;
+        }
         formData.defaultOption =
           room.itemNodes[0]?.loadsBlueprintId?.toString();
         break;
       case `mob`:
         formData.refersToObjectType = "mobBlueprint";
-        formData.names = getMobBlueprintNamesFromZone(zone);
+        let mobBlueprintNames = getMobBlueprintNamesFromZone(zone);
+        if (mobBlueprintNames) {
+          formData.names = mobBlueprintNames;
+        }
         formData.defaultOption = room.mobNodes[0]?.loadsBlueprintId?.toString();
         break;
       case `room`:
@@ -67,18 +79,7 @@ async function suggest(parsedCommand: IParsedCommand, user: IUser) {
 
     worldEmitter.emit(`formPromptFor${user.username}`, formData);
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`"suggest" error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`"suggest" error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("suggest", error, user.name);
   }
 }
 

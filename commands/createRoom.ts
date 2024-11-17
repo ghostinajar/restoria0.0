@@ -15,6 +15,7 @@ import truncateDescription from "../util/truncateDescription.js";
 import exits from "./exits.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface INewRoomData {
   name: string;
@@ -46,7 +47,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       return;
     }
 
-    let originRoom: IRoom = await getRoomOfUser(user);
+    let originRoom = await getRoomOfUser(user);
     if (!originRoom) {
       throw new Error(`Couldn't find origin room to create room.`);
     }
@@ -179,20 +180,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
     );
     await exits(user);
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(
-        `createRoom error for user ${user.username}: ${error.message}`
-      );
-    } else {
-      logger.error(`createRoom error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("createRoom", error, user.name)
   }
 }
 

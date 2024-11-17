@@ -1,6 +1,5 @@
 // createUser
 // allows user to create new users from the /register page, or from in game
-
 import { Types } from "mongoose";
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -13,6 +12,7 @@ import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import { historyStartingNow } from "../model/classes/History.js";
 import purifyDescriptionOfObject from "../util/purify.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface IUserData {
   username: string;
@@ -207,18 +207,7 @@ async function createUser(
     return newUser;
   } catch (error: unknown) {
     if (author) {
-      worldEmitter.emit(
-        `messageFor${author.username}`,
-        makeMessage(
-          "rejection",
-          `There was an error on our server. Ralu will have a look at it soon!`
-        )
-      );
-    }
-    if (error instanceof Error) {
-      logger.error(`createUser error: ${error.message}`);
-    } else {
-      logger.error(`createUser error: ${error}`);
+      catchErrorHandlerForFunction("createUser", error, author.name);
     }
     throw error;
   }

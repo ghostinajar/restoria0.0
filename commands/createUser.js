@@ -11,6 +11,7 @@ import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import { historyStartingNow } from "../model/classes/History.js";
 import purifyDescriptionOfObject from "../util/purify.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 // Return user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
@@ -187,13 +188,7 @@ async function createUser(userFormData, author) {
     }
     catch (error) {
         if (author) {
-            worldEmitter.emit(`messageFor${author.username}`, makeMessage("rejection", `There was an error on our server. Ralu will have a look at it soon!`));
-        }
-        if (error instanceof Error) {
-            logger.error(`createUser error: ${error.message}`);
-        }
-        else {
-            logger.error(`createUser error: ${error}`);
+            catchErrorHandlerForFunction("createUser", error, author.name);
         }
         throw error;
     }

@@ -1,6 +1,5 @@
 // createZone
 // allows user to create a new zone
-
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
@@ -14,6 +13,7 @@ import Name from "../model/classes/Name.js";
 import mongoose from "mongoose";
 import ROOM_TYPE from "../constants/ROOM_TYPE.js";
 import { historyStartingNow } from "../model/classes/History.js";
+import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface IZoneData {
   name: string;
@@ -129,18 +129,7 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
     );
     await exits(user);
   } catch (error: unknown) {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `There was an error on our server. Ralu will have a look at it soon!`
-      )
-    );
-    if (error instanceof Error) {
-      logger.error(`createZone error for user ${user.username}: ${error.message}`);
-    } else {
-      logger.error(`createZone error for user ${user.username}: ${error}`);
-    }
+    catchErrorHandlerForFunction("createZone", error, user.name)
   }
 }
 
