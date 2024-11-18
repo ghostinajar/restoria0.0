@@ -10,11 +10,10 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import exits from "./commands/exits.js";
-import createItemBlueprint from "./commands/createItemBlueprint.js";
 import createZone from "./commands/createZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, { purifyCommandInput, } from "./util/purify.js";
@@ -82,19 +81,17 @@ const setupSocket = (io) => {
                 await userSubmittedEditZoneHandler(zoneData, user);
             });
             socket.on(`userSubmittedEraseItemBlueprint`, async (formData) => {
-                userSubmittedEraseItemBlueprintHandler(formData, user);
+                await userSubmittedEraseItemBlueprintHandler(formData, user);
             });
             socket.on(`userSubmittedEraseMobBlueprint`, async (formData) => {
-                userSubmittedEraseMobBlueprintHandler(formData, user);
+                await userSubmittedEraseMobBlueprintHandler(formData, user);
             });
             socket.on(`userSubmittedEraseRoom`, async (formData) => await userSubmittedEraseRoomHandler(formData, user));
             socket.on(`userSubmittedGoto`, async (gotoFormData) => {
-                userSubmittedGotoHandler(gotoFormData, user);
+                await userSubmittedGotoHandler(gotoFormData, user);
             });
-            socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
-                purifyDescriptionOfObject(itemBlueprintData);
-                await createItemBlueprint(itemBlueprintData, user);
-                stats(user);
+            socket.on(`userSubmittedCreateItemBlueprint`, async (itemBlueprintData) => {
+                await userSubmittedCreateItemBlueprintHandler(itemBlueprintData, user);
             });
             socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {
                 purifyDescriptionOfObject(mobBlueprintData);

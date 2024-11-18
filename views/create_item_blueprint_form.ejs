@@ -166,7 +166,7 @@
           container: document.getElementById("createItemIsContainer").checked,
         },
       };
-      socket.emit("userSubmittedNewItemBlueprint", createItemBlueprintFormData);
+      socket.emit("userSubmittedCreateItemBlueprint", createItemBlueprintFormData);
       createItemBlueprintForm.reset();
       createItemBlueprintForm.style.display = "none";
     });

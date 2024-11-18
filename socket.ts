@@ -20,6 +20,7 @@ import {
   messageForUserHandler,
   messageForUsersRoomHandler,
   messageForUsersZoneHandler,
+  userSubmittedCreateItemBlueprintHandler,
   userSubmittedEditItemBlueprintHandler,
   userSubmittedEditMobBlueprintHandler,
   userSubmittedEditRoomHandler,
@@ -188,14 +189,14 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedEraseItemBlueprint`,
         async (formData: { _id: string; name: string }) => {
-          userSubmittedEraseItemBlueprintHandler(formData, user);
+          await userSubmittedEraseItemBlueprintHandler(formData, user);
         }
       );
 
       socket.on(
         `userSubmittedEraseMobBlueprint`,
         async (formData: { _id: string; name: string }) => {
-          userSubmittedEraseMobBlueprintHandler(formData, user);
+          await userSubmittedEraseMobBlueprintHandler(formData, user);
         }
       );
 
@@ -206,15 +207,16 @@ const setupSocket = (io: any) => {
       );
 
       socket.on(`userSubmittedGoto`, async (gotoFormData: ILocation) => {
-        userSubmittedGotoHandler(gotoFormData, user);
+        await userSubmittedGotoHandler(gotoFormData, user);
       });
 
       socket.on(
-        `userSubmittedNewItemBlueprint`,
+        `userSubmittedCreateItemBlueprint`,
         async (itemBlueprintData: ICreateItemBlueprintFormData) => {
-          purifyDescriptionOfObject(itemBlueprintData);
-          await createItemBlueprint(itemBlueprintData, user);
-          stats(user);
+          await userSubmittedCreateItemBlueprintHandler(
+            itemBlueprintData,
+            user
+          );
         }
       );
 

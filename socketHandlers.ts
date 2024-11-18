@@ -28,6 +28,9 @@ import { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import { ILocation } from "./model/classes/Location.js";
 import relocateUser from "./util/relocateUser.js";
+import createItemBlueprint, {
+  ICreateItemBlueprintFormData,
+} from "./commands/createItemBlueprint.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -361,6 +364,19 @@ export const userSubmittedGotoHandler = async (
     );
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`userSubmittedGotoHandler`, error, user?.name);
+  }
+};
+
+export const userSubmittedCreateItemBlueprintHandler = async (
+  itemBlueprintData: ICreateItemBlueprintFormData,
+  user: IUser
+) => {
+  try {
+    purifyDescriptionOfObject(itemBlueprintData);
+    await createItemBlueprint(itemBlueprintData, user);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`userSubmittedCreateItemBlueprintHandler`, error, user?.name);
   }
 };
 
