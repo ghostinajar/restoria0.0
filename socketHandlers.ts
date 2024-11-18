@@ -26,6 +26,8 @@ import editRoom, { IEditRoomFormData } from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
+import { ILocation } from "./model/classes/Location.js";
+import relocateUser from "./util/relocateUser.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -333,6 +335,32 @@ export const userSubmittedEraseRoomHandler = async (
       error,
       user?.name
     );
+  }
+};
+
+export const userSubmittedGotoHandler = async (
+  gotoFormData: ILocation,
+  user: IUser
+) => {
+  try {
+    worldEmitter.emit(
+      `messageFor${user.username}sRoom`,
+      makeMessage(`success`, `${user.name} disappears.`)
+    );
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(
+        `success`,
+        `You close your eyes for a moment, imagine the location, and appear there.`
+      )
+    );
+    await relocateUser(user, gotoFormData);
+    worldEmitter.emit(
+      `messageFor${user.username}sRoom`,
+      makeMessage(`success`, `${user.name} appears.`)
+    );
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`userSubmittedGotoHandler`, error, user?.name);
   }
 };
 

@@ -27,6 +27,7 @@ import {
   userSubmittedEraseItemBlueprintHandler,
   userSubmittedEraseMobBlueprintHandler,
   userSubmittedEraseRoomHandler,
+  userSubmittedGotoHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
@@ -205,22 +206,7 @@ const setupSocket = (io: any) => {
       );
 
       socket.on(`userSubmittedGoto`, async (gotoFormData: ILocation) => {
-        worldEmitter.emit(
-          `messageFor${user.username}sRoom`,
-          makeMessage(`success`, `${user.name} disappears.`)
-        );
-        worldEmitter.emit(
-          `messageFor${user.username}`,
-          makeMessage(
-            `success`,
-            `You close your eyes for a moment, imagine the location, and appear there.`
-          )
-        );
-        await relocateUser(user, gotoFormData);
-        worldEmitter.emit(
-          `messageFor${user.username}sRoom`,
-          makeMessage(`success`, `${user.name} appears.`)
-        );
+        userSubmittedGotoHandler(gotoFormData, user);
       });
 
       socket.on(

@@ -14,6 +14,7 @@ import editMobBlueprint from "./commands/editMobBlueprint.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
 import editZone from "./commands/editZone.js";
+import relocateUser from "./util/relocateUser.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -220,6 +221,17 @@ export const userSubmittedEraseRoomHandler = async (formData, user) => {
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEraseRoomHandler`, error, user?.name);
+    }
+};
+export const userSubmittedGotoHandler = async (gotoFormData, user) => {
+    try {
+        worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`success`, `${user.name} disappears.`));
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `You close your eyes for a moment, imagine the location, and appear there.`));
+        await relocateUser(user, gotoFormData);
+        worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`success`, `${user.name} appears.`));
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedGotoHandler`, error, user?.name);
     }
 };
 export const userXLeavingGameHandler = async (user, socket) => {

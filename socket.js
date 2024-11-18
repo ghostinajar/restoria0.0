@@ -10,7 +10,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import exits from "./commands/exits.js";
@@ -18,7 +18,6 @@ import createItemBlueprint from "./commands/createItemBlueprint.js";
 import createZone from "./commands/createZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, { purifyCommandInput, } from "./util/purify.js";
-import relocateUser from "./util/relocateUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 const setupSocket = (io) => {
     try {
@@ -90,10 +89,7 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEraseRoom`, async (formData) => await userSubmittedEraseRoomHandler(formData, user));
             socket.on(`userSubmittedGoto`, async (gotoFormData) => {
-                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`success`, `${user.name} disappears.`));
-                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `You close your eyes for a moment, imagine the location, and appear there.`));
-                await relocateUser(user, gotoFormData);
-                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`success`, `${user.name} appears.`));
+                userSubmittedGotoHandler(gotoFormData, user);
             });
             socket.on(`userSubmittedNewItemBlueprint`, async (itemBlueprintData) => {
                 purifyDescriptionOfObject(itemBlueprintData);
