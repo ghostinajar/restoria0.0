@@ -26,6 +26,7 @@ import {
   userSubmittedEditZoneHandler,
   userSubmittedEraseItemBlueprintHandler,
   userSubmittedEraseMobBlueprintHandler,
+  userSubmittedEraseRoomHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
@@ -199,21 +200,8 @@ const setupSocket = (io: any) => {
 
       socket.on(
         `userSubmittedEraseRoom`,
-        async (formData: { _id: string; name: string }) => {
-          const zone = await getZoneOfUser(user);
-          if (!zone) {
-            throw new Error(`Couldn't get ${user.username}'s zone.`);
-          }
-          await zone.eraseRoomById(formData._id);
-          logger.info(
-            `User ${user.name} erased room ${formData.name}, id: ${formData._id}`
-          );
-          let message = makeMessage(
-            "success",
-            `You permanently erased the room ${formData.name}.`
-          );
-          worldEmitter.emit(`messageFor${user.username}`, message);
-        }
+        async (formData: { _id: string; name: string }) =>
+          await userSubmittedEraseRoomHandler(formData, user)
       );
 
       socket.on(`userSubmittedGoto`, async (gotoFormData: ILocation) => {

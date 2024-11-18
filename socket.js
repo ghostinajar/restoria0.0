@@ -10,7 +10,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import exits from "./commands/exits.js";
@@ -88,16 +88,7 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedEraseMobBlueprint`, async (formData) => {
                 userSubmittedEraseMobBlueprintHandler(formData, user);
             });
-            socket.on(`userSubmittedEraseRoom`, async (formData) => {
-                const zone = await getZoneOfUser(user);
-                if (!zone) {
-                    throw new Error(`Couldn't get ${user.username}'s zone.`);
-                }
-                await zone.eraseRoomById(formData._id);
-                logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
-                let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
-                worldEmitter.emit(`messageFor${user.username}`, message);
-            });
+            socket.on(`userSubmittedEraseRoom`, async (formData) => await userSubmittedEraseRoomHandler(formData, user));
             socket.on(`userSubmittedGoto`, async (gotoFormData) => {
                 worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`success`, `${user.name} disappears.`));
                 worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `You close your eyes for a moment, imagine the location, and appear there.`));

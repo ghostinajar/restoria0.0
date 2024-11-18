@@ -207,6 +207,21 @@ export const userSubmittedEraseMobBlueprintHandler = async (formData, user) => {
         catchErrorHandlerForFunction(`userSubmittedEraseMobBlueprintHandler`, error, user?.name);
     }
 };
+export const userSubmittedEraseRoomHandler = async (formData, user) => {
+    try {
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
+        await zone.eraseRoomById(formData._id);
+        logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
+        let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
+        worldEmitter.emit(`messageFor${user.username}`, message);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEraseRoomHandler`, error, user?.name);
+    }
+};
 export const userXLeavingGameHandler = async (user, socket) => {
     // logger.debug(
     //   `socket received user${user.name}LeavingGame event. Disconnecting.`
