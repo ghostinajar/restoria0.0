@@ -301,31 +301,26 @@ export const userSubmittedSuggestionsHandler = async (suggestions, user, socket)
     }
 };
 export const userXLeavingGameHandler = async (user, socket) => {
-    // logger.debug(
-    //   `socket received user${user.name}LeavingGame event. Disconnecting.`
-    // );
-    socket.emit(`redirectToLogin`, `User ${user.name} left the game.`);
-    socket.disconnect;
+    try {
+        socket.emit(`redirectToLogin`, `User ${user.name} left the game.`);
+        socket.disconnect;
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userXLeavingGameHandler`, error, user?.name);
+    }
 };
 export const userXChangingRoomsHandler = (originRoomId, originZoneId, destinationRoomId, destinationZoneId, socket, user) => {
-    // logger.debug(
-    //   `userChangingRoomsHandler called with ${originRoomId},${originZoneId},${destinationRoomId},${destinationZoneId}`
-    // );
-    // logger.debug(
-    //   `${user.name}'s socket is in rooms: ${Array.from(socket.rooms)}`
-    // );
-    // update room chat
-    socket.leave(originRoomId);
-    socket.join(destinationRoomId);
-    // update zone chat
-    if (originZoneId !== destinationZoneId) {
-        // logger.debug(
-        //   `userChangingRoomsHandler changing users's ioZone to ${destinationZoneId}`
-        // );
-        socket.leave(originZoneId);
-        socket.join(destinationZoneId);
+    try {
+        // update room chat
+        socket.leave(originRoomId);
+        socket.join(destinationRoomId);
+        // update zone chat
+        if (originZoneId !== destinationZoneId) {
+            socket.leave(originZoneId);
+            socket.join(destinationZoneId);
+        }
     }
-    // logger.debug(
-    //   `${user.name}'s socket is now in rooms: ${Array.from(socket.rooms)}`
-    // );
+    catch (error) {
+        catchErrorHandlerForFunction(`userXChangingRoomsHandler`, error, user?.name);
+    }
 };
