@@ -24,7 +24,7 @@ import editMobBlueprint, {
 } from "./commands/editMobBlueprint.js";
 import editRoom, { IEditRoomFormData } from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
-import { IZoneData } from "./commands/createZone.js";
+import createZone, { IZoneData } from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import { ILocation } from "./model/classes/Location.js";
 import relocateUser from "./util/relocateUser.js";
@@ -434,6 +434,23 @@ export const userSubmittedNewUserHandler = async (
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedNewUserHandler`,
+      error,
+      user?.name
+    );
+  }
+};
+
+export const userSubmittedNewZoneHandler = async (
+  zoneData: IZoneData,
+  user: IUser
+) => {
+  try {
+    purifyDescriptionOfObject(zoneData);
+    await createZone(zoneData, user);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedNewZoneHandler`,
       error,
       user?.name
     );

@@ -13,6 +13,7 @@ import editItemBlueprint from "./commands/editItemBlueprint.js";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
+import createZone from "./commands/createZone.js";
 import editZone from "./commands/editZone.js";
 import relocateUser from "./util/relocateUser.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
@@ -276,6 +277,16 @@ export const userSubmittedNewUserHandler = async (userData, user) => {
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedNewUserHandler`, error, user?.name);
+    }
+};
+export const userSubmittedNewZoneHandler = async (zoneData, user) => {
+    try {
+        purifyDescriptionOfObject(zoneData);
+        await createZone(zoneData, user);
+        stats(user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedNewZoneHandler`, error, user?.name);
     }
 };
 export const userXLeavingGameHandler = async (user, socket) => {

@@ -8,10 +8,9 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedNewRoomHandler, userSubmittedNewUserHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedNewRoomHandler, userSubmittedNewUserHandler, userSubmittedNewZoneHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
-import createZone from "./commands/createZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, { purifyCommandInput, } from "./util/purify.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
@@ -100,9 +99,7 @@ const setupSocket = (io) => {
                 await userSubmittedNewUserHandler(userData, user);
             });
             socket.on(`userSubmittedNewZone`, async (zoneData) => {
-                purifyDescriptionOfObject(zoneData);
-                await createZone(zoneData, user);
-                stats(user);
+                await userSubmittedNewZoneHandler(zoneData, user);
             });
             socket.on(`userSubmittedUserDescription`, async (userDescription) => {
                 purifyDescriptionOfObject(userDescription);

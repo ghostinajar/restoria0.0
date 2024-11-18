@@ -34,6 +34,7 @@ import {
   userXLeavingGameHandler,
   userSubmittedNewRoomHandler,
   userSubmittedNewUserHandler,
+  userSubmittedNewZoneHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -239,9 +240,7 @@ const setupSocket = (io: any) => {
       });
 
       socket.on(`userSubmittedNewZone`, async (zoneData: IZoneData) => {
-        purifyDescriptionOfObject(zoneData);
-        await createZone(zoneData, user);
-        stats(user);
+        await userSubmittedNewZoneHandler(zoneData, user);
       });
 
       socket.on(
