@@ -10,9 +10,8 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
-import createMobBlueprint from "./commands/createMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createZone from "./commands/createZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
@@ -93,10 +92,8 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedCreateItemBlueprint`, async (itemBlueprintData) => {
                 await userSubmittedCreateItemBlueprintHandler(itemBlueprintData, user);
             });
-            socket.on(`userSubmittedNewMobBlueprint`, async (mobBlueprintData) => {
-                purifyDescriptionOfObject(mobBlueprintData);
-                await createMobBlueprint(mobBlueprintData, user);
-                stats(user);
+            socket.on(`userSubmittedCreateMobBlueprint`, async (mobBlueprintData) => {
+                await userSubmittedCreateMobBlueprintHandler(mobBlueprintData, user);
             });
             socket.on(`userSubmittedNewRoom`, async (roomData) => {
                 purifyDescriptionOfObject(roomData);

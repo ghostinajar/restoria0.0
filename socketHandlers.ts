@@ -31,6 +31,9 @@ import relocateUser from "./util/relocateUser.js";
 import createItemBlueprint, {
   ICreateItemBlueprintFormData,
 } from "./commands/createItemBlueprint.js";
+import createMobBlueprint, {
+  ICreateMobFormData,
+} from "./commands/createMobBlueprint.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -376,7 +379,28 @@ export const userSubmittedCreateItemBlueprintHandler = async (
     await createItemBlueprint(itemBlueprintData, user);
     stats(user);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`userSubmittedCreateItemBlueprintHandler`, error, user?.name);
+    catchErrorHandlerForFunction(
+      `userSubmittedCreateItemBlueprintHandler`,
+      error,
+      user?.name
+    );
+  }
+};
+
+export const userSubmittedCreateMobBlueprintHandler = async (
+  mobBlueprintData: ICreateMobFormData,
+  user: IUser
+) => {
+  try {
+    purifyDescriptionOfObject(mobBlueprintData);
+    await createMobBlueprint(mobBlueprintData, user);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedCreateMobBlueprintHandler`,
+      error,
+      user?.name
+    );
   }
 };
 

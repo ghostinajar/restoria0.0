@@ -16,6 +16,7 @@ import getRoomOfUser from "./util/getRoomOfUser.js";
 import editZone from "./commands/editZone.js";
 import relocateUser from "./util/relocateUser.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
+import createMobBlueprint from "./commands/createMobBlueprint.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -243,6 +244,16 @@ export const userSubmittedCreateItemBlueprintHandler = async (itemBlueprintData,
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedCreateItemBlueprintHandler`, error, user?.name);
+    }
+};
+export const userSubmittedCreateMobBlueprintHandler = async (mobBlueprintData, user) => {
+    try {
+        purifyDescriptionOfObject(mobBlueprintData);
+        await createMobBlueprint(mobBlueprintData, user);
+        stats(user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedCreateMobBlueprintHandler`, error, user?.name);
     }
 };
 export const userXLeavingGameHandler = async (user, socket) => {

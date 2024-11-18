@@ -29,6 +29,7 @@ import {
   userSubmittedEraseMobBlueprintHandler,
   userSubmittedEraseRoomHandler,
   userSubmittedGotoHandler,
+  userSubmittedCreateMobBlueprintHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
@@ -221,11 +222,9 @@ const setupSocket = (io: any) => {
       );
 
       socket.on(
-        `userSubmittedNewMobBlueprint`,
+        `userSubmittedCreateMobBlueprint`,
         async (mobBlueprintData: ICreateMobFormData) => {
-          purifyDescriptionOfObject(mobBlueprintData);
-          await createMobBlueprint(mobBlueprintData, user);
-          stats(user);
+          await userSubmittedCreateMobBlueprintHandler(mobBlueprintData, user);
         }
       );
 
