@@ -1,7 +1,6 @@
 // socket
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
-import createUser from "./commands/createUser.js";
 import makeMessage from "./util/makeMessage.js";
 import look from "./commands/look.js";
 import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSocket.js";
@@ -9,7 +8,7 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedNewRoomHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedNewRoomHandler, userSubmittedNewUserHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
 import createZone from "./commands/createZone.js";
@@ -98,9 +97,7 @@ const setupSocket = (io) => {
                 await userSubmittedNewRoomHandler(roomData, user);
             });
             socket.on(`userSubmittedNewUser`, async (userData) => {
-                purifyDescriptionOfObject(userData);
-                const newUser = await createUser(userData, user);
-                stats(user);
+                await userSubmittedNewUserHandler(userData, user);
             });
             socket.on(`userSubmittedNewZone`, async (zoneData) => {
                 purifyDescriptionOfObject(zoneData);

@@ -33,6 +33,7 @@ import {
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
   userSubmittedNewRoomHandler,
+  userSubmittedNewUserHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -234,9 +235,7 @@ const setupSocket = (io: any) => {
       });
 
       socket.on(`userSubmittedNewUser`, async (userData: IUserData) => {
-        purifyDescriptionOfObject(userData);
-        const newUser = await createUser(userData, user);
-        stats(user);
+        await userSubmittedNewUserHandler(userData, user);
       });
 
       socket.on(`userSubmittedNewZone`, async (zoneData: IZoneData) => {
