@@ -14,7 +14,6 @@ import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import { IDescription } from "./model/classes/Description.js";
 import {
   formPromptForUserHandler,
-  handleSuggestion,
   messageArrayForUserHandler,
   messageForUserHandler,
   messageForUsersRoomHandler,
@@ -159,15 +158,8 @@ const setupSocket = (io: any) => {
 
       socket.on(
         `userSubmittedEditItemBlueprint`,
-        async (
-          itemId: mongoose.Types.ObjectId,
-          itemBlueprintData: IEditItemBlueprintFormData
-        ) => {
-          await userSubmittedEditItemBlueprintHandler(
-            itemId,
-            itemBlueprintData,
-            user
-          );
+        async (itemBlueprintData: IEditItemBlueprintFormData) => {
+          await userSubmittedEditItemBlueprintHandler(itemBlueprintData, user);
         }
       );
 

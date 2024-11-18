@@ -140,10 +140,10 @@ export const messageForUsersRoomHandler = async (message, socket, user) => {
 export const messageForUsersZoneHandler = async (message, socket, user) => {
     socket.to(user.location.inZone.toString()).emit(`message`, message);
 };
-export const userSubmittedEditItemBlueprintHandler = async (itemId, itemBlueprintData, user) => {
+export const userSubmittedEditItemBlueprintHandler = async (itemBlueprintData, user) => {
     try {
         purifyDescriptionOfObject(itemBlueprintData);
-        await editItemBlueprint(itemId, itemBlueprintData, user);
+        await editItemBlueprint(itemBlueprintData, user);
         stats(user);
     }
     catch (error) {

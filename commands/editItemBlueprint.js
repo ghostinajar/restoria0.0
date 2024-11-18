@@ -7,9 +7,9 @@ import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-async function editItemBlueprint(itemId, formData, user) {
+async function editItemBlueprint(formData, user) {
     try {
-        if (!itemId)
+        if (!formData._id)
             throw new Error("Missing itemId");
         if (!formData)
             throw new Error("Missing formData");
@@ -20,9 +20,9 @@ async function editItemBlueprint(itemId, formData, user) {
         if (!zone) {
             throw new Error(`editItemBlueprint couldn't find zone to save for user ${user.username}'s location.`);
         }
-        const item = zone.itemBlueprints.find((blueprint) => blueprint._id.toString() === itemId.toString());
+        const item = zone.itemBlueprints.find((blueprint) => blueprint._id.toString() === formData._id.toString());
         if (!item) {
-            throw new Error(`editItemBlueprint couldn't find item with id ${itemId} in ${zone.name}`);
+            throw new Error(`editItemBlueprint couldn't find item with id ${formData._id} in ${zone.name}`);
         }
         //coerce formData property values to correct types
         formData.price = Number(formData.price);

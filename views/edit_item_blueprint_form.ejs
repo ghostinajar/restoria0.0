@@ -778,6 +778,7 @@
       // (no need for this object to contain irrelevant properties,
       // and they are optional in the type)
       const editItemBlueprintFormData = {
+        _id: selectedItemId,
         name: DOMPurify.sanitize(editItemName.value) || "no item name",
         keywords: purifiedKeywords,
         price: editItemPrice.value || 0,
@@ -886,7 +887,6 @@
       }
       socket.emit(
         "userSubmittedEditItemBlueprint",
-        selectedItemId,
         editItemBlueprintFormData
       );
       editItemBlueprintForm.reset();

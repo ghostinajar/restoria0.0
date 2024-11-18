@@ -12,6 +12,7 @@ import { IItemNode } from "../model/classes/ItemNode.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface IEditItemBlueprintFormData {
+  _id: mongoose.Types.ObjectId;
   name: string;
   keywords: string[];
   price: number;
@@ -77,12 +78,11 @@ export interface IEditItemBlueprintFormData {
 }
 
 async function editItemBlueprint(
-  itemId: mongoose.Types.ObjectId,
   formData: IEditItemBlueprintFormData,
   user: IUser
 ) {
   try {
-    if (!itemId) throw new Error("Missing itemId");
+    if (!formData._id) throw new Error("Missing itemId");
     if (!formData) throw new Error("Missing formData");
     if (!user) throw new Error("Missing user");
 
@@ -95,11 +95,11 @@ async function editItemBlueprint(
     }
 
     const item = zone.itemBlueprints.find(
-      (blueprint) => blueprint._id.toString() === itemId.toString()
+      (blueprint) => blueprint._id.toString() === formData._id.toString()
     );
     if (!item) {
       throw new Error(
-        `editItemBlueprint couldn't find item with id ${itemId} in ${zone.name}`
+        `editItemBlueprint couldn't find item with id ${formData._id} in ${zone.name}`
       );
     }
 

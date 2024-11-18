@@ -192,13 +192,12 @@ export const messageForUsersZoneHandler = async (
 };
 
 export const userSubmittedEditItemBlueprintHandler = async (
-  itemId: mongoose.Types.ObjectId,
   itemBlueprintData: IEditItemBlueprintFormData,
   user: IUser
 ) => {
   try {
     purifyDescriptionOfObject(itemBlueprintData);
-    await editItemBlueprint(itemId, itemBlueprintData, user);
+    await editItemBlueprint(itemBlueprintData, user);
     stats(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(

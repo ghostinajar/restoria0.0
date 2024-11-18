@@ -72,8 +72,8 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedCreateZone`, async (zoneData) => {
                 await userSubmittedCreateZoneHandler(zoneData, user);
             });
-            socket.on(`userSubmittedEditItemBlueprint`, async (itemId, itemBlueprintData) => {
-                await userSubmittedEditItemBlueprintHandler(itemId, itemBlueprintData, user);
+            socket.on(`userSubmittedEditItemBlueprint`, async (itemBlueprintData) => {
+                await userSubmittedEditItemBlueprintHandler(itemBlueprintData, user);
             });
             socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
                 await userSubmittedEditMobBlueprintHandler(mobId, mobBlueprintData, user);
