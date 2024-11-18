@@ -6,9 +6,9 @@ import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-async function editMobBlueprint(mobId, formData, user) {
+async function editMobBlueprint(formData, user) {
     try {
-        if (!mobId)
+        if (!formData._id)
             throw new Error("Missing mobId");
         if (!formData)
             throw new Error("Missing formData");
@@ -19,9 +19,9 @@ async function editMobBlueprint(mobId, formData, user) {
         if (!zone) {
             throw new Error(`couldn't find zone to save for user ${user.username}'s location.}`);
         }
-        const mob = zone.mobBlueprints.find((blueprint) => blueprint._id.toString() === mobId.toString());
+        const mob = zone.mobBlueprints.find((blueprint) => blueprint._id.toString() === formData._id.toString());
         if (!mob) {
-            throw new Error(`editMobBlueprint couldn't find mob with id ${mobId} in ${zone.name}`);
+            throw new Error(`editMobBlueprint couldn't find mob with id ${formData._id} in ${zone.name}`);
         }
         truncateDescription(formData.description, user);
         //update values and save zone

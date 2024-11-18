@@ -473,6 +473,7 @@
         DOMPurify.sanitize(keyword)
       );
       const editMobBlueprintFormData = {
+        _id: selectedMobId,
         name: DOMPurify.sanitize(editMobName.value) || "no mob name",
         keywords: purifiedKeywords,
         pronouns: Number(editMobPronouns).value || 1,
@@ -531,7 +532,6 @@
       }
       socket.emit(
         "userSubmittedEditMobBlueprint",
-        selectedMobId,
         editMobBlueprintFormData
       );
       editMobBlueprintForm.reset();

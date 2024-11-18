@@ -165,15 +165,8 @@ const setupSocket = (io: any) => {
 
       socket.on(
         `userSubmittedEditMobBlueprint`,
-        async (
-          mobId: mongoose.Types.ObjectId,
-          mobBlueprintData: IEditMobFormData
-        ) => {
-          await userSubmittedEditMobBlueprintHandler(
-            mobId,
-            mobBlueprintData,
-            user
-          );
+        async (mobBlueprintData: IEditMobFormData) => {
+          await userSubmittedEditMobBlueprintHandler(mobBlueprintData, user);
         }
       );
 

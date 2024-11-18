@@ -75,8 +75,8 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedEditItemBlueprint`, async (itemBlueprintData) => {
                 await userSubmittedEditItemBlueprintHandler(itemBlueprintData, user);
             });
-            socket.on(`userSubmittedEditMobBlueprint`, async (mobId, mobBlueprintData) => {
-                await userSubmittedEditMobBlueprintHandler(mobId, mobBlueprintData, user);
+            socket.on(`userSubmittedEditMobBlueprint`, async (mobBlueprintData) => {
+                await userSubmittedEditMobBlueprintHandler(mobBlueprintData, user);
             });
             socket.on(`userSubmittedEditRoom`, async (roomData) => {
                 await userSubmittedEditRoomHandler(roomData, user);

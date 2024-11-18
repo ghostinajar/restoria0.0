@@ -12,6 +12,7 @@ import { IAffix } from "../model/classes/Affix.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
 export interface IEditMobFormData {
+  _id: mongoose.Types.ObjectId;
   name: string;
   keywords: string[];
   pronouns: number;
@@ -32,12 +33,11 @@ export interface IEditMobFormData {
 }
 
 async function editMobBlueprint(
-  mobId: mongoose.Types.ObjectId,
   formData: IEditMobFormData,
   user: IUser
 ) {
   try {
-    if (!mobId) throw new Error("Missing mobId");
+    if (!formData._id) throw new Error("Missing mobId");
     if (!formData) throw new Error("Missing formData");
     if (!user) throw new Error("Missing user");
 
@@ -49,11 +49,11 @@ async function editMobBlueprint(
       );
     }
     const mob = zone.mobBlueprints.find(
-      (blueprint) => blueprint._id.toString() === mobId.toString()
+      (blueprint) => blueprint._id.toString() === formData._id.toString()
     );
     if (!mob) {
       throw new Error(
-        `editMobBlueprint couldn't find mob with id ${mobId} in ${zone.name}`
+        `editMobBlueprint couldn't find mob with id ${formData._id} in ${zone.name}`
       );
     }
 

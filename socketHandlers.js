@@ -150,10 +150,10 @@ export const userSubmittedEditItemBlueprintHandler = async (itemBlueprintData, u
         catchErrorHandlerForFunction(`userSubmittedEditItemBlueprintHandler`, error);
     }
 };
-export const userSubmittedEditMobBlueprintHandler = async (mobId, mobBlueprintData, user) => {
+export const userSubmittedEditMobBlueprintHandler = async (mobBlueprintData, user) => {
     try {
         purifyDescriptionOfObject(mobBlueprintData);
-        await editMobBlueprint(mobId, mobBlueprintData, user);
+        await editMobBlueprint(mobBlueprintData, user);
         stats(user);
     }
     catch (error) {
