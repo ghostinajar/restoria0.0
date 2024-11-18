@@ -1,8 +1,8 @@
 // socket
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
-import createRoom, { INewRoomData } from "./commands/createRoom.js";
-import createUser, { IUserData } from "./commands/createUser.js";
+import { INewRoomData } from "./commands/createRoom.js";
+import { IUserData } from "./commands/createUser.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import makeMessage from "./util/makeMessage.js";
@@ -12,7 +12,6 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import { IDescription } from "./model/classes/Description.js";
-import editUser from "./commands/editUser.js";
 import {
   formPromptForUserHandler,
   handleSuggestion,
@@ -35,25 +34,19 @@ import {
   userSubmittedNewRoomHandler,
   userSubmittedNewUserHandler,
   userSubmittedNewZoneHandler,
+  userSubmittedEditUserHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
-import createMobBlueprint, {
-  ICreateMobFormData,
-} from "./commands/createMobBlueprint.js";
+import { ICreateMobFormData } from "./commands/createMobBlueprint.js";
 import mongoose from "mongoose";
 import { IEditMobFormData } from "./commands/editMobBlueprint.js";
 import exits from "./commands/exits.js";
-import createItemBlueprint, {
-  ICreateItemBlueprintFormData,
-} from "./commands/createItemBlueprint.js";
+import { ICreateItemBlueprintFormData } from "./commands/createItemBlueprint.js";
 import { IEditItemBlueprintFormData } from "./commands/editItemBlueprint.js";
-import createZone, { IZoneData } from "./commands/createZone.js";
+import { IZoneData } from "./commands/createZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
-import purifyDescriptionOfObject, {
-  purifyCommandInput,
-} from "./util/purify.js";
-import relocateUser from "./util/relocateUser.js";
+import { purifyCommandInput } from "./util/purify.js";
 import { ILocation } from "./model/classes/Location.js";
 import { ISuggestion, refersToObjectType } from "./model/classes/Suggestion.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
@@ -244,11 +237,9 @@ const setupSocket = (io: any) => {
       });
 
       socket.on(
-        `userSubmittedUserDescription`,
+        `userSubmittedEditUser`,
         async (userDescription: IDescription) => {
-          purifyDescriptionOfObject(userDescription);
-          await editUser(user, userDescription);
-          stats(user);
+          await userSubmittedEditUserHandler(userDescription, user);
         }
       );
 

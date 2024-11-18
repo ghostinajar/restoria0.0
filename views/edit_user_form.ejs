@@ -63,7 +63,7 @@
         study: DOMPurify.sanitize(editUserStudyUser.value),
         research: DOMPurify.sanitize(editUserResearchUser.value),
       };
-      socket.emit("userSubmittedUserDescription", userDescription);
+      socket.emit("userSubmittedEditUser", userDescription);
       editUserForm.reset();
       editUserForm.style.display = "none";
     });

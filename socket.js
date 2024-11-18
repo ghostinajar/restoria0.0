@@ -7,12 +7,11 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
-import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedNewRoomHandler, userSubmittedNewUserHandler, userSubmittedNewZoneHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedNewRoomHandler, userSubmittedNewUserHandler, userSubmittedNewZoneHandler, userSubmittedEditUserHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
-import purifyDescriptionOfObject, { purifyCommandInput, } from "./util/purify.js";
+import { purifyCommandInput } from "./util/purify.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 const setupSocket = (io) => {
     try {
@@ -101,10 +100,8 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedNewZone`, async (zoneData) => {
                 await userSubmittedNewZoneHandler(zoneData, user);
             });
-            socket.on(`userSubmittedUserDescription`, async (userDescription) => {
-                purifyDescriptionOfObject(userDescription);
-                await editUser(user, userDescription);
-                stats(user);
+            socket.on(`userSubmittedEditUser`, async (userDescription) => {
+                await userSubmittedEditUserHandler(userDescription, user);
             });
             socket.on(`userSubmittedSuggest`, async (suggestionFormData) => {
                 handleSuggestion(suggestionFormData, user);

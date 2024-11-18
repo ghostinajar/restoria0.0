@@ -20,6 +20,7 @@ import createItemBlueprint from "./commands/createItemBlueprint.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import createRoom from "./commands/createRoom.js";
 import createUser from "./commands/createUser.js";
+import editUser from "./commands/editUser.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -287,6 +288,16 @@ export const userSubmittedNewZoneHandler = async (zoneData, user) => {
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedNewZoneHandler`, error, user?.name);
+    }
+};
+export const userSubmittedEditUserHandler = async (userDescription, user) => {
+    try {
+        purifyDescriptionOfObject(userDescription);
+        await editUser(user, userDescription);
+        stats(user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEditUserHandler`, error, user?.name);
     }
 };
 export const userXLeavingGameHandler = async (user, socket) => {

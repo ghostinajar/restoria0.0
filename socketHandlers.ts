@@ -36,6 +36,8 @@ import createMobBlueprint, {
 } from "./commands/createMobBlueprint.js";
 import createRoom, { INewRoomData } from "./commands/createRoom.js";
 import createUser, { IUserData } from "./commands/createUser.js";
+import { IDescription } from "./model/classes/Description.js";
+import editUser from "./commands/editUser.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -451,6 +453,23 @@ export const userSubmittedNewZoneHandler = async (
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedNewZoneHandler`,
+      error,
+      user?.name
+    );
+  }
+};
+
+export const userSubmittedEditUserHandler = async (
+  userDescription: IDescription,
+  user: IUser
+) => {
+  try {
+    purifyDescriptionOfObject(userDescription);
+    await editUser(user, userDescription);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedEditUserHandler`,
       error,
       user?.name
     );
