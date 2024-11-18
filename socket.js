@@ -7,12 +7,11 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
-import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, userSubmittedSuggestHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, userSubmittedSuggestHandler, userSubmittedSuggestionsHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
-import getZoneOfUser from "./util/getZoneofUser.js";
 import { purifyCommandInput } from "./util/purify.js";
-import saveSuggestions from "./commands/saveSuggestions.js";
+import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -107,12 +106,7 @@ const setupSocket = (io) => {
                 await userSubmittedSuggestHandler(suggestFormData, user, socket);
             });
             socket.on(`userSubmittedSuggestions`, async (suggestions) => {
-                const zone = await getZoneOfUser(user);
-                if (!zone) {
-                    throw new Error(`Couldn't get ${user.username}'s zone.`);
-                }
-                await saveSuggestions(suggestions, zone);
-                socket.emit("message", makeMessage("success", `We saved the suggestions for ${zone.name}.`));
+                userSubmittedSuggestionsHandler(suggestions, user, socket);
             });
             // On connection, alert room and look
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
@@ -137,8 +131,8 @@ const setupSocket = (io) => {
                     worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
                     worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
                 }
-                catch (err) {
-                    logger.error(err);
+                catch (error) {
+                    catchErrorHandlerForFunction(`socket.on('disconnect')`, error, user?.name);
                 }
             });
         });

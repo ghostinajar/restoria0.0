@@ -21,6 +21,7 @@ import createMobBlueprint from "./commands/createMobBlueprint.js";
 import createRoom from "./commands/createRoom.js";
 import createUser from "./commands/createUser.js";
 import editUser from "./commands/editUser.js";
+import saveSuggestions from "./commands/saveSuggestions.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -307,6 +308,19 @@ export const userSubmittedSuggestHandler = async (suggestFormData, user, socket)
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedSuggestHandler`, error, user?.name);
+    }
+};
+export const userSubmittedSuggestionsHandler = async (suggestions, user, socket) => {
+    try {
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
+        await saveSuggestions(suggestions, zone);
+        socket.emit("message", makeMessage("success", `We saved the suggestions for ${zone.name}.`));
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedSuggestionsHandler`, error, user?.name);
     }
 };
 export const userXLeavingGameHandler = async (user, socket) => {

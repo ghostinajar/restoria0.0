@@ -35,6 +35,7 @@ import {
   userSubmittedCreateZoneHandler,
   userSubmittedEditUserHandler,
   userSubmittedSuggestHandler,
+  userSubmittedSuggestionsHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -50,6 +51,7 @@ import { purifyCommandInput } from "./util/purify.js";
 import { ILocation } from "./model/classes/Location.js";
 import { ISuggestion, refersToObjectType } from "./model/classes/Suggestion.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
+import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -243,15 +245,7 @@ const setupSocket = (io: any) => {
       socket.on(
         `userSubmittedSuggestions`,
         async (suggestions: Array<ISuggestion>) => {
-          const zone = await getZoneOfUser(user);
-          if (!zone) {
-            throw new Error(`Couldn't get ${user.username}'s zone.`);
-          }
-          await saveSuggestions(suggestions, zone);
-          socket.emit(
-            "message",
-            makeMessage("success", `We saved the suggestions for ${zone.name}.`)
-          );
+          userSubmittedSuggestionsHandler(suggestions, user, socket);
         }
       );
 
@@ -281,8 +275,8 @@ const setupSocket = (io: any) => {
           worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
           worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
           worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
-        } catch (err) {
-          logger.error(err);
+        } catch (error: unknown){
+          catchErrorHandlerForFunction(`socket.on('disconnect')`, error, user?.name);
         }
       });
     });

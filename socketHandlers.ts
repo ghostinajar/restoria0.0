@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 import logger from "./logger.js";
 import {
+  ISuggestion,
   refersToObjectType,
   suggestionStatusType,
 } from "./model/classes/Suggestion.js";
@@ -38,6 +39,7 @@ import createRoom, { INewRoomData } from "./commands/createRoom.js";
 import createUser, { IUserData } from "./commands/createUser.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
+import saveSuggestions from "./commands/saveSuggestions.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -495,6 +497,30 @@ export const userSubmittedSuggestHandler = async (
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedSuggestHandler`,
+      error,
+      user?.name
+    );
+  }
+};
+
+export const userSubmittedSuggestionsHandler = async (
+  suggestions: Array<ISuggestion>,
+  user: IUser,
+  socket: any
+) => {
+  try {
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
+    await saveSuggestions(suggestions, zone);
+    socket.emit(
+      "message",
+      makeMessage("success", `We saved the suggestions for ${zone.name}.`)
+    );
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedSuggestionsHandler`,
       error,
       user?.name
     );
