@@ -76,13 +76,21 @@ export const messageArrayForUserHandler = async (
   messageArray: Array<IMessage>,
   socket: any
 ) => {
-  for (let message of messageArray) {
-    socket.emit(`message`, message);
+  try {
+    for (let message of messageArray) {
+      socket.emit(`message`, message);
+    }
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`messageArrayForUserHandler`, error);
   }
 };
 
 export const messageForUserHandler = async (message: IMessage, socket: any) => {
-  socket.emit(`message`, message);
+  try {
+    socket.emit(`message`, message);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`messageForUserHandler`, error);
+  }
 };
 
 export const messageForUsersRoomHandler = async (
@@ -90,10 +98,15 @@ export const messageForUsersRoomHandler = async (
   socket: any,
   user: IUser
 ) => {
-  // logger.debug(
-  //   `socket says ${user.name}'s location is ${JSON.stringify(user.location)}`
-  // );
-  socket.to(user.location.inRoom.toString()).emit(`message`, message);
+  try {
+    socket.to(user.location.inRoom.toString()).emit(`message`, message);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `messageForUsersRoomHandler`,
+      error,
+      user?.name
+    );
+  }
 };
 
 export const messageForUsersZoneHandler = async (
@@ -101,7 +114,15 @@ export const messageForUsersZoneHandler = async (
   socket: any,
   user: IUser
 ) => {
-  socket.to(user.location.inZone.toString()).emit(`message`, message);
+  try {
+    socket.to(user.location.inZone.toString()).emit(`message`, message);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `messageForUsersZoneHandler`,
+      error,
+      user?.name
+    );
+  }
 };
 
 export const userSubmittedEditItemBlueprintHandler = async (

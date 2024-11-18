@@ -52,21 +52,38 @@ export const formPromptForUserHandler = async (formData, socket) => {
     }
 };
 export const messageArrayForUserHandler = async (messageArray, socket) => {
-    for (let message of messageArray) {
-        socket.emit(`message`, message);
+    try {
+        for (let message of messageArray) {
+            socket.emit(`message`, message);
+        }
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`messageArrayForUserHandler`, error);
     }
 };
 export const messageForUserHandler = async (message, socket) => {
-    socket.emit(`message`, message);
+    try {
+        socket.emit(`message`, message);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`messageForUserHandler`, error);
+    }
 };
 export const messageForUsersRoomHandler = async (message, socket, user) => {
-    // logger.debug(
-    //   `socket says ${user.name}'s location is ${JSON.stringify(user.location)}`
-    // );
-    socket.to(user.location.inRoom.toString()).emit(`message`, message);
+    try {
+        socket.to(user.location.inRoom.toString()).emit(`message`, message);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`messageForUsersRoomHandler`, error, user?.name);
+    }
 };
 export const messageForUsersZoneHandler = async (message, socket, user) => {
-    socket.to(user.location.inZone.toString()).emit(`message`, message);
+    try {
+        socket.to(user.location.inZone.toString()).emit(`message`, message);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`messageForUsersZoneHandler`, error, user?.name);
+    }
 };
 export const userSubmittedEditItemBlueprintHandler = async (itemBlueprintData, user) => {
     try {
