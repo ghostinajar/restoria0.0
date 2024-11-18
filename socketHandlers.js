@@ -23,69 +23,32 @@ import createUser from "./commands/createUser.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 export const formPromptForUserHandler = async (formData, socket) => {
-    if (formData.form === "createItemBlueprintForm") {
-        socket.emit(`openCreateItemBlueprintForm`, formData);
-        return;
-    }
-    if (formData.form === "createMobBlueprintForm") {
-        socket.emit(`opencreateMobBlueprintForm`, formData);
-        return;
-    }
-    if (formData.form === "createRoomForm") {
-        socket.emit(`openCreateRoomForm`, formData);
-        return;
-    }
-    if (formData.form === "createUserForm") {
-        socket.emit(`openCreateUserForm`);
-        return;
-    }
-    if (formData.form === "createZoneForm") {
-        socket.emit(`openCreateZoneForm`);
-        return;
-    }
-    if (formData.form === "editItemBlueprintForm") {
-        socket.emit(`openEditItemBlueprintForm`, formData);
-        return;
-    }
-    if (formData.form === "editMobBlueprintForm") {
-        socket.emit(`openEditMobBlueprintForm`, formData);
-        return;
-    }
-    if (formData.form === "editRoomForm") {
-        socket.emit(`openEditRoomForm`, formData);
-        return;
-    }
-    if (formData.form === "editUserForm") {
-        socket.emit(`openEditUserForm`, formData);
-        return;
-    }
-    if (formData.form === "editZoneForm") {
-        socket.emit(`openEditZoneForm`, formData);
-        return;
-    }
-    if (formData.form === "eraseItemBlueprintForm") {
-        socket.emit(`openEraseItemBlueprintForm`, formData);
-        return;
-    }
-    if (formData.form === "eraseMobBlueprintForm") {
-        socket.emit(`openEraseMobBlueprintForm`, formData);
-        return;
-    }
-    if (formData.form === "eraseRoomForm") {
-        socket.emit(`openEraseRoomForm`, formData);
-        return;
-    }
-    if (formData.form === "gotoForm") {
-        socket.emit(`openGotoForm`, formData);
-        return;
-    }
-    if (formData.form === "suggestForm") {
-        socket.emit(`openSuggestForm`, formData);
-        return;
-    }
-    if (formData.form === "suggestionsForm") {
-        socket.emit(`openSuggestionsForm`, formData);
-        return;
+    const formEventMap = {
+        createItemBlueprintForm: "openCreateItemBlueprintForm",
+        createMobBlueprintForm: "opencreateMobBlueprintForm",
+        createRoomForm: "openCreateRoomForm",
+        createUserForm: "openCreateUserForm",
+        createZoneForm: "openCreateZoneForm",
+        editItemBlueprintForm: "openEditItemBlueprintForm",
+        editMobBlueprintForm: "openEditMobBlueprintForm",
+        editRoomForm: "openEditRoomForm",
+        editUserForm: "openEditUserForm",
+        editZoneForm: "openEditZoneForm",
+        eraseItemBlueprintForm: "openEraseItemBlueprintForm",
+        eraseMobBlueprintForm: "openEraseMobBlueprintForm",
+        eraseRoomForm: "openEraseRoomForm",
+        gotoForm: "openGotoForm",
+        suggestForm: "openSuggestForm",
+        suggestionsForm: "openSuggestionsForm",
+    };
+    const eventName = formEventMap[formData.form];
+    if (eventName) {
+        if (["openCreateUserForm", "openCreateZoneForm"].includes(eventName)) {
+            socket.emit(eventName);
+        }
+        else {
+            socket.emit(eventName, formData);
+        }
     }
 };
 export async function handleSuggestion(suggestionFormData, user) {
