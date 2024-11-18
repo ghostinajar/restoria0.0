@@ -13,6 +13,7 @@ import editItemBlueprint from "./commands/editItemBlueprint.js";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
 import editRoom from "./commands/editRoom.js";
 import getRoomOfUser from "./util/getRoomOfUser.js";
+import editZone from "./commands/editZone.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -164,6 +165,16 @@ export const userSubmittedEditRoomHandler = async (roomData, user) => {
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEditRoomHandler`, error, user?.name);
+    }
+};
+export const userSubmittedEditZoneHandler = async (zoneData, user) => {
+    try {
+        purifyDescriptionOfObject(zoneData);
+        await editZone(zoneData, user);
+        stats(user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEditZoneHandler`, error, user?.name);
     }
 };
 export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => {

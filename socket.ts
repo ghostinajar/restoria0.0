@@ -23,14 +23,14 @@ import {
   userSubmittedEditItemBlueprintHandler,
   userSubmittedEditMobBlueprintHandler,
   userSubmittedEditRoomHandler,
+  userSubmittedEditZoneHandler,
   userSubmittedEraseItemBlueprintHandler,
   userSubmittedEraseMobBlueprintHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
-import editRoom, { IEditRoomFormData } from "./commands/editRoom.js";
-import getRoomOfUser from "./util/getRoomOfUser.js";
+import { IEditRoomFormData } from "./commands/editRoom.js";
 import createMobBlueprint, {
   ICreateMobFormData,
 } from "./commands/createMobBlueprint.js";
@@ -40,11 +40,8 @@ import exits from "./commands/exits.js";
 import createItemBlueprint, {
   ICreateItemBlueprintFormData,
 } from "./commands/createItemBlueprint.js";
-import editItemBlueprint, {
-  IEditItemBlueprintFormData,
-} from "./commands/editItemBlueprint.js";
+import { IEditItemBlueprintFormData } from "./commands/editItemBlueprint.js";
 import createZone, { IZoneData } from "./commands/createZone.js";
-import editZone from "./commands/editZone.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, {
   purifyCommandInput,
@@ -183,9 +180,7 @@ const setupSocket = (io: any) => {
       );
 
       socket.on(`userSubmittedEditZone`, async (zoneData: IZoneData) => {
-        purifyDescriptionOfObject(zoneData);
-        await editZone(zoneData, user);
-        stats(user);
+        await userSubmittedEditZoneHandler(zoneData, user);
       });
 
       socket.on(
