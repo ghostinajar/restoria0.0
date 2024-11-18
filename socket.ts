@@ -35,6 +35,7 @@ import {
   userSubmittedCreateUserHandler,
   userSubmittedCreateZoneHandler,
   userSubmittedEditUserHandler,
+  userSubmittedSuggestHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -144,6 +145,18 @@ const setupSocket = (io: any) => {
         userSentCommandHandler(socket, userInput, user);
       });
 
+      socket.on(`userSubmittedCreateRoom`, async (roomData: INewRoomData) => {
+        await userSubmittedCreateRoomHandler(roomData, user);
+      });
+
+      socket.on(`userSubmittedCreateUser`, async (userData: IUserData) => {
+        await userSubmittedCreateUserHandler(userData, user);
+      });
+
+      socket.on(`userSubmittedCreateZone`, async (zoneData: IZoneData) => {
+        await userSubmittedCreateZoneHandler(zoneData, user);
+      });
+
       socket.on(
         `userSubmittedEditItemBlueprint`,
         async (
@@ -176,6 +189,13 @@ const setupSocket = (io: any) => {
         `userSubmittedEditRoom`,
         async (roomData: IEditRoomFormData) => {
           await userSubmittedEditRoomHandler(roomData, user);
+        }
+      );
+
+      socket.on(
+        `userSubmittedEditUser`,
+        async (userDescription: IDescription) => {
+          await userSubmittedEditUserHandler(userDescription, user);
         }
       );
 
@@ -224,40 +244,14 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(`userSubmittedCreateRoom`, async (roomData: INewRoomData) => {
-        await userSubmittedCreateRoomHandler(roomData, user);
-      });
-
-      socket.on(`userSubmittedCreateUser`, async (userData: IUserData) => {
-        await userSubmittedCreateUserHandler(userData, user);
-      });
-
-      socket.on(`userSubmittedCreateZone`, async (zoneData: IZoneData) => {
-        await userSubmittedCreateZoneHandler(zoneData, user);
-      });
-
-      socket.on(
-        `userSubmittedEditUser`,
-        async (userDescription: IDescription) => {
-          await userSubmittedEditUserHandler(userDescription, user);
-        }
-      );
-
       socket.on(
         `userSubmittedSuggest`,
-        async (suggestionFormData: {
+        async (suggestFormData: {
           _id: string;
           refersToObjectType: refersToObjectType;
           body: string;
         }) => {
-          handleSuggestion(suggestionFormData, user);
-          socket.emit(
-            "message",
-            makeMessage(
-              "success",
-              `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`
-            )
-          );
+          await userSubmittedSuggestHandler(suggestFormData, user, socket);
         }
       );
 

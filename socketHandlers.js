@@ -300,6 +300,15 @@ export const userSubmittedEditUserHandler = async (userDescription, user) => {
         catchErrorHandlerForFunction(`userSubmittedEditUserHandler`, error, user?.name);
     }
 };
+export const userSubmittedSuggestHandler = async (suggestFormData, user, socket) => {
+    try {
+        await handleSuggestion(suggestFormData, user);
+        socket.emit("message", makeMessage("success", `We saved your suggestion for this ${suggestFormData.refersToObjectType}.`));
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedSuggestHandler`, error, user?.name);
+    }
+};
 export const userXLeavingGameHandler = async (user, socket) => {
     // logger.debug(
     //   `socket received user${user.name}LeavingGame event. Disconnecting.`

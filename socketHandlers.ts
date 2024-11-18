@@ -476,6 +476,33 @@ export const userSubmittedEditUserHandler = async (
   }
 };
 
+export const userSubmittedSuggestHandler = async (
+  suggestFormData: {
+    _id: string;
+    refersToObjectType: refersToObjectType;
+    body: string;
+  },
+  user: IUser,
+  socket: any
+) => {
+  try {
+    await handleSuggestion(suggestFormData, user);
+    socket.emit(
+      "message",
+      makeMessage(
+        "success",
+        `We saved your suggestion for this ${suggestFormData.refersToObjectType}.`
+      )
+    );
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedSuggestHandler`,
+      error,
+      user?.name
+    );
+  }
+};
+
 export const userXLeavingGameHandler = async (user: IUser, socket: any) => {
   // logger.debug(
   //   `socket received user${user.name}LeavingGame event. Disconnecting.`

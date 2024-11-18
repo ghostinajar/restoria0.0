@@ -7,7 +7,7 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, userSubmittedSuggestHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
@@ -63,6 +63,15 @@ const setupSocket = (io) => {
                 userInput = purifyCommandInput(userInput);
                 userSentCommandHandler(socket, userInput, user);
             });
+            socket.on(`userSubmittedCreateRoom`, async (roomData) => {
+                await userSubmittedCreateRoomHandler(roomData, user);
+            });
+            socket.on(`userSubmittedCreateUser`, async (userData) => {
+                await userSubmittedCreateUserHandler(userData, user);
+            });
+            socket.on(`userSubmittedCreateZone`, async (zoneData) => {
+                await userSubmittedCreateZoneHandler(zoneData, user);
+            });
             socket.on(`userSubmittedEditItemBlueprint`, async (itemId, itemBlueprintData) => {
                 await userSubmittedEditItemBlueprintHandler(itemId, itemBlueprintData, user);
             });
@@ -71,6 +80,9 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedEditRoom`, async (roomData) => {
                 await userSubmittedEditRoomHandler(roomData, user);
+            });
+            socket.on(`userSubmittedEditUser`, async (userDescription) => {
+                await userSubmittedEditUserHandler(userDescription, user);
             });
             socket.on(`userSubmittedEditZone`, async (zoneData) => {
                 await userSubmittedEditZoneHandler(zoneData, user);
@@ -91,21 +103,8 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedCreateMobBlueprint`, async (mobBlueprintData) => {
                 await userSubmittedCreateMobBlueprintHandler(mobBlueprintData, user);
             });
-            socket.on(`userSubmittedCreateRoom`, async (roomData) => {
-                await userSubmittedCreateRoomHandler(roomData, user);
-            });
-            socket.on(`userSubmittedCreateUser`, async (userData) => {
-                await userSubmittedCreateUserHandler(userData, user);
-            });
-            socket.on(`userSubmittedCreateZone`, async (zoneData) => {
-                await userSubmittedCreateZoneHandler(zoneData, user);
-            });
-            socket.on(`userSubmittedEditUser`, async (userDescription) => {
-                await userSubmittedEditUserHandler(userDescription, user);
-            });
-            socket.on(`userSubmittedSuggest`, async (suggestionFormData) => {
-                handleSuggestion(suggestionFormData, user);
-                socket.emit("message", makeMessage("success", `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`));
+            socket.on(`userSubmittedSuggest`, async (suggestFormData) => {
+                await userSubmittedSuggestHandler(suggestFormData, user, socket);
             });
             socket.on(`userSubmittedSuggestions`, async (suggestions) => {
                 const zone = await getZoneOfUser(user);
