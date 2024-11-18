@@ -58,7 +58,6 @@ export interface IUser extends mongoose.Document {
   equipped: IEquipped;
   affixes: Array<IAffix>;
   editor: mongoose.Types.ObjectId | null;
-  editorFor: mongoose.Types.ObjectId | null;
   runtimeProps?: IRuntimeProps;
   comparePassword(candidatePassword: string): Promise<boolean>;
   calculateMaxHp(): number;

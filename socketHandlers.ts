@@ -72,59 +72,6 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   }
 };
 
-export async function handleSuggestion(
-  suggestionFormData: {
-    _id: string;
-    refersToObjectType: refersToObjectType;
-    body: string;
-  },
-  user: IUser
-) {
-  suggestionFormData = purifyAllStringPropsOfObject(suggestionFormData);
-  const zone = await getZoneOfUser(user);
-  if (!zone) {
-    throw new Error(`Couldn't get ${user.username}'s zone.`);
-  }
-  const author = await User.findById(zone.author);
-  let authorName = author?.name || "the author";
-
-  if (zone.history.completionStatus === "published") {
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(
-        "rejection",
-        `This zone is already published! Contact ${authorName} with your suggestion.`
-      )
-    );
-    return;
-  }
-
-  const suggestion = {
-    authorId: user._id,
-    authorName: user.name,
-    refersToId: new mongoose.Types.ObjectId(suggestionFormData._id),
-    refersToObjectType: suggestionFormData.refersToObjectType,
-    body: suggestionFormData.body,
-    status: "pending" as suggestionStatusType,
-    history: historyStartingNow(),
-  };
-
-  switch (suggestionFormData.refersToObjectType) {
-    case "room":
-      suggestion.refersToId = user.location.inRoom;
-      break;
-    case "zone":
-      suggestion.refersToId = user.location.inZone;
-      break;
-    default:
-      break;
-  }
-  zone.suggestions.push(suggestion);
-  await zone.save();
-  await zone.initRooms();
-  stats(user);
-}
-
 export const messageArrayForUserHandler = async (
   messageArray: Array<IMessage>,
   socket: any
@@ -450,7 +397,48 @@ export const userSubmittedSuggestHandler = async (
   socket: any
 ) => {
   try {
-    await handleSuggestion(suggestFormData, user);
+    suggestFormData = purifyAllStringPropsOfObject(suggestFormData);
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Couldn't get ${user.username}'s zone.`);
+    }
+    const author = await User.findById(zone.author);
+    let authorName = author?.name || "the author";
+
+    if (zone.history.completionStatus === "published") {
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          "rejection",
+          `This zone is already published! Contact ${authorName} with your suggestion.`
+        )
+      );
+      return;
+    }
+
+    const suggestion = {
+      authorId: user._id,
+      authorName: user.name,
+      refersToId: new mongoose.Types.ObjectId(suggestFormData._id),
+      refersToObjectType: suggestFormData.refersToObjectType,
+      body: suggestFormData.body,
+      status: "pending" as suggestionStatusType,
+      history: historyStartingNow(),
+    };
+
+    switch (suggestFormData.refersToObjectType) {
+      case "room":
+        suggestion.refersToId = user.location.inRoom;
+        break;
+      case "zone":
+        suggestion.refersToId = user.location.inZone;
+        break;
+      default:
+        break;
+    }
+    zone.suggestions.push(suggestion);
+    await zone.save();
+    await zone.initRooms();
     socket.emit(
       "message",
       makeMessage(
@@ -458,6 +446,7 @@ export const userSubmittedSuggestHandler = async (
         `We saved your suggestion for this ${suggestFormData.refersToObjectType}.`
       )
     );
+    stats(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedSuggestHandler`,
