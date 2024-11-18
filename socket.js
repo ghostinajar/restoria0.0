@@ -7,7 +7,7 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedNewRoomHandler, userSubmittedNewUserHandler, userSubmittedNewZoneHandler, userSubmittedEditUserHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
 import getZoneOfUser from "./util/getZoneofUser.js";
@@ -91,14 +91,14 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedCreateMobBlueprint`, async (mobBlueprintData) => {
                 await userSubmittedCreateMobBlueprintHandler(mobBlueprintData, user);
             });
-            socket.on(`userSubmittedNewRoom`, async (roomData) => {
-                await userSubmittedNewRoomHandler(roomData, user);
+            socket.on(`userSubmittedCreateRoom`, async (roomData) => {
+                await userSubmittedCreateRoomHandler(roomData, user);
             });
-            socket.on(`userSubmittedNewUser`, async (userData) => {
-                await userSubmittedNewUserHandler(userData, user);
+            socket.on(`userSubmittedCreateUser`, async (userData) => {
+                await userSubmittedCreateUserHandler(userData, user);
             });
-            socket.on(`userSubmittedNewZone`, async (zoneData) => {
-                await userSubmittedNewZoneHandler(zoneData, user);
+            socket.on(`userSubmittedCreateZone`, async (zoneData) => {
+                await userSubmittedCreateZoneHandler(zoneData, user);
             });
             socket.on(`userSubmittedEditUser`, async (userDescription) => {
                 await userSubmittedEditUserHandler(userDescription, user);

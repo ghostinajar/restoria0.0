@@ -260,34 +260,34 @@ export const userSubmittedCreateMobBlueprintHandler = async (mobBlueprintData, u
         catchErrorHandlerForFunction(`userSubmittedCreateMobBlueprintHandler`, error, user?.name);
     }
 };
-export const userSubmittedNewRoomHandler = async (roomData, user) => {
+export const userSubmittedCreateRoomHandler = async (roomData, user) => {
     try {
         purifyDescriptionOfObject(roomData);
         await createRoom(roomData, user);
         stats(user);
     }
     catch (error) {
-        catchErrorHandlerForFunction(`userSubmittedNewRoomHandler`, error, user?.name);
+        catchErrorHandlerForFunction(`userSubmittedCreateRoomHandler`, error, user?.name);
     }
 };
-export const userSubmittedNewUserHandler = async (userData, user) => {
+export const userSubmittedCreateUserHandler = async (userData, user) => {
     try {
         purifyDescriptionOfObject(userData);
         const newUser = await createUser(userData, user);
         stats(user);
     }
     catch (error) {
-        catchErrorHandlerForFunction(`userSubmittedNewUserHandler`, error, user?.name);
+        catchErrorHandlerForFunction(`userSubmittedCreateUserHandler`, error, user?.name);
     }
 };
-export const userSubmittedNewZoneHandler = async (zoneData, user) => {
+export const userSubmittedCreateZoneHandler = async (zoneData, user) => {
     try {
         purifyDescriptionOfObject(zoneData);
         await createZone(zoneData, user);
         stats(user);
     }
     catch (error) {
-        catchErrorHandlerForFunction(`userSubmittedNewZoneHandler`, error, user?.name);
+        catchErrorHandlerForFunction(`userSubmittedCreateZoneHandler`, error, user?.name);
     }
 };
 export const userSubmittedEditUserHandler = async (userDescription, user) => {

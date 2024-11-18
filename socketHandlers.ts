@@ -408,7 +408,7 @@ export const userSubmittedCreateMobBlueprintHandler = async (
   }
 };
 
-export const userSubmittedNewRoomHandler = async (
+export const userSubmittedCreateRoomHandler = async (
   roomData: INewRoomData,
   user: IUser
 ) => {
@@ -418,14 +418,14 @@ export const userSubmittedNewRoomHandler = async (
     stats(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
-      `userSubmittedNewRoomHandler`,
+      `userSubmittedCreateRoomHandler`,
       error,
       user?.name
     );
   }
 };
 
-export const userSubmittedNewUserHandler = async (
+export const userSubmittedCreateUserHandler = async (
   userData: IUserData,
   user: IUser
 ) => {
@@ -435,14 +435,14 @@ export const userSubmittedNewUserHandler = async (
     stats(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
-      `userSubmittedNewUserHandler`,
+      `userSubmittedCreateUserHandler`,
       error,
       user?.name
     );
   }
 };
 
-export const userSubmittedNewZoneHandler = async (
+export const userSubmittedCreateZoneHandler = async (
   zoneData: IZoneData,
   user: IUser
 ) => {
@@ -452,7 +452,7 @@ export const userSubmittedNewZoneHandler = async (
     stats(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
-      `userSubmittedNewZoneHandler`,
+      `userSubmittedCreateZoneHandler`,
       error,
       user?.name
     );

@@ -31,9 +31,9 @@ import {
   userSubmittedCreateMobBlueprintHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
-  userSubmittedNewRoomHandler,
-  userSubmittedNewUserHandler,
-  userSubmittedNewZoneHandler,
+  userSubmittedCreateRoomHandler,
+  userSubmittedCreateUserHandler,
+  userSubmittedCreateZoneHandler,
   userSubmittedEditUserHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
@@ -224,16 +224,16 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(`userSubmittedNewRoom`, async (roomData: INewRoomData) => {
-        await userSubmittedNewRoomHandler(roomData, user);
+      socket.on(`userSubmittedCreateRoom`, async (roomData: INewRoomData) => {
+        await userSubmittedCreateRoomHandler(roomData, user);
       });
 
-      socket.on(`userSubmittedNewUser`, async (userData: IUserData) => {
-        await userSubmittedNewUserHandler(userData, user);
+      socket.on(`userSubmittedCreateUser`, async (userData: IUserData) => {
+        await userSubmittedCreateUserHandler(userData, user);
       });
 
-      socket.on(`userSubmittedNewZone`, async (zoneData: IZoneData) => {
-        await userSubmittedNewZoneHandler(zoneData, user);
+      socket.on(`userSubmittedCreateZone`, async (zoneData: IZoneData) => {
+        await userSubmittedCreateZoneHandler(zoneData, user);
       });
 
       socket.on(

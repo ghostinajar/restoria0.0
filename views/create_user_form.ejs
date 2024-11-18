@@ -74,7 +74,7 @@
         pronouns: document.getElementById("pronouns").value,
         job: document.getElementById("job").value,
       };
-      socket.emit("userSubmittedNewUser", userData);
+      socket.emit("userSubmittedCreateUser", userData);
       createUserForm.reset();
       createUserForm.style.display = "none";
     });

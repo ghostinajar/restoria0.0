@@ -113,7 +113,7 @@
         study: "",
         research: "",
       };
-      socket.emit("userSubmittedNewRoom", roomData);
+      socket.emit("userSubmittedCreateRoom", roomData);
       createRoomForm.reset();
       createRoomForm.style.display = "none";
     });
