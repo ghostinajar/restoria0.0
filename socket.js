@@ -10,10 +10,8 @@ import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import editUser from "./commands/editUser.js";
-import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, handleSuggestion, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
-import editRoom from "./commands/editRoom.js";
-import getRoomOfUser from "./util/getRoomOfUser.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import exits from "./commands/exits.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
@@ -80,13 +78,7 @@ const setupSocket = (io) => {
                 await userSubmittedEditMobBlueprintHandler(mobId, mobBlueprintData, user);
             });
             socket.on(`userSubmittedEditRoom`, async (roomData) => {
-                const room = await getRoomOfUser(user);
-                if (!room) {
-                    throw new Error(`Room not found for user ${user.name}`);
-                }
-                purifyDescriptionOfObject(roomData);
-                await editRoom(room, roomData, user);
-                stats(user);
+                await userSubmittedEditRoomHandler(roomData, user);
             });
             socket.on(`userSubmittedEditZone`, async (zoneData) => {
                 purifyDescriptionOfObject(zoneData);
@@ -150,8 +142,6 @@ const setupSocket = (io) => {
                 socket.emit("message", makeMessage("success", `We saved your suggestion for this ${suggestionFormData.refersToObjectType}.`));
             });
             socket.on(`userSubmittedSuggestions`, async (suggestions) => {
-                console.log("Received userSubmittedSuggestions event, saving...");
-                console.log(suggestions);
                 const zone = await getZoneOfUser(user);
                 if (!zone) {
                     throw new Error(`Couldn't get ${user.username}'s zone.`);

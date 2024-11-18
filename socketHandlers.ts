@@ -22,6 +22,8 @@ import editItemBlueprint, {
 import editMobBlueprint, {
   IEditMobFormData,
 } from "./commands/editMobBlueprint.js";
+import editRoom, { IEditRoomFormData } from "./commands/editRoom.js";
+import getRoomOfUser from "./util/getRoomOfUser.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   if (formData.form === "createItemBlueprintForm") {
@@ -202,7 +204,32 @@ export const userSubmittedEditMobBlueprintHandler = async (
     await editMobBlueprint(mobId, mobBlueprintData, user);
     stats(user);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction(`functionName`, error, user?.name);
+    catchErrorHandlerForFunction(
+      `userSubmittedEditMobBlueprintHandler`,
+      error,
+      user?.name
+    );
+  }
+};
+
+export const userSubmittedEditRoomHandler = async (
+  roomData: IEditRoomFormData,
+  user: IUser
+) => {
+  try {
+    const room = await getRoomOfUser(user);
+    if (!room) {
+      throw new Error(`Room not found for user ${user.name}`);
+    }
+    purifyDescriptionOfObject(roomData);
+    await editRoom(room, roomData, user);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedEditRoomHandler`,
+      error,
+      user?.name
+    );
   }
 };
 

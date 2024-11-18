@@ -11,6 +11,8 @@ import makeMessage from "./util/makeMessage.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
 import editItemBlueprint from "./commands/editItemBlueprint.js";
 import editMobBlueprint from "./commands/editMobBlueprint.js";
+import editRoom from "./commands/editRoom.js";
+import getRoomOfUser from "./util/getRoomOfUser.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     if (formData.form === "createItemBlueprintForm") {
         socket.emit(`openCreateItemBlueprintForm`, formData);
@@ -147,7 +149,21 @@ export const userSubmittedEditMobBlueprintHandler = async (mobId, mobBlueprintDa
         stats(user);
     }
     catch (error) {
-        catchErrorHandlerForFunction(`functionName`, error, user?.name);
+        catchErrorHandlerForFunction(`userSubmittedEditMobBlueprintHandler`, error, user?.name);
+    }
+};
+export const userSubmittedEditRoomHandler = async (roomData, user) => {
+    try {
+        const room = await getRoomOfUser(user);
+        if (!room) {
+            throw new Error(`Room not found for user ${user.name}`);
+        }
+        purifyDescriptionOfObject(roomData);
+        await editRoom(room, roomData, user);
+        stats(user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEditRoomHandler`, error, user?.name);
     }
 };
 export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => {
