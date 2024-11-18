@@ -33,9 +33,6 @@ async function suggest(parsedCommand: IParsedCommand, user: IUser) {
       );
     }
 
-    console.log(zoneAuthor.editor);
-    console.log(user._id);
-
     // reject suggestions from users who aren't the editor or author
     if (
       zoneAuthor.editor?.toString() != user._id.toString() &&

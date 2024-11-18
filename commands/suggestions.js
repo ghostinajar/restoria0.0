@@ -4,11 +4,16 @@ import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
 import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
+import makeMessage from "../util/makeMessage.js";
 async function suggestions(user) {
     try {
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
+        if (zone.author.toString() !== user._id.toString()) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `You're not the author of this zone.`));
+            return;
         }
         worldEmitter.emit(`formPromptFor${user.username}`, {
             form: `suggestionsForm`,

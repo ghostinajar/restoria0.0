@@ -24,8 +24,6 @@ async function suggest(parsedCommand, user) {
         if (!zoneAuthor) {
             throw new Error(`Author of ${zone.name} (user with id ${zone.author.toString()} doesn't exist!(?)`);
         }
-        console.log(zoneAuthor.editor);
-        console.log(user._id);
         // reject suggestions from users who aren't the editor or author
         if (zoneAuthor.editor?.toString() != user._id.toString() &&
             zone.author.toString() != user._id.toString()) {

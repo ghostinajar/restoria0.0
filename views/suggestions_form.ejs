@@ -200,6 +200,7 @@
     });
 
     function loadSuggestionsToUlElement(ulElement, suggestions, objectList) {
+      console.log(objectList)
       for (let suggestion of suggestions) {
         addSuggestionToUlElement(
           ulElement,
@@ -221,7 +222,7 @@
       liElement.className = "suggestion";
       suggestionName = objectList.find(
         (object) => object._id === suggestion.refersToId
-      ).name;
+      )?.name ?? "General Zone Suggestion";
 
       liElement.innerHTML = `
         <div class="suggestionInfo">
