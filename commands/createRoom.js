@@ -7,13 +7,13 @@ import roomSchema from "../model/classes/Room.js";
 import mongoose from "mongoose";
 import ROOM_TYPE from "../constants/ROOM_TYPE.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
-import createExit from "./createExit.js";
 import truncateDescription from "../util/truncateDescription.js";
 import exits from "./exits.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
+import makeExitToRoomId from "../util/makeExitToRoomId.js";
 // Return room, or a message explaining failure (if by user, emit message to their socket)
 async function createRoom(roomFormData, user) {
     try {
@@ -76,8 +76,8 @@ async function createRoom(roomFormData, user) {
                     originRoom.mapCoords[1] - 1,
                     originRoom.mapCoords[2],
                 ];
-                newRoomData.exits.south = createExit(originRoom._id, originZone._id);
-                originRoom.exits.north = createExit(newRoomData._id, originZone._id);
+                newRoomData.exits.south = makeExitToRoomId(originRoom._id, originZone._id);
+                originRoom.exits.north = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "east": {
@@ -86,8 +86,8 @@ async function createRoom(roomFormData, user) {
                     originRoom.mapCoords[1],
                     originRoom.mapCoords[2],
                 ];
-                newRoomData.exits.west = createExit(originRoom._id, originZone._id);
-                originRoom.exits.east = createExit(newRoomData._id, originZone._id);
+                newRoomData.exits.west = makeExitToRoomId(originRoom._id, originZone._id);
+                originRoom.exits.east = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "south": {
@@ -96,8 +96,8 @@ async function createRoom(roomFormData, user) {
                     originRoom.mapCoords[1] + 1,
                     originRoom.mapCoords[2],
                 ];
-                newRoomData.exits.north = createExit(originRoom._id, originZone._id);
-                originRoom.exits.south = createExit(newRoomData._id, originZone._id);
+                newRoomData.exits.north = makeExitToRoomId(originRoom._id, originZone._id);
+                originRoom.exits.south = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "west": {
@@ -106,8 +106,8 @@ async function createRoom(roomFormData, user) {
                     originRoom.mapCoords[1],
                     originRoom.mapCoords[2],
                 ];
-                newRoomData.exits.east = createExit(originRoom._id, originZone._id);
-                originRoom.exits.west = createExit(newRoomData._id, originZone._id);
+                newRoomData.exits.east = makeExitToRoomId(originRoom._id, originZone._id);
+                originRoom.exits.west = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "up": {
@@ -116,8 +116,8 @@ async function createRoom(roomFormData, user) {
                     originRoom.mapCoords[1],
                     originRoom.mapCoords[2] + 1,
                 ];
-                newRoomData.exits.down = createExit(originRoom._id, originZone._id);
-                originRoom.exits.up = createExit(newRoomData._id, originZone._id);
+                newRoomData.exits.down = makeExitToRoomId(originRoom._id, originZone._id);
+                originRoom.exits.up = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "down": {
@@ -126,8 +126,8 @@ async function createRoom(roomFormData, user) {
                     originRoom.mapCoords[1],
                     originRoom.mapCoords[2] - 1,
                 ];
-                newRoomData.exits.up = createExit(originRoom._id, originZone._id);
-                originRoom.exits.down = createExit(newRoomData._id, originZone._id);
+                newRoomData.exits.up = makeExitToRoomId(originRoom._id, originZone._id);
+                originRoom.exits.down = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             default:
