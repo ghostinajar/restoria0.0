@@ -40,9 +40,12 @@ import createUser, { IUserData } from "./commands/createUser.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
+import makeExitToRoomId from "./util/makeExitToRoomId.js";
+import coordsOccupiedInZone from "./util/coordsOccupiedInZone.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
+    createExit: "openCreateExitForm",
     createItemBlueprintForm: "openCreateItemBlueprintForm",
     createMobBlueprintForm: "opencreateMobBlueprintForm",
     createRoomForm: "openCreateRoomForm",
@@ -122,6 +125,32 @@ export const messageForUsersZoneHandler = async (
       error,
       user?.name
     );
+  }
+};
+
+export const userSubmittedCreateExitHandler = async (
+  direction: string,
+  user: IUser
+) => {
+  try {
+    const room = await getRoomOfUser(user);
+    if (!room) {
+      throw new Error(`Room not found for ${user.name}.`)
+    }
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Room not found for ${user.name}.`)
+    }
+    
+    // check current room has available exit in direction (fail early)
+    if(room.exits[direction]) {
+      throw new Error(`create_exit form submitted for an unavailable exit`)
+    }
+    // get neighbor room (fail early)
+     // check neighbor room has available exit in opposite direction (fail early)
+    // makeExitToRoomId
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(``, error, user?.name);
   }
 };
 

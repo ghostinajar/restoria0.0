@@ -1,11 +1,14 @@
 // createExit
-// used by createRoom (createRoom will catch and handle error)
+// allows user to create an exit between two existing rooms
 import mongoose from "mongoose";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import { IZone } from "../model/classes/Zone.js";
+import { IUser } from "../model/classes/User.js";
 
 function createExit(
   toRoomId: mongoose.Types.ObjectId,
-  inZoneId: mongoose.Types.ObjectId
+  inZoneId: mongoose.Types.ObjectId,
+  user: IUser
 ) {
   try {
     const newExit = {

@@ -46,6 +46,7 @@ export interface IRoom {
   mapCoords: Array<number>;
   description: IDescription;
   exits: {
+    [key: string]: IExit | null | undefined; 
     north?: IExit | null;
     south?: IExit | null;
     east?: IExit | null;

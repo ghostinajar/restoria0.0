@@ -1,0 +1,67 @@
+<!-- create_exit_form -->
+<form
+  id="createExitForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelCreateExitForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Create Exit</h2>
+  <ul>
+    <li>
+      <label for="newExitDirection">Direction:</label>
+      <select id="newExitDirection" name="newExitDirection" required></select>
+    </li>
+  </ul>
+  <button type="submit">Create Exit</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const createExitForm = document.getElementById("createExitForm");
+    const directionSelect = document.getElementById("newExitDirection");
+
+    createExitForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      console.log(directionSelect.value);
+      socket.emit("userSubmittedCreateExit", directionSelect.value);
+      createExitForm.reset();
+      createExitForm.style.display = "none";
+    });
+
+    document
+      .getElementById("cancelCreateExitForm")
+      .addEventListener("click", function () {
+        createExitForm.style.display = "none";
+      });
+
+    socket.on("openCreateExitForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = createExitForm;
+      activeForm.style.display = "block";
+      input.value = "";
+      const helpArray = [
+        `================================ Create Exit =================================`,
+        `Open an exit between this room and an adjacent room.`,
+        `If there is no available room in a particular direction, it won't appear on the form.`,
+        `If the "Direction" dropdown is empty, try CREATE ROOM instead.`,
+      ];
+      showHelpArray(helpArray);
+
+      // Update the direction select element
+      directionSelect.innerHTML = ""; // Clear existing options
+
+      formData.availableExits.forEach((direction) => {
+        const option = document.createElement("option");
+        option.value = direction;
+        option.textContent = direction;
+        directionSelect.appendChild(option);
+      });
+    });
+  });
+</script>

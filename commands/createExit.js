@@ -1,5 +1,5 @@
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-function createExit(toRoomId, inZoneId) {
+function createExit(toRoomId, inZoneId, user) {
     try {
         const newExit = {
             destinationLocation: {

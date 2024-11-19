@@ -24,6 +24,7 @@ import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     const formEventMap = {
+        createExit: "openCreateExitForm",
         createItemBlueprintForm: "openCreateItemBlueprintForm",
         createMobBlueprintForm: "opencreateMobBlueprintForm",
         createRoomForm: "openCreateRoomForm",
@@ -83,6 +84,28 @@ export const messageForUsersZoneHandler = async (message, socket, user) => {
     }
     catch (error) {
         catchErrorHandlerForFunction(`messageForUsersZoneHandler`, error, user?.name);
+    }
+};
+export const userSubmittedCreateExitHandler = async (direction, user) => {
+    try {
+        const room = await getRoomOfUser(user);
+        if (!room) {
+            throw new Error(`Room not found for ${user.name}.`);
+        }
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Room not found for ${user.name}.`);
+        }
+        // check current room has available exit in direction (fail early)
+        if (room.exits[direction]) {
+            throw new Error(`create_exit form submitted for an unavailable exit`);
+        }
+        // get neighbor room (fail early)
+        // check neighbor room has available exit in opposite direction (fail early)
+        // makeExitToRoomId
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(``, error, user?.name);
     }
 };
 export const userSubmittedEditItemBlueprintHandler = async (itemBlueprintData, user) => {

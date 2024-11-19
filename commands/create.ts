@@ -4,7 +4,9 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import getAvailableExitsForCreateExit from "../util/getAvailableExitsForCreateExit.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
+import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
@@ -33,6 +35,14 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     switch (target) {
+      case `exit`: {
+        const availableExits = await getAvailableExitsForCreateExit(user);
+        worldEmitter.emit(`formPromptFor${user.username}`, {
+          form: `createExit`,
+          availableExits: availableExits,
+        });
+        break;
+      }
       case `item`: {
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `createItemBlueprintForm`,
