@@ -144,7 +144,7 @@ zoneSchema.methods.eraseRoomById = async function (id) {
                 if (exit &&
                     exit.destinationLocation &&
                     exit.destinationLocation.inRoom.toString() === id.toString()) {
-                    delete room.exits[direction]; // Remove the exit if it leads to the deleted room
+                    room.exits[direction] = null; // Remove the exit if it leads to the deleted room
                 }
             });
         });

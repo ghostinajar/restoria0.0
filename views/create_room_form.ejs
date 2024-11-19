@@ -145,10 +145,10 @@
       // Update the direction select element
       directionSelect.innerHTML = ""; // Clear existing options
 
-      formData.unusedExits.forEach((exit) => {
+      formData.availableDirections.forEach((direction) => {
         const option = document.createElement("option");
-        option.value = exit;
-        option.textContent = exit;
+        option.value = direction;
+        option.textContent = direction;
         directionSelect.appendChild(option);
       });
     });

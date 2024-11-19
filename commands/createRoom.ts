@@ -9,13 +9,13 @@ import { IUser } from "../model/classes/User.js";
 import ROOM_TYPE from "../constants/ROOM_TYPE.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import createExit from "./createExit.js";
-import unusedExitsForUser from "../util/unusedExitsForUser.js";
 import { IDescription } from "../model/classes/Description.js";
 import truncateDescription from "../util/truncateDescription.js";
 import exits from "./exits.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 
 export interface INewRoomData {
   name: string;
@@ -56,8 +56,8 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       throw new Error(`Couldn't find origin zone to create room.`);
     }
 
-    const unusedExits = await unusedExitsForUser(user);
-    if (!unusedExits.includes(roomFormData.direction)) {
+    const availableDirections = await getAvailableExitsForCreateRoom(user);
+    if (!availableDirections.includes(roomFormData.direction)) {
       throw new Error(
         `exit already exists (this shouldn't be possible). Author ${user._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`
       );

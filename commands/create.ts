@@ -4,10 +4,10 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
-import unusedExitsForUser from "../util/unusedExitsForUser.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 
 async function create(parsedCommand: IParsedCommand, user: IUser) {
@@ -47,10 +47,10 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `room`: {
-        const unusedExits = await unusedExitsForUser(user);
+        const availableDirections = await getAvailableExitsForCreateRoom(user);
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `createRoomForm`,
-          unusedExits: unusedExits,
+          availableDirections: availableDirections,
         });
         break;
       }

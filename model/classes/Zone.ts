@@ -6,7 +6,6 @@ import roomSchema, { IRoom } from "./Room.js";
 import mobBlueprintSchema, { IMobBlueprint } from "./MobBlueprint.js";
 import itemBlueprintSchema, { IItemBlueprint } from "./ItemBlueprint.js";
 import suggestionSchema, { ISuggestion } from "./Suggestion.js";
-import logger from "../../logger.js";
 import { IItemNode } from "./ItemNode.js";
 import { IMobNode } from "./MobNode.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
@@ -192,7 +191,7 @@ zoneSchema.methods.eraseRoomById = async function (id: string) {
           exit.destinationLocation &&
           exit.destinationLocation.inRoom.toString() === id.toString()
         ) {
-          delete room.exits[direction]; // Remove the exit if it leads to the deleted room
+          room.exits[direction] = null; // Remove the exit if it leads to the deleted room
         }
       });
     });

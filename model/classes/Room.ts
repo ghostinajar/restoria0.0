@@ -46,12 +46,12 @@ export interface IRoom {
   mapCoords: Array<number>;
   description: IDescription;
   exits: {
-    north?: IExit;
-    south?: IExit;
-    east?: IExit;
-    west?: IExit;
-    up?: IExit;
-    down?: IExit;
+    north?: IExit | null;
+    south?: IExit | null;
+    east?: IExit | null;
+    west?: IExit | null;
+    up?: IExit | null;
+    down?: IExit | null;
   };
   mobNodes: Array<IMobNode>;
   itemNodes: Array<IItemNode>;
