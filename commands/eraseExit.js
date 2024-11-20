@@ -3,6 +3,7 @@
 import { directions } from "../constants/DIRECTIONS.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import getOppositeDirection from "../util/getOppositeDirection.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
@@ -24,28 +25,9 @@ async function eraseExit(direction, user) {
         if (!destinationRoom) {
             throw new Error(`room not found to the ${direction} of room ${originRoom._id}`);
         }
-        let oppositeDirection = "";
-        switch (direction) {
-            case "north":
-                oppositeDirection = "south";
-                break;
-            case "east":
-                oppositeDirection = "west";
-                break;
-            case "south":
-                oppositeDirection = "north";
-                break;
-            case "west":
-                oppositeDirection = "east";
-                break;
-            case "up":
-                oppositeDirection = "down";
-                break;
-            case "down":
-                oppositeDirection = "up";
-                break;
-            default:
-                break;
+        let oppositeDirection = getOppositeDirection(direction);
+        if (!oppositeDirection) {
+            throw new Error(`couldn't get opposite direction of ${direction}`);
         }
         originRoom.exits[direction] = null;
         if (directions.includes(oppositeDirection)) {

@@ -8,6 +8,7 @@ import getRoomInZoneByCoords from "../util/getRoomInZoneByMapCoords.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import getOppositeDirection from "../util/getOppositeDirection.js";
 async function createExit(direction, user) {
     try {
         const originRoom = await getRoomOfUser(user);
@@ -30,6 +31,11 @@ async function createExit(direction, user) {
             throw new Error(`couldn't get valid destinationRoom to the ${direction} of room ${originRoom._id}`);
         }
         originRoom.exits[direction] = makeExitToRoomId(destinationRoom._id, zone._id);
+        let oppositeDirection = getOppositeDirection(direction);
+        if (!oppositeDirection) {
+            throw new Error(`couldn't get opposite direction of ${direction}`);
+        }
+        destinationRoom.exits[oppositeDirection] = makeExitToRoomId(originRoom._id, zone._id);
         await zone.save();
         await zone.initRooms();
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created an exit to the ${direction}.`));
