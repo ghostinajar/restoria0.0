@@ -23,6 +23,7 @@ import createUser from "./commands/createUser.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 import createExit from "./commands/createExit.js";
+import eraseExit from "./commands/eraseExit.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     const formEventMap = {
         createExit: "openCreateExitForm",
@@ -36,6 +37,7 @@ export const formPromptForUserHandler = async (formData, socket) => {
         editRoomForm: "openEditRoomForm",
         editUserForm: "openEditUserForm",
         editZoneForm: "openEditZoneForm",
+        eraseExitForm: "openEraseExitForm",
         eraseItemBlueprintForm: "openEraseItemBlueprintForm",
         eraseMobBlueprintForm: "openEraseMobBlueprintForm",
         eraseRoomForm: "openEraseRoomForm",
@@ -88,14 +90,7 @@ export const messageForUsersZoneHandler = async (message, socket, user) => {
     }
 };
 export const userSubmittedCreateExitHandler = async (direction, user) => {
-    try {
-        console.log(direction);
-        console.log(user.name);
-        await createExit(direction, user);
-    }
-    catch (error) {
-        catchErrorHandlerForFunction(`userSubmittedCreateExitHandler`, error, user?.name);
-    }
+    await createExit(direction, user);
 };
 export const userSubmittedEditItemBlueprintHandler = async (itemBlueprintData, user) => {
     try {
@@ -140,6 +135,11 @@ export const userSubmittedEditZoneHandler = async (zoneData, user) => {
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEditZoneHandler`, error, user?.name);
     }
+};
+export const userSubmittedEraseExitHandler = async (direction, user) => {
+    console.log(direction);
+    console.log(user);
+    await eraseExit(direction, user);
 };
 export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => {
     try {

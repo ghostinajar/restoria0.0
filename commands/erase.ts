@@ -12,6 +12,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import { directions } from "../constants/DIRECTIONS.js";
 
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -72,6 +73,24 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
     ];
 
     switch (target) {
+      case `exit`: {
+        const room = await getRoomOfUser(user);
+        if (!room) {
+          throw new Error(`No room found for user ${user.name}`);
+        }
+        let eraseableExits: Array<string> = [];
+        directions.forEach((direction) => {
+          if (room.exits[direction]) {
+            eraseableExits.push(direction);
+          }
+        });
+        worldEmitter.emit(`formPromptFor${user.username}`, {
+          form: `eraseExitForm`,
+          eraseableExits: eraseableExits,
+        });
+        logger.debug(`user ${user.name} requested erase item form.`);
+        break;
+      }
       case `item`: {
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `eraseItemBlueprintForm`,
@@ -92,7 +111,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       case `room`: {
         const originRoom = await getRoomOfUser(user);
         if (!originRoom) {
-          throw new Error(`Room not found for user ${user.name}`)
+          throw new Error(`Room not found for user ${user.name}`);
         }
         let exitNames: Array<{ _id: string; name: string }> = [];
         for (let [key, value] of Object.entries(originRoom.exits)) {
@@ -183,7 +202,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       }
     }
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("erase", error, user.name)
+    catchErrorHandlerForFunction("erase", error, user.name);
   }
 }
 

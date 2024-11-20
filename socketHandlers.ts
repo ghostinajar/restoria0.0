@@ -40,11 +40,8 @@ import createUser, { IUserData } from "./commands/createUser.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
-import makeExitToRoomId from "./util/makeExitToRoomId.js";
-import coordsOccupiedInZone from "./util/coordsOccupiedInZone.js";
-import getMapCoordsInDirection from "./util/getMapCoordsInDirection.js";
-import getRoomInZoneByCoords from "./util/getRoomInZoneByMapCoords.js";
 import createExit from "./commands/createExit.js";
+import eraseExit from "./commands/eraseExit.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
@@ -59,6 +56,7 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     editRoomForm: "openEditRoomForm",
     editUserForm: "openEditUserForm",
     editZoneForm: "openEditZoneForm",
+    eraseExitForm: "openEraseExitForm",
     eraseItemBlueprintForm: "openEraseItemBlueprintForm",
     eraseMobBlueprintForm: "openEraseMobBlueprintForm",
     eraseRoomForm: "openEraseRoomForm",
@@ -135,17 +133,7 @@ export const userSubmittedCreateExitHandler = async (
   direction: string,
   user: IUser
 ) => {
-  try {
-    console.log(direction)
-    console.log(user.name)
-    await createExit(direction, user);
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(
-      `userSubmittedCreateExitHandler`,
-      error,
-      user?.name
-    );
-  }
+  await createExit(direction, user);
 };
 
 export const userSubmittedEditItemBlueprintHandler = async (
@@ -217,6 +205,15 @@ export const userSubmittedEditZoneHandler = async (
       user?.name
     );
   }
+};
+
+export const userSubmittedEraseExitHandler = async (
+  direction: string,
+  user: IUser
+) => {
+  console.log(direction)
+  console.log(user)
+  await eraseExit(direction, user);
 };
 
 export const userSubmittedEraseItemBlueprintHandler = async (

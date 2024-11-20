@@ -37,6 +37,7 @@ import {
   userSubmittedSuggestHandler,
   userSubmittedSuggestionsHandler,
   userSubmittedCreateExitHandler,
+  userSubmittedEraseExitHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -192,6 +193,10 @@ const setupSocket = (io: any) => {
         await userSubmittedEditZoneHandler(zoneData, user);
       });
 
+      socket.on(`userSubmittedEraseExit`, async (direction: string) => {
+        await userSubmittedEraseExitHandler(direction, user);
+      });
+
       socket.on(
         `userSubmittedEraseItemBlueprint`,
         async (formData: { _id: string; name: string }) => {
@@ -277,8 +282,12 @@ const setupSocket = (io: any) => {
           worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
           worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
           worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
-        } catch (error: unknown){
-          catchErrorHandlerForFunction(`socket.on('disconnect')`, error, user?.name);
+        } catch (error: unknown) {
+          catchErrorHandlerForFunction(
+            `socket.on('disconnect')`,
+            error,
+            user?.name
+          );
         }
       });
     });

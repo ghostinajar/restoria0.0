@@ -9,6 +9,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import { directions } from "../constants/DIRECTIONS.js";
 async function erase(parsedCommand, user) {
     try {
         const target = parsedCommand.directObject;
@@ -38,6 +39,24 @@ async function erase(parsedCommand, user) {
             `Why not back it up now, before erasing, just in case?`,
         ];
         switch (target) {
+            case `exit`: {
+                const room = await getRoomOfUser(user);
+                if (!room) {
+                    throw new Error(`No room found for user ${user.name}`);
+                }
+                let eraseableExits = [];
+                directions.forEach((direction) => {
+                    if (room.exits[direction]) {
+                        eraseableExits.push(direction);
+                    }
+                });
+                worldEmitter.emit(`formPromptFor${user.username}`, {
+                    form: `eraseExitForm`,
+                    eraseableExits: eraseableExits,
+                });
+                logger.debug(`user ${user.name} requested erase item form.`);
+                break;
+            }
             case `item`: {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `eraseItemBlueprintForm`,
