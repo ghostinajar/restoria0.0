@@ -27,7 +27,6 @@
 
     createExitForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      console.log(directionSelect.value);
       socket.emit("userSubmittedCreateExit", directionSelect.value);
       createExitForm.reset();
       createExitForm.style.display = "none";
@@ -48,7 +47,7 @@
       const helpArray = [
         `================================ Create Exit =================================`,
         `Open an exit between this room and an adjacent room.`,
-        `If there is no available room in a particular direction, it won't appear on the form.`,
+        `If there's no available room in a particular direction, it won't appear on the form.`,
         `If the "Direction" dropdown is empty, try CREATE ROOM instead.`,
       ];
       showHelpArray(helpArray);

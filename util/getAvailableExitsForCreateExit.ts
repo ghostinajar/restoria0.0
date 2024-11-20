@@ -26,7 +26,7 @@ async function getAvailableExitsForCreateExit(user: IUser) {
         direction,
         room.mapCoords
       );
-      if (coordsOccupiedInZone(zone, potentialMapCoordsOfNewRoom)) {
+      if (coordsOccupiedInZone(zone, potentialMapCoordsOfNewRoom) && room.exits[direction] === null) {
         availableExits.push(direction);
       }
     });

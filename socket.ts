@@ -36,6 +36,7 @@ import {
   userSubmittedEditUserHandler,
   userSubmittedSuggestHandler,
   userSubmittedSuggestionsHandler,
+  userSubmittedCreateExitHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -141,6 +142,10 @@ const setupSocket = (io: any) => {
       socket.on(`userSentCommand`, async (userInput: string) => {
         userInput = purifyCommandInput(userInput);
         userSentCommandHandler(socket, userInput, user);
+      });
+
+      socket.on(`userSubmittedCreateExit`, async (direction: string) => {
+        await userSubmittedCreateExitHandler(direction, user);
       });
 
       socket.on(`userSubmittedCreateRoom`, async (roomData: INewRoomData) => {

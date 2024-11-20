@@ -6,7 +6,6 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateExit from "../util/getAvailableExitsForCreateExit.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
-import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";

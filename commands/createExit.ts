@@ -1,28 +1,71 @@
 // createExit
 // allows user to create an exit between two existing rooms
-import mongoose from "mongoose";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import { IZone } from "../model/classes/Zone.js";
 import { IUser } from "../model/classes/User.js";
+import getRoomOfUser from "../util/getRoomOfUser.js";
+import getZoneOfUser from "../util/getZoneofUser.js";
+import getMapCoordsInDirection from "../util/getMapCoordsInDirection.js";
+import getRoomInZoneByCoords from "../util/getRoomInZoneByMapCoords.js";
+import makeExitToRoomId from "../util/makeExitToRoomId.js";
+import makeMessage from "../util/makeMessage.js";
+import worldEmitter from "../model/classes/WorldEmitter.js";
 
-function createExit(
-  toRoomId: mongoose.Types.ObjectId,
-  inZoneId: mongoose.Types.ObjectId,
+async function createExit(
+  direction: string,
   user: IUser
 ) {
   try {
-    const newExit = {
-      destinationLocation: {
-        inZone: inZoneId,
-        inRoom: toRoomId,
-      },
-      toExternalZone: false,
-      isHidden: false,
-      isClosed: false,
-    };
-    return newExit;
+    const originRoom = await getRoomOfUser(user);
+    if (!originRoom) {
+      throw new Error(`Room not found for ${user.name}.`);
+    }
+
+    const zone = await getZoneOfUser(user);
+    if (!zone) {
+      throw new Error(`Room not found for ${user.name}.`);
+    }
+
+    if (originRoom.exits[direction]) {
+      throw new Error(
+        `create_exit form submitted for an existing exit to the ${direction} of room ${originRoom._id}`
+      );
+    }
+
+    const destinationCoords = getMapCoordsInDirection(
+      direction,
+      originRoom.mapCoords
+    );
+    if (!destinationCoords) {
+      throw new Error(
+        `couldn't get valid destinationCoords to the ${direction} of room ${originRoom._id}`
+      );
+    }
+
+    const destinationRoom = getRoomInZoneByCoords(destinationCoords, zone);
+    if (!destinationRoom) {
+      throw new Error(
+        `couldn't get valid destinationRoom to the ${direction} of room ${originRoom._id}`
+      );
+    }
+
+    originRoom.exits[direction] = makeExitToRoomId(
+      destinationRoom._id,
+      zone._id
+    );
+    
+    await zone.save();
+    await zone.initRooms();
+
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage("success", `You created an exit to the ${direction}.`)
+    );
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("createExit", error)
+    catchErrorHandlerForFunction(
+      `createExit`,
+      error,
+      user?.name
+    );
   }
 }
 

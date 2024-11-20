@@ -20,7 +20,7 @@ async function getAvailableExitsForCreateExit(user) {
         }
         directions.forEach((direction) => {
             let potentialMapCoordsOfNewRoom = getMapCoordsInDirection(direction, room.mapCoords);
-            if (coordsOccupiedInZone(zone, potentialMapCoordsOfNewRoom)) {
+            if (coordsOccupiedInZone(zone, potentialMapCoordsOfNewRoom) && room.exits[direction] === null) {
                 availableExits.push(direction);
             }
         });
