@@ -20,7 +20,7 @@ import editor from "../commands/editor.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 async function processCommand(parsedCommand, user) {
     try {
-        switch (parsedCommand.commandWord) {
+        switch (parsedCommand.commandWord.toLowerCase()) {
             case `create`: {
                 await create(parsedCommand, user);
                 break;

@@ -23,7 +23,7 @@ import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
-    switch (parsedCommand.commandWord) {
+    switch (parsedCommand.commandWord.toLowerCase()) {
       case `create`: {
         await create(parsedCommand, user);
         break;

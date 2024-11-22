@@ -63,13 +63,13 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
         });
         break;
       }
-      case `character`:
-      case `user`: {
-        worldEmitter.emit(`formPromptFor${user.username}`, {
-          form: `createUserForm`,
-        });
-        break;
-      }
+      // case `character`:
+      // case `user`: {
+      //   worldEmitter.emit(`formPromptFor${user.username}`, {
+      //     form: `createUserForm`,
+      //   });
+      //   break;
+      // }
       case `zone`: {
         if (user.unpublishedZoneTally >= 5) {
           worldEmitter.emit(
