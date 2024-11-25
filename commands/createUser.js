@@ -1,6 +1,3 @@
-// createUser
-// allows user to create new users from the /register page, or from in game
-import { Types } from "mongoose";
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
@@ -12,6 +9,7 @@ import mongoose from "mongoose";
 import { historyStartingNow } from "../model/classes/History.js";
 import purifyDescriptionOfObject from "../util/purify.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import WORLD_RECALL from "../constants/WORLD_RECALL.js";
 // Return user, or a message explaining failure (if by author, emit message to their socket)
 async function createUser(userFormData, author) {
     try {
@@ -63,10 +61,7 @@ async function createUser(userFormData, author) {
             isAdmin: false,
             isTeacher: false,
             author: author?._id || null,
-            location: {
-                inZone: new Types.ObjectId(process.env.WORLD_RECALL_ZONEID),
-                inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
-            },
+            location: WORLD_RECALL,
             pronouns: userFormData.pronouns,
             history: historyStartingNow(),
             hoursPlayed: 0,

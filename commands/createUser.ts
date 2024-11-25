@@ -13,6 +13,7 @@ import mongoose from "mongoose";
 import { historyStartingNow } from "../model/classes/History.js";
 import purifyDescriptionOfObject from "../util/purify.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import WORLD_RECALL from "../constants/WORLD_RECALL.js";
 
 export interface IUserData {
   username: string;
@@ -78,10 +79,7 @@ async function createUser(
       isAdmin: false,
       isTeacher: false,
       author: author?._id || null,
-      location: {
-        inZone: new Types.ObjectId(process.env.WORLD_RECALL_ZONEID),
-        inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
-      },
+      location: WORLD_RECALL,
       pronouns: userFormData.pronouns,
       history: historyStartingNow(),
       hoursPlayed: 0,

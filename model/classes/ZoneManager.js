@@ -2,10 +2,11 @@
 import logger from "../../logger.js";
 import Zone from "./Zone.js";
 import worldEmitter from "./WorldEmitter.js";
-import resetUserLocation from "../../util/resetUserLocation.js";
 import mongoose from "mongoose";
 import COMPLETION_STATUS from "../../constants/COMPLETION_STATUS.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
+import relocateUser from "../../util/relocateUser.js";
+import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
 class ZoneManager {
     constructor() {
         this.zones = new Map();
@@ -37,13 +38,13 @@ class ZoneManager {
             let zone = this.zones.get(inZone.toString());
             if (!zone) {
                 logger.error("User location zone not found at logout! Reset to world recall.");
-                await resetUserLocation(user);
+                await relocateUser(user, WORLD_RECALL);
                 return;
             }
             let room = zone.rooms.find((room) => room._id.toString() == inRoom.toString());
             if (!room) {
                 logger.error("User location room not found at logout! Reset to world recall.");
-                await resetUserLocation(user);
+                await relocateUser(user, WORLD_RECALL);
                 return;
             }
             //remove user from location
@@ -204,13 +205,13 @@ class ZoneManager {
             // Reset user location if necessary
             if (!user.location.inRoom || !user.location.inZone) {
                 logger.error("User location missing, reset to worldRecall.");
-                await resetUserLocation(user);
+                await relocateUser(user, WORLD_RECALL);
             }
             // Load zone if necessary
             let zone = await this.getZoneById(user.location.inZone);
             if (!zone) {
                 logger.error("User location missing, reset to worldRecall.");
-                await resetUserLocation(user);
+                await relocateUser(user, WORLD_RECALL);
                 zone = this.zones.get(user.location.inZone.toString());
             }
             // If zone still doesn't exist, log error and return
@@ -223,7 +224,7 @@ class ZoneManager {
             // If room doesn't exist, reset user location and try to find the room again
             if (!room) {
                 logger.error("User location missing, reset to worldRecall.");
-                await resetUserLocation(user);
+                await relocateUser(user, WORLD_RECALL);
                 zone = this.zones.get(user.location.inZone.toString());
                 room = zone?.rooms.find((room) => room._id.toString() == user.location.inRoom.toString());
             }

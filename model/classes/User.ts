@@ -12,6 +12,7 @@ import IRuntimeProps from "../../types/RuntimeProps.js";
 import IEquipped from "../../types/Equipped.js";
 import historySchema, { IHistory } from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
+import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -80,10 +81,7 @@ export const userSchema = new Schema<IUser>({
   location: {
     type: locationSchema,
     required: true,
-    default: {
-      inZone: new Types.ObjectId(process.env.WORLD_RECALL_ZONEID),
-      inRoom: new Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
-    },
+    default: WORLD_RECALL,
   },
   // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
   pronouns: { type: Number, required: true, default: 3 },
