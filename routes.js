@@ -1,13 +1,16 @@
 // routes
 import passport from "passport";
 import validCommandWords from "./constants/validCommandWords.js";
+import HELP from "./constants/HELP.js";
 import logger from "./logger.js";
 import createUser from "./commands/createUser.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 
 const setupRoutes = (app, __dirname) => {
   app.get("/", (req, res, next) => {
-    res.render("index");
+    const cheatsheet = HELP.CHEATSHEET;
+    console.log(cheatsheet)
+    res.render("index", { cheatsheet: cheatsheet });
   });
 
   const isAuthenticated = (req, res, next) => {
@@ -23,13 +26,17 @@ const setupRoutes = (app, __dirname) => {
   });
 
   app.get("/login", (req, res, next) => {
-    res.render("login");
+    const cheatsheet = HELP.CHEATSHEET;
+    res.render("login", { cheatsheet: cheatsheet });
   });
 
-  app.post("/login/password", passport.authenticate("local", {
+  app.post(
+    "/login/password",
+    passport.authenticate("local", {
       successRedirect: "/game_terminal",
       failureRedirect: "/",
-  }));
+    })
+  );
 
   app.post("/logout", function (req, res, next) {
     req.logout(function (err) {
@@ -41,7 +48,8 @@ const setupRoutes = (app, __dirname) => {
   });
 
   app.get("/register", (req, res, next) => {
-    res.render("register");
+    const cheatsheet = HELP.CHEATSHEET;
+    res.render("register", { cheatsheet: cheatsheet });
   });
 
   app.post("/register", async function (req, res, next) {
@@ -89,8 +97,9 @@ const setupRoutes = (app, __dirname) => {
 
       req.login(sessionUser, function (err) {
         if (err) {
-          logger.error(`Error in req.login: ${err.message}`)
-          return next(err);}
+          logger.error(`Error in req.login: ${err.message}`);
+          return next(err);
+        }
         res.redirect("/game_terminal");
       });
     } catch (err) {
