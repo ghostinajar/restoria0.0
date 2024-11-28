@@ -40,9 +40,9 @@
       <%- include('erase_exit_form'); %> 
       <%- include('erase_item_blueprint_form'); %> 
       <%- include('erase_mob_blueprint_form'); %> 
-      <%- include('erase_room_form'); %>
-      <%- include('goto_form'); %>
-      <%- include('suggest_form'); %>
+      <%- include('erase_room_form'); %> 
+      <%- include('goto_form'); %> 
+      <%- include('suggest_form'); %> 
       <%- include('suggestions_form'); %>
     </div>
 
@@ -69,6 +69,10 @@
 
       socket.on("message", (message) => {
         appendMessageToTerminal(message);
+      });
+
+      socket.on("safeMessage", (message) => {
+        appendSafeMessageToTerminal(message);
       });
 
       window.addEventListener("beforeunload", function (event) {
@@ -98,7 +102,7 @@
 
       function appendMessageToTerminal(message) {
         const item = document.createElement("li");
-        item.classList.add("message-item"); // Add message-item class
+        item.classList.add("message-item");
         item.textContent = message.content;
         item.classList.add(message.type);
         messages.appendChild(item);
@@ -107,7 +111,7 @@
 
       function appendSafeMessageToTerminal(message) {
         const item = document.createElement("li");
-        item.classList.add("message-item"); // Add message-item class
+        item.classList.add("message-item");
         item.innerHTML = message.content;
         item.classList.add(message.type);
         messages.appendChild(item);

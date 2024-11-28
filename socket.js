@@ -7,7 +7,7 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
-import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, userSubmittedSuggestHandler, userSubmittedSuggestionsHandler, userSubmittedCreateExitHandler, userSubmittedEraseExitHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, userSubmittedSuggestHandler, userSubmittedSuggestionsHandler, userSubmittedCreateExitHandler, userSubmittedEraseExitHandler, safeMessageArrayForUserHandler, safeMessageForUserHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
 import { purifyCommandInput } from "./util/purify.js";
@@ -42,8 +42,14 @@ const setupSocket = (io) => {
             worldEmitter.on(`messageArrayFor${user.username}`, async (messageArray) => {
                 messageArrayForUserHandler(messageArray, socket);
             });
+            worldEmitter.on(`safeMessageArrayFor${user.username}`, async (messageArray) => {
+                safeMessageArrayForUserHandler(messageArray, socket);
+            });
             worldEmitter.on(`messageFor${user.username}`, async (message) => {
                 messageForUserHandler(message, socket);
+            });
+            worldEmitter.on(`safeMessageFor${user.username}`, async (message) => {
+                safeMessageForUserHandler(message, socket);
             });
             worldEmitter.on(`messageFor${user.username}sRoom`, async (message) => {
                 messageForUsersRoomHandler(message, socket, user);

@@ -89,11 +89,34 @@ export const messageArrayForUserHandler = async (
   }
 };
 
+// a safeMessage should never contain user-generated text
+export const safeMessageArrayForUserHandler = async (
+  messageArray: Array<IMessage>,
+  socket: any
+) => {
+  try {
+    for (let message of messageArray) {
+      socket.emit(`safeMessage`, message);
+    }
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`safeMessageArrayForUserHandler`, error);
+  }
+};
+
 export const messageForUserHandler = async (message: IMessage, socket: any) => {
   try {
     socket.emit(`message`, message);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`messageForUserHandler`, error);
+  }
+};
+
+// a safeMessage should never contain user-generated text
+export const safeMessageForUserHandler = async (message: IMessage, socket: any) => {
+  try {
+    socket.emit(`safeMessage`, message);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`safeMessageForUserHandler`, error);
   }
 };
 

@@ -120,7 +120,7 @@ function help(parsedCommand: IParsedCommand, user: IUser) {
       helpArray.push(makeMessage("help", string));
     });
     
-    worldEmitter.emit(`messageArrayFor${user.username}`, helpArray);
+    worldEmitter.emit(`safeMessageArrayFor${user.username}`, helpArray);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`help`, error, user?.name);
   }

@@ -101,7 +101,7 @@ function help(parsedCommand, user) {
         stringArray.forEach((string) => {
             helpArray.push(makeMessage("help", string));
         });
-        worldEmitter.emit(`messageArrayFor${user.username}`, helpArray);
+        worldEmitter.emit(`safeMessageArrayFor${user.username}`, helpArray);
     }
     catch (error) {
         catchErrorHandlerForFunction(`help`, error, user?.name);

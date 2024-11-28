@@ -38,6 +38,8 @@ import {
   userSubmittedSuggestionsHandler,
   userSubmittedCreateExitHandler,
   userSubmittedEraseExitHandler,
+  safeMessageArrayForUserHandler,
+  safeMessageForUserHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -90,11 +92,23 @@ const setupSocket = (io: any) => {
           messageArrayForUserHandler(messageArray, socket);
         }
       );
+      worldEmitter.on(
+        `safeMessageArrayFor${user.username}`,
+        async (messageArray: Array<IMessage>) => {
+          safeMessageArrayForUserHandler(messageArray, socket);
+        }
+      );
 
       worldEmitter.on(
         `messageFor${user.username}`,
         async (message: IMessage) => {
           messageForUserHandler(message, socket);
+        }
+      );
+      worldEmitter.on(
+        `safeMessageFor${user.username}`,
+        async (message: IMessage) => {
+          safeMessageForUserHandler(message, socket);
         }
       );
 

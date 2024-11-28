@@ -65,12 +65,30 @@ export const messageArrayForUserHandler = async (messageArray, socket) => {
         catchErrorHandlerForFunction(`messageArrayForUserHandler`, error);
     }
 };
+export const safeMessageArrayForUserHandler = async (messageArray, socket) => {
+    try {
+        for (let message of messageArray) {
+            socket.emit(`safeMessage`, message);
+        }
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`safeMessageArrayForUserHandler`, error);
+    }
+};
 export const messageForUserHandler = async (message, socket) => {
     try {
         socket.emit(`message`, message);
     }
     catch (error) {
         catchErrorHandlerForFunction(`messageForUserHandler`, error);
+    }
+};
+export const safeMessageForUserHandler = async (message, socket) => {
+    try {
+        socket.emit(`safeMessage`, message);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`safeMessageForUserHandler`, error);
     }
 };
 export const messageForUsersRoomHandler = async (message, socket, user) => {
