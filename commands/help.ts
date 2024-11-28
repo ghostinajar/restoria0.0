@@ -43,6 +43,9 @@ function help(parsedCommand: IParsedCommand, user: IUser) {
       case `capacity`:
         target = `container`;
         break;
+      case `edit_zone`:
+        target = `create_zone`;
+        break;
       case `look`:
       case `examine`:
       case `study`:
@@ -50,12 +53,16 @@ function help(parsedCommand: IParsedCommand, user: IUser) {
         target = `description`;
         break;
       case `delete`:
-      case `erase item`:
-      case `delete item`:
-      case `erase mob`:
-      case `delete mob`:
-      case `erase room`:
-      case `delete room`:
+      case `erase_item`:
+      case `delete_item`:
+      case `erase_mob`:
+      case `delete_mob`:
+      case `erase_room`:
+      case `delete_room`:
+      case `erase_user`:
+      case `delete_user`:
+      case `erase_zone`:
+      case `delete_zone`:
         target = `erase`;
         break;
       case `ex`:

@@ -10,7 +10,7 @@ import makeMessage from "../util/makeMessage.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 async function create(parsedCommand, user) {
     try {
-        let target = parsedCommand.directObject;
+        let target = parsedCommand.directObject?.toLowerCase();
         if (!target) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what?`));
             return;
@@ -33,6 +33,8 @@ async function create(parsedCommand, user) {
                 });
                 break;
             }
+            case `object`:
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Objects are called items in Restoria.`));
             case `item`: {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `createItemBlueprintForm`,
@@ -40,6 +42,9 @@ async function create(parsedCommand, user) {
                 });
                 break;
             }
+            case `monster`:
+            case `npc`:
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
             case `mob`: {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `createMobBlueprintForm`,

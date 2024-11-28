@@ -1,6 +1,3 @@
-// erase
-// switch on target to open erase form for item, mob, room
-import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone.js";
@@ -12,7 +9,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import { directions } from "../constants/DIRECTIONS.js";
 async function erase(parsedCommand, user) {
     try {
-        const target = parsedCommand.directObject;
+        const target = parsedCommand.directObject?.toLowerCase();
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
@@ -54,18 +51,21 @@ async function erase(parsedCommand, user) {
                     form: `eraseExitForm`,
                     eraseableExits: eraseableExits,
                 });
-                logger.debug(`user ${user.name} requested erase item form.`);
                 break;
             }
+            case `object`:
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Objects are called items in Restoria.`));
             case `item`: {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `eraseItemBlueprintForm`,
                     itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
                     helpArray: helpArray,
                 });
-                logger.debug(`user ${user.name} requested erase item form.`);
                 break;
             }
+            case `monster`:
+            case `npc`:
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
             case `mob`: {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `eraseMobBlueprintForm`,

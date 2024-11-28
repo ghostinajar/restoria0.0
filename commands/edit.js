@@ -14,7 +14,7 @@ import getNameById from "../util/getNameById.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function edit(parsedCommand, user) {
     try {
-        let target = parsedCommand.directObject;
+        let target = parsedCommand.directObject?.toLowerCase();
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
@@ -29,6 +29,8 @@ async function edit(parsedCommand, user) {
             }
         }
         switch (target) {
+            case `object`:
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Objects are called items in Restoria.`));
             case `item`: {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `editItemBlueprintForm`,
@@ -41,6 +43,9 @@ async function edit(parsedCommand, user) {
                 });
                 break;
             }
+            case `monster`:
+            case `npc`:
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
             case `mob`: {
                 const zone = await getZoneOfUser(user);
                 if (!zone) {
