@@ -20,6 +20,7 @@ import suggest from "../commands/suggest.js";
 import suggestions from "../commands/suggestions.js";
 import editor from "../commands/editor.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
+import help from "../commands/help.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -57,6 +58,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       case `goto`: {
         await goto(user);
         break;
+      }
+      case `help`: {
+        help(parsedCommand, user);
+        break; 
       }
       case `n`:
       case `north`:

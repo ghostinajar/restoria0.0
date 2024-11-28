@@ -137,8 +137,6 @@ export const userSubmittedEditZoneHandler = async (zoneData, user) => {
     }
 };
 export const userSubmittedEraseExitHandler = async (direction, user) => {
-    console.log(direction);
-    console.log(user);
     await eraseExit(direction, user);
 };
 export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => {

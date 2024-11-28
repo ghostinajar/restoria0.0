@@ -1,8 +1,11 @@
+// padStringToLength79
+// returns the given string as a heading 79 characters long,
+// flanked by a row of a given padding character (default =========)
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 function padStringToLength79(input: string, paddingChar: string = "="): string {
   try {
-    const totalLength = 80;
+    const totalLength = 79;
     const stringWithSpaces = ` ${input} `;
     const paddingNeeded = totalLength - stringWithSpaces.length;
 

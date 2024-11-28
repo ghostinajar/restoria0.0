@@ -14,5 +14,4 @@ const WORLD_RECALL = {
     inZone: new mongoose.Types.ObjectId(process.env.WORLD_RECALL_ZONEID),
     inRoom: new mongoose.Types.ObjectId(process.env.WORLD_RECALL_ROOMID),
 };
-console.log(`WORLD_RECALL = ${JSON.stringify(WORLD_RECALL)}`);
 export default WORLD_RECALL;

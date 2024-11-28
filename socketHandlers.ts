@@ -211,8 +211,6 @@ export const userSubmittedEraseExitHandler = async (
   direction: string,
   user: IUser
 ) => {
-  console.log(direction)
-  console.log(user)
   await eraseExit(direction, user);
 };
 

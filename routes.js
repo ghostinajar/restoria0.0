@@ -9,7 +9,6 @@ import worldEmitter from "./model/classes/WorldEmitter.js";
 const setupRoutes = (app, __dirname) => {
   app.get("/", (req, res, next) => {
     const cheatsheet = HELP.CHEATSHEET;
-    console.log(cheatsheet)
     res.render("index", { cheatsheet: cheatsheet });
   });
 
