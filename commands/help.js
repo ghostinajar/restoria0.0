@@ -3,13 +3,19 @@
 import HELP from "../constants/HELP.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import htmlTableOfContentsForKeysOfObject from "../util/htmlTableOfContentsForKeysOfObject.js";
 import makeMessage from "../util/makeMessage.js";
 function help(parsedCommand, user) {
     try {
-        let target = parsedCommand.directObject;
-        if (!target) {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `What do you need help with? E.g. HELP CREATE`));
+        if (!parsedCommand.directObject) {
+            const helpContents = htmlTableOfContentsForKeysOfObject(HELP);
+            worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, helpContents));
+            worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, `What would you like help with? E.g. HELP CREATE`));
             return;
+        }
+        let target = parsedCommand.directObject;
+        if (parsedCommand.string) {
+            target = `${parsedCommand.directObject} ${parsedCommand.string}`;
         }
         target = target.replace(/ /g, "_");
         switch (target.toLowerCase()) {
@@ -91,12 +97,12 @@ function help(parsedCommand, user) {
             default:
                 break;
         }
-        target = target.toUpperCase();
-        if (!HELP.hasOwnProperty(target)) {
+        if (!HELP.hasOwnProperty(target.toUpperCase())) {
+            target = target.replace(/_/g, " ");
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Sorry, there's no help available yet for ${target}.`));
             return;
         }
-        let stringArray = HELP[target];
+        let stringArray = HELP[target.toUpperCase()];
         let helpArray = [];
         stringArray.forEach((string) => {
             helpArray.push(makeMessage("help", string));

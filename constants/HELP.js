@@ -3,10 +3,9 @@ import padStringToLength79 from "../util/padStringToLength79.js";
 // Arrays of help messages for the HELP command
 const HELP = {
     AFFIX: [
-        `${padStringToLength79(`Affix`)}`,
         `This feature is still in development.`,
-        `${padStringToLength79(`Item Affix`, `-`)}`,
-        `An affix boosts a stat on a mob, item, or target of a spell. The effects of each stat is explained in a help file (e.g. HELP DEXTERITY) An item can have 0-3 affixes, and a mob can have 0-5. It's okay to have no affixes, or more than one affix on the same stat, e.g. for a double or triple boost to dexterity on the same boots, or a minotaur that is extra, extra, extra strong.`,
+        `${padStringToLength79(`Affix`)}`,
+        `An affix boosts a stat on a mob, item, or target of a spell. The effects of each stat is explained in a help file (e.g. HELP DEXTERITY). An item can have 0-3 affixes, and a mob can have 0-5. It's okay to have no affixes, or more than one affix on the same stat, e.g. for a double or triple boost to dexterity on the same boots, or a minotaur that is extra, extra, extra strong.`,
     ],
     AGGRESSIVE_MOB: [
         `${padStringToLength79(`Aggressive Mob`)}`,
@@ -67,7 +66,7 @@ const HELP = {
         `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--green_light)">a green goblin</span>' or '<span style="color: var(--green_light)">Greg the blacksmith'</span>`,
         `<span style="color:var(--red)">Keywords:</span> e.g 'goblin, green' or 'blacksmith, Greg'`,
         `<span style="color:var(--red)">Pronouns:</span> Pronouns may appear in place of a name ("Greg eats." vs "<u>He</u> eats.").`,
-        `<span style="color:var(--red)">Level:</span> A mob's level determines its stats, and what spells and abilities it has learned.`,
+        `<span style="color:var(--red)">Level:</span> A mob's level determines its stats, and learned spells and abilities.`,
         `<span style="color:var(--red)">Job:</span> A job determines abilities and combat style.`,
         `<span style="color:var(--red)">Look:</span> This is how the player sees the mob when they look or enter a room.`,
         `<span style="color:var(--red)">Examine:</span> The player sees this paragraph when they examine the mob.`,

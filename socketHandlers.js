@@ -65,6 +65,7 @@ export const messageArrayForUserHandler = async (messageArray, socket) => {
         catchErrorHandlerForFunction(`messageArrayForUserHandler`, error);
     }
 };
+// a safeMessage should never contain user-generated text
 export const safeMessageArrayForUserHandler = async (messageArray, socket) => {
     try {
         for (let message of messageArray) {
@@ -83,6 +84,7 @@ export const messageForUserHandler = async (message, socket) => {
         catchErrorHandlerForFunction(`messageForUserHandler`, error);
     }
 };
+// a safeMessage should never contain user-generated text
 export const safeMessageForUserHandler = async (message, socket) => {
     try {
         socket.emit(`safeMessage`, message);
