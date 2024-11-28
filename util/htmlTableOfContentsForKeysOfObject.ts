@@ -24,7 +24,7 @@ function htmlTableOfContentsForKeysOfObject(obj: Record<string, any>): string {
     for (const row of rows) {
       tableHtml += `<tr>\n`;
       for (let i = 0; i < columnCount; i++) {
-        const key = row[i] || ""; // Fill empty cells with an empty string
+        const key = row[i] ? row[i].replace(/_/g, " ") : ""; // Replace underscores with spaces
         tableHtml += `<td style="padding: 0;">${key}</td>\n`;
       }
       tableHtml += `</tr>\n`;

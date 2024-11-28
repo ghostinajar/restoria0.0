@@ -5,7 +5,7 @@ const HELP = {
     AFFIX: [
         `This feature is still in development.`,
         `${padStringToLength79(`Affix`)}`,
-        `An affix boosts a stat on a mob, item, or target of a spell. The effects of each stat is explained in a help file (e.g. HELP DEXTERITY). An item can have 0-3 affixes, and a mob can have 0-5. It's okay to have no affixes, or more than one affix on the same stat, e.g. for a double or triple boost to dexterity on the same boots, or a minotaur that is extra, extra, extra strong.`,
+        `An affix boosts a stat on a mob, item, or target of a spell. The effect of each stat is explained in a help file (e.g. HELP DEXTERITY). An item can have 0-3 affixes, and a mob can have 0-5. It's okay to have no affixes, or more than one affix on the same stat, e.g. for a double or triple boost to dexterity on the same boots, or a minotaur that is extra, extra, extra strong.`,
     ],
     AGGRESSIVE_MOB: [
         `${padStringToLength79(`Aggressive Mob`)}`,
@@ -17,7 +17,7 @@ const HELP = {
     ],
     AUTHOR: [
         `${padStringToLength79(`Author, Character, User`)}`,
-        `The words author, character, and user all refer to the same thing: a human person who plays Restoria. Everyone in the game is an author in the sense that they can CREATE zones and their contents. We are all users and characters in the sense that we interact with the world of zones created by other authors, often in a role-playing style of gameplay, and a human person may have multiple user accounts representing different characters. That's why "user", "character", and "author" are used interchangeably in Restoria.`,
+        `The words author, character, and user all refer to the same thing: a human person who plays Restoria. Everyone in the game is an author in the sense that they can CREATE zones and their contents. We are all users and characters in the sense that we interact with the world of zones created by other authors, often in a role-playing style of gameplay. A person may have multiple user accounts representing different characters. That's why "user", "character", and "author" are used interchangeably in Restoria.`,
     ],
     CHEATSHEET: [
         `${padStringToLength79(`HELP CHEATSHEET`)}`,
@@ -33,7 +33,7 @@ const HELP = {
         `<span style="color:var(--green)">SUGGEST:</span> leave a suggestion for an author to improve something`,
         `<span style="color:var(--green)">SUGGESTIONS:</span> view suggestions from your editor in your zone`,
         `<span style="color:var(--green)">SAY:</span> send a message to users in the same room`,
-        `<span style="color:var(--green)">SHOUT:</span> send a message to users in the same room`,
+        `<span style="color:var(--green)">SHOUT:</span> send a message to users in the same zone`,
         `<span style="color:var(--green)">TELEPATH:</span> send a message to a single user`,
         `<span style="color:var(--green)">RULES:</span> read and follow these if you want to stay in Restoria`,
         `Type <span style="color:var(--green)">HELP CHEATSHEET</span> in-game to see this again.`,
@@ -316,6 +316,10 @@ const HELP = {
     RECALL: [
         `${padStringToLength79(`RECALL`)}`,
         `User the RECALL command to return to safety at The Snails statue, the centre of Restoria City.`,
+    ],
+    RULES: [
+        `${padStringToLength79(`RULES`)}`,
+        `We protect the safety, dignity, and fun of Restoria users by removing players who abuse others. Everything we say and do in Restoria is logged, and if you are found to be intentionally bothering anyone else in the game, your account may be deleted without warning. In this case, your writing, character experience, equipment & items, and everything else associated with your account would be permanently removed (another good reason why everyone should keep a backup of all their writing, e.g. on Google Drive). If you don't have good intentions towards all other players at all times, stop playing Restoria until you do.`,
     ],
     SAY: [
         `${padStringToLength79(`SAY`)}`,
