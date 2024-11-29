@@ -70,7 +70,6 @@ function help(parsedCommand, user) {
             case `token`:
             case `treasure`:
             case `wand`:
-            case `weapon`:
             case `fishing_rod`:
                 target = `item_type`;
                 break;
@@ -79,6 +78,11 @@ function help(parsedCommand, user) {
             case `lamp`:
             case `temporary`:
                 target = `item_tag`;
+                break;
+            case `keyword`:
+            case `key_word`:
+            case `key_words`:
+                target = `keywords`;
                 break;
             case `hp`:
             case `health`:
@@ -100,6 +104,24 @@ function help(parsedCommand, user) {
             case `spi`:
             case `spirit`:
                 target = `stats`;
+                break;
+            case `finesse`:
+            case `finesse_weapon`:
+            case `light_weapon`:
+            case `reach`:
+            case `reach_weapon`:
+            case `range`:
+            case `range_weapon`:
+            case `ranged`:
+            case `ranged_weapon`:
+            case `twohand`:
+            case `two_hand`:
+            case `twohand_weapon`:
+            case `two_hand_weapon`:
+                target = `weapon_properties`;
+                break;
+            case `unique`:
+                target = `unique_mob`;
                 break;
             default:
                 break;
