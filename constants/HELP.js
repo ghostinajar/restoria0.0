@@ -148,7 +148,7 @@ const HELP = {
     ],
     EDIT_USER: [
         `${padStringToLength79(`EDIT USER`)}`,
-        `<span style="color:var(--red)">Name:</span> must be letters only (max. 18), no unique irl names (e.g. no "Obama")`,
+        `<span style="color:var(--red)">User Name:</span> must be letters only (max. 18), no unique irl names (e.g. no "Obama")`,
         `<span style="color:var(--red)">Password:</span> has min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
         `<span style="color:var(--red)">Pronouns:</span> may appear in place of a name ("Greg eats." vs "<u>He</u> eats.")`,
         `<span style="color:var(--red)">Job:</span> determines abilities, spells, and fighting style in combat`,
@@ -269,7 +269,7 @@ const HELP = {
     PASSWORD: [
         `This feature is still in development.`,
         `${padStringToLength79(`PASSWORD`)}`,
-        `A password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.`,
+        `Password must be at least 8 characters long and include lowercase, uppercase, and a number.`,
     ],
     PRONOUNS: [
         `${padStringToLength79(`Pronouns`)}`,

@@ -4,7 +4,6 @@ import validCommandWords from "./constants/validCommandWords.js";
 import HELP from "./constants/HELP.js";
 import logger from "./logger.js";
 import createUser from "./commands/createUser.js";
-import worldEmitter from "./model/classes/WorldEmitter.js";
 
 const setupRoutes = (app, __dirname) => {
   app.get("/", (req, res, next) => {
@@ -70,18 +69,26 @@ const setupRoutes = (app, __dirname) => {
       }
 
       const newUser = await createUser(userData);
+
+      // handle createUser failure
       if (newUser.content) {
         logger.error(`createUser rejected for reason: ${newUser.content}}`);
-        worldEmitter.emit(`message`, newUser);
-        return;
+        return res.status(400).render("register", {
+          cheatsheet: HELP.CHEATSHEET,
+          errorMessage: newUser.content, 
+        });
       }
-      logger.debug(`routes got newUser: ${JSON.stringify(newUser)}`);
+
       if (!newUser) {
         logger.error(
           `routes couldn't create user with ${JSON.stringify(userData)}`
         );
-        return;
+        return res.status(400).render("register", {
+          cheatsheet: HELP.CHEATSHEET,
+          errorMessage: `Sorry, we couldn't create your account. We logged the error and will investigate it.` 
+        });
       }
+
       const sessionUser = {
         _id: newUser._id,
         username: newUser.username,
@@ -92,7 +99,6 @@ const setupRoutes = (app, __dirname) => {
         );
         return;
       }
-      logger.debug(`routes made sessionUser: ${JSON.stringify(sessionUser)}`);
 
       req.login(sessionUser, function (err) {
         if (err) {

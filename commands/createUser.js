@@ -40,10 +40,10 @@ async function createUser(userFormData, author) {
             return message;
         }
         // Validate password
-        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         if (!passwordRegex.test(userFormData.password)) {
             message.content =
-                "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.";
+                "Password must be at least 8 characters long and include lowercase, uppercase, and a number.";
             if (author) {
                 worldEmitter.emit(`messageFor${author.username}`, message);
             }

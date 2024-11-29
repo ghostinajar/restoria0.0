@@ -11,6 +11,9 @@
     <ul id="messages">
       <h1>Restoria 0.0.1</h1>
       <h2>Register</h2>
+      <% if (typeof errorMessage !== 'undefined') { %>
+      <p style="color: red"><%= errorMessage %></p>
+      <% } %>
       <li>
         <form action="/register" method="post">
           <ul>
@@ -25,6 +28,12 @@
               />
             </li>
             <li>
+              <small
+                >Name must be at least 8 characters long and include
+                lowercase, uppercase, and a number.</small
+              >
+            </li>
+            <li>
               <label for="new-password">Password:</label>
               <input
                 id="new-password"
@@ -33,6 +42,12 @@
                 autocomplete="new-password"
                 required
               />
+            </li>
+            <li>
+              <small
+                >Password must be at least 8 characters long and include
+                lowercase, uppercase, and a number.</small
+              >
             </li>
             <li>
               <label for="pronouns">Pronouns:</label>
@@ -64,3 +79,20 @@
     <%- include('help_cheatsheet'); %>
   </body>
 </html>
+
+<script>
+  document.querySelector("form").addEventListener("submit", function (e) {
+    const passwordInput = document.getElementById("new-password");
+    const password = passwordInput.value;
+
+    const passwordRequirements = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+    if (!passwordRequirements.test(password)) {
+      e.preventDefault();
+      alert(
+        "Password must be at least 8 characters long and include lowercase, uppercase, and a number."
+      );
+      passwordInput.focus();
+    }
+  });
+</script>
