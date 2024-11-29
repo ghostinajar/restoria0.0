@@ -7,6 +7,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import { directions } from "../constants/DIRECTIONS.js";
+import help from "./help.js";
 async function erase(parsedCommand, user) {
     try {
         const target = parsedCommand.directObject?.toLowerCase();
@@ -30,13 +31,12 @@ async function erase(parsedCommand, user) {
         if (!userHasZoneAuthorId(zone.author.toString(), user)) {
             return;
         }
-        const helpArray = [
-            `<span style="color:var(--red)">Erase cannot be undone!</span> We recommend saving all your writing somewhere,`,
-            `(e.g. Google Drive), so you have a back up copy of your hard work.`,
-            `Why not back it up now, before erasing, just in case?`,
-        ];
         switch (target) {
             case `exit`: {
+                help({
+                    commandWord: "help",
+                    directObject: "erase_exit",
+                }, user);
                 const room = await getRoomOfUser(user);
                 if (!room) {
                     throw new Error(`No room found for user ${user.name}`);
@@ -56,10 +56,13 @@ async function erase(parsedCommand, user) {
             case `object`:
                 worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Objects are called items in Restoria.`));
             case `item`: {
+                help({
+                    commandWord: "help",
+                    directObject: "erase",
+                }, user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `eraseItemBlueprintForm`,
                     itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
-                    helpArray: helpArray,
                 });
                 break;
             }
@@ -67,14 +70,21 @@ async function erase(parsedCommand, user) {
             case `npc`:
                 worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
             case `mob`: {
+                help({
+                    commandWord: "help",
+                    directObject: "erase",
+                }, user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `eraseMobBlueprintForm`,
                     mobBlueprintNames: getMobBlueprintNamesFromZone(zone),
-                    helpArray: helpArray,
                 });
                 break;
             }
             case `room`: {
+                help({
+                    commandWord: "help",
+                    directObject: "erase",
+                }, user);
                 const originRoom = await getRoomOfUser(user);
                 if (!originRoom) {
                     throw new Error(`Room not found for user ${user.name}`);
@@ -139,7 +149,6 @@ async function erase(parsedCommand, user) {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `eraseRoomForm`,
                     exitNames: exitNames,
-                    helpArray: helpArray,
                 });
                 break;
             }

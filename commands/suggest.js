@@ -9,6 +9,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import help from "./help.js";
 async function suggest(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject;
@@ -30,6 +31,10 @@ async function suggest(parsedCommand, user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `If you want to suggest in this zone, ask its author to make you an editor.`));
             return;
         }
+        help({
+            commandWord: "help",
+            directObject: "suggest",
+        }, user);
         const room = await getRoomOfUser(user);
         if (!room) {
             throw new Error(`Room not found for user ${user.name}'s location.`);

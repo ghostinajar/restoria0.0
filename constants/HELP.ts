@@ -111,10 +111,6 @@ const HELP: {
     `<span style="color:var(--red)">Study:</span> When a reader uses the STUDY command on an item, mob, user, room, or zone, this long description (640 characters or less) is what they see. It should include rich detail that a reader wouldn't notice at first glance, and may even share secrets to reward those careful and patient readers who take the time to STUDY.`,
     `<span style="color:var(--red)">Research:</span> When a reader uses the RESEARCH command on an item, mob, user, room, or zone, this complete story (1600 characters or less) is shown to them. Good authors will use the 'research' description to tell some history. They may explain why certain things in their zone are they way they are. This is also a fun place to include easter eggs or major secrets about your zone, since only the best and most deserving readers explore with the RESEARCH command.`,
   ],
-  EDIT: [
-    `${padStringToLength79(`EDIT`)}`,
-    `After creating a zone, item, mob, room, or user in Restoria, you can use EDIT to change or add more details. EDIT ITEM, EDIT MOB, and EDIT ROOM allow many options for customization, while EDIT USER and EDIT ZONE allow only basic description changes, for now. Each option opens a form to edit text and options, and the HELP for each form will display automatically when it opens.`,
-  ],
   EDIT_ITEM: [
     `${padStringToLength79(`EDIT ITEM`)}`,
     `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--blue_light)">a green potion</span>' or '<span style="color: var(--blue_light)">Excaliburr the Frozen'</span>`,
@@ -152,10 +148,16 @@ const HELP: {
   ],
   EDIT_USER: [
     `${padStringToLength79(`EDIT USER`)}`,
-    `<span style="color:var(--red)">User Name:</span> must be letters only (max. 18), no unique irl names (e.g. no "Obama")`,
+    `<span style="color:var(--red)">User Name:</span> letters only (max. 18), no unique irl names (e.g. no "Obama")`,
     `<span style="color:var(--red)">Password:</span> has min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
     `<span style="color:var(--red)">Pronouns:</span> may appear in place of a name ("Greg eats." vs "<u>He</u> eats.")`,
     `<span style="color:var(--red)">Job:</span> determines abilities, spells, and fighting style in combat`,
+    `Read HELP DESCRIPTION for more.`,
+  ],
+  EDIT_ZONE: [
+    `${padStringToLength79(`EDIT ZONE`)}`,
+    `<span style="color:var(--red)">Name:</span> letters only (max. 18), no unique irl names (e.g. no "Obama")`,
+    `<span style="color:var(--red)">Password:</span> has min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
     `Read HELP DESCRIPTION for more.`,
   ],
   EDITOR: [

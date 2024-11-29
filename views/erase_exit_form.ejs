@@ -44,13 +44,6 @@
       activeForm = eraseExitForm;
       activeForm.style.display = "block";
       input.value = "";
-      const helpArray = [
-        `================================ Erase Exit =================================`,
-        `Remove an exit between this room and an adjacent room.`,
-        `Erasing an exit can make some rooms in your zone inaccessible.`, 
-        `You can use GOTO, then CREATE EXIT or CREATE ROOM to reconnect them.`
-      ];
-      showHelpArray(helpArray);
 
       // Update the direction select element
       directionSelect.innerHTML = ""; // Clear existing options

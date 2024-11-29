@@ -392,45 +392,16 @@
     const editMobAffix4 = document.getElementById("editMobAffix4");
     const editMobAffix5 = document.getElementById("editMobAffix5");
 
-    // help arrays to message user when they click each tab
-    const editMobGeneralHelp = [
-      `================================== Edit Mob ===================================`,
-      `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--green_light)">a green goblin</span>' or '<span style="color: var(--green_light)">Greg the blacksmith'</span>`,
-      `<span style="color:var(--red)">Keywords:</span> e.g 'goblin, green' or 'blacksmith, Greg'`,
-      `<span style="color:var(--red)">Pronouns:</span> Pronouns may appear in place of a name ("Greg eats." vs "<u>He</u> eats.").`,
-      `<span style="color:var(--red)">Level:</span> A mob's level determines its stats, and what spells and abilities it has learned.`,
-      `<span style="color:var(--red)">Job:</span> A job determines abilities and combat style.`,
-      ];
-    const editMobDescriptionHelp = [
-      `============================== Mob Description ===============================`,
-      `<span style="color:var(--red)">Look:</span> This is how the player sees the mob when they look or enter the room.`,
-      `<span style="color:var(--red)">Examine:</span> The player sees this paragraph when they examine the mob.`,
-      `<span style="color:var(--red)">Study:</span> The player learns some history when they study the mob.`,
-      `<span style="color:var(--red)">Research:</span> These paragraphs tell the full history of the mob.`,
-      `  A good research text rewards the reader with some secrets about the mob.`,
-    ];
-    const editMobItemNodesHelp = [
-      `================================ Item Nodes ==================================`,
-      `An item node spawns that item in the mob's inventory when the mob spawns.`,
-      `Choose an item and click <span style="color:var(--green)">add</span> to create an item node for it.`,
-      `Click <span style="color:var(--red)">remove</span> next to an existing node to remove it.`,
-      `These changes won't be saved until you click "Update Item".`,
-    ];
-    const editMobAffixesHelp = [
-      `================================ Mob Affixes ================================`,
-      `An affix boosts a mob's stat 'naturally' regardless of equipment.`,
-      `Each stat has its own help file describing its effects (e.g. HELP DEXTERITY)`,
-      `A mob can have up to 5 affixes, and it's okay for some mobs to have none. `,
-      `It's okay to have more than one affix on the same stat,`,
-      `e.g. for a double or triple boost to dexterity on the same goblin thief.`,
-    ];
-
     // to hold data from server on "edit item" command
     let selectedMob;
     let itemBlueprintNames;
     let mobBlueprintFullData;
     let selectedMobId = "";
     let affixTypes;
+    let editMobGeneralHelp = [];
+    let editMobDescriptionHelp = [];
+    let editMobItemNodesHelp = [];
+    let editMobAffixesHelp = [];
 
     // Tab menu listeners
     editMobTabLinks.forEach((link) => {
@@ -530,10 +501,7 @@
           value: 1,
         });
       }
-      socket.emit(
-        "userSubmittedEditMobBlueprint",
-        editMobBlueprintFormData
-      );
+      socket.emit("userSubmittedEditMobBlueprint", editMobBlueprintFormData);
       editMobBlueprintForm.reset();
       editMobBlueprintForm.style.display = "none";
     });
@@ -570,6 +538,10 @@
       mobBlueprintFullData = formData.mobBlueprintFullData;
       itemBlueprintNames = formData.itemBlueprintNames;
       affixTypes = formData.affixTypes;
+      editMobGeneralHelp = formData.editMobGeneralHelp;
+      editMobDescriptionHelp = formData.editMobDescriptionHelp;
+      editMobItemNodesHelp = formData.editMobItemNodesHelp;
+      editMobAffixesHelp = formData.editMobAffixesHelp;
 
       // prepare fresh editMobBlueprintForm
       editMobBlueprintForm.reset();

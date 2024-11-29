@@ -5,9 +5,17 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getZonesNamesByAuthorId from "../util/getZoneNamesByAuthorId.js";
 import makeMessage from "../util/makeMessage.js";
+import help from "./help.js";
 
 async function goto(user: IUser) {
   try {
+    help(
+      {
+        commandWord: "help",
+        directObject: "goto",
+      },
+      user
+    );
     let zonesNames = (await getZonesNamesByAuthorId(user._id.toString())) ?? [];
     // TODO handle possible undefined zonesNames for legit case where user
     // hasn't created any zones yet

@@ -91,14 +91,6 @@
       activeForm = createUserForm;
       activeForm.style.display = "block";
       input.value = "";
-      const helpArray = [
-        `================================ Create User =================================`,
-        `<span style="color:var(--red)">Name:</span> Must be letters only (max. 18), no unique irl names (e.g. no "Obama")</span>.`,
-        `<span style="color:var(--red)">Password:</span> Has min. 8 characters, including uppercase, lowercase, <u>and</u> number.`,
-        `<span style="color:var(--red)">Pronouns:</span> Pronouns may appear in place of a name ("Greg eats." vs "<u>He</u> eats.").`,
-        `<span style="color:var(--red)">Job:</span> This determines abilities, spells, and fighting style in combat.`,
-      ];
-      showHelpArray(helpArray);
     });
   });
 </script>

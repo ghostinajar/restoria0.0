@@ -16,7 +16,7 @@ async function createUser(userFormData, author) {
         let message = makeMessage("rejection", ``);
         // Validate new name
         if (!isValidName(userFormData.username)) {
-            message.content = `Names must be fewer than 18 letters only.`;
+            message.content = `Name must be letters only (max. 18), no unique irl names (e.g. no "Obama")`;
             if (author) {
                 worldEmitter.emit(`messageFor${author.username}`, message);
             }

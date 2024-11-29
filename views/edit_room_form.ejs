@@ -332,51 +332,16 @@
     );
     const editRoomExitList = document.getElementById("editRoomExitList");
 
-    const editRoomDescriptionHelp = [
-      `============================== Room Description ==============================`,
-      `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
-      `<span style="color:var(--red)">Examine:</span> The player sees this paragraph when they examine the room.`,
-      `<span style="color:var(--red)">Study:</span> player learns some history when they study the room.`,
-      `<span style="color:var(--red)">Research:</span> these paragraphs tell the full history of the room.`,
-      `  A good research text rewards the reader with some secrets about the room.`,
-    ];
-    const editRoomTagsHelp = [
-      `================================ Room Tags ===================================`,
-      `<span style="color:var(--red)">Dark:</span> Items, mobs, and players are hidden unless a lamp is in the room.`,
-      `<span style="color:var(--red)">Indoors:</span> Weather won't take effect here.`,
-      `<span style="color:var(--red)">On Water:</span> Players and mobs can't enter without levitate.`,
-      `<span style="color:var(--red)">Underwater:</span> Players will take drowning damage without magic.`,
-      `<span style="color:var(--red)">No Mounts:</span> No one can enter this room while mounted.`,
-      `<span style="color:var(--red)">No Mobs:</span> Mobs can't enter this room.`,
-      `<span style="color:var(--red)">No Magic:</span> No one can cast spells in this room.`,
-      `<span style="color:var(--red)">No Combat:</span> No one can enter combat in this room.`,
-    ];
-    const editRoomExitsHelp = [
-      `================================== Exits =====================================`,
-      `<span style="color:var(--red)">Key:</span> No one can unlock this door unless this item is in their inventory.`,
-      `<span style="color:var(--red)">Hidden:</span> The exit is hidden unless you search.`,
-      `<span style="color:var(--red)">Closed:</span> This door is closed when the zone is spawned.`,
-    ];
-    const editRoomItemNodesHelp = [
-      `================================ Item Nodes ===================================`,
-      `An item node spawns that item into the room when the zone is spawned.`,
-      `Choose an item and click <span style="color:var(--green)">add</span> to create an item node for it.`,
-      `Click <span style="color:var(--red)">remove</span> next to an existing node to remove it.`,
-      `These changes won't be saved until you click "Update Item".`,
-    ];
-    const editRoomMobNodesHelp = [
-      `================================ Mob Nodes ==================================`,
-      `An mob node spawns that mob into the room when the zone is spawned.`,
-      `Choose a mob and click <span style="color:var(--green)">add</span> to create an mob node for it.`,
-      `Click <span style="color:var(--red)">remove</span> next to an existing node to remove it.`,
-      `These changes won't be saved until you click "Update Room".`,
-    ];
-
     // to hold data from server on "edit room" command
     let workingEditRoomData;
     let mobBlueprints;
     let itemBlueprints;
     let rooms;
+    let editRoomDescriptionHelp = [];
+    let editRoomTagsHelp = [];
+    let editRoomExitsHelp = [];
+    let editRoomItemNodesHelp = [];
+    let editRoomMobNodesHelp = [];
 
     // Tab menu listeners
     editRoomTabLinks.forEach((link) => {
@@ -486,6 +451,12 @@
       mobBlueprints = formData.zoneData.mobBlueprintNames;
       itemBlueprints = formData.zoneData.itemBlueprintNames;
       rooms = formData.zoneData.rooms;
+      editRoomDescriptionHelp = formData.editRoomDescriptionHelp;
+      editRoomTagsHelp = formData.editRoomTagsHelp;
+      editRoomExitsHelp = formData.editRoomExitsHelp;
+      editRoomItemNodesHelp = formData.editRoomItemNodesHelp;
+      editRoomMobNodesHelp = formData.editRoomMobNodesHelp;
+
       // prepare fresh editRoomForm
       editRoomForm.reset();
       clearUl(editRoomMobNodeList);

@@ -5,6 +5,7 @@ import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.j
 import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
+import help from "./help.js";
 async function suggestions(user) {
     try {
         const zone = await getZoneOfUser(user);
@@ -15,6 +16,10 @@ async function suggestions(user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `You're not the author of this zone.`));
             return;
         }
+        help({
+            commandWord: "help",
+            directObject: "suggestions",
+        }, user);
         worldEmitter.emit(`formPromptFor${user.username}`, {
             form: `suggestionsForm`,
             suggestions: zone.suggestions,

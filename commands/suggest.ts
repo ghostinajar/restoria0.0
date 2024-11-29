@@ -10,6 +10,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import help from "./help.js";
 
 async function suggest(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -48,6 +49,13 @@ async function suggest(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
 
+    help(
+      {
+        commandWord: "help",
+        directObject: "suggest",
+      },
+      user
+    );
     const room = await getRoomOfUser(user);
     if (!room) {
       throw new Error(`Room not found for user ${user.name}'s location.`);

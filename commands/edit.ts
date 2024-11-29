@@ -18,6 +18,8 @@ import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getNameById from "../util/getNameById.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import HELP from "../constants/HELP.js";
+import help from "./help.js";
 
 async function edit(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -30,7 +32,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
     if (!target) {
       worldEmitter.emit(
         `messageFor${user.username}`,
-        makeMessage(`rejection`, `Edit what?`)
+        makeMessage(`rejection`, `Edit what? Try EDIT ITEM, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`)
       );
       return;
     }
@@ -56,6 +58,14 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
           itemTypes: itemTypes,
           affixTypes: affixTypes,
           damageTypes: damageTypes,
+          editItemGeneralHelp: HELP.EDIT_ITEM,
+          editItemDescriptionHelp: HELP.DESCRIPTION,
+          editItemTagsHelp: HELP.ITEM_TAG,
+          editItemItemNodesHelp: HELP.ITEM_NODE,
+          editItemAffixesHelp: HELP.AFFIX,
+          editItemWeaponHelp: HELP.WEAPON_PROPERTIES,
+          editItemArmorHelp: HELP.ARMOR,
+          editItemSpellHelp: HELP.ITEM_SPELL_PROPERTIES,
         });
         break;
       }
@@ -79,6 +89,10 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
           mobBlueprintFullData: zone.mobBlueprints,
           itemBlueprintNames: getItemBlueprintNamesFromZone(zone),
           affixTypes: affixTypes,
+          editMobGeneralHelp: HELP.EDIT_MOB,
+          editMobDescriptionHelp: HELP.DESCRIPTION,
+          editMobItemNodesHelp: HELP.ITEM_NODE,
+          editMobAffixesHelp: HELP.AFFIX,
         });
         break;
       }
@@ -117,11 +131,23 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
             mobBlueprintNames: mobBlueprintNames,
             rooms: roomList,
           },
+          editRoomDescriptionHelp: HELP.DESCRIPTION,
+          editRoomTagsHelp: HELP.EDIT_ROOM_TAGS,
+          editRoomExitsHelp: HELP.EXITS,
+          editRoomItemNodesHelp: HELP.ITEM_NODE,
+          editRoomMobNodesHelp: HELP.MOB_NODE,
         });
         break;
       }
       case `character`:
       case `user`: {
+        help(
+          {
+            commandWord: "help",
+            directObject: "edit_user",
+          },
+          user
+        );
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `editUserForm`,
           examine: user.description.examine,
@@ -131,6 +157,13 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `zone`: {
+        help(
+          {
+            commandWord: "help",
+            directObject: "edit_zone",
+          },
+          user
+        );
         const zone = await getZoneOfUser(user);
         if (!zone) {
           throw new Error(`Couldn't get ${user.username}'s zone.`);
@@ -147,7 +180,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
       default: {
         worldEmitter.emit(
           `messageFor${user.username}`,
-          makeMessage(`rejection`, `Edit what?`)
+          makeMessage(`rejection`, `Edit what? Try EDIT ITEM, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`)
         );
         return;
       }

@@ -8,6 +8,7 @@ import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.j
 import getRoomNamesFromZone from "../util/getRoomNamesFromZone.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
+import help from "./help.js";
 
 async function suggestions(user: IUser) {
   try {
@@ -16,18 +17,20 @@ async function suggestions(user: IUser) {
       throw new Error(`Couldn't get ${user.username}'s zone.`);
     }
 
-    if (zone.author.toString() !== user._id.toString())
-    {
+    if (zone.author.toString() !== user._id.toString()) {
       worldEmitter.emit(
         `messageFor${user.username}`,
-        makeMessage(
-          "rejection",
-          `You're not the author of this zone.`
-        )
+        makeMessage("rejection", `You're not the author of this zone.`)
       );
       return;
     }
-
+    help(
+      {
+        commandWord: "help",
+        directObject: "suggestions",
+      },
+      user
+    );
     worldEmitter.emit(`formPromptFor${user.username}`, {
       form: `suggestionsForm`,
       suggestions: zone.suggestions,

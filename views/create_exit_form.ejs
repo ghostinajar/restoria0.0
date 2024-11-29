@@ -44,13 +44,6 @@
       activeForm = createExitForm;
       activeForm.style.display = "block";
       input.value = "";
-      const helpArray = [
-        `================================ Create Exit =================================`,
-        `Open an exit between this room and an adjacent room.`,
-        `If there's no available room in a direction, it won't appear on the form.`,
-        `If the "Direction" dropdown is empty, try CREATE ROOM instead.`,
-      ];
-      showHelpArray(helpArray);
 
       // Update the direction select element
       directionSelect.innerHTML = ""; // Clear existing options

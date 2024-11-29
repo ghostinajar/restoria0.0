@@ -8,11 +8,12 @@ import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRo
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
+import help from "./help.js";
 async function create(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject?.toLowerCase();
         if (!target) {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what?`));
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`));
             return;
         }
         const zone = await getZoneOfUser(user);
@@ -26,6 +27,10 @@ async function create(parsedCommand, user) {
         }
         switch (target) {
             case `exit`: {
+                help({
+                    commandWord: "help",
+                    directObject: "create_exit",
+                }, user);
                 const availableExits = await getAvailableExitsForCreateExit(user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `createExit`,
@@ -36,6 +41,10 @@ async function create(parsedCommand, user) {
             case `object`:
                 worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Objects are called items in Restoria.`));
             case `item`: {
+                help({
+                    commandWord: "help",
+                    directObject: "create_item",
+                }, user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `createItemBlueprintForm`,
                     itemTypes: itemTypes,
@@ -46,12 +55,20 @@ async function create(parsedCommand, user) {
             case `npc`:
                 worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
             case `mob`: {
+                help({
+                    commandWord: "help",
+                    directObject: "create_mob",
+                }, user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `createMobBlueprintForm`,
                 });
                 break;
             }
             case `room`: {
+                help({
+                    commandWord: "help",
+                    directObject: "create_room",
+                }, user);
                 const availableDirections = await getAvailableExitsForCreateRoom(user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `createRoomForm`,
@@ -71,13 +88,17 @@ async function create(parsedCommand, user) {
                     worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You already have 5 zones in progress! Work on publishing one of them first.`));
                     break;
                 }
+                help({
+                    commandWord: "help",
+                    directObject: "create_zone",
+                }, user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `createZoneForm`,
                 });
                 break;
             }
             default: {
-                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what?`));
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`));
                 return;
             }
         }
