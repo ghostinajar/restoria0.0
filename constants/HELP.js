@@ -158,7 +158,7 @@ const HELP = {
     ],
     EDITOR: [
         `${padStringToLength79(`EDITOR`)}`,
-        `The EDITOR command designates another user to be your zone editor (e.g. EDITOR RALU). The person you choose can enter your unpublished zones and read all your content. They can also use the SUGGEST command to give you notes to improve your zone.`,
+        `The EDITOR command designates another user to be your zone editor (e.g. EDITOR RALU). The person you choose can enter your unpublished zones and read all your content. They can also use the SUGGEST command to give you notes to improve your zone. If you want to remove your editor without replacing them, type EDITOR NONE.`,
     ],
     ERASE: [
         `${padStringToLength79(`ERASE, DELETE, ERASE ITEM, ERASE MOB, ERASE ROOM, ERASE USER, ERASE ZONE`)}`,
