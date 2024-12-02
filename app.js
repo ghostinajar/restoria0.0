@@ -19,7 +19,9 @@ import User from "./model/classes/User.js";
 import World from "./model/classes/World.js";
 import deleteZoneById from "./util/deleteZoneById.js"
 
-dotenv.config(); // Load environment variables from a .env file into process.env
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 const mongodb_uri = process.env.MONGODB_URI;
 const port = process.env.PORT || 3000;
 const app = express(); // Express app
@@ -36,10 +38,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(morgan("dev"));
 const sessionMiddleware = session({
-  secret: "white cat",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }, //TODO set to true when app moves to https
+  cookie: { secure: true },
 });
 app.use(sessionMiddleware);
 app.use(passport.initialize());
@@ -54,7 +56,9 @@ passport.use(
       name = name.toLowerCase();
       const user = await User.findOne({ username: name });
       if (!user) {
-        logger.debug(`Passport local strategy couldn't find name: ${name} in Users`);
+        logger.debug(
+          `Passport local strategy couldn't find name: ${name} in Users`
+        );
         return cb(null, false, { message: "Incorrect name or password." });
       }
 
@@ -64,7 +68,7 @@ passport.use(
         return cb(null, false, { message: "Incorrect name or password." });
       }
       // logger.debug(`Passport local strategy authenticated, returning user ${user.name}.`);
-      return cb(null, user); 
+      return cb(null, user);
     } catch (err) {
       return cb(err);
     }
@@ -107,8 +111,7 @@ async function main() {
   // Setup game world
   const world = new World();
   logger.info("World instantiated!");
-  await world.zoneManager.addZoneById("664f8ca70cc5ae9b173969a8"); // load Restoria Town
-  //setTimeout(()=>{world.zoneManager.removeZoneById('664f8ca70cc5ae9b173969a8');}, 4000);
+  await world.zoneManager.addZoneById(process.env.WORLD_RECALL_ZONEID); // load Restoria Town
 
   // Setup socket.io
   io.use((socket, next) => {
