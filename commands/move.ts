@@ -12,7 +12,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 
 async function move(parsedCommand: IParsedCommand, user: IUser) {
   try {
-    let requestedDirection = parsedCommand.commandWord;
+    let requestedDirection = parsedCommand.commandWord.toLowerCase();
 
     // expand abbreviations
     switch (requestedDirection) {
