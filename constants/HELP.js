@@ -75,7 +75,7 @@ const HELP = {
     ],
     CREATE_ROOM: [
         `${padStringToLength79(`CREATE ROOM`)}`,
-        `A Room is a specific area of a zone, and there should be many rooms in a zone. Despite the name, a Room can be an outdoor area without walls. Examples of rooms could be "A Walkway in the Garden", "The Smallest Dungeon Cell", or "Persephone's Walk-In Closet". If a Zone is a large area where many parts of a story can happen, a Room is a specific place where you can watch an event (e.g. a conversation, a battle) happen.`,
+        `A Room is a specific area of a zone, and there should be many rooms in a zone. Despite being called "Room", a Room can be any specific location, even an outdoor area without walls. Examples of rooms could be "A Walkway in the Garden", "The Smallest Dungeon Cell", or "Persephone's Walk-In Closet". If a Zone is a large area where many parts of a story can happen, a Room is a specific place where a specific event (e.g. a conversation, a battle) can happen.`,
         `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
         `<span style="color:var(--red)">Direction:</span> the location of the new room, from where you create it`,
         `<span style="color:var(--red)">Dark:</span> items, mobs, and players are hidden unless a lamp is present`,
@@ -83,14 +83,6 @@ const HELP = {
         `<span style="color:var(--red)">On Water:</span> players and mobs can't enter without levitate`,
         `<span style="color:var(--red)">Underwater:</span> players will take drowning damage without magic`,
         `<span style="color:var(--red)">Examine:</span> a paragraph a player sees when they look or enter the room`,
-    ],
-    CREATE_USER: [
-        `${padStringToLength79(`CREATE USER`)}`,
-        `This command is currently disabled during Beta testing.`,
-        `<span style="color:var(--red)">Name:</span> must be letters only (max. 18), no unique irl names (e.g. no "Obama")`,
-        `<span style="color:var(--red)">Password:</span> has min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
-        `<span style="color:var(--red)">Pronouns:</span> may appear in place of a name ("Greg eats." vs "<u>He</u> eats.")`,
-        `<span style="color:var(--red)">Job:</span> determines abilities, spells, and fighting style in combat`,
     ],
     CREATE_ZONE: [
         `${padStringToLength79(`CREATE ZONE, EDIT ZONE`)}`,

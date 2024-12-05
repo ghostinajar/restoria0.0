@@ -29,7 +29,11 @@ function help(parsedCommand, user) {
             case `capacity`:
                 target = `container`;
                 break;
+            case `room`:
+                target = `create_room`;
+                break;
             case `edit_zone`:
+            case `zone`:
                 target = `create_zone`;
                 break;
             case `look`:
