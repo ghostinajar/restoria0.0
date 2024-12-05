@@ -33,7 +33,7 @@ async function create(parsedCommand, user) {
                 }, user);
                 const availableExits = await getAvailableExitsForCreateExit(user);
                 worldEmitter.emit(`formPromptFor${user.username}`, {
-                    form: `createExit`,
+                    form: `createExitForm`,
                     availableExits: availableExits,
                 });
                 break;

@@ -1,0 +1,61 @@
+<!-- bug_form -->
+<form
+  id="bugForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelBugForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Report Bug</h2>
+  <ul>
+    <h3>Description</h3>
+    <li>
+      <textarea
+        id="bugDescription"
+        name="bugDescription"
+        maxlength="6400"
+        style="height:10rem;"
+        required
+      ></textarea>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <button type="submit" style="margin-left: 0;">Submit Bug Report</button>
+    </li>
+  </ul>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const bugForm = document.getElementById("bugForm");
+    const bugDescription = document.getElementById("bugDescription");
+
+    bugForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const bugFormData = bugDescription.value;
+      socket.emit("userSubmittedBug", bugFormData);
+      bugForm.reset();
+      bugForm.style.display = "none";
+    });
+
+    document
+      .getElementById("cancelBugForm")
+      .addEventListener("click", function () {
+        bugForm.style.display = "none";
+      });
+
+    socket.on("openBugForm", () => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = bugForm;
+      activeForm.style.display = "block";
+      input.value = "";
+    });
+  });
+</script>

@@ -40,6 +40,9 @@ function help(parsedCommand: IParsedCommand, user: IUser) {
       case `user`:
         target = `author`;
         break;
+      case `bugs`:
+        target = `bug`;
+        break;
       case `capacity`:
         target = `container`;
         break;

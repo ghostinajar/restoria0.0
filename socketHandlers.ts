@@ -14,6 +14,7 @@ import purifyDescriptionOfObject, {
 } from "./util/purify.js";
 import { historyStartingNow } from "./model/classes/History.js";
 import stats from "./commands/stats.js";
+import bug from "./commands/bug.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import makeMessage from "./util/makeMessage.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
@@ -45,7 +46,8 @@ import eraseExit from "./commands/eraseExit.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
-    createExit: "openCreateExitForm",
+    bugForm: "openBugForm",
+    createExitForm: "openCreateExitForm",
     createItemBlueprintForm: "openCreateItemBlueprintForm",
     createMobBlueprintForm: "opencreateMobBlueprintForm",
     createRoomForm: "openCreateRoomForm",
@@ -112,7 +114,10 @@ export const messageForUserHandler = async (message: IMessage, socket: any) => {
 };
 
 // a safeMessage should never contain user-generated text
-export const safeMessageForUserHandler = async (message: IMessage, socket: any) => {
+export const safeMessageForUserHandler = async (
+  message: IMessage,
+  socket: any
+) => {
   try {
     socket.emit(`safeMessage`, message);
   } catch (error: unknown) {
@@ -150,6 +155,13 @@ export const messageForUsersZoneHandler = async (
       user?.name
     );
   }
+};
+
+export const userSubmittedBugHandler = async (
+  description: string,
+  user: IUser
+) => {
+  await bug(description, user);
 };
 
 export const userSubmittedCreateExitHandler = async (

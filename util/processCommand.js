@@ -19,9 +19,20 @@ import suggestions from "../commands/suggestions.js";
 import editor from "../commands/editor.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 import help from "../commands/help.js";
+import worldEmitter from "../model/classes/WorldEmitter.js";
 async function processCommand(parsedCommand, user) {
     try {
         switch (parsedCommand.commandWord) {
+            case `bug`: {
+                help({
+                    commandWord: "help",
+                    directObject: "bug",
+                }, user);
+                worldEmitter.emit(`formPromptFor${user.username}`, {
+                    form: `bugForm`,
+                });
+                break;
+            }
             case `create`: {
                 await create(parsedCommand, user);
                 break;

@@ -23,6 +23,9 @@ const HELP: {
     `${padStringToLength79(`Author, Character, User`)}`,
     `The words author, character, and user all refer to the same thing: a human person who plays Restoria. Everyone in the game is an author in the sense that they can CREATE zones and their contents. We are all users and characters in the sense that we interact with the world of zones created by other authors, often in a role-playing style of gameplay. A person may have multiple user accounts representing different characters. That's why "user", "character", and "author" are used interchangeably in Restoria.`,
   ],
+  BUG: [
+    `Restoria's first beta was coded and written by Ralu (aka Mark Wells), so of course it is full of dumb bugs. If you find one, type BUG to report it, and include lots of details about what happened, and what you were doing when it happened (e.g. the last commands you tried to use, the buggy result, what you were expecting, etc). The game will automatically record your username, the date & time, and your location in the game when you submit the report, so please try to report from the time and place you observed the bug. If you can't, then include those details in your description too, please. You can type BUGS to see a "todo" list of bugfixes Ralu is working on.`
+  ],
   CHEATSHEET: [
     `${padStringToLength79(`HELP CHEATSHEET`)}`,
     `Here are some commands to try after login:`,

@@ -26,6 +26,9 @@ function help(parsedCommand, user) {
             case `user`:
                 target = `author`;
                 break;
+            case `bugs`:
+                target = `bug`;
+                break;
             case `capacity`:
                 target = `container`;
                 break;

@@ -40,6 +40,7 @@ import {
   userSubmittedEraseExitHandler,
   safeMessageArrayForUserHandler,
   safeMessageForUserHandler,
+  userSubmittedBugHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -157,6 +158,10 @@ const setupSocket = (io: any) => {
       socket.on(`userSentCommand`, async (userInput: string) => {
         userInput = purifyCommandInput(userInput);
         userSentCommandHandler(socket, userInput, user);
+      });
+
+      socket.on(`userSubmittedBug`, async (description: string) => {
+        await userSubmittedBugHandler(description, user);
       });
 
       socket.on(`userSubmittedCreateExit`, async (direction: string) => {

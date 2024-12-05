@@ -6,6 +6,7 @@ import getZoneOfUser from "./util/getZoneofUser.js";
 import purifyDescriptionOfObject, { purifyAllStringPropsOfObject, } from "./util/purify.js";
 import { historyStartingNow } from "./model/classes/History.js";
 import stats from "./commands/stats.js";
+import bug from "./commands/bug.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import makeMessage from "./util/makeMessage.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
@@ -26,7 +27,8 @@ import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     const formEventMap = {
-        createExit: "openCreateExitForm",
+        bugForm: "openBugForm",
+        createExitForm: "openCreateExitForm",
         createItemBlueprintForm: "openCreateItemBlueprintForm",
         createMobBlueprintForm: "opencreateMobBlueprintForm",
         createRoomForm: "openCreateRoomForm",
@@ -108,6 +110,9 @@ export const messageForUsersZoneHandler = async (message, socket, user) => {
     catch (error) {
         catchErrorHandlerForFunction(`messageForUsersZoneHandler`, error, user?.name);
     }
+};
+export const userSubmittedBugHandler = async (description, user) => {
+    await bug(description, user);
 };
 export const userSubmittedCreateExitHandler = async (direction, user) => {
     await createExit(direction, user);

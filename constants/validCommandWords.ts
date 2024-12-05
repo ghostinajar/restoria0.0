@@ -1,5 +1,7 @@
 // validCommandWords
 export const validCommandWords = [
+  "bug",
+  "bugs",
   "create",
   "e",
   "east",
