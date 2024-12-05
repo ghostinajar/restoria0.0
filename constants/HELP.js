@@ -27,6 +27,7 @@ const HELP = {
         `<span style="color:var(--green)">RECALL:</span> warp back to "The Snails", the centre of Restoria Town`,
         `<span style="color:var(--green)">CREATE:</span> start with CREATE ZONE to write things into the game`,
         `<span style="color:var(--green)">GOTO:</span> warp to any room in any zone you create or edit`,
+        `<span style="color:var(--green)">HELP:</span> see a list of help files. HELP <TOPIC> shows the file on that topic`,
         `<span style="color:var(--green)">EDIT:</span> make changes to an item, mob, room, etc. you've created`,
         `<span style="color:var(--green)">ERASE:</span> remove something you've created from the game`,
         `<span style="color:var(--green)">EDITOR:</span> choose another user to make suggestions in your zones`,
@@ -63,6 +64,7 @@ const HELP = {
     ],
     CREATE_MOB: [
         `${padStringToLength79(`CREATE MOB`)}`,
+        `A Mob is a monster, creature, or non-player character in a zone. "MOB" stands for "Mobile Object", which is an old gaming term to refer to anything in a game that might move around or act on its own.`,
         `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--green_light)">a green goblin</span>' or '<span style="color: var(--green_light)">Greg the blacksmith'</span>`,
         `<span style="color:var(--red)">Keywords:</span> e.g 'goblin, green' or 'blacksmith, Greg'`,
         `<span style="color:var(--red)">Pronouns:</span> may appear in place of a name ("Greg eats." vs "<u>He</u> eats.")`,
@@ -73,6 +75,7 @@ const HELP = {
     ],
     CREATE_ROOM: [
         `${padStringToLength79(`CREATE ROOM`)}`,
+        `A Room is a specific area of a zone, and there should be many rooms in a zone. Despite the name, a Room can be an outdoor area without walls. Examples of rooms could be "A Walkway in the Garden", "The Smallest Dungeon Cell", or "Persephone's Walk-In Closet". If a Zone is a large area where many parts of a story can happen, a Room is a specific place where you can watch an event (e.g. a conversation, a battle) happen.`,
         `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
         `<span style="color:var(--red)">Direction:</span> the location of the new room, from where you create it`,
         `<span style="color:var(--red)">Dark:</span> items, mobs, and players are hidden unless a lamp is present`,
@@ -91,6 +94,7 @@ const HELP = {
     ],
     CREATE_ZONE: [
         `${padStringToLength79(`CREATE ZONE, EDIT ZONE`)}`,
+        `A Zone is a broad area in the game; think of it as a setting where many parts of a story can take place. A zone is made up of smaller places called Rooms. Examples of a zone may be "The Haunted Unicorn Forest", "Bunnyland", or "Drake's Vampiric Castle", whereas examples of rooms inside those zones could be "A Mossy Glade", "The Bunny Cafeteria", or "Drake's Treasure Chamber".`,
         `<span style="color:var(--red)">Name:</span> the zone's title, e.g. "The Mushroom City"`,
         `<span style="color:var(--red)">Respawn:</span> how many minutes before the whole zone's mobs, doors, & items respawn`,
         `<span style="color:var(--red)">Look:</span> a sentence shown to a player when they survey the wilderness nearby`,
