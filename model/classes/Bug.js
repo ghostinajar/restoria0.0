@@ -1,7 +1,6 @@
 // Bug
 // (reported by user)
 import mongoose from "mongoose";
-import historySchema from "./History.js";
 import locationSchema from "./Location.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
 const { Schema } = mongoose;
@@ -11,9 +10,9 @@ const bugSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
-    history: {
-        type: historySchema,
-        default: () => ({}),
+    date: {
+        type: Date,
+        default: new Date(),
     },
     description: {
         type: String,

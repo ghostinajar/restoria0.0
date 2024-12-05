@@ -22,6 +22,7 @@ import editor from "../commands/editor.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 import help from "../commands/help.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import bugs from "../commands/bugs.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -37,6 +38,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         worldEmitter.emit(`formPromptFor${user.username}`, {
           form: `bugForm`,
         });
+        break;
+      }
+      case `bugs`: {
+        await bugs(user);
         break;
       }
       case `create`: {

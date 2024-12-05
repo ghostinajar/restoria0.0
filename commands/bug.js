@@ -3,7 +3,6 @@
 import mongoose from "mongoose";
 import logger from "../logger.js";
 import Bug from "../model/classes/Bug.js";
-import { historyStartingNow } from "../model/classes/History.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
@@ -14,7 +13,7 @@ async function bug(bugDescription, user) {
         let newBugData = {
             _id: new mongoose.Types.ObjectId(),
             author: user._id,
-            history: historyStartingNow(),
+            date: new Date(),
             description: bugDescription,
             location: {
                 inZone: await getZoneOfUser(user),

@@ -8,7 +8,6 @@ async function userSentCommandHandler(socket, userInput, user) {
     try {
         logger.input(`${user.name} sent command: ${userInput}`);
         let parsedCommand = parseCommand(userInput);
-        console.log(parsedCommand);
         if (!isValidCommandWord(parsedCommand.commandWord)) {
             //TODO If invalid command word log IP (suspicious because client should prevent this)
             socket.emit(`redirectToLogin`, `Server rejected command`);

@@ -10,7 +10,7 @@ const { Schema } = mongoose;
 export interface IBug extends mongoose.Document {
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
-  history: IHistory;
+  date: Date;
   description: string;
   location: ILocation;
   isValid: boolean;
@@ -22,9 +22,9 @@ const bugSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  history: {
-    type: historySchema,
-    default: () => ({}),
+  date: {
+    type: Date,
+    default: new Date(),
   },
   description: {
     type: String,

@@ -16,7 +16,7 @@ async function bug(bugDescription: string, user: IUser) {
     let newBugData: any = {
       _id: new mongoose.Types.ObjectId(),
       author: user._id,
-      history: historyStartingNow(),
+      date: new Date(),
       description: bugDescription,
       location: {
         inZone: await getZoneOfUser(user),
