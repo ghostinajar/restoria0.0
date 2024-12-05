@@ -6,13 +6,19 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import makeMessage from "../util/makeMessage.js";
 async function bugs(user) {
     try {
-        const validBugs = await Bug.find({ isValid: true }, // Filter for isValid true
-        { date: 1, description: 1, _id: 0 } // Projection to include only date and description
-        );
+        const validBugs = await Bug.find({ isValid: true }, { date: 1, description: 1, _id: 0 });
+        const formatDate = (date) => {
+            return new Intl.DateTimeFormat('en-GB', {
+                year: '2-digit',
+                month: '2-digit',
+                day: '2-digit'
+            }).format(new Date(date));
+        };
         const validBugStrings = validBugs.map(bug => {
-            return makeMessage("message", `${bug.date}: ${bug.description}`);
+            const formattedDate = formatDate(bug.date);
+            return makeMessage("message", `${formattedDate}: ${bug.description}`);
         });
-        console.log(validBugStrings);
+        validBugStrings.unshift(makeMessage(`help`, `Current known bugs in Restoria:`));
         worldEmitter.emit(`messageArrayFor${user.username}`, validBugStrings);
     }
     catch (error) {
