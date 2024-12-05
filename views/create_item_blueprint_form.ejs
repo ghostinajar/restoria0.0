@@ -118,11 +118,22 @@
     const createItemBlueprintForm = document.getElementById(
       "createItemBlueprintForm"
     );
+    const createItemName = document.getElementById("createItemName");
+    const createItemPrice = document.getElementById("createItemPrice");
+    const createItemMinimumLevel = document.getElementById(
+      "createItemMinimumLevel"
+    );
     const createItemType = document.getElementById("createItemType");
+    const createItemLook = document.getElementById("createItemLook");
+    const createItemExamine = document.getElementById("createItemExamine");
+    const createItemIsContainer = document.getElementById(
+      "createItemIsContainer"
+    );
 
     let itemTypes;
 
     createItemBlueprintForm.addEventListener("submit", (e) => {
+      //validate & sanitize data
       e.preventDefault();
       const keywords = document
         .getElementById("createItemKeywords")
@@ -130,21 +141,17 @@
       const purifiedKeywords = keywords.map((keyword) =>
         DOMPurify.sanitize(keyword)
       );
+
+      //package data
       const createItemBlueprintFormData = {
-        name: DOMPurify.sanitize(
-          document.getElementById("createItemName").value
-        ),
+        name: DOMPurify.sanitize(createItemName.value),
         keywords: purifiedKeywords,
-        price: document.getElementById("createItemPrice").value,
-        minimumLevel: document.getElementById("createItemMinimumLevel").value,
+        price: createItemPrice.value,
+        minimumLevel: createItemMinimumLevel.value,
         itemType: createItemType.value,
         description: {
-          look: DOMPurify.sanitize(
-            document.getElementById("createItemLook").value
-          ),
-          examine: DOMPurify.sanitize(
-            document.getElementById("createItemExamine").value
-          ),
+          look: DOMPurify.sanitize(createItemLook.value),
+          examine: DOMPurify.sanitize(createItemExamine.value),
           study: "",
           research: "",
         },
@@ -163,10 +170,14 @@
           fixture: false,
           quest: false,
           temporary: false,
-          container: document.getElementById("createItemIsContainer").checked,
+          container: createItemIsContainer.checked,
         },
       };
-      socket.emit("userSubmittedCreateItemBlueprint", createItemBlueprintFormData);
+
+      socket.emit(
+        "userSubmittedCreateItemBlueprint",
+        createItemBlueprintFormData
+      );
       createItemBlueprintForm.reset();
       createItemBlueprintForm.style.display = "none";
     });

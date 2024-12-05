@@ -47,7 +47,7 @@ async function editor(parsedCommand: IParsedCommand, user: IUser) {
       }
     }
 
-    if (target.toLowerCase() === "none") {
+    if (target === "none") {
       user.editor = null;
       await user.save();
 
@@ -61,7 +61,7 @@ async function editor(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
 
-    let newEditor = await User.findOne({ username: target.toLowerCase() });
+    let newEditor = await User.findOne({ username: target });
 
     if (!newEditor) {
       worldEmitter.emit(

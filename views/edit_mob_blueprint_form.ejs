@@ -127,66 +127,6 @@
           required
         />
       </li>
-      <!-- statBlock -->
-      <li>
-        <label for="editMobStr">Str:</label>
-        <input
-          style="width: 3.9rem"
-          type="number"
-          id="editMobStr"
-          name="editMobStr"
-          min="4"
-          max="18"
-          value="10"
-          required
-        />
-        <label for="editMobDex" style="min-width: 3rem">Dex:</label>
-        <input
-          style="width: 3.9rem"
-          type="number"
-          id="editMobDex"
-          name="editMobDex"
-          min="4"
-          max="18"
-          value="10"
-          required
-        />
-        <label for="editMobCon" style="min-width: 3rem">Con:</label>
-        <input
-          style="width: 3.9rem"
-          type="number"
-          id="editMobCon"
-          name="editMobCon"
-          min="4"
-          max="18"
-          value="10"
-          required
-        />
-      </li>
-      <li>
-        <label for="editMobInt">Int:</label>
-        <input
-          style="width: 3.9rem"
-          type="number"
-          id="editMobInt"
-          name="editMobInt"
-          min="4"
-          max="18"
-          value="10"
-          required
-        />
-        <label for="editMobWis" style="min-width: 3rem">Wis:</label>
-        <input
-          style="width: 3.9rem"
-          type="number"
-          id="editMobWis"
-          name="editMobWis"
-          min="4"
-          max="18"
-          value="10"
-          required
-        />
-      </li>
       <li>
         <label for="editMobIsUnique"> </label>
         <input
@@ -358,11 +298,6 @@
     const editMobLevel = document.getElementById("editMobLevel");
     const editMobJob = document.getElementById("editMobJob");
     const editMobSpi = document.getElementById("editMobSpi");
-    const editMobStr = document.getElementById("editMobStr");
-    const editMobDex = document.getElementById("editMobDex");
-    const editMobCon = document.getElementById("editMobCon");
-    const editMobInt = document.getElementById("editMobInt");
-    const editMobWis = document.getElementById("editMobWis");
     const editMobIsUnique = document.getElementById("editMobIsUnique");
     const editMobIsMount = document.getElementById("editMobIsMount");
     const editMobIsAggressive = document.getElementById("editMobIsAggressive");
@@ -450,15 +385,7 @@
         pronouns: Number(editMobPronouns).value || 1,
         level: Number(editMobLevel.value) || 1,
         job: editMobJob.value || "warrior",
-        statBlock: {
-          strength: Number(editMobStr.value) || 10,
-          dexterity: Number(editMobDex.value) || 10,
-          constitution: Number(editMobCon.value) || 10,
-          intelligence: Number(editMobInt.value) || 10,
-          wisdom: Number(editMobWis.value) || 10,
-          charisma: 10,
-          spirit: Number(editMobSpi.value) || 0,
-        },
+        spirit: Number(editMobSpi.value) || 0,
         isUnique: editMobIsUnique.checked || false,
         isMount: editMobIsMount.checked || false,
         isAggressive: editMobIsAggressive.checked || false,
@@ -586,11 +513,6 @@
         editMobLevel.value = selectedMob.level || 0;
         editMobJob.value = selectedMob.job || "warrior";
         editMobSpi.value = selectedMob.statBlock.spirit || 0;
-        editMobStr.value = selectedMob.statBlock.strength || 10;
-        editMobDex.value = selectedMob.statBlock.dexterity || 10;
-        editMobCon.value = selectedMob.statBlock.constitution || 10;
-        editMobInt.value = selectedMob.statBlock.intelligence || 10;
-        editMobWis.value = selectedMob.statBlock.wisdom || 10;
         editMobIsUnique.checked = selectedMob.isUnique || false;
         editMobIsMount.checked = selectedMob.IsMount || false;
         editMobIsAggressive.checked = selectedMob.IsAggressive || false;

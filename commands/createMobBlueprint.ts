@@ -12,6 +12,7 @@ import look from "./look.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 
 export interface ICreateMobFormData {
   name: string;
@@ -49,7 +50,7 @@ async function createMobBlueprint(
       name: mobFormData.name,
       pronouns: mobFormData.pronouns,
       history: historyStartingNow(),
-      level: mobFormData.level,
+      level: putNumberInRange(1, 31, mobFormData.level, user),
       job: mobFormData.job,
       statBlock: {
         strength: 10,

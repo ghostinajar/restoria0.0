@@ -8,7 +8,7 @@ import relocateUser from "../util/relocateUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function move(parsedCommand, user) {
     try {
-        let requestedDirection = parsedCommand.commandWord.toLowerCase();
+        let requestedDirection = parsedCommand.commandWord;
         // expand abbreviations
         switch (requestedDirection) {
             case `n`: {

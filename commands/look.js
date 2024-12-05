@@ -20,7 +20,7 @@ async function look(parsedCommand, user) {
             return;
         }
         if (target) {
-            lookTarget(target.toLowerCase(), room, lookArray);
+            lookTarget(target, room, lookArray);
             worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
             return;
         }

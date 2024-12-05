@@ -14,6 +14,7 @@ import SPELL from "../constants/SPELL.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 
 export interface ICreateItemBlueprintFormData {
   name: string;
@@ -69,9 +70,9 @@ async function createItemBlueprint(
       author: user._id,
       name: itemFormData.name,
       itemType: itemFormData.itemType,
-      price: itemFormData.price,
+      price: putNumberInRange(0, 100000, itemFormData.price, user),
       capacity: 0,
-      minimumLevel: itemFormData.minimumLevel,
+      minimumLevel: putNumberInRange(0, 31, itemFormData.minimumLevel, user),
       history: historyStartingNow(),
       description: itemDescription,
       tags: itemFormData.tags,

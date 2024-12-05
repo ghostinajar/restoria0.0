@@ -11,7 +11,7 @@ import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import help from "./help.js";
 async function create(parsedCommand, user) {
     try {
-        let target = parsedCommand.directObject?.toLowerCase();
+        let target = parsedCommand.directObject;
         if (!target) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`));
             return;

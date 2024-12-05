@@ -14,6 +14,7 @@ import mongoose from "mongoose";
 import ROOM_TYPE from "../constants/ROOM_TYPE.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 
 export interface IZoneData {
   name: string;
@@ -89,7 +90,7 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
       mobBlueprints: [],
       itemBlueprints: [],
       suggestions: [],
-      minutesToRespawn: zoneFormData.minutesToRespawn,
+      minutesToRespawn: putNumberInRange(5, 120, zoneFormData.minutesToRespawn, user),
     };
 
     // create and save to db

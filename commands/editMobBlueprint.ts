@@ -6,10 +6,10 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
-import { IStatBlock } from "../model/classes/StatBlock.js";
 import { IItemNode } from "../model/classes/ItemNode.js";
 import { IAffix } from "../model/classes/Affix.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 
 export interface IEditMobFormData {
   _id: mongoose.Types.ObjectId;
@@ -18,7 +18,7 @@ export interface IEditMobFormData {
   pronouns: number;
   level: number;
   job: string;
-  statBlock: IStatBlock;
+  spirit: number;
   isUnique: boolean;
   isMount: boolean;
   isAggressive: boolean;
@@ -32,10 +32,7 @@ export interface IEditMobFormData {
   affixes?: Array<IAffix>;
 }
 
-async function editMobBlueprint(
-  formData: IEditMobFormData,
-  user: IUser
-) {
+async function editMobBlueprint(formData: IEditMobFormData, user: IUser) {
   try {
     if (!formData._id) throw new Error("Missing mobId");
     if (!formData) throw new Error("Missing formData");
@@ -63,9 +60,17 @@ async function editMobBlueprint(
     mob.name = formData.name;
     mob.keywords = formData.keywords;
     mob.pronouns = formData.pronouns;
-    mob.level = formData.level;
+    mob.level = putNumberInRange(1, 31, formData.level, user);
     mob.job = formData.job;
-    mob.statBlock = formData.statBlock;
+    mob.statBlock = {
+      strength: 10,
+      dexterity: 10,
+      constitution: 10,
+      intelligence: 10,
+      wisdom: 10,
+      charisma: 10,
+      spirit: putNumberInRange(-1000, 1000, formData.spirit, user),
+    };
     mob.isUnique = formData.isUnique;
     mob.isMount = formData.isMount;
     mob.isAggressive = formData.isAggressive;
@@ -92,7 +97,7 @@ async function editMobBlueprint(
       makeMessage(`success`, `Mob updated!`)
     );
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("editMobBlueprint", error, user.name)
+    catchErrorHandlerForFunction("editMobBlueprint", error, user.name);
   }
 }
 

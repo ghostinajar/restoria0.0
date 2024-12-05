@@ -7,6 +7,7 @@ import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 async function editItemBlueprint(formData, user) {
     try {
         if (!formData._id)
@@ -30,10 +31,12 @@ async function editItemBlueprint(formData, user) {
         //update values and save zone
         item.name = formData.name;
         item.keywords = formData.keywords;
-        item.price = formData.price;
-        item.minimumLevel = formData.minimumLevel;
+        item.price = putNumberInRange(0, 100000, formData.price, user);
+        item.minimumLevel = putNumberInRange(0, 31, formData.minimumLevel, user);
         item.itemType = formData.itemType;
         if (formData.itemType === "weapon" && formData.weaponStats) {
+            formData.weaponStats.damageDieQuantity = putNumberInRange(1, 9, formData.weaponStats.damageDieQuantity, user);
+            formData.weaponStats.damageDieSides = putNumberInRange(1, 12, formData.weaponStats.damageDieSides, user);
             item.weaponStats = formData.weaponStats;
         }
         if ((formData.itemType === "potion" ||
@@ -41,6 +44,8 @@ async function editItemBlueprint(formData, user) {
             formData.itemType === "wand" ||
             formData.tags.food) &&
             formData.spellCharges) {
+            formData.spellCharges.level = putNumberInRange(1, 31, formData.spellCharges.level, user);
+            formData.spellCharges.maxCharges = putNumberInRange(1, 20, formData.spellCharges.maxCharges, user);
             item.spellCharges = formData.spellCharges;
         }
         item.description = formData.description;
@@ -53,6 +58,9 @@ async function editItemBlueprint(formData, user) {
             logger.debug(`editItemBlueprint: setting capacity to 10 (item is a container without capacity)`);
             item.capacity = 10;
             item.itemNodes = [];
+        }
+        if (formData.tags.container && formData.capacity) {
+            item.capacity = putNumberInRange(1, 200, formData.capacity, user);
         }
         //clear room.itemNodes and replace with processed roomData.itemNodes
         if (formData.tags.container && formData.itemNodes) {

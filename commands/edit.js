@@ -16,7 +16,7 @@ import HELP from "../constants/HELP.js";
 import help from "./help.js";
 async function edit(parsedCommand, user) {
     try {
-        let target = parsedCommand.directObject?.toLowerCase();
+        let target = parsedCommand.directObject;
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);

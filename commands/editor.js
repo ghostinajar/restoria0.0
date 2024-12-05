@@ -23,14 +23,14 @@ async function editor(parsedCommand, user) {
                 return;
             }
         }
-        if (target.toLowerCase() === "none") {
+        if (target === "none") {
             user.editor = null;
             await user.save();
             editorHelpArray.push(makeMessage("success", `Editor removed. To choose someone, give their name, e.g. EDITOR RALU`));
             worldEmitter.emit(`messageArrayFor${user.username}`, editorHelpArray);
             return;
         }
-        let newEditor = await User.findOne({ username: target.toLowerCase() });
+        let newEditor = await User.findOne({ username: target });
         if (!newEditor) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `There is no user named ${target}.`));
             return;

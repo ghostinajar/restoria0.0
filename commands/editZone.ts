@@ -9,6 +9,7 @@ import { IZoneData } from "./createZone.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import Name from "../model/classes/Name.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 
 async function editZone(zoneData: IZoneData, user: IUser) {
   try {
@@ -46,7 +47,12 @@ async function editZone(zoneData: IZoneData, user: IUser) {
       zone.name = zoneData.name;
     }
 
-    zone.minutesToRespawn = zoneData.minutesToRespawn;
+    zone.minutesToRespawn = putNumberInRange(
+      5,
+      180,
+      zoneData.minutesToRespawn,
+      user
+    );
     zone.description = zoneData.description;
 
     await zone.save();

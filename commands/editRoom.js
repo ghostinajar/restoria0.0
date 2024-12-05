@@ -6,6 +6,7 @@ import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 async function editRoom(room, roomData, user) {
     try {
         if (!room)
@@ -38,8 +39,8 @@ async function editRoom(room, roomData, user) {
         room.noMobs = roomData.noMobs;
         room.noMagic = roomData.noMagic;
         room.noCombat = roomData.noCombat;
-        room.playerCap = roomData.playerCap;
-        room.mobCap = roomData.mobCap;
+        room.playerCap = putNumberInRange(0, 18, roomData.playerCap, user);
+        room.mobCap = putNumberInRange(0, 18, roomData.mobCap, user);
         //clear room.mobNodes and replace with processed roomData.mobNodes
         room.mobNodes = [];
         roomData.mobNodes.forEach((node) => {

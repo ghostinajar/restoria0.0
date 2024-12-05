@@ -11,6 +11,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IExit } from "../model/classes/Exit.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 
 export interface IEditRoomFormData {
   _id: string | mongoose.Types.ObjectId;
@@ -73,8 +74,8 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
     room.noMobs = roomData.noMobs;
     room.noMagic = roomData.noMagic;
     room.noCombat = roomData.noCombat;
-    room.playerCap = roomData.playerCap;
-    room.mobCap = roomData.mobCap;
+    room.playerCap = putNumberInRange(0, 18, roomData.playerCap, user);
+    room.mobCap = putNumberInRange(0, 18, roomData.mobCap, user);
     //clear room.mobNodes and replace with processed roomData.mobNodes
     room.mobNodes = [];
     roomData.mobNodes.forEach((node) => {
@@ -103,7 +104,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
       makeMessage(`success`, `Room updated!`)
     );
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("editRoom", error, user.name)
+    catchErrorHandlerForFunction("editRoom", error, user.name);
   }
 }
 

@@ -6,6 +6,7 @@ import makeMessage from "../util/makeMessage.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 async function editMobBlueprint(formData, user) {
     try {
         if (!formData._id)
@@ -28,9 +29,17 @@ async function editMobBlueprint(formData, user) {
         mob.name = formData.name;
         mob.keywords = formData.keywords;
         mob.pronouns = formData.pronouns;
-        mob.level = formData.level;
+        mob.level = putNumberInRange(1, 31, formData.level, user);
         mob.job = formData.job;
-        mob.statBlock = formData.statBlock;
+        mob.statBlock = {
+            strength: 10,
+            dexterity: 10,
+            constitution: 10,
+            intelligence: 10,
+            wisdom: 10,
+            charisma: 10,
+            spirit: putNumberInRange(-1000, 1000, formData.spirit, user),
+        };
         mob.isUnique = formData.isUnique;
         mob.isMount = formData.isMount;
         mob.isAggressive = formData.isAggressive;

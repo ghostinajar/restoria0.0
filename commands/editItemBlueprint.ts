@@ -10,6 +10,7 @@ import truncateDescription from "../util/truncateDescription.js";
 import { IAffix } from "../model/classes/Affix.js";
 import { IItemNode } from "../model/classes/ItemNode.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import putNumberInRange from "../util/putNumberInRange.js";
 
 export interface IEditItemBlueprintFormData {
   _id: mongoose.Types.ObjectId;
@@ -75,6 +76,7 @@ export interface IEditItemBlueprintFormData {
   };
   itemNodes?: Array<IItemNode>;
   affixes?: Array<IAffix>;
+  capacity: number;
 }
 
 async function editItemBlueprint(
@@ -110,10 +112,22 @@ async function editItemBlueprint(
     //update values and save zone
     item.name = formData.name;
     item.keywords = formData.keywords;
-    item.price = formData.price;
-    item.minimumLevel = formData.minimumLevel;
+    item.price = putNumberInRange(0, 100000, formData.price, user);
+    item.minimumLevel = putNumberInRange(0, 31, formData.minimumLevel, user);
     item.itemType = formData.itemType;
     if (formData.itemType === "weapon" && formData.weaponStats) {
+      formData.weaponStats.damageDieQuantity = putNumberInRange(
+        1,
+        9,
+        formData.weaponStats.damageDieQuantity,
+        user
+      );
+      formData.weaponStats.damageDieSides = putNumberInRange(
+        1,
+        12,
+        formData.weaponStats.damageDieSides,
+        user
+      );
       item.weaponStats = formData.weaponStats;
     }
     if (
@@ -123,6 +137,18 @@ async function editItemBlueprint(
         formData.tags.food) &&
       formData.spellCharges
     ) {
+      formData.spellCharges.level = putNumberInRange(
+        1,
+        31,
+        formData.spellCharges.level,
+        user
+      );
+      formData.spellCharges.maxCharges = putNumberInRange(
+        1,
+        20,
+        formData.spellCharges.maxCharges,
+        user
+      );
       item.spellCharges = formData.spellCharges;
     }
     item.description = formData.description;
@@ -138,6 +164,10 @@ async function editItemBlueprint(
       );
       item.capacity = 10;
       item.itemNodes = [];
+    }
+
+    if (formData.tags.container && formData.capacity) {
+      item.capacity = putNumberInRange(1, 200, formData.capacity, user);
     }
 
     //clear room.itemNodes and replace with processed roomData.itemNodes
@@ -178,7 +208,7 @@ async function editItemBlueprint(
       makeMessage(`success`, `Item updated!`)
     );
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("editItemBlueprint", error, user.name)
+    catchErrorHandlerForFunction("editItemBlueprint", error, user.name);
   }
 }
 

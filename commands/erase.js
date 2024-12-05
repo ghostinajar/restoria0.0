@@ -10,7 +10,7 @@ import { directions } from "../constants/DIRECTIONS.js";
 import help from "./help.js";
 async function erase(parsedCommand, user) {
     try {
-        const target = parsedCommand.directObject?.toLowerCase();
+        const target = parsedCommand.directObject;
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);

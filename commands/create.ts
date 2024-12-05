@@ -14,7 +14,7 @@ import help from "./help.js";
 
 async function create(parsedCommand: IParsedCommand, user: IUser) {
   try {
-    let target = parsedCommand.directObject?.toLowerCase();
+    let target = parsedCommand.directObject;
     if (!target) {
       worldEmitter.emit(
         `messageFor${user.username}`,

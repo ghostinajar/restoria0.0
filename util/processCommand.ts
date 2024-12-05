@@ -24,7 +24,7 @@ import help from "../commands/help.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
-    switch (parsedCommand.commandWord.toLowerCase()) {
+    switch (parsedCommand.commandWord) {
       case `create`: {
         await create(parsedCommand, user);
         break;

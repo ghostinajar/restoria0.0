@@ -23,7 +23,7 @@ import help from "./help.js";
 
 async function edit(parsedCommand: IParsedCommand, user: IUser) {
   try {
-    let target = parsedCommand.directObject?.toLowerCase();
+    let target = parsedCommand.directObject;
     const zone = await getZoneOfUser(user);
     if (!zone) {
       throw new Error(`Couldn't get ${user.username}'s zone.`);

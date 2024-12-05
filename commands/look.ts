@@ -25,7 +25,7 @@ async function look(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     if (target) {
-      lookTarget(target.toLowerCase(), room, lookArray);
+      lookTarget(target, room, lookArray);
       worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
       return;
     } else {
