@@ -1,0 +1,55 @@
+<!-- erase_zone_form -->
+<form
+  id="eraseZoneForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelEraseZoneForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Erase Zone</h2>
+  <ul>
+    <li>
+      <label for="eraseZoneId">Id:</label>
+      <input
+        id="eraseZoneId"
+        name="eraseZoneId"
+        type="text"
+        autocomplete="on"
+        required
+      />
+    </li>
+  </ul>
+  <button type="submit">Erase Zone</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const eraseZoneForm = document.getElementById("eraseZoneForm");
+    const eraseZoneId = document.getElementById("eraseZoneId");
+
+    eraseZoneForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      socket.emit("userSubmittedEraseZone", eraseZoneId.value);
+      eraseZoneForm.reset();
+      eraseZoneForm.style.display = "none";
+    });
+
+    document
+      .getElementById("cancelEraseZoneForm")
+      .addEventListener("click", function () {
+        eraseZoneForm.style.display = "none";
+      });
+
+    socket.on("openEraseZoneForm", (formData) => {
+      activeForm.reset();
+      activeForm.style.display = "none";
+      activeForm = eraseZoneForm;
+      activeForm.style.display = "block";
+      input.value = "";
+    });
+  });
+</script>

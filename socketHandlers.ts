@@ -43,6 +43,8 @@ import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
+import Zone from "./model/classes/Zone.js";
+import eraseZone from "./commands/eraseZone.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
@@ -62,6 +64,7 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     eraseItemBlueprintForm: "openEraseItemBlueprintForm",
     eraseMobBlueprintForm: "openEraseMobBlueprintForm",
     eraseRoomForm: "openEraseRoomForm",
+    eraseZoneForm: "openEraseZoneForm",
     gotoForm: "openGotoForm",
     suggestForm: "openSuggestForm",
     suggestionsForm: "openSuggestionsForm",
@@ -327,6 +330,21 @@ export const userSubmittedEraseRoomHandler = async (
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedEraseRoomHandler`,
+      error,
+      user?.name
+    );
+  }
+};
+
+export const userSubmittedEraseZoneHandler = async (
+  zoneId: string,
+  user: IUser
+) => {
+  try {
+    await eraseZone(zoneId, user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedEraseZoneHandler`,
       error,
       user?.name
     );

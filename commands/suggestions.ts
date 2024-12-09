@@ -20,7 +20,7 @@ async function suggestions(user: IUser) {
     if (zone.author.toString() !== user._id.toString()) {
       worldEmitter.emit(
         `messageFor${user.username}`,
-        makeMessage("rejection", `You're not the author of this zone.`)
+        makeMessage("rejection", `You're not an author of this zone.`)
       );
       return;
     }

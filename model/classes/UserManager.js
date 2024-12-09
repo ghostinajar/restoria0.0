@@ -1,6 +1,7 @@
 // UserManager
 // Manages loading and removing active users from the game,
 // also responds to events requesting user data
+import recall from "../../commands/recall.js";
 import logger from "../../logger.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import initRuntimePropsForAgent from "../../util/initRuntimePropsForAgent.js";
@@ -9,6 +10,7 @@ import worldEmitter from "./WorldEmitter.js";
 class UserManager {
     constructor() {
         this.users = new Map(); // Stores all users with their _id.toString() as key
+        worldEmitter.on(`emptyZoneOfUsersRequested`, this.emptyZoneOfUsersRequestedHandler);
         worldEmitter.on(`requestingUser`, this.requestingUserHandler);
         worldEmitter.on(`requestingWhoArray`, this.requestingWhoArrayHandler);
         worldEmitter.on(`socketCheckingMultiplay`, this.socketCheckingMultiplayHandler);
@@ -16,6 +18,21 @@ class UserManager {
         worldEmitter.on(`zoneManagerRemovedUser`, this.logoutUserHandler);
     }
     users;
+    emptyZoneOfUsersRequestedHandler = async (zoneId) => {
+        try {
+            for (let user of this.users.values()) {
+                if (user.location.inZone.toString() === zoneId) {
+                    await recall(user);
+                    logger.info(`User ${user.name} recalled by userManager.`);
+                }
+            }
+            worldEmitter.emit(`zone${zoneId}EmptiedOfUsers`, true);
+        }
+        catch (error) {
+            catchErrorHandlerForFunction("UserManager.emptyZoneOfUsersRequestedHandler", error);
+            return false;
+        }
+    };
     logoutUserHandler = (user) => {
         try {
             this.removeUserById(user._id);
@@ -117,6 +134,7 @@ class UserManager {
     }
     clearContents() {
         this.users.clear;
+        worldEmitter.off(`emptyZoneOfUsersRequested`, this.emptyZoneOfUsersRequestedHandler);
         worldEmitter.off(`requestingUser`, this.requestingUserHandler);
         worldEmitter.off(`requestingWhoArray`, this.requestingWhoArrayHandler);
         worldEmitter.off(`socketCheckingMultiplay`, this.socketCheckingMultiplayHandler);

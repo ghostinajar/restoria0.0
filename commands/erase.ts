@@ -51,7 +51,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
 
-    if (target === "zone") {
+    if (target === "zone" && !user.isAdmin) {
       worldEmitter.emit(
         `messageFor${user.username}`,
         makeMessage(
@@ -59,6 +59,12 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
           `You can't erase a zone. Edit or erase its contents instead.`
         )
       );
+      return;
+    } else if (target === "zone" && user.isAdmin) {
+      console.log(`Admin ${user.name} authorized for "erase zone" command.`);
+      worldEmitter.emit(`formPromptFor${user.username}`, {
+        form: `eraseZoneForm`,
+      });
       return;
     }
 

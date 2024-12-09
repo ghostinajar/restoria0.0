@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Restoria 0.0.1</title>
+    <title>Restoria</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
@@ -15,7 +15,7 @@
 
   <body>
     <nav class="nav">
-      <h1>Restoria 0.0.1</h1>
+      <h1>Restoria 0.1.0</h1>
       <form action="/logout" method="post">
         <button id="logout" type="submit">Quit</button>
       </form>
@@ -42,6 +42,7 @@
       <%- include('erase_item_blueprint_form'); %> 
       <%- include('erase_mob_blueprint_form'); %> 
       <%- include('erase_room_form'); %> 
+      <%- include('erase_zone_form'); %> 
       <%- include('goto_form'); %> 
       <%- include('suggest_form'); %> 
       <%- include('suggestions_form'); %>

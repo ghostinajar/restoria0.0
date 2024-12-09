@@ -84,16 +84,22 @@ async function editItemBlueprint(
   user: IUser
 ) {
   try {
-    if (!formData._id) throw new Error("Missing itemId");
-    if (!formData) throw new Error("Missing formData");
-    if (!user) throw new Error("Missing user");
-
     //get existing item data
     const zone = await getZoneOfUser(user);
     if (!zone) {
       throw new Error(
         `editItemBlueprint couldn't find zone to save for user ${user.username}'s location.`
       );
+    }
+    if (user._id.toString() !== zone.author.toString()) {
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          `rejection`,
+          `Tsk, you aren't an author of this zone. GOTO one of your own and EDIT there.`
+        )
+      );
+      return;
     }
 
     const item = zone.itemBlueprints.find(

@@ -13,7 +13,7 @@ async function suggestions(user) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
         }
         if (zone.author.toString() !== user._id.toString()) {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `You're not the author of this zone.`));
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `You're not an author of this zone.`));
             return;
         }
         help({

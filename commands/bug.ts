@@ -3,7 +3,6 @@
 import mongoose from "mongoose";
 import logger from "../logger.js";
 import Bug from "../model/classes/Bug.js";
-import { historyStartingNow } from "../model/classes/History.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";

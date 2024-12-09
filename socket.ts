@@ -38,6 +38,7 @@ import {
   userSubmittedSuggestionsHandler,
   userSubmittedCreateExitHandler,
   userSubmittedEraseExitHandler,
+  userSubmittedEraseZoneHandler,
   safeMessageArrayForUserHandler,
   safeMessageForUserHandler,
   userSubmittedBugHandler,
@@ -234,6 +235,12 @@ const setupSocket = (io: any) => {
         `userSubmittedEraseRoom`,
         async (formData: { _id: string; name: string }) =>
           await userSubmittedEraseRoomHandler(formData, user)
+      );
+
+      socket.on(
+        `userSubmittedEraseZone`,
+        async (zoneId: string) =>
+          await userSubmittedEraseZoneHandler(zoneId, user)
       );
 
       socket.on(`userSubmittedGoto`, async (gotoFormData: ILocation) => {

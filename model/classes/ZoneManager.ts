@@ -15,6 +15,7 @@ class ZoneManager {
   constructor() {
     this.zones = new Map();
 
+    worldEmitter.on("closeZoneRequested", this.closeZoneRequestedHandler);
     worldEmitter.on("roomRequested", this.roomRequestedHandler);
     worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
     worldEmitter.on("placeUserRequest", this.placeUserRequestHandler);
@@ -22,6 +23,20 @@ class ZoneManager {
   }
 
   zones: Map<string, IZone>;
+
+  closeZoneRequestedHandler = async (zoneId: string) => {
+    try {
+      await this.removeZoneById(new mongoose.Types.ObjectId(zoneId));
+      worldEmitter.emit(`zone${zoneId}Closed`, true)
+      return true;
+    } catch (error: unknown) {
+      catchErrorHandlerForFunction(
+        `ZoneManager.closeZoneRequestedHandler`,
+        error
+      );
+      return false;
+    }
+  };
 
   roomRequestedHandler = async (location: ILocation) => {
     try {
@@ -286,8 +301,9 @@ class ZoneManager {
       if (zone) {
         await zone.clearRooms();
         this.zones.delete(id.toString());
+        logger.info(`Zonemanager closed zone id ${id}.`);
       } else {
-        logger.warn(`Zone with id ${id} does not exist in zones.`);
+        logger.info(`Zonemanager tried to close zone id ${id}, but it wasn't even loaded in zones.`);
       }
     } catch (error: unknown) {
       catchErrorHandlerForFunction(`ZoneManager.removeZoneById`, error);
@@ -296,6 +312,7 @@ class ZoneManager {
 
   clearContents() {
     this.zones.clear();
+    worldEmitter.off("closeZoneRequested", this.closeZoneRequestedHandler);
     worldEmitter.off("roomRequested", this.roomRequestedHandler);
     worldEmitter.off("socketDisconnectedUser", this.userLogoutHandler);
     worldEmitter.off("placeUserRequest", this.placeUserRequestHandler);

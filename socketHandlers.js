@@ -25,6 +25,7 @@ import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
+import eraseZone from "./commands/eraseZone.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     const formEventMap = {
         bugForm: "openBugForm",
@@ -43,6 +44,7 @@ export const formPromptForUserHandler = async (formData, socket) => {
         eraseItemBlueprintForm: "openEraseItemBlueprintForm",
         eraseMobBlueprintForm: "openEraseMobBlueprintForm",
         eraseRoomForm: "openEraseRoomForm",
+        eraseZoneForm: "openEraseZoneForm",
         gotoForm: "openGotoForm",
         suggestForm: "openSuggestForm",
         suggestionsForm: "openSuggestionsForm",
@@ -207,6 +209,14 @@ export const userSubmittedEraseRoomHandler = async (formData, user) => {
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEraseRoomHandler`, error, user?.name);
+    }
+};
+export const userSubmittedEraseZoneHandler = async (zoneId, user) => {
+    try {
+        await eraseZone(zoneId, user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEraseZoneHandler`, error, user?.name);
     }
 };
 export const userSubmittedGotoHandler = async (gotoFormData, user) => {
