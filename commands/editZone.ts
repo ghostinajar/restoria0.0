@@ -31,16 +31,16 @@ async function editZone(zoneData: IZoneData, user: IUser) {
     if (zoneData.name !== zone.name) {
       // check updated zone name for duplicate in Names
       let nameIsTaken = await Name.findOne({
-        name: zoneData.name,
+        name: zoneData.name.toLowerCase(),
       });
       if (nameIsTaken) {
-        const message = makeMessage(`rejection`, `That name is taken.`);
+        const message = makeMessage(`rejection`, `That zone name is taken.`);
         worldEmitter.emit(`messageFor${user.username}`, message);
         return;
       }
 
       // Register new name to Names
-      const nameToRegister = new Name({ name: zoneData.name });
+      const nameToRegister = new Name({ name: zoneData.name.toLowerCase() });
       const nameSaved = await nameToRegister.save();
       if (!nameSaved) {
         logger.error(

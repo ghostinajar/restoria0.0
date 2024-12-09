@@ -37,13 +37,11 @@ import createMobBlueprint, {
   ICreateMobFormData,
 } from "./commands/createMobBlueprint.js";
 import createRoom, { INewRoomData } from "./commands/createRoom.js";
-import createUser, { IUserData } from "./commands/createUser.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
-import Zone from "./model/classes/Zone.js";
 import eraseZone from "./commands/eraseZone.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
@@ -53,7 +51,6 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     createItemBlueprintForm: "openCreateItemBlueprintForm",
     createMobBlueprintForm: "opencreateMobBlueprintForm",
     createRoomForm: "openCreateRoomForm",
-    createUserForm: "openCreateUserForm",
     createZoneForm: "openCreateZoneForm",
     editItemBlueprintForm: "openEditItemBlueprintForm",
     editMobBlueprintForm: "openEditMobBlueprintForm",
@@ -73,7 +70,7 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const eventName = formEventMap[formData.form];
 
   if (eventName) {
-    if (["openCreateUserForm", "openCreateZoneForm"].includes(eventName)) {
+    if (["openCreateZoneForm"].includes(eventName)) {
       socket.emit(eventName);
     } else {
       socket.emit(eventName, formData);
@@ -422,23 +419,6 @@ export const userSubmittedCreateRoomHandler = async (
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedCreateRoomHandler`,
-      error,
-      user?.name
-    );
-  }
-};
-
-export const userSubmittedCreateUserHandler = async (
-  userData: IUserData,
-  user: IUser
-) => {
-  try {
-    purifyDescriptionOfObject(userData);
-    const newUser = await createUser(userData, user);
-    stats(user);
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(
-      `userSubmittedCreateUserHandler`,
       error,
       user?.name
     );

@@ -7,7 +7,7 @@ import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSoc
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
 import userSentCommandHandler from "./util/userSentCommandHandler.js";
-import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateUserHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, userSubmittedSuggestHandler, userSubmittedSuggestionsHandler, userSubmittedCreateExitHandler, userSubmittedEraseExitHandler, userSubmittedEraseZoneHandler, safeMessageArrayForUserHandler, safeMessageForUserHandler, userSubmittedBugHandler, } from "./socketHandlers.js";
+import { formPromptForUserHandler, messageArrayForUserHandler, messageForUserHandler, messageForUsersRoomHandler, messageForUsersZoneHandler, userSubmittedCreateItemBlueprintHandler, userSubmittedEditItemBlueprintHandler, userSubmittedEditMobBlueprintHandler, userSubmittedEditRoomHandler, userSubmittedEditZoneHandler, userSubmittedEraseItemBlueprintHandler, userSubmittedEraseMobBlueprintHandler, userSubmittedEraseRoomHandler, userSubmittedGotoHandler, userSubmittedCreateMobBlueprintHandler, userXChangingRoomsHandler, userXLeavingGameHandler, userSubmittedCreateRoomHandler, userSubmittedCreateZoneHandler, userSubmittedEditUserHandler, userSubmittedSuggestHandler, userSubmittedSuggestionsHandler, userSubmittedCreateExitHandler, userSubmittedEraseExitHandler, userSubmittedEraseZoneHandler, safeMessageArrayForUserHandler, safeMessageForUserHandler, userSubmittedBugHandler, } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
 import { purifyCommandInput } from "./util/purify.js";
@@ -76,9 +76,6 @@ const setupSocket = (io) => {
             });
             socket.on(`userSubmittedCreateRoom`, async (roomData) => {
                 await userSubmittedCreateRoomHandler(roomData, user);
-            });
-            socket.on(`userSubmittedCreateUser`, async (userData) => {
-                await userSubmittedCreateUserHandler(userData, user);
             });
             socket.on(`userSubmittedCreateZone`, async (zoneData) => {
                 await userSubmittedCreateZoneHandler(zoneData, user);

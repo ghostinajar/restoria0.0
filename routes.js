@@ -3,7 +3,7 @@ import passport from "passport";
 import validCommandWords from "./constants/validCommandWords.js";
 import HELP from "./constants/HELP.js";
 import logger from "./logger.js";
-import createUser from "./commands/createUser.js";
+import createUser from "./util/createUser.js";
 
 const setupRoutes = (app, __dirname) => {
   app.get("/", (req, res, next) => {

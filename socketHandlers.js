@@ -20,7 +20,6 @@ import relocateUser from "./util/relocateUser.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
 import createRoom from "./commands/createRoom.js";
-import createUser from "./commands/createUser.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 import createExit from "./commands/createExit.js";
@@ -33,7 +32,6 @@ export const formPromptForUserHandler = async (formData, socket) => {
         createItemBlueprintForm: "openCreateItemBlueprintForm",
         createMobBlueprintForm: "opencreateMobBlueprintForm",
         createRoomForm: "openCreateRoomForm",
-        createUserForm: "openCreateUserForm",
         createZoneForm: "openCreateZoneForm",
         editItemBlueprintForm: "openEditItemBlueprintForm",
         editMobBlueprintForm: "openEditMobBlueprintForm",
@@ -51,7 +49,7 @@ export const formPromptForUserHandler = async (formData, socket) => {
     };
     const eventName = formEventMap[formData.form];
     if (eventName) {
-        if (["openCreateUserForm", "openCreateZoneForm"].includes(eventName)) {
+        if (["openCreateZoneForm"].includes(eventName)) {
             socket.emit(eventName);
         }
         else {
@@ -258,16 +256,6 @@ export const userSubmittedCreateRoomHandler = async (roomData, user) => {
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedCreateRoomHandler`, error, user?.name);
-    }
-};
-export const userSubmittedCreateUserHandler = async (userData, user) => {
-    try {
-        purifyDescriptionOfObject(userData);
-        const newUser = await createUser(userData, user);
-        stats(user);
-    }
-    catch (error) {
-        catchErrorHandlerForFunction(`userSubmittedCreateUserHandler`, error, user?.name);
     }
 };
 export const userSubmittedCreateZoneHandler = async (zoneData, user) => {

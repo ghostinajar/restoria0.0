@@ -36,7 +36,7 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
     }
 
     let nameIsTaken = await Name.findOne({
-      name: zoneFormData.name,
+      name: zoneFormData.name.toLowerCase(),
     });
     if (nameIsTaken) {
       worldEmitter.emit(
@@ -116,7 +116,7 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
     }
     await newZone.save();
     logger.info(`Author "${user.name}" created zone "${newZoneData.name}".`);
-    const nameToRegister = new Name({ name: newZoneData.name });
+    const nameToRegister = new Name({ name: newZoneData.name.toLowerCase() });
     const nameSaved = await nameToRegister.save();
     if (!nameSaved) {
       throw new Error(

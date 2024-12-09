@@ -2,7 +2,6 @@
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import { INewRoomData } from "./commands/createRoom.js";
-import { IUserData } from "./commands/createUser.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import makeMessage from "./util/makeMessage.js";
@@ -31,7 +30,6 @@ import {
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
   userSubmittedCreateRoomHandler,
-  userSubmittedCreateUserHandler,
   userSubmittedCreateZoneHandler,
   userSubmittedEditUserHandler,
   userSubmittedSuggestHandler,
@@ -171,10 +169,6 @@ const setupSocket = (io: any) => {
 
       socket.on(`userSubmittedCreateRoom`, async (roomData: INewRoomData) => {
         await userSubmittedCreateRoomHandler(roomData, user);
-      });
-
-      socket.on(`userSubmittedCreateUser`, async (userData: IUserData) => {
-        await userSubmittedCreateUserHandler(userData, user);
       });
 
       socket.on(`userSubmittedCreateZone`, async (zoneData: IZoneData) => {
