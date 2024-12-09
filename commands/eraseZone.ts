@@ -3,7 +3,7 @@
 
 import mongoose from "mongoose";
 import logger from "../logger.js";
-import { IUser } from "../model/classes/User.js";
+import User, { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
@@ -78,6 +78,14 @@ async function eraseZone(zoneId: string, user: IUser) {
       return;
     }
     
+    const zoneAuthor = await User.findById(zone.author);
+    if (!zoneAuthor) {
+      logger.warn(`eraseZone couldn't find the author of zone ${zoneId}.`)
+    }
+    if (zoneAuthor) {
+      zoneAuthor.unpublishedZoneTally--;
+    }
+
     // Delete zone from database
     try {
       await Zone.findByIdAndDelete(zoneObjectId);
@@ -89,7 +97,7 @@ async function eraseZone(zoneId: string, user: IUser) {
       );
       return;
     }
-
+    
     // Step 4: Notify success
     logger.info(`Zone ${zoneId} successfully deleted by admin ${user.name}.`);
     worldEmitter.emit(

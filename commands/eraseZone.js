@@ -2,6 +2,7 @@
 // 
 import mongoose from "mongoose";
 import logger from "../logger.js";
+import User from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
@@ -47,6 +48,13 @@ async function eraseZone(zoneId, user) {
             logger.warn(`userSubmittedEraseZoneHandler failed, couldn't close zone in zoneManager`);
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Failed to safely close zone.`));
             return;
+        }
+        const zoneAuthor = await User.findById(zone.author);
+        if (!zoneAuthor) {
+            logger.warn(`eraseZone couldn't find the author of zone ${zoneId}.`);
+        }
+        if (zoneAuthor) {
+            zoneAuthor.unpublishedZoneTally--;
         }
         // Delete zone from database
         try {
