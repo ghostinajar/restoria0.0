@@ -24,24 +24,12 @@ export interface IUserData {
 }
 
 // Return user, or a message explaining failure (if by author, emit message to their socket)
-async function createUser(
-  userFormData: IUserData,
-  author?: IUser
-): Promise<IUser | IMessage> {
+async function createUser(userFormData: IUserData): Promise<IUser | IMessage> {
   try {
     let message = makeMessage("rejection", ``);
     // Validate new name
     if (!isValidName(userFormData.username)) {
       message.content = `Name must be letters only (max. 18), no unique irl names (e.g. no "Obama")`;
-      if (author) {
-        worldEmitter.emit(`messageFor${author.username}`, message);
-      }
-      return message;
-    }
-    // Validate user limit per author
-    if (author && author.users.length >= 12) {
-      message.content = `You already have 12 users. That's the limit!`;
-      worldEmitter.emit(`messageFor${author.username}`, message);
       return message;
     }
     // Check for duplicate name
@@ -50,9 +38,6 @@ async function createUser(
     });
     if (nameIsTaken) {
       message.content = `That name is taken.`;
-      if (author) {
-        worldEmitter.emit(`messageFor${author.username}`, message);
-      }
       return message;
     }
     // Validate password
@@ -61,9 +46,6 @@ async function createUser(
     if (!passwordRegex.test(userFormData.password)) {
       message.content =
         "Password must be at least 8 characters long and include lowercase, uppercase, and a number.";
-      if (author) {
-        worldEmitter.emit(`messageFor${author.username}`, message);
-      }
       return message;
     }
 
@@ -79,7 +61,6 @@ async function createUser(
       salt: salt,
       isAdmin: false,
       isTeacher: false,
-      author: author?._id || null,
       location: WORLD_RECALL,
       pronouns: userFormData.pronouns,
       history: historyStartingNow(),
@@ -169,13 +150,7 @@ async function createUser(
     if (!newUser) {
       logger.error(`createUser couldn't save new user ${newUserData.name}!`);
       message.content = `Sorry, we ran into a problem saving your user!`;
-      if (author) {
-        worldEmitter.emit(`messageFor${author.username}`, message);
-      }
       return message;
-    }
-    if (author && author._id) {
-      newUserData.author = author._id;
     }
     await newUser.save();
 
@@ -186,28 +161,13 @@ async function createUser(
         `createZone couldn't save the name ${newUser.name} to Names!`
       );
       message.content = `Sorry, we ran into a problem saving your user!`;
-      if (author) {
-        worldEmitter.emit(`messageFor${author.username}`, message);
-      }
       return message;
     }
 
-    if (author) {
-      logger.info(`Author "${author.name}" created user "${newUser.name}".`);
-      message.type = "createUser";
-      message.content = `You created ${newUser.name} the ${newUser.job}! You can sign out, then sign in as your new user.`;
-      if (newUser.author) {
-        logger.info(`Author ${author.name} is the author of ${newUser.name}.`);
-      }
-      worldEmitter.emit(`messageFor${author.username}`, message);
-    } else {
-      logger.info(`New user registered: "${newUser.name}".`);
-    }
+    logger.info(`New user registered: "${newUser.name}".`);
+
     return newUser;
   } catch (error: unknown) {
-    if (author) {
-      catchErrorHandlerForFunction("createUser", error, author.name);
-    }
     throw error;
   }
 }
