@@ -114,7 +114,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       //   break;
       // }
       case `zone`: {
-        if (user.unpublishedZoneTally >= 5) {
+        if (user.unpublishedZoneTally >= 5 && !user.isAdmin) {
           worldEmitter.emit(
             `messageFor${user.username}`,
             makeMessage(

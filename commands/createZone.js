@@ -15,7 +15,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import putNumberInRange from "../util/putNumberInRange.js";
 async function createZone(zoneFormData, user) {
     try {
-        if (user.unpublishedZoneTally > 4) {
+        if (user.unpublishedZoneTally >= 5 && !user.isAdmin) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Sorry, you can't have more then 5 unpublished zones at a time.`));
             return;
         }

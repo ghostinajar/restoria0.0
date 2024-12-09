@@ -24,7 +24,7 @@ export interface IZoneData {
 
 async function createZone(zoneFormData: IZoneData, user: IUser) {
   try {
-    if (user.unpublishedZoneTally > 4) {
+    if (user.unpublishedZoneTally >= 5 && !user.isAdmin) {
       worldEmitter.emit(
         `messageFor${user.username}`,
         makeMessage(
@@ -90,7 +90,12 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
       mobBlueprints: [],
       itemBlueprints: [],
       suggestions: [],
-      minutesToRespawn: putNumberInRange(5, 120, zoneFormData.minutesToRespawn, user),
+      minutesToRespawn: putNumberInRange(
+        5,
+        120,
+        zoneFormData.minutesToRespawn,
+        user
+      ),
     };
 
     // create and save to db
@@ -130,7 +135,7 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
     );
     await exits(user);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("createZone", error, user.name)
+    catchErrorHandlerForFunction("createZone", error, user.name);
   }
 }
 
