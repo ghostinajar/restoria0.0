@@ -89,7 +89,7 @@ const HELP = {
     ],
     CREATE_ZONE: [
         `${padStringToLength79(`CREATE ZONE, EDIT ZONE`)}`,
-        `A Zone is a broad area in the game; think of it as a setting where many parts of a story can take place. A zone is made up of smaller places called Rooms. Examples of a zone may be "The Haunted Unicorn Forest", "Bunnyland", or "Drake's Vampiric Castle", whereas examples of rooms inside those zones could be "A Mossy Glade", "The Bunny Cafeteria", or "Drake's Treasure Chamber".`,
+        `A Zone is a broad area in the game; think of it as a setting where many parts of a story can take place. A zone is made up of smaller places called Rooms. For example, "Restoria City" is a zone, and "The Snails" is a room within that zone. Other examples of a zone may be "The Haunted Unicorn Forest", "Bunnyland", or "Drake's Vampiric Castle", whereas examples of rooms inside those zones could be "A Mossy Glade", "The Bunny Cafeteria", or "Drake's Treasure Chamber".`,
         `<span style="color:var(--red)">Name:</span> the zone's title, e.g. "The Mushroom City"`,
         `<span style="color:var(--red)">Respawn:</span> how many minutes before the whole zone's mobs, doors, & items respawn`,
         `<span style="color:var(--red)">Look:</span> a sentence shown to a player when they survey the wilderness nearby`,

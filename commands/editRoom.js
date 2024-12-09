@@ -9,12 +9,14 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import putNumberInRange from "../util/putNumberInRange.js";
 async function editRoom(room, roomData, user) {
     try {
-        if (!room)
-            throw new Error("Missing room");
-        if (!roomData)
-            throw new Error("Missing roomData");
-        if (!user)
-            throw new Error("Missing user");
+        const zone = await getZoneOfUser(user);
+        if (!zone) {
+            throw new Error(`Couldn't get ${user.username}'s zone.`);
+        }
+        if (user._id.toString() !== zone.author.toString()) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Tsk, you aren't an author of this zone. GOTO one of your own and EDIT there.`));
+            return;
+        }
         const newRoomDescription = {
             examine: roomData.description.examine,
             study: roomData.description.study,
@@ -22,13 +24,6 @@ async function editRoom(room, roomData, user) {
         };
         truncateDescription(newRoomDescription, user);
         room.history.modifiedDate = new Date();
-        const zone = await getZoneOfUser(user);
-        if (!zone) {
-            throw new Error(`Couldn't get ${user.username}'s zone.`);
-        }
-        if (!zone) {
-            throw new Error(`couldn't find zone for user ${user.username}'s location.}`);
-        }
         room.name = roomData.name;
         room.description = newRoomDescription;
         room.isDark = roomData.isDark;

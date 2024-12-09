@@ -10,11 +10,15 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import putNumberInRange from "../util/putNumberInRange.js";
 async function editZone(zoneData, user) {
     try {
-        truncateDescription(zoneData.description, user);
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
         }
+        if (user._id.toString() !== zone.author.toString()) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Tsk, you aren't an author of this zone. GOTO one of your own and EDIT there.`));
+            return;
+        }
+        truncateDescription(zoneData.description, user);
         zone.history.modifiedDate = new Date();
         if (zoneData.name !== zone.name) {
             // check updated zone name for duplicate in Names
