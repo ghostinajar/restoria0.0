@@ -40,7 +40,6 @@ class ZoneManager {
 
   roomRequestedHandler = async (location: ILocation) => {
     try {
-      // get the zone, then get the room
       let zone = await this.getZoneById(location.inZone);
       const room = zone?.rooms.find(
         (room) => room._id.toString() === location.inRoom.toString()
@@ -99,7 +98,8 @@ class ZoneManager {
     try {
       let zone = await this.getZoneById(zoneId);
       if (!zone) {
-        logger.error(`zone requested (${zoneId.toString}) that doesn't exist`);
+        logger.error(`zoneManager.zoneRequestedHandler failed to return zone id ${zoneId}`);
+        return;
       }
       worldEmitter.emit(`zone${zoneId.toString()}Loaded`, zone);
     } catch (error: unknown) {
@@ -112,23 +112,13 @@ class ZoneManager {
       //load from db
       const zone: IZone | null = await Zone.findById(id);
       if (!zone) {
-        logger.error(`addZoneById couldn't get a zone with id ${id} from db`);
+        logger.error(`zoneManager.addZoneById couldn't get a zone with id ${id} from db`);
         return undefined;
       }
 
       // add to zones map
       this.zones.set(zone._id.toString(), zone);
       logger.info(`zoneManager added ${zone.name} to zones.`);
-      // logger.log(
-      //   `loadout`,
-      //   `Rooms in zone "${zone.name}": ${zone.rooms.map((room) => room.name)}.`
-      // );
-      // logger.log(
-      //   `loadout`,
-      //   `Active zones: ${JSON.stringify(
-      //     Array.from(this.zones.values()).map((zone) => zone.name)
-      //   )}`
-      // );
 
       // if blueprints are empty, add dummy data (necessary for user forms)
       if (zone.itemBlueprints.length === 0) {
@@ -227,7 +217,7 @@ class ZoneManager {
         zone = await this.addZoneById(id);
       }
       if (!zone) {
-        logger.error(`zoneManager can't find zone with id: ${id}.`);
+        logger.error(`ZoneManager.getZoneById can't find zone with id: ${id}.`);
         return null;
       }
       return zone;
