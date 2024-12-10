@@ -24,7 +24,7 @@ const HELP: {
     `The words author, character, and user all refer to the same thing: a human person who plays Restoria. Everyone in the game is an author in the sense that they can CREATE zones and their contents. We are all users and characters in the sense that we interact with the world of zones created by other authors, often in a role-playing style of gameplay. A person may have multiple user accounts representing different characters. That's why "user", "character", and "author" are used interchangeably in Restoria.`,
   ],
   BUG: [
-    `Restoria's first beta was coded and written by Ralu (aka Mark Wells), so of course it is full of dumb bugs. If you find one, type BUG to report it, and include lots of details about what happened, and what you were doing when it happened (e.g. the last commands you tried to use, the buggy result, what you were expecting, etc). The game will automatically record your username, the date & time, and your location in the game when you submit the report, so please try to report from the time and place you observed the bug. If you can't, then include those details in your description too, please. You can type BUGS to see a "todo" list of bugfixes Ralu is working on.`
+    `Restoria's first beta was coded and written by Ralu (aka Mark Wells), so of course it is full of dumb bugs. If you find one, type BUG to report it, and include lots of details about what happened, and what you were doing when it happened (e.g. the last commands you tried to use, the buggy result, what you were expecting, etc). The game will automatically record your username, the date & time, and your location in the game when you submit the report, so please try to report from the time and place you observed the bug. If you can't, then include those details in your description too, please. You can type BUGS to see a "todo" list of bugfixes Ralu is working on.`,
   ],
   CHEATSHEET: [
     `${padStringToLength79(`HELP CHEATSHEET`)}`,
@@ -66,6 +66,7 @@ const HELP: {
     `<span style="color:var(--red)">MinLvl:</span> player must be at least this level to use or equip it`,
     `<span style="color:var(--red)">Price:</span> costs to purchase (selling price will be less)`,
     `<span style="color:var(--red)">Container:</span> this item may spawn or hold other items inside`,
+    `<span style="color:var(--red)">Capacity:</span> determines how many items it can hold.`,
     `<span style="color:var(--red)">Look:</span> how the player sees the item when they look or enter a room`,
     `<span style="color:var(--red)">Examine:</span> a paragraph a player seens when they examine the item.`,
   ],
@@ -117,6 +118,8 @@ const HELP: {
     `<span style="color:var(--red)">Price:</span> the cost to purchase (selling price will be less)`,
     `<span style="color:var(--red)">MinLvl:</span> a player must be at least this level to use or equip it`,
     `<span style="color:var(--red)">Type:</span> gives an item certain behaviours`,
+    `<span style="color:var(--red)">Container:</span> this item may spawn or hold other items inside`,
+    `<span style="color:var(--red)">Capacity:</span> determines how many items it can hold.`,
   ],
   EDIT_MOB: [
     `${padStringToLength79(`EDIT MOB`)}`,
@@ -196,7 +199,6 @@ const HELP: {
   ITEM_NODE: [
     `${padStringToLength79(`Item Node`)}`,
     `Item nodes help a zone load its items. Each item node spawns its item into a container, mob inventory, or room when the zone is loaded. Choose an item and click <span style="color:var(--green)">add</span> to create an item node for it. Click <span style="color:var(--red)">remove</span> next to an existing node to remove it. These changes won't be saved until you submit the form.`,
-    `<span style="color:var(--red)">Capacity:</span> If you're editing a container (item), this number determines how many item nodes it can hold.`,
   ],
   ITEM_SPELL_PROPERTIES: [
     `${padStringToLength79(`Item Spell Properties`)}`,
@@ -345,7 +347,9 @@ const HELP: {
     `${padStringToLength79(`Unique Mob`)}`,
     `A Unique mob can only exist in one place at one time. It is different from a mob like "a goblin", where there could be any number of them in a zone or in the world. Use this for special mobs with an identity, especially those with a name (e.g. Greg, the Blacksmith), where it wouldn't make sense for there to be more than one in the world.`,
   ],
-  UPDATES: [`View of list of recent changes (bug fixes, etc.) made to Restoria.`],
+  UPDATES: [
+    `View of list of recent changes (bug fixes, etc.) made to Restoria.`,
+  ],
   WEAPON_PROPERTIES: [
     `This feature is still in development.`,
     `${padStringToLength79(`Weapon Properties`)}`,

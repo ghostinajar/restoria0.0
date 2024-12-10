@@ -149,6 +149,27 @@
           <!-- populated by script -->
         </select>
       </li>
+      <li style="display: inline-block">
+        <label for="editItemContainer">Container:</label>
+        <input
+          type="checkbox"
+          id="editItemContainer"
+          name="editItemContainer"
+        />
+      </li>
+      <li style="display: inline-block">
+        <label for="editItemCapacity">Capacity:</label>
+        <input
+          style="width: 6rem"
+          type="number"
+          id="editItemCapacity"
+          name="editItemCapacity"
+          min="0"
+          max="200"
+          value="1"
+          required
+        />
+      </li>
     </ul>
   </section>
   <section
@@ -262,14 +283,6 @@
             name="editItemTemporary"
           />
         </li>
-        <li>
-          <label for="editItemContainer">Container:</label>
-          <input
-            type="checkbox"
-            id="editItemContainer"
-            name="editItemContainer"
-          />
-        </li>
       </div>
     </ul>
   </section>
@@ -279,21 +292,6 @@
     style="display: none"
   >
     <h3>Item Nodes</h3>
-    <ul>
-      <li>
-        <label for="editItemCapacity">Capacity:</label>
-        <input
-          style="width: 6rem"
-          type="number"
-          id="editItemCapacity"
-          name="editItemCapacity"
-          min="0"
-          max="200"
-          value="1"
-          required
-        />
-      </li>
-    </ul>
     <ul class="nodeList" id="editItemItemNodeList">
       <!-- loaded via script -->
     </ul>
@@ -790,7 +788,7 @@
         };
       }
       if (editItemBlueprintFormData.tags.container) {
-        editItemBlueprintFormData.capacity = editItemCapacity || 10;
+        editItemBlueprintFormData.capacity = editItemCapacity.value || 10;
         editItemBlueprintFormData.itemNodes = selectedItem.itemNodes;
       }
       if (

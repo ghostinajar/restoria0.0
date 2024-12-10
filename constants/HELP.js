@@ -187,7 +187,7 @@ const HELP = {
     ITEM_NODE: [
         `${padStringToLength79(`Item Node`)}`,
         `Item nodes help a zone load its items. Each item node spawns its item into a container, mob inventory, or room when the zone is loaded. Choose an item and click <span style="color:var(--green)">add</span> to create an item node for it. Click <span style="color:var(--red)">remove</span> next to an existing node to remove it. These changes won't be saved until you submit the form.`,
-        `<span style="color:var(--red)">Capacity:</span> If you're editing a container (item), this number determines how many item nodes it can hold.`,
+        `<span style="color:var(--red)">Capacity:</span> determines how many items it can hold.`,
     ],
     ITEM_SPELL_PROPERTIES: [
         `${padStringToLength79(`Item Spell Properties`)}`,
