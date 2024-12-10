@@ -24,6 +24,7 @@ const bugSchema = new Schema({
         default: WORLD_RECALL,
     },
     isValid: { type: Boolean, default: false },
+    isFixed: { type: Boolean, default: false }
 });
 const Bug = mongoose.model("Bug", bugSchema);
 export default Bug;

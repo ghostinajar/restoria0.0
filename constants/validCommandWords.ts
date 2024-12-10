@@ -38,6 +38,7 @@ export const validCommandWords = [
   "tell",
   "u",
   "up",
+  "updates",
   "w",
   "west",
   "who",

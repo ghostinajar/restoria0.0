@@ -1,7 +1,6 @@
 // Bug
 // (reported by user)
 import mongoose from "mongoose";
-import historySchema, { IHistory } from "./History.js";
 import locationSchema, { ILocation } from "./Location.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
 
@@ -14,6 +13,7 @@ export interface IBug extends mongoose.Document {
   description: string;
   location: ILocation;
   isValid: boolean;
+  isFixed: boolean;
 }
 
 const bugSchema = new Schema({
@@ -36,6 +36,7 @@ const bugSchema = new Schema({
     default: WORLD_RECALL,
   },
   isValid: { type: Boolean, default: false },
+  isFixed: { type: Boolean, default: false }
 });
 
 const Bug = mongoose.model("Bug", bugSchema);

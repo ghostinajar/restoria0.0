@@ -1,5 +1,5 @@
-// bugs
-// shows user a list of valid bugs in queue to fix
+// updates
+// shows user a list of recent updates (fixed bugs, etc)
 import Bug from "../model/classes/Bug.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -7,24 +7,24 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import formatDate from "../util/formatDate.js";
 import makeMessage from "../util/makeMessage.js";
 
-async function bugs(user: IUser) {
+async function updates(user: IUser) {
   try {
-    const validBugs = await Bug.find(
-      { isValid: true, isFixed: false },
+    const fixedBugs = await Bug.find(
+      { isFixed: true },
       { date: 1, description: 1, _id: 0 }
-    );
+    )
+      .sort({ date: -1 })
+      .limit(20);
 
-    const validBugStrings = validBugs.map((bug) => {
+    const fixedBugStrings = fixedBugs.map((bug) => {
       const formattedDate = formatDate(bug.date);
-      return makeMessage("message", `${formattedDate}: ${bug.description}`);
+      return makeMessage("success", `${formattedDate}: ${bug.description}`);
     });
-    validBugStrings.unshift(
-      makeMessage(`help`, `Current known bugs in Restoria:`)
-    );
-    worldEmitter.emit(`messageArrayFor${user.username}`, validBugStrings);
+    fixedBugStrings.unshift(makeMessage(`help`, `Recent Updates in Restoria:`));
+    worldEmitter.emit(`messageArrayFor${user.username}`, fixedBugStrings);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`bugs`, error, user?.name);
   }
 }
 
-export default bugs;
+export default updates;

@@ -23,6 +23,7 @@ import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 import help from "../commands/help.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import bugs from "../commands/bugs.js";
+import updates from "../commands/updates.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -131,6 +132,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       case `telepath`:
       case `tell`: {
         await telepath(parsedCommand, user);
+        break;
+      }
+      case `updates`: {
+        await updates(user);
         break;
       }
       case `who`: {

@@ -3,18 +3,12 @@
 import Bug from "../model/classes/Bug.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import formatDate from "../util/formatDate.js";
 import makeMessage from "../util/makeMessage.js";
 async function bugs(user) {
     try {
-        const validBugs = await Bug.find({ isValid: true }, { date: 1, description: 1, _id: 0 });
-        const formatDate = (date) => {
-            return new Intl.DateTimeFormat('en-GB', {
-                year: '2-digit',
-                month: '2-digit',
-                day: '2-digit'
-            }).format(new Date(date));
-        };
-        const validBugStrings = validBugs.map(bug => {
+        const validBugs = await Bug.find({ isValid: true, isFixed: false }, { date: 1, description: 1, _id: 0 });
+        const validBugStrings = validBugs.map((bug) => {
             const formattedDate = formatDate(bug.date);
             return makeMessage("message", `${formattedDate}: ${bug.description}`);
         });
