@@ -7,7 +7,7 @@ function getItemBlueprintNamesFromZone(zone) {
         return itemBlueprintNames;
     }
     catch (error) {
-        catchErrorHandlerForFunction("functionName", error);
+        catchErrorHandlerForFunction("getItemBlueprintNamesFromZone", error);
     }
 }
 export default getItemBlueprintNamesFromZone;

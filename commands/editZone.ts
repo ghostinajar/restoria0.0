@@ -39,6 +39,9 @@ async function editZone(zoneData: IZoneData, user: IUser) {
         return;
       }
 
+      // erase (unreserver) old name from Names
+      await Name.deleteOne({name: zone.name.toLowerCase()});
+
       // Register new name to Names
       const nameToRegister = new Name({ name: zoneData.name.toLowerCase() });
       const nameSaved = await nameToRegister.save();
@@ -52,6 +55,7 @@ async function editZone(zoneData: IZoneData, user: IUser) {
         );
         return;
       }
+      logger.info(`User ${user.name} renamed a zone, ${zone.name} unreserved in Names. Reserving ${zoneData.name}...`)
       zone.name = zoneData.name;
     }
 

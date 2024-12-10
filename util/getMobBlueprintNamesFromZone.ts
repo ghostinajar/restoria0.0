@@ -9,7 +9,7 @@ function getMobBlueprintNamesFromZone(zone: IZone) {
   });
   return mobBlueprintNames;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("functionName", error);
+    catchErrorHandlerForFunction("getMobBlueprintNamesFromZone", error);
   }
   
 }

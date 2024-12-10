@@ -10,7 +10,7 @@ function getItemBlueprintNamesFromZone(zone: IZone) {
     
     return itemBlueprintNames;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("functionName", error);
+    catchErrorHandlerForFunction("getItemBlueprintNamesFromZone", error);
   }
 }
 

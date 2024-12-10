@@ -12,7 +12,7 @@ async function getRoomOfUser(user) {
         return room;
     }
     catch (error) {
-        catchErrorHandlerForFunction("functionName", error);
+        catchErrorHandlerForFunction("getRoomOfUser", error);
     }
 }
 export default getRoomOfUser;

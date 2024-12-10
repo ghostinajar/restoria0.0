@@ -7,7 +7,7 @@ function getMobBlueprintNamesFromZone(zone) {
         return mobBlueprintNames;
     }
     catch (error) {
-        catchErrorHandlerForFunction("functionName", error);
+        catchErrorHandlerForFunction("getMobBlueprintNamesFromZone", error);
     }
 }
 export default getMobBlueprintNamesFromZone;

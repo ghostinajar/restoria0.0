@@ -17,7 +17,7 @@ async function getRoomOfUser(user: IUser) {
     }
     return room;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("functionName", error);
+    catchErrorHandlerForFunction("getRoomOfUser", error);
   }
 }
 
