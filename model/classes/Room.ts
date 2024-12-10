@@ -16,6 +16,7 @@ import { IItem } from "./Item.js";
 import { IUser } from "./User.js";
 import ROOM_TYPE from "../../constants/ROOM_TYPE.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
+import recall from "../../commands/recall.js";
 
 const { Schema } = mongoose;
 
@@ -46,7 +47,7 @@ export interface IRoom {
   mapCoords: Array<number>;
   description: IDescription;
   exits: {
-    [key: string]: IExit | null | undefined; 
+    [key: string]: IExit | null | undefined;
     north?: IExit | null;
     south?: IExit | null;
     east?: IExit | null;
@@ -120,6 +121,7 @@ const roomSchema = new Schema<IRoom>({
   mapCoords: {
     type: [Number],
     validate: {
+      // TODO move this out of schema and into createRoom login before saving
       validator: function (arr: Array<number>) {
         if (arr.length !== 3) {
           return false;
@@ -267,7 +269,17 @@ roomSchema.methods.clearContents = async function () {
   try {
     await destroyMobs(this.mobs);
     this.mobs = [];
+
+    // destroy items
+    for (const item of this.items) {
+      item.inventory = [];
+    }
     this.inventory = [];
+
+    // recall users
+    for (const user of this.users) {
+      recall(user);
+    }
     this.users = [];
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
