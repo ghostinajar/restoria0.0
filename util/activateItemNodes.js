@@ -7,6 +7,7 @@ async function activateItemNodes(itemNodes, inventory, isNested = false) {
     try {
         for (const itemNode of itemNodes) {
             try {
+                // get the zone where the blueprint is stored
                 const zone = await new Promise((resolve) => {
                     worldEmitter.once(`zone${itemNode.fromZoneId.toString()}Loaded`, resolve);
                     worldEmitter.emit(`zoneRequested`, itemNode.fromZoneId.toString());
@@ -15,7 +16,8 @@ async function activateItemNodes(itemNodes, inventory, isNested = false) {
                     logger.error(`activateItemNodes couldn't get a zone`);
                     return null;
                 }
-                const blueprint = await zone.itemBlueprints.find((blueprint) => blueprint._id.toString() === itemNode.loadsBlueprintId.toString());
+                // get the blueprint
+                const blueprint = zone.itemBlueprints.find((blueprint) => blueprint._id.toString() === itemNode.loadsBlueprintId.toString());
                 if (!blueprint) {
                     logger.error(`ActivateItemNodes couldn't find blueprint ${itemNode.loadsBlueprintId} in zone ${zone.name}.`);
                     return null;
@@ -23,7 +25,7 @@ async function activateItemNodes(itemNodes, inventory, isNested = false) {
                 const item = await createItemFromBlueprint(blueprint);
                 // If item is a container and we're not in a nested inventory,
                 // initiate its inventory recursively
-                if (item.itemType == "container" && !isNested) {
+                if (item.tags.container && !isNested) {
                     if (!item.inventory) {
                         item.inventory = [];
                     }
