@@ -157,7 +157,7 @@
           name="editItemContainer"
         />
       </li>
-      <li style="display: inline-block">
+      <li id="editItemCapacityField" style="display: none">
         <label for="editItemCapacity">Capacity:</label>
         <input
           style="width: 6rem"
@@ -609,7 +609,7 @@
     const editItemQuest = document.getElementById("editItemQuest");
     const editItemTemporary = document.getElementById("editItemTemporary");
     const editItemContainer = document.getElementById("editItemContainer");
-
+    const editItemCapacityField = document.getElementById("editItemCapacityField");
     const editItemCapacity = document.getElementById("editItemCapacity");
     // nodeList ul elements
     const editItemItemNodeList = document.getElementById(
@@ -836,8 +836,11 @@
       // logic to hide/show parts of form based on item type
       if (event.target.checked) {
         editItemItemNodesTab.style.display = "inline-block";
+        editItemCapacityField.style.display = "inline-block";
       } else {
         editItemItemNodesTab.style.display = "none";
+        editItemCapacityField.style.display = "none";
+
       }
     });
 
@@ -1043,8 +1046,10 @@
       }
       if (editItemContainer.checked) {
         editItemItemNodesTab.style.display = "inline-block";
+        editItemCapacityField.style.display = "inline-block";
       } else {
         editItemItemNodesTab.style.display = "none";
+        editItemCapacityField.style.display = "none";
       }
       if (editItemFood.checked) {
         editItemSpellTab.style.display = "inline-block";
