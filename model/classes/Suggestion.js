@@ -10,7 +10,7 @@ const suggestionSchema = new Schema({
     refersToId: Schema.Types.ObjectId,
     refersToObjectType: {
         type: String,
-        enum: ['room', 'itemBlueprint', 'mobBlueprint', 'zone'],
+        enum: ['room', 'item', 'mob', 'zone'],
         required: true
     },
     body: String,

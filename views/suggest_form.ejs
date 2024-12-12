@@ -73,7 +73,7 @@
 
       refersToObjectType = formData.refersToObjectType;
       generateStringSelectOptions(formData.names, suggestSelect);
-      // TODO preselect formData.defaultOption
+      suggestSelect.value = formData.defaultOption;
       activeForm.style.display = "block";
       input.value = "";
     });

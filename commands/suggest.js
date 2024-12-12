@@ -47,9 +47,10 @@ async function suggest(parsedCommand, user) {
             ],
             defaultOption: "",
         };
+        // prepare formPromptData with list of object names, and default to show
+        // the first item or mob visible in the room, for convenience
         switch (target) {
             case `item`:
-                formPromptData.refersToObjectType = "itemBlueprint";
                 let itemBlueprintNames = getItemBlueprintNamesFromZone(zone);
                 if (itemBlueprintNames) {
                     formPromptData.names = itemBlueprintNames;
@@ -58,7 +59,6 @@ async function suggest(parsedCommand, user) {
                     room.itemNodes[0]?.loadsBlueprintId?.toString();
                 break;
             case `mob`:
-                formPromptData.refersToObjectType = "mobBlueprint";
                 let mobBlueprintNames = getMobBlueprintNamesFromZone(zone);
                 if (mobBlueprintNames) {
                     formPromptData.names = mobBlueprintNames;

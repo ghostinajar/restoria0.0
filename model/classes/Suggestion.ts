@@ -3,7 +3,7 @@ import historySchema, { IHistory } from './History.js';
 
 const { Schema } = mongoose;
 
-export type refersToObjectType = 'room' | 'itemBlueprint' | 'mobBlueprint' | 'zone';
+export type refersToObjectType = 'room' | 'item' | 'mob' | 'zone';
 export type suggestionStatusType = 'pending' | 'completed' | 'declined'
 
 export interface ISuggestion {
@@ -25,7 +25,7 @@ const suggestionSchema = new Schema<ISuggestion>({
     refersToId: Schema.Types.ObjectId,
     refersToObjectType: {
         type: String,
-        enum: ['room', 'itemBlueprint', 'mobBlueprint', 'zone'],
+        enum: ['room', 'item', 'mob', 'zone'],
         required: true
     },
     body: String,

@@ -67,7 +67,13 @@
     <h3>Description</h3>
     <li>
       <label for="newLookMob">Look:</label>
-      <input id="newLookMob" name="newLookMob" type="text" maxlength="80" />
+      <input
+        id="newLookMob"
+        name="newLookMob"
+        type="text"
+        maxlength="80"
+        required
+      />
     </li>
     <li>
       <label for="newExamineMob">Examine:</label>
@@ -110,7 +116,10 @@
           ),
         },
       };
-      socket.emit("userSubmittedCreateMobBlueprint", createMobBlueprintFormData);
+      socket.emit(
+        "userSubmittedCreateMobBlueprint",
+        createMobBlueprintFormData
+      );
       createMobBlueprintForm.reset();
       createMobBlueprintForm.style.display = "none";
     });

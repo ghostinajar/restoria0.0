@@ -11,11 +11,14 @@
     </li>
   </ul>
 
-  
-  <section >  
+  <section>
     <ul>
-      <li style="display: inline-block;"><h2style="display: inline-block;">Suggestions</h2>
-        <button style="margin-left: 0; margin-top: 0.5rem; display: inline-block" type="submit">
+      <li style="display: inline-block">
+        <h2 style="display: inline-block">Suggestions</h2>
+        <button
+          style="margin-left: 0; margin-top: 0.5rem; display: inline-block"
+          type="submit"
+        >
           Save Suggestions
         </button>
       </li>
@@ -82,7 +85,6 @@
     <ul class="suggestionsList" id="suggestionsMobBlueprintsList">
     </ul>
   </section> -->
-
 </form>
 
 <script>
@@ -186,7 +188,6 @@
       activeForm.style.display = "block";
       // document.querySelector("#suggestionsRoomsTab").click();
       input.value = "";
-
       showHelpArray(suggestionsHelp);
     });
 
@@ -210,9 +211,9 @@
       // Create a new <li> element
       const liElement = document.createElement("li");
       liElement.className = "suggestion";
-      suggestionName = objectList.find(
-        (object) => object._id === suggestion.refersToId
-      )?.name ?? "General Zone Suggestion";
+      suggestionName =
+        objectList.find((object) => object._id === suggestion.refersToId)
+          ?.name ?? "General Zone Suggestion";
 
       liElement.innerHTML = `
         <div class="suggestionInfo">
@@ -289,9 +290,8 @@
     }
 
     function sortSuggestions(suggestions) {
-      const order = { "pending": 0, "completed": 1, "declined": 2 };
+      const order = { pending: 0, completed: 1, declined: 2 };
       suggestions.sort((a, b) => order[a.status] - order[b.status]);
     }
-
   });
 </script>
