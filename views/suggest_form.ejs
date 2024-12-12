@@ -73,7 +73,9 @@
 
       refersToObjectType = formData.refersToObjectType;
       generateStringSelectOptions(formData.names, suggestSelect);
-      suggestSelect.value = formData.defaultOption;
+      if (formData.refersToObjectType === "item" || formData.refersToObjectType === "mob") {
+        suggestSelect.value = formData.defaultOption;
+      }
       activeForm.style.display = "block";
       input.value = "";
     });
