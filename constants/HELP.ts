@@ -348,7 +348,7 @@ const HELP: {
     `A Unique mob can only exist in one place at one time. It is different from a mob like "a goblin", where there could be any number of them in a zone or in the world. Use this for special mobs with an identity, especially those with a name (e.g. Greg, the Blacksmith), where it wouldn't make sense for there to be more than one in the world.`,
   ],
   UPDATES: [
-    `View of list of recent changes (bug fixes, etc.) made to Restoria.`,
+    `View of list of recent updates (bug fixes, etc.) made to Restoria. Include a number (UPDATES 5) to limit how many are shown, or UPDATE ALL to see everything.`,
   ],
   WEAPON_PROPERTIES: [
     `This feature is still in development.`,

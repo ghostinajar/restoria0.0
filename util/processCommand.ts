@@ -135,7 +135,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `updates`: {
-        await updates(user);
+        await updates(parsedCommand, user);
         break;
       }
       case `who`: {

@@ -129,7 +129,7 @@ async function processCommand(parsedCommand, user) {
                 break;
             }
             case `updates`: {
-                await updates(user);
+                await updates(parsedCommand, user);
                 break;
             }
             case `who`: {

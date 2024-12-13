@@ -127,6 +127,7 @@ export const commandsWith1Param = [
     "train",
     "trip",
     "unparty",
+    "updates",
     "wake",
     "where",
     "whisper",
