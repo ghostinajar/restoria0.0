@@ -14,7 +14,6 @@ import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
-// Return room, or a message explaining failure (if by user, emit message to their socket)
 async function createRoom(roomFormData, user) {
     try {
         if (!roomFormData.direction || roomFormData.direction == ``) {
@@ -132,6 +131,14 @@ async function createRoom(roomFormData, user) {
             }
             default:
                 break;
+        }
+        if (newRoomData.mapCoords[0] > 79 ||
+            newRoomData.mapCoords[0] < 0 ||
+            newRoomData.mapCoords[1] > 79 ||
+            newRoomData.mapCoords[1] < 0 ||
+            newRoomData.mapCoords[2] > 10 ||
+            newRoomData.mapCoords[2] > -10) {
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Sorry, your room couldn't be saved due to a map error. Ralu will look into this ASAP.`));
         }
         originZone.rooms.push(newRoomData);
         await originZone.save();

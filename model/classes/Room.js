@@ -191,7 +191,7 @@ roomSchema.methods.clearContents = async function () {
         await destroyMobs(this.mobs);
         this.mobs = [];
         // destroy items
-        for (const item of this.items) {
+        for (const item of this.inventory) {
             item.inventory = [];
         }
         this.inventory = [];

@@ -33,7 +33,6 @@ export interface INewRoomData {
   research: string;
 }
 
-// Return room, or a message explaining failure (if by user, emit message to their socket)
 async function createRoom(roomFormData: INewRoomData, user: IUser) {
   try {
     if (!roomFormData.direction || roomFormData.direction == ``) {
@@ -108,8 +107,14 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           originRoom.mapCoords[1] - 1,
           originRoom.mapCoords[2],
         ];
-        newRoomData.exits.south = makeExitToRoomId(originRoom._id, originZone._id);
-        originRoom.exits.north = makeExitToRoomId(newRoomData._id, originZone._id);
+        newRoomData.exits.south = makeExitToRoomId(
+          originRoom._id,
+          originZone._id
+        );
+        originRoom.exits.north = makeExitToRoomId(
+          newRoomData._id,
+          originZone._id
+        );
         break;
       }
       case "east": {
@@ -118,8 +123,14 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           originRoom.mapCoords[1],
           originRoom.mapCoords[2],
         ];
-        newRoomData.exits.west = makeExitToRoomId(originRoom._id, originZone._id);
-        originRoom.exits.east = makeExitToRoomId(newRoomData._id, originZone._id);
+        newRoomData.exits.west = makeExitToRoomId(
+          originRoom._id,
+          originZone._id
+        );
+        originRoom.exits.east = makeExitToRoomId(
+          newRoomData._id,
+          originZone._id
+        );
         break;
       }
       case "south": {
@@ -128,8 +139,14 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           originRoom.mapCoords[1] + 1,
           originRoom.mapCoords[2],
         ];
-        newRoomData.exits.north = makeExitToRoomId(originRoom._id, originZone._id);
-        originRoom.exits.south = makeExitToRoomId(newRoomData._id, originZone._id);
+        newRoomData.exits.north = makeExitToRoomId(
+          originRoom._id,
+          originZone._id
+        );
+        originRoom.exits.south = makeExitToRoomId(
+          newRoomData._id,
+          originZone._id
+        );
         break;
       }
       case "west": {
@@ -138,8 +155,14 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           originRoom.mapCoords[1],
           originRoom.mapCoords[2],
         ];
-        newRoomData.exits.east = makeExitToRoomId(originRoom._id, originZone._id);
-        originRoom.exits.west = makeExitToRoomId(newRoomData._id, originZone._id);
+        newRoomData.exits.east = makeExitToRoomId(
+          originRoom._id,
+          originZone._id
+        );
+        originRoom.exits.west = makeExitToRoomId(
+          newRoomData._id,
+          originZone._id
+        );
         break;
       }
       case "up": {
@@ -148,7 +171,10 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           originRoom.mapCoords[1],
           originRoom.mapCoords[2] + 1,
         ];
-        newRoomData.exits.down = makeExitToRoomId(originRoom._id, originZone._id);
+        newRoomData.exits.down = makeExitToRoomId(
+          originRoom._id,
+          originZone._id
+        );
         originRoom.exits.up = makeExitToRoomId(newRoomData._id, originZone._id);
         break;
       }
@@ -159,11 +185,31 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           originRoom.mapCoords[2] - 1,
         ];
         newRoomData.exits.up = makeExitToRoomId(originRoom._id, originZone._id);
-        originRoom.exits.down = makeExitToRoomId(newRoomData._id, originZone._id);
+        originRoom.exits.down = makeExitToRoomId(
+          newRoomData._id,
+          originZone._id
+        );
         break;
       }
       default:
         break;
+    }
+
+    if (
+      newRoomData.mapCoords[0] > 79 ||
+      newRoomData.mapCoords[0] < 0 ||
+      newRoomData.mapCoords[1] > 79 ||
+      newRoomData.mapCoords[1] < 0 ||
+      newRoomData.mapCoords[2] > 10 ||
+      newRoomData.mapCoords[2] > -10
+    ) {
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          "rejection",
+          `Sorry, your room couldn't be saved due to a map error. Ralu will look into this ASAP.`
+        )
+      );
     }
 
     originZone.rooms.push(newRoomData);
@@ -180,7 +226,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
     );
     await exits(user);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("createRoom", error, user.name)
+    catchErrorHandlerForFunction("createRoom", error, user.name);
   }
 }
 

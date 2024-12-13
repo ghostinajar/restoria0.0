@@ -7,12 +7,13 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 import Zone from "../model/classes/Zone.js";
+import Name from "../model/classes/Name.js";
 async function eraseZone(zoneId, user) {
     try {
         // Authenticate (admin only)
         if (!user.isAdmin) {
             logger.warn(`User ${user._id} (${user.name} submitted erase_zone_form successfully on zone id ${zoneId}. How?)`);
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You shouldn't be able to submit 'erase zone'. Your attempt has been logged.`));
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You aren't authorized to submit 'erase zone'. Your attempt has been logged.`));
             return;
         }
         // Verify valid ObjectId
@@ -55,6 +56,11 @@ async function eraseZone(zoneId, user) {
         }
         if (zoneAuthor) {
             zoneAuthor.unpublishedZoneTally--;
+        }
+        // Delete name from reserved Names
+        if (zone.name) {
+            let nameDeleted = await Name.deleteOne({ name: zone.name.toString().toLowerCase() });
+            console.log(nameDeleted);
         }
         // Delete zone from database
         try {
