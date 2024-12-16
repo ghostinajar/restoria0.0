@@ -21,7 +21,7 @@
     function parseCommand(command) {
       const parsedCommand = {};
       const splitCommand = command.split(" ");
-      parsedCommand.commandWord = splitCommand[0];
+      parsedCommand.commandWord = splitCommand[0].toLowerCase();
       if (splitCommand.length > 1) {
         parsedCommand.string = splitCommand.slice(1).join(" ");
       }
