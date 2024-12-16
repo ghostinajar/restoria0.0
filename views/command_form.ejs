@@ -46,6 +46,12 @@
             type: "rejection",
             content: `Sorry, '${shortenedCommand}' is not a valid command word.`,
           });
+          if (["move","go","travel"].includes(parsedCommand.commandWord)) {
+            appendMessageToTerminal({
+            type: "help",
+            content: `Type a direction (e.g. "north" or "n"), or type GOTO to visit your zones.`,
+          });
+          }
           input.value = "";
           return;
         }
