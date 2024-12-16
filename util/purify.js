@@ -5,6 +5,7 @@ import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
 export const wordFilter = new Filter();
+wordFilter.removeWords('god');
 export function purifyCommandInput(input) {
     try {
         let sanitizedInput = purify.sanitize(input);
