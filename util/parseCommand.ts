@@ -10,7 +10,9 @@ import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 export interface IParsedCommand {
   commandWord: string;
   directObject?: string;
+  directObjectOrdinal?: number;
   indirectObject?: string;
+  indirectObjectOrdinal?: number;
   string?: string;
 }
 
@@ -21,27 +23,68 @@ function parseCommand(command: string) {
     };
     const splitCommand = command.split(" ");
     parsedCommand.commandWord = splitCommand[0].toLowerCase();
+
+    function parseAndPackageObject(objectStr: string, isDirectObject: boolean) {
+      const lowerObj = objectStr.toLowerCase();
+      if (hasOrdinalPrefix(lowerObj)) {
+        const { ordinal, object } = parseOrdinalFromObject(lowerObj);
+        if (isDirectObject) {
+          parsedCommand.directObjectOrdinal = ordinal;
+          parsedCommand.directObject = object;
+        } else {
+          parsedCommand.indirectObjectOrdinal = ordinal;
+          parsedCommand.indirectObject = object;
+        }
+      } else {
+        if (isDirectObject) {
+          parsedCommand.directObject = lowerObj;
+        } else {
+          parsedCommand.indirectObject = lowerObj;
+        }
+      }
+    }
+
     if (commandsWith1Param.find((word) => word === parsedCommand.commandWord)) {
-      parsedCommand.directObject = splitCommand[1]?.toLowerCase();
+      if (splitCommand[1]) {
+        parseAndPackageObject(splitCommand[1], true);
+      }
       if (splitCommand.length > 2) {
         parsedCommand.string = splitCommand.slice(2).join(" ");
       }
     } else if (
       commandsWith2Params.find((word) => word === parsedCommand.commandWord)
     ) {
-      parsedCommand.directObject = splitCommand[1]?.toLowerCase();
-      parsedCommand.indirectObject = splitCommand[2]?.toLowerCase();
+      if (splitCommand[1]) {
+        parseAndPackageObject(splitCommand[1], true);
+      }
+      if (splitCommand[2]) {
+        parseAndPackageObject(splitCommand[2], false);
+      }
       if (splitCommand.length > 3) {
         parsedCommand.string = splitCommand.slice(3).join(" ");
       }
     } else {
       parsedCommand.string = splitCommand.slice(1).join(" ");
     }
+    console.log(parsedCommand);
     return parsedCommand;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`parseCommand`, error);
-    return {commandWord: 'command-parsing-error'};
+    return { commandWord: "command-parsing-error" };
   }
+}
+
+function hasOrdinalPrefix(str: string): boolean {
+  // Only match if number is greater than 0
+  return /^[1-9]\d*\./.test(str);
+}
+
+function parseOrdinalFromObject(object: string) {
+  const match = object.match(/^(\d+)\.(.*)/);
+  const userOrdinal = parseInt(match![1], 10);
+  const ordinal = userOrdinal - 1;
+  const cleanedObject = match![2];
+  return { ordinal, object: cleanedObject };
 }
 
 export default parseCommand;
