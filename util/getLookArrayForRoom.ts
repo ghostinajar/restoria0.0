@@ -1,18 +1,22 @@
-// lookRoom
-// populates the lookArray for the look command
+// getLookArrayForRoom
+// gets the lookArray for the look command targeting a room
 import { IRoom } from "../model/classes/Room.js";
 import { IUser } from "../model/classes/User.js";
 import IMessage from "../types/Message.js";
-import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import makeMessage from "../util/makeMessage.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
+import makeMessage from "./makeMessage.js";
 
-function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
+function getLookArrayForRoom(
+  room: IRoom,
+  user: IUser,
+) {
   try {
+    let lookArray : Array<IMessage> = [];
     let roomNameMessage = makeMessage(`heading`, `${room.name}`);
     lookArray.push(roomNameMessage);
 
     let roomDescriptionMessage = makeMessage(
-      `roomDescription`,
+      `description`,
       `${room.description.examine}`
     );
     lookArray.push(roomDescriptionMessage);
@@ -34,9 +38,10 @@ function lookRoom(room: IRoom, user: IUser, lookArray: Array<IMessage>) {
       const message = makeMessage(`userIsHere`, `${userInRoom.name} is here.`);
       if (userInRoom.name !== user.name) lookArray.push(message);
     }
+    return lookArray
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("lookRoom", error, user.name)
+    catchErrorHandlerForFunction("getLookArrayForRoom", error, user.name);
   }
 }
 
-export default lookRoom;
+export default getLookArrayForRoom;

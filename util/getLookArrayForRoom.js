@@ -1,10 +1,11 @@
-import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import makeMessage from "../util/makeMessage.js";
-function lookRoom(room, user, lookArray) {
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
+import makeMessage from "./makeMessage.js";
+function getLookArrayForRoom(room, user) {
     try {
+        let lookArray = [];
         let roomNameMessage = makeMessage(`heading`, `${room.name}`);
         lookArray.push(roomNameMessage);
-        let roomDescriptionMessage = makeMessage(`roomDescription`, `${room.description.examine}`);
+        let roomDescriptionMessage = makeMessage(`description`, `${room.description.examine}`);
         lookArray.push(roomDescriptionMessage);
         for (let itemInRoom of room.inventory) {
             const message = makeMessage(`itemIsHere`, `${itemInRoom.description.look}`);
@@ -19,9 +20,10 @@ function lookRoom(room, user, lookArray) {
             if (userInRoom.name !== user.name)
                 lookArray.push(message);
         }
+        return lookArray;
     }
     catch (error) {
-        catchErrorHandlerForFunction("lookRoom", error, user.name);
+        catchErrorHandlerForFunction("getLookArrayForRoom", error, user.name);
     }
 }
-export default lookRoom;
+export default getLookArrayForRoom;

@@ -388,10 +388,7 @@ ul {
   color: var(--yellow_light);
 }
 
-.userDescription,
-.mobDescription,
-.itemDescription,
-.roomDescription {
+.description {
   color: var(--orange_light);
 }
 
