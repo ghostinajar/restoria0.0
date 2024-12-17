@@ -10,6 +10,11 @@
   document.addEventListener("DOMContentLoaded", () => {
     const commandForm = document.getElementById("commandForm");
     const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
+    
+    const commandHistory = [];
+    let historyIndex = -1;
+    const MAX_HISTORY = 10;
+    let currentInput = '';
 
     function isValidCommandWord(commandWord) {
       if (!validCommandWords.includes(commandWord.toLowerCase())) {
@@ -28,10 +33,59 @@
       return parsedCommand;
     }
 
+    function addToHistory(command) {
+      // Don't add empty or repeated commands
+      if (!command || (commandHistory.length > 0 && commandHistory[0] === command)) {
+        return;
+      }
+      
+      commandHistory.unshift(command);
+      
+      if (commandHistory.length > MAX_HISTORY) {
+        commandHistory.pop();
+      }
+      
+      // Reset the history index
+      historyIndex = -1;
+    }
+
+    function navigateHistory(direction) {
+      if (commandHistory.length === 0) return;
+
+      // Store current input when starting to navigate
+      if (historyIndex === -1) {
+        currentInput = input.value;
+      }
+
+      // Update history index
+      if (direction === 'up') {
+        historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+        input.value = commandHistory[historyIndex];
+      } else if (direction === 'down') {
+        historyIndex = Math.max(historyIndex - 1, -1);
+        input.value = historyIndex === -1 ? currentInput : commandHistory[historyIndex];
+      }
+
+      // Move cursor to end of input
+      setTimeout(() => {
+        input.selectionStart = input.selectionEnd = input.value.length;
+      }, 0);
+    }
+
+    // Add keydown event listener for up/down arrow keys
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        navigateHistory('up');
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        navigateHistory('down');
+      }
+    });
+
     commandForm.addEventListener("submit", (e) => {
       e.preventDefault();
       if (input.value) {
-        
         const parsedCommand = parseCommand(input.value);
 
         const directions = ["n","e","s","w","u","d","north","east","south","west","up","down"]
@@ -48,13 +102,17 @@
           });
           if (["move","go","travel"].includes(parsedCommand.commandWord)) {
             appendMessageToTerminal({
-            type: "help",
-            content: `Type a direction (e.g. "north" or "n"), or type GOTO to visit your zones.`,
-          });
+              type: "help",
+              content: `Type a direction (e.g. "north" or "n"), or type GOTO to visit your zones.`,
+            });
           }
           input.value = "";
           return;
         }
+
+        // Add command to history before clearing input
+        addToHistory(input.value);
+        
         socket.emit("userSentCommand", DOMPurify.sanitize(input.value));
         input.value = "";
       }
