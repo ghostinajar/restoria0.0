@@ -30,6 +30,7 @@ export const validCommandWords = [
     "south",
     "stat",
     "stats",
+    "study",
     "suggest",
     "suggestions",
     "t",

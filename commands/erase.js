@@ -8,6 +8,7 @@ import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import { directions } from "../constants/DIRECTIONS.js";
 import help from "./help.js";
+import logger from "../logger.js";
 async function erase(parsedCommand, user) {
     try {
         const target = parsedCommand.directObject;
@@ -29,7 +30,7 @@ async function erase(parsedCommand, user) {
             return;
         }
         else if (target === "zone" && user.isAdmin) {
-            console.log(`Admin ${user.name} authorized for "erase zone" command.`);
+            logger.info(`Admin ${user.name} authorized for "erase zone" command.`);
             worldEmitter.emit(`formPromptFor${user.username}`, {
                 form: `eraseZoneForm`,
             });

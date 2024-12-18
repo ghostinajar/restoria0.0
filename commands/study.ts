@@ -1,38 +1,50 @@
-// look
-// shows the user what's in their room,
-// or the description and contents of a target
+// study
+// shows the user the study description of room or target
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import { IUser } from "../model/classes/User.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import getLookArrayForRoom from "../util/getLookArrayForRoom.js";
-import getLookArrayForTarget from "../util/getLookArrayForTarget.js";
 import selectTargetByOrdinal from "../util/selectTargetByOrdinal.js";
+import makeMessage from "../util/makeMessage.js";
+import { IRoom } from "../model/classes/Room.js";
+import { IItem } from "../model/classes/Item.js";
+import { IMob } from "../model/classes/Mob.js";
 import messageMissingTargetToUser from "../util/messageMissingTargetToUser.js";
 
-async function look(parsedCommand: IParsedCommand, user: IUser) {
+async function study(parsedCommand: IParsedCommand, user: IUser) {
   try {
+    function studyForObject(object: IRoom | IUser | IItem | IMob) {
+      if (object.description.study) {
+        let messageArray = [];
+        messageArray.push(makeMessage(`heading`, object.name));
+        messageArray.push(makeMessage(`description`, object.description.study));
+        worldEmitter.emit(`messageArrayFor${user.username}`, messageArray);
+      } else {
+        worldEmitter.emit(
+          `messageArrayFor${user.username}`,
+          makeMessage(`failure`, `There's not much to study here.`)
+        );
+      }
+    }
+
     const room = await getRoomOfUser(user);
     if (!room) {
       throw new Error(`Room not found for user ${user.name}`);
     }
 
     let targetKeyword = parsedCommand.directObject;
-    let lookArray = getLookArrayForRoom(room, user);
 
-    // target is missing or room
+    // target is missing or room?
     if (!targetKeyword || targetKeyword === "room") {
-      worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
+      studyForObject(room);
       return;
     }
 
     // target is a user?
-    let checkEquipped = true;
     let userObject = room.users.find((user) => user.username === targetKeyword);
     if (userObject) {
-      lookArray = getLookArrayForTarget(userObject, checkEquipped);
-      worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
+      studyForObject(userObject);
       return;
     }
 
@@ -44,28 +56,25 @@ async function look(parsedCommand: IParsedCommand, user: IUser) {
       room.mobs
     );
     if (mobObject) {
-      lookArray = getLookArrayForTarget(mobObject, checkEquipped);
-      worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
+      studyForObject(mobObject);
       return;
     }
 
     //target is an item?
-    checkEquipped = false;
     let itemObject = selectTargetByOrdinal(
       targetOrdinal,
       targetKeyword,
       room.inventory
     );
     if (itemObject) {
-      lookArray = getLookArrayForTarget(itemObject, checkEquipped);
-      worldEmitter.emit(`messageArrayFor${user.username}`, lookArray);
+      studyForObject(itemObject);
       return;
     }
 
     messageMissingTargetToUser(user, targetKeyword);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("look", error, user.name);
+    catchErrorHandlerForFunction("study", error, user.name);
   }
 }
 
-export default look;
+export default study;

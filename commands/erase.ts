@@ -13,6 +13,7 @@ import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import { directions } from "../constants/DIRECTIONS.js";
 import help from "./help.js";
+import logger from "../logger.js";
 
 async function erase(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -61,7 +62,7 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
       );
       return;
     } else if (target === "zone" && user.isAdmin) {
-      console.log(`Admin ${user.name} authorized for "erase zone" command.`);
+      logger.info(`Admin ${user.name} authorized for "erase zone" command.`);
       worldEmitter.emit(`formPromptFor${user.username}`, {
         form: `eraseZoneForm`,
       });

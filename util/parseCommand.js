@@ -54,7 +54,6 @@ function parseCommand(command) {
         else {
             parsedCommand.string = splitCommand.slice(1).join(" ");
         }
-        console.log(parsedCommand);
         return parsedCommand;
     }
     catch (error) {

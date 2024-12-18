@@ -60,7 +60,7 @@ async function eraseZone(zoneId, user) {
         // Delete name from reserved Names
         if (zone.name) {
             let nameDeleted = await Name.deleteOne({ name: zone.name.toString().toLowerCase() });
-            console.log(nameDeleted);
+            logger.info(`${nameDeleted} deleted from reserved Names.`);
         }
         // Delete zone from database
         try {

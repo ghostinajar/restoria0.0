@@ -24,6 +24,7 @@ import help from "../commands/help.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import bugs from "../commands/bugs.js";
 import updates from "../commands/updates.js";
+import study from "../commands/study.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -117,6 +118,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       case `stat`:
       case `stats`: {
         stats(user);
+        break;
+      }
+      case `study`: {
+        study(parsedCommand, user)
         break;
       }
       case `suggest`: {
