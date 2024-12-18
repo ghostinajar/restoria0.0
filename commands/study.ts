@@ -22,8 +22,8 @@ async function study(parsedCommand: IParsedCommand, user: IUser) {
         worldEmitter.emit(`messageArrayFor${user.username}`, messageArray);
       } else {
         worldEmitter.emit(
-          `messageArrayFor${user.username}`,
-          makeMessage(`failure`, `There's not much to study here.`)
+          `messageFor${user.username}`,
+          makeMessage(`failure`, `There's not much to study about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`)
         );
       }
     }

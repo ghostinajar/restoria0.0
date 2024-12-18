@@ -16,7 +16,7 @@ async function study(parsedCommand, user) {
                 worldEmitter.emit(`messageArrayFor${user.username}`, messageArray);
             }
             else {
-                worldEmitter.emit(`messageArrayFor${user.username}`, makeMessage(`failure`, `There's not much to study here.`));
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`failure`, `There's not much to study about that ${targetKeyword}. Try LOOK ${targetKeyword?.toUpperCase()} instead.`));
             }
         }
         const room = await getRoomOfUser(user);
