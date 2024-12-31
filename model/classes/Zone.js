@@ -37,19 +37,26 @@ const zoneSchema = new Schema({
             wallColor: String,
         },
         default: () => new Map(),
-        // Convert array keys to strings when saving
+        // because mongoose won't store tuple typed keys,
+        // set and get handles conversion for a string key
         set: function (v) {
             const convertedMap = new Map();
             v.forEach((value, key) => {
-                convertedMap.set(JSON.stringify(key), value);
+                if (Array.isArray(key) && key.length === 3) {
+                    convertedMap.set(JSON.stringify(key), value);
+                }
             });
             return convertedMap;
         },
-        // Convert string keys back to arrays when retrieving
         get: function (v) {
             const convertedMap = new Map();
             v.forEach((value, key) => {
-                convertedMap.set(JSON.parse(key), value);
+                const parsed = JSON.parse(key);
+                if (Array.isArray(parsed) &&
+                    parsed.length === 3 &&
+                    parsed.every((n) => typeof n === "number")) {
+                    convertedMap.set(parsed, value);
+                }
             });
             return convertedMap;
         },

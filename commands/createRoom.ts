@@ -16,6 +16,7 @@ import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
+import COLOR from "../constants/COLOR.js";
 
 export interface INewRoomData {
   name: string;
@@ -88,7 +89,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       noCombat: false,
       itemsForSale: [],
       mountIdForSale: [],
-      mapCoords: originRoom.mapCoords.slice(), // Copy to avoid mutation
+      mapCoords: [...originRoom.mapCoords] as [number, number, number], // spread to avoid mutation of original
       description: roomDescription,
       exits: {},
       mobNodes: [],
@@ -102,11 +103,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
 
     switch (roomFormData.direction) {
       case "north": {
-        newRoomData.mapCoords = [
-          originRoom.mapCoords[0],
-          originRoom.mapCoords[1] - 1,
-          originRoom.mapCoords[2],
-        ];
+        newRoomData.mapCoords[1]--;
         newRoomData.exits.south = makeExitToRoomId(
           originRoom._id,
           originZone._id
@@ -118,11 +115,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         break;
       }
       case "east": {
-        newRoomData.mapCoords = [
-          originRoom.mapCoords[0] + 1,
-          originRoom.mapCoords[1],
-          originRoom.mapCoords[2],
-        ];
+        newRoomData.mapCoords[0]++;
         newRoomData.exits.west = makeExitToRoomId(
           originRoom._id,
           originZone._id
@@ -134,11 +127,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         break;
       }
       case "south": {
-        newRoomData.mapCoords = [
-          originRoom.mapCoords[0],
-          originRoom.mapCoords[1] + 1,
-          originRoom.mapCoords[2],
-        ];
+        newRoomData.mapCoords[1]++;
         newRoomData.exits.north = makeExitToRoomId(
           originRoom._id,
           originZone._id
@@ -150,11 +139,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         break;
       }
       case "west": {
-        newRoomData.mapCoords = [
-          originRoom.mapCoords[0] - 1,
-          originRoom.mapCoords[1],
-          originRoom.mapCoords[2],
-        ];
+        newRoomData.mapCoords[0]--;
         newRoomData.exits.east = makeExitToRoomId(
           originRoom._id,
           originZone._id
@@ -166,11 +151,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         break;
       }
       case "up": {
-        newRoomData.mapCoords = [
-          originRoom.mapCoords[0],
-          originRoom.mapCoords[1],
-          originRoom.mapCoords[2] + 1,
-        ];
+        newRoomData.mapCoords[2]++;
         newRoomData.exits.down = makeExitToRoomId(
           originRoom._id,
           originZone._id
@@ -179,11 +160,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         break;
       }
       case "down": {
-        newRoomData.mapCoords = [
-          originRoom.mapCoords[0],
-          originRoom.mapCoords[1],
-          originRoom.mapCoords[2] - 1,
-        ];
+        newRoomData.mapCoords[2]--;
         newRoomData.exits.up = makeExitToRoomId(originRoom._id, originZone._id);
         originRoom.exits.down = makeExitToRoomId(
           newRoomData._id,
@@ -210,8 +187,17 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           `Sorry, your room couldn't be saved due to a map error. Ralu will look into this ASAP.`
         )
       );
-      throw new Error(`createRoom failed due to invalid mapCoords ${JSON.stringify(newRoomData.mapCoords)}`)
+      throw new Error(
+        `createRoom failed due to invalid mapCoords ${JSON.stringify(
+          newRoomData.mapCoords
+        )}`
+      );
     }
+    originZone.map.set(newRoomData.mapCoords, {
+      character: "·",
+      color: COLOR.WHITE,
+      wallColor: COLOR.WHITE,
+    });
 
     originZone.rooms.push(newRoomData);
     await originZone.save();

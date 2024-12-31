@@ -14,6 +14,7 @@ import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
+import COLOR from "../constants/COLOR.js";
 async function createRoom(roomFormData, user) {
     try {
         if (!roomFormData.direction || roomFormData.direction == ``) {
@@ -57,7 +58,7 @@ async function createRoom(roomFormData, user) {
             noCombat: false,
             itemsForSale: [],
             mountIdForSale: [],
-            mapCoords: originRoom.mapCoords.slice(), // Copy to avoid mutation
+            mapCoords: [...originRoom.mapCoords], // spread to avoid mutation of original
             description: roomDescription,
             exits: {},
             mobNodes: [],
@@ -70,61 +71,37 @@ async function createRoom(roomFormData, user) {
         };
         switch (roomFormData.direction) {
             case "north": {
-                newRoomData.mapCoords = [
-                    originRoom.mapCoords[0],
-                    originRoom.mapCoords[1] - 1,
-                    originRoom.mapCoords[2],
-                ];
+                newRoomData.mapCoords[1]--;
                 newRoomData.exits.south = makeExitToRoomId(originRoom._id, originZone._id);
                 originRoom.exits.north = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "east": {
-                newRoomData.mapCoords = [
-                    originRoom.mapCoords[0] + 1,
-                    originRoom.mapCoords[1],
-                    originRoom.mapCoords[2],
-                ];
+                newRoomData.mapCoords[0]++;
                 newRoomData.exits.west = makeExitToRoomId(originRoom._id, originZone._id);
                 originRoom.exits.east = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "south": {
-                newRoomData.mapCoords = [
-                    originRoom.mapCoords[0],
-                    originRoom.mapCoords[1] + 1,
-                    originRoom.mapCoords[2],
-                ];
+                newRoomData.mapCoords[1]++;
                 newRoomData.exits.north = makeExitToRoomId(originRoom._id, originZone._id);
                 originRoom.exits.south = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "west": {
-                newRoomData.mapCoords = [
-                    originRoom.mapCoords[0] - 1,
-                    originRoom.mapCoords[1],
-                    originRoom.mapCoords[2],
-                ];
+                newRoomData.mapCoords[0]--;
                 newRoomData.exits.east = makeExitToRoomId(originRoom._id, originZone._id);
                 originRoom.exits.west = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "up": {
-                newRoomData.mapCoords = [
-                    originRoom.mapCoords[0],
-                    originRoom.mapCoords[1],
-                    originRoom.mapCoords[2] + 1,
-                ];
+                newRoomData.mapCoords[2]++;
                 newRoomData.exits.down = makeExitToRoomId(originRoom._id, originZone._id);
                 originRoom.exits.up = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
             }
             case "down": {
-                newRoomData.mapCoords = [
-                    originRoom.mapCoords[0],
-                    originRoom.mapCoords[1],
-                    originRoom.mapCoords[2] - 1,
-                ];
+                newRoomData.mapCoords[2]--;
                 newRoomData.exits.up = makeExitToRoomId(originRoom._id, originZone._id);
                 originRoom.exits.down = makeExitToRoomId(newRoomData._id, originZone._id);
                 break;
@@ -141,6 +118,11 @@ async function createRoom(roomFormData, user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Sorry, your room couldn't be saved due to a map error. Ralu will look into this ASAP.`));
             throw new Error(`createRoom failed due to invalid mapCoords ${JSON.stringify(newRoomData.mapCoords)}`);
         }
+        originZone.map.set(newRoomData.mapCoords, {
+            character: "·",
+            color: COLOR.WHITE,
+            wallColor: COLOR.WHITE,
+        });
         originZone.rooms.push(newRoomData);
         await originZone.save();
         await originZone.initRooms();

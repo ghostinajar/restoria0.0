@@ -71,20 +71,10 @@ const roomSchema = new Schema({
     mapCoords: {
         type: [Number],
         validate: {
-            // TODO move this out of schema and into createRoom login before saving
-            validator: function (arr) {
-                if (arr.length !== 3) {
-                    return false;
-                }
-                if (arr[0] < 0 || arr[0] >= 80 || arr[1] < 0 || arr[1] >= 80) {
-                    return false;
-                }
-                if (arr[2] < -10 || arr[2] > 10) {
-                    return false;
-                }
-                return true;
+            validator: function (v) {
+                return v.length === 3;
             },
-            message: "Array should contain exactly 3 elements. The first and second elements should be between 0 and 79 (inclusive), and the third element should be between -10 and 10 (inclusive).",
+            message: "Array must contain exactly 3 numbers",
         },
     },
     description: {
