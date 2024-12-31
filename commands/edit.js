@@ -55,7 +55,7 @@ async function edit(parsedCommand, user) {
             }
             case `monster`:
             case `npc`:
-                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
+                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria. EDIT MOB instead.`));
             case `mob`: {
                 const zone = await getZoneOfUser(user);
                 if (!zone) {
