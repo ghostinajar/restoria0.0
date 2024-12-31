@@ -75,7 +75,7 @@ async function edit(parsedCommand: IParsedCommand, user: IUser) {
           `messageFor${user.username}`,
           makeMessage(
             `help`,
-            `Monsters and NPCs are considered mobs in Restoria. EDIT MOB instead.`
+            `Monsters and NPCs are considered mobs in Restoria.`
           )
         );
       case `mob`: {
