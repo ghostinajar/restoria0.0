@@ -12,6 +12,12 @@ import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunctio
 
 const { Schema } = mongoose;
 
+export interface IMapTile {
+  character: string;
+  color: string;
+  wallColor: string;
+}
+
 export interface IZone extends mongoose.Document {
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
@@ -19,6 +25,7 @@ export interface IZone extends mongoose.Document {
   history: IHistory;
   description: IDescription;
   rooms: Array<IRoom>;
+  map: Map<[number], IMapTile>;
   mobBlueprints: Array<IMobBlueprint>;
   itemBlueprints: Array<IItemBlueprint>;
   suggestions: Array<ISuggestion>;
@@ -52,6 +59,31 @@ const zoneSchema = new Schema({
       default: () => [],
     },
   ],
+  map: {
+    type: Map,
+    of: {
+      character: String,
+      color: String,
+      wallColor: String,
+    },
+    default: () => new Map(),
+    // Convert array keys to strings when saving
+    set: function (v: Map<[number], IMapTile>) {
+      const convertedMap = new Map();
+      v.forEach((value, key) => {
+        convertedMap.set(JSON.stringify(key), value);
+      });
+      return convertedMap;
+    },
+    // Convert string keys back to arrays when retrieving
+    get: function (v: Map<string, IMapTile>) {
+      const convertedMap = new Map();
+      v.forEach((value, key) => {
+        convertedMap.set(JSON.parse(key), value);
+      });
+      return convertedMap;
+    },
+  },
   mobBlueprints: [
     {
       type: mobBlueprintSchema,

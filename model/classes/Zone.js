@@ -29,6 +29,31 @@ const zoneSchema = new Schema({
             default: () => [],
         },
     ],
+    map: {
+        type: Map,
+        of: {
+            character: String,
+            color: String,
+            wallColor: String,
+        },
+        default: () => new Map(),
+        // Convert array keys to strings when saving
+        set: function (v) {
+            const convertedMap = new Map();
+            v.forEach((value, key) => {
+                convertedMap.set(JSON.stringify(key), value);
+            });
+            return convertedMap;
+        },
+        // Convert string keys back to arrays when retrieving
+        get: function (v) {
+            const convertedMap = new Map();
+            v.forEach((value, key) => {
+                convertedMap.set(JSON.parse(key), value);
+            });
+            return convertedMap;
+        },
+    },
     mobBlueprints: [
         {
             type: mobBlueprintSchema,
