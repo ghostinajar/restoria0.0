@@ -201,7 +201,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       newRoomData.mapCoords[1] > 79 ||
       newRoomData.mapCoords[1] < 0 ||
       newRoomData.mapCoords[2] > 10 ||
-      newRoomData.mapCoords[2] > -10
+      newRoomData.mapCoords[2] < -10
     ) {
       worldEmitter.emit(
         `messageFor${user.username}`,
@@ -210,6 +210,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
           `Sorry, your room couldn't be saved due to a map error. Ralu will look into this ASAP.`
         )
       );
+      throw new Error(`createRoom failed due to invalid mapCoords ${JSON.stringify(newRoomData.mapCoords)}`)
     }
 
     originZone.rooms.push(newRoomData);

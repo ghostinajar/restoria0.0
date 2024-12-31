@@ -132,6 +132,7 @@ async function createRoom(roomFormData, user) {
             default:
                 break;
         }
+        console.log(newRoomData.mapCoords);
         if (newRoomData.mapCoords[0] > 79 ||
             newRoomData.mapCoords[0] < 0 ||
             newRoomData.mapCoords[1] > 79 ||
