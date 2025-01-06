@@ -74,7 +74,7 @@ const roomSchema = new Schema({
             validator: function (v) {
                 return v.length === 3;
             },
-            message: "Array must contain exactly 3 numbers",
+            message: "Array must contain exactly 3 numbers.",
         },
     },
     description: {

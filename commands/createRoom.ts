@@ -193,7 +193,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         )}`
       );
     }
-    originZone.map.set(newRoomData.mapCoords, {
+    originZone.map.set(JSON.stringify(newRoomData.mapCoords), {
       character: "·",
       color: COLOR.WHITE,
       wallColor: COLOR.WHITE,

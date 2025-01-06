@@ -37,29 +37,6 @@ const zoneSchema = new Schema({
             wallColor: String,
         },
         default: () => new Map(),
-        // because mongoose won't store tuple typed keys,
-        // set and get handles conversion for a string key
-        set: function (v) {
-            const convertedMap = new Map();
-            v.forEach((value, key) => {
-                if (Array.isArray(key) && key.length === 3) {
-                    convertedMap.set(JSON.stringify(key), value);
-                }
-            });
-            return convertedMap;
-        },
-        get: function (v) {
-            const convertedMap = new Map();
-            v.forEach((value, key) => {
-                const parsed = JSON.parse(key);
-                if (Array.isArray(parsed) &&
-                    parsed.length === 3 &&
-                    parsed.every((n) => typeof n === "number")) {
-                    convertedMap.set(parsed, value);
-                }
-            });
-            return convertedMap;
-        },
     },
     mobBlueprints: [
         {

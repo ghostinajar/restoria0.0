@@ -118,7 +118,7 @@ async function createRoom(roomFormData, user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Sorry, your room couldn't be saved due to a map error. Ralu will look into this ASAP.`));
             throw new Error(`createRoom failed due to invalid mapCoords ${JSON.stringify(newRoomData.mapCoords)}`);
         }
-        originZone.map.set(newRoomData.mapCoords, {
+        originZone.map.set(JSON.stringify(newRoomData.mapCoords), {
             character: "·",
             color: COLOR.WHITE,
             wallColor: COLOR.WHITE,

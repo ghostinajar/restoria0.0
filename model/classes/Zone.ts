@@ -18,8 +18,6 @@ export interface IMapTile {
   wallColor: string;
 }
 
-export type MapCoordinates = [number, number, number];
-
 export interface IZone extends mongoose.Document {
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
@@ -27,7 +25,7 @@ export interface IZone extends mongoose.Document {
   history: IHistory;
   description: IDescription;
   rooms: Array<IRoom>;
-  map: Map<MapCoordinates, IMapTile>;
+  map: Map<string, IMapTile>;
   mobBlueprints: Array<IMobBlueprint>;
   itemBlueprints: Array<IItemBlueprint>;
   suggestions: Array<ISuggestion>;
@@ -69,31 +67,6 @@ const zoneSchema = new Schema({
       wallColor: String,
     },
     default: () => new Map(),
-    // because mongoose won't store tuple typed keys,
-    // set and get handles conversion for a string key
-    set: function (v: Map<MapCoordinates, IMapTile>) {
-      const convertedMap = new Map();
-      v.forEach((value, key) => {
-        if (Array.isArray(key) && key.length === 3) {
-          convertedMap.set(JSON.stringify(key), value);
-        }
-      });
-      return convertedMap;
-    },
-    get: function (v: Map<string, IMapTile>) {
-      const convertedMap = new Map();
-      v.forEach((value, key) => {
-        const parsed = JSON.parse(key);
-        if (
-          Array.isArray(parsed) &&
-          parsed.length === 3 &&
-          parsed.every((n) => typeof n === "number")
-        ) {
-          convertedMap.set(parsed as MapCoordinates, value);
-        }
-      });
-      return convertedMap;
-    },
   },
   mobBlueprints: [
     {
