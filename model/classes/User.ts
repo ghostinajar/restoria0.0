@@ -8,11 +8,11 @@ import itemSchema, { IItem } from "./Item.js";
 import descriptionSchema, { IDescription } from "./Description.js";
 import locationSchema, { ILocation } from "./Location.js";
 import statBlockSchema, { IStatBlock } from "./StatBlock.js";
-import IRuntimeProps from "../../types/RuntimeProps.js";
 import IEquipped from "../../types/Equipped.js";
 import historySchema, { IHistory } from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
+import IAgentRuntimeProps from "../../types/AgentRuntimeProps.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -59,7 +59,7 @@ export interface IUser extends mongoose.Document {
   equipped: IEquipped;
   affixes: Array<IAffix>;
   editor: mongoose.Types.ObjectId | null;
-  runtimeProps?: IRuntimeProps;
+  runtimeProps?: IAgentRuntimeProps;
   comparePassword(candidatePassword: string): Promise<boolean>;
   calculateMaxHp(): number;
   calculateMaxMp(): number;

@@ -1,10 +1,10 @@
 import { IUser } from "../model/classes/User.js";
-import IRuntimeProps from "../types/RuntimeProps.js";
+import IAgentRuntimeProps from "../types/AgentRuntimeProps.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 function initRuntimePropsForAgent(agent: IUser) {
   try {
-    const runtimeProps: IRuntimeProps = {
+    const runtimeProps: IAgentRuntimeProps = {
       maxHp: agent.calculateMaxHp(),
       currentHp: agent.calculateMaxHp(),
       currentMp: agent.calculateMaxMp(),

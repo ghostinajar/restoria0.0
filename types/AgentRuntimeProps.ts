@@ -1,5 +1,5 @@
-// RuntimeProps
-interface IRuntimeProps {
+// AgentRuntimeProps
+interface IAgentRuntimeProps {
   currentHp: number;
   maxHp: number;
   currentMp: number;
@@ -8,4 +8,4 @@ interface IRuntimeProps {
   maxMv: number;
 }
 
-export default IRuntimeProps;
+export default IAgentRuntimeProps;
