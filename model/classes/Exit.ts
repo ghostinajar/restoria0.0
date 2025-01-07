@@ -8,8 +8,8 @@ const { Schema } = mongoose;
 export interface IExit {
   destinationLocation: ILocation;
   toExternalZone: boolean;
-  isHidden: boolean;
-  isClosed: boolean;
+  hiddenByDefault: boolean;
+  closedByDefault: boolean;
   keyItemBlueprint?: mongoose.Types.ObjectId;
   keyItemZone?: mongoose.Types.ObjectId;
   echoes?: {
@@ -35,11 +35,11 @@ const exitSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    isHidden: {
+    hiddenByDefault: {
       type: Boolean,
       default: false,
     },
-    isClosed: {
+    closedByDefault: {
       type: Boolean,
       default: false,
     },

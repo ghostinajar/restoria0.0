@@ -535,15 +535,15 @@
               </div>
               <div style="display: inline-block; margin: 0; vertical-align: top;">
                 <div class="right-aligned-stacked">
-                  <label for="${direction}IsHidden">Hidden:</label>
-                  <input type="checkbox" id="${direction}IsHidden" ${
-            exitData.isHidden ? "checked" : ""
+                  <label for="${direction}hiddenByDefault">Hidden:</label>
+                  <input type="checkbox" id="${direction}hiddenByDefault" ${
+            exitData.hiddenByDefault ? "checked" : ""
           } />
                 </div>
                 <div class="right-aligned-stacked">
-                  <label for="${direction}IsClosed">Closed:</label>
-                  <input type="checkbox" id="${direction}IsClosed" ${
-            exitData.isClosed ? "checked" : ""
+                  <label for="${direction}closedByDefault">Closed:</label>
+                  <input type="checkbox" id="${direction}closedByDefault" ${
+            exitData.closedByDefault ? "checked" : ""
           } />
                 </div>
               </div>
@@ -567,11 +567,11 @@
             chosenKeyBlueprint = null;
           }
           exitData.keyItemBlueprint = chosenKeyBlueprint;
-          exitData.isHidden = document.getElementById(
-            `${direction}IsHidden`
+          exitData.hiddenByDefault = document.getElementById(
+            `${direction}hiddenByDefault`
           ).checked;
-          exitData.isClosed = document.getElementById(
-            `${direction}IsClosed`
+          exitData.closedByDefault = document.getElementById(
+            `${direction}closedByDefault`
           ).checked;
         }
       });

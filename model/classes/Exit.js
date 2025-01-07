@@ -17,11 +17,11 @@ const exitSchema = new Schema({
         type: Boolean,
         default: false,
     },
-    isHidden: {
+    hiddenByDefault: {
         type: Boolean,
         default: false,
     },
-    isClosed: {
+    closedByDefault: {
         type: Boolean,
         default: false,
     },
