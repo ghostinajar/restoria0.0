@@ -29,15 +29,16 @@ const zoneSchema = new Schema({
             default: () => [],
         },
     ],
-    map: {
-        type: Map,
-        of: {
-            character: String,
-            color: String,
-            wallColor: String,
-        },
-        default: () => new Map(),
-    },
+    // might not need if stored in room.mapTile and map constructed in browser...
+    // map: {
+    //   type: Map,
+    //   of: {
+    //     character: String,
+    //     color: String,
+    //     wallColor: String,
+    //   },
+    //   default: () => new Map(),
+    // },
     mobBlueprints: [
         {
             type: mobBlueprintSchema,

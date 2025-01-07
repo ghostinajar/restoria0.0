@@ -77,6 +77,20 @@ const roomSchema = new Schema({
             message: "Array must contain exactly 3 numbers.",
         },
     },
+    mapTile: {
+        character: {
+            type: String,
+            default: "·",
+        },
+        color: {
+            type: String,
+            default: "white",
+        },
+        wallColor: {
+            type: String,
+            default: "white",
+        },
+    },
     description: {
         type: descriptionSchema,
         default: () => ({}),

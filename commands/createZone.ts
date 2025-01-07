@@ -87,13 +87,14 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
           itemNodes: [],
         },
       ],
-      map: {
-        "[39,39,0]": {
-          character: "·",
-          color: "yellow",
-          wallColor: "white",
-        },
-      },
+      // might not need if stored in room.mapTile and map constructed in browser...
+      // map: {
+      //   "[39,39,0]": {
+      //     character: "·",
+      //     color: "yellow",
+      //     wallColor: "white",
+      //   },
+      // },
       mobBlueprints: [],
       itemBlueprints: [],
       suggestions: [],

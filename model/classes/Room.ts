@@ -25,6 +25,12 @@ export interface IForSale {
   fromZone: mongoose.Types.ObjectId;
 }
 
+export interface IMapTile {
+  character: string;
+  color: string;
+  wallColor: string;
+}
+
 export interface IRoom {
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
@@ -45,6 +51,11 @@ export interface IRoom {
   itemsForSale: Array<IForSale>;
   mountIdForSale: Array<IForSale>;
   mapCoords: [number, number, number];
+  mapTile: {
+    character: string;
+    color: string;
+    wallColor: string;
+  };
   description: IDescription;
   exits: {
     [key: string]: IExit | null | undefined;
@@ -125,6 +136,20 @@ const roomSchema = new Schema<IRoom>({
         return v.length === 3;
       },
       message: "Array must contain exactly 3 numbers.",
+    },
+  },
+  mapTile: {
+    character: {
+      type: String,
+      default: "·",
+    },
+    color: {
+      type: String,
+      default: "white",
+    },
+    wallColor: {
+      type: String,
+      default: "white",
     },
   },
   description: {

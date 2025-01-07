@@ -12,11 +12,12 @@ import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunctio
 
 const { Schema } = mongoose;
 
-export interface IMapTile {
-  character: string;
-  color: string;
-  wallColor: string;
-}
+// might not need if stored in room.mapTile and map constructed in browser...
+// export interface IMapTile {
+//   character: string;
+//   color: string;
+//   wallColor: string;
+// }
 
 export interface IZone extends mongoose.Document {
   _id: mongoose.Types.ObjectId;
@@ -25,7 +26,7 @@ export interface IZone extends mongoose.Document {
   history: IHistory;
   description: IDescription;
   rooms: Array<IRoom>;
-  map: Map<string, IMapTile>;
+  // map: Map<string, IMapTile>; might not need if stored in room.mapTile and map constructed in browser...
   mobBlueprints: Array<IMobBlueprint>;
   itemBlueprints: Array<IItemBlueprint>;
   suggestions: Array<ISuggestion>;
@@ -59,15 +60,16 @@ const zoneSchema = new Schema({
       default: () => [],
     },
   ],
-  map: {
-    type: Map,
-    of: {
-      character: String,
-      color: String,
-      wallColor: String,
-    },
-    default: () => new Map(),
-  },
+  // might not need if stored in room.mapTile and map constructed in browser...
+  // map: {
+  //   type: Map,
+  //   of: {
+  //     character: String,
+  //     color: String,
+  //     wallColor: String,
+  //   },
+  //   default: () => new Map(),
+  // },
   mobBlueprints: [
     {
       type: mobBlueprintSchema,

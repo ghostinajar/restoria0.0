@@ -14,7 +14,6 @@ import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
-import COLOR from "../constants/COLOR.js";
 async function createRoom(roomFormData, user) {
     try {
         if (!roomFormData.direction || roomFormData.direction == ``) {
@@ -59,6 +58,7 @@ async function createRoom(roomFormData, user) {
             itemsForSale: [],
             mountIdForSale: [],
             mapCoords: [...originRoom.mapCoords], // spread to avoid mutation of original
+            mapTile: { character: "·", color: "white", wallColor: "white" },
             description: roomDescription,
             exits: {},
             mobNodes: [],
@@ -118,11 +118,6 @@ async function createRoom(roomFormData, user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage("rejection", `Sorry, your room couldn't be saved due to a map error. Ralu will look into this ASAP.`));
             throw new Error(`createRoom failed due to invalid mapCoords ${JSON.stringify(newRoomData.mapCoords)}`);
         }
-        originZone.map.set(JSON.stringify(newRoomData.mapCoords), {
-            character: "·",
-            color: COLOR.WHITE,
-            wallColor: COLOR.WHITE,
-        });
         originZone.rooms.push(newRoomData);
         await originZone.save();
         await originZone.initRooms();

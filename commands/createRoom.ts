@@ -90,6 +90,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       itemsForSale: [],
       mountIdForSale: [],
       mapCoords: [...originRoom.mapCoords] as [number, number, number], // spread to avoid mutation of original
+      mapTile: {character: "·", color: "white", wallColor: "white"},
       description: roomDescription,
       exits: {},
       mobNodes: [],
@@ -193,11 +194,6 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         )}`
       );
     }
-    originZone.map.set(JSON.stringify(newRoomData.mapCoords), {
-      character: "·",
-      color: COLOR.WHITE,
-      wallColor: COLOR.WHITE,
-    });
 
     originZone.rooms.push(newRoomData);
     await originZone.save();
