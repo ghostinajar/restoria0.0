@@ -49,4 +49,13 @@ const exitSchema = new Schema({
         },
     },
 }, { _id: false });
+exitSchema.methods.initializeRuntimeProperties = function () {
+    this.isClosed = this.closedByDefault;
+    if (this.keyItemBlueprint) {
+        this.isLocked = true;
+    }
+    else {
+        this.isLocked = false;
+    }
+};
 export default exitSchema;
