@@ -9,6 +9,8 @@ function makeExitToRoomId(toRoomId, inZoneId) {
             toExternalZone: false,
             hiddenByDefault: false,
             closedByDefault: false,
+            isClosed: false,
+            isLocked: false,
         };
         return newExit;
     }

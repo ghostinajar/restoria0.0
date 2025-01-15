@@ -16,6 +16,8 @@ function makeExitToRoomId(
       toExternalZone: false,
       hiddenByDefault: false,
       closedByDefault: false,
+      isClosed: false,
+      isLocked: false,
     };
     return newExit;
   } catch (error: unknown) {

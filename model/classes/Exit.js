@@ -25,10 +25,18 @@ const exitSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    isClosed: {
+        type: Boolean,
+        default: false,
+    },
     keyItemBlueprint: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ItemBlueprint",
         default: null,
+    },
+    isLocked: {
+        type: Boolean,
+        default: false,
     },
     keyItemZone: {
         type: Schema.Types.ObjectId,
@@ -49,7 +57,7 @@ const exitSchema = new Schema({
         },
     },
 }, { _id: false });
-exitSchema.methods.initializeRuntimeProperties = function () {
+exitSchema.pre("save", function (next) {
     this.isClosed = this.closedByDefault;
     if (this.keyItemBlueprint) {
         this.isLocked = true;
@@ -57,5 +65,6 @@ exitSchema.methods.initializeRuntimeProperties = function () {
     else {
         this.isLocked = false;
     }
-};
+    next();
+});
 export default exitSchema;

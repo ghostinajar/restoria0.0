@@ -18,8 +18,8 @@ export interface IExit {
     close?: IEcho;
   };
   // Runtime only
-  isClosed?: boolean;
-  isLocked?: boolean;
+  isClosed: boolean;
+  isLocked: boolean;
 }
 
 const exitSchema = new Schema<IExit>(
@@ -46,10 +46,18 @@ const exitSchema = new Schema<IExit>(
       type: Boolean,
       default: false,
     },
+    isClosed: {
+      type: Boolean,
+      default: false,
+    },
     keyItemBlueprint: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ItemBlueprint",
       default: null,
+    },
+    isLocked: {
+      type: Boolean,
+      default: false,
     },
     keyItemZone: {
       type: Schema.Types.ObjectId,
@@ -73,13 +81,14 @@ const exitSchema = new Schema<IExit>(
   { _id: false }
 );
 
-exitSchema.methods.initializeRuntimeProperties = function () {
+exitSchema.pre("save", function (next) {
   this.isClosed = this.closedByDefault;
   if (this.keyItemBlueprint) {
     this.isLocked = true;
   } else {
     this.isLocked = false;
   }
-};
+  next();
+});
 
 export default exitSchema;
