@@ -78,6 +78,18 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
   }
 };
 
+export const mapTileStateForUserHandler = async (
+  mapTileState: string,
+  socket: any
+) => {
+  try {
+    console.log(mapTileState);
+    socket.emit(`mapTileState`, mapTileState);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`mapTileStateForUserHandler`, error);
+  }
+}
+
 export const messageArrayForUserHandler = async (
   messageArray: Array<IMessage>,
   socket: any

@@ -13,6 +13,7 @@ import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import { IDescription } from "./model/classes/Description.js";
 import {
   formPromptForUserHandler,
+  mapTileStateForUserHandler,
   messageArrayForUserHandler,
   messageForUserHandler,
   messageForUsersRoomHandler,
@@ -72,6 +73,7 @@ const setupSocket = (io: any) => {
 
       // Remove existing event listeners for the user before adding new ones
       worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
+      worldEmitter.removeAllListeners(`mapTileStateFor${user.username}`);
       worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
       worldEmitter.removeAllListeners(`messageFor${user.username}`);
       worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
@@ -86,6 +88,12 @@ const setupSocket = (io: any) => {
           formPromptForUserHandler(formData, socket);
         }
       );
+      worldEmitter.on(
+        `mapTileStateFor${user.username}`,
+        async (mapTileState: any) => {
+          mapTileStateForUserHandler(mapTileState, socket);
+        }
+      )
       worldEmitter.on(
         `messageArrayFor${user.username}`,
         async (messageArray: Array<IMessage>) => {

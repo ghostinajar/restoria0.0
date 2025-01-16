@@ -25,6 +25,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import bugs from "../commands/bugs.js";
 import updates from "../commands/updates.js";
 import studyresearch from "../commands/studyresearch.js";
+import map from "../commands/map.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -82,6 +83,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `help`: {
         help(parsedCommand, user);
+        break;
+      }
+      case `map` : {
+        await map(user);
         break;
       }
       case `n`:

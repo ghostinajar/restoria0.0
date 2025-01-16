@@ -68,6 +68,10 @@
         window.location.href = "/login";
       });
 
+      socket.on("mapTileState", (mapTileState) => {
+        console.log(mapTileState);
+      });
+
       socket.on("message", (message) => {
         appendMessageToTerminal(message);
       });
