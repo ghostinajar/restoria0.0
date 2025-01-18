@@ -43,6 +43,7 @@
       <%- include('erase_room_form'); %> 
       <%- include('erase_zone_form'); %> 
       <%- include('goto_form'); %> 
+      <%- include('map'); %>
       <%- include('suggest_form'); %> 
       <%- include('suggestions_form'); %>
     </div>
@@ -63,17 +64,13 @@
         });
       });
 
+      socket.on("message", (message) => {
+        appendMessageToTerminal(message);
+      });
+
       socket.on("redirectToLogin", () => {
         socket.disconnect();
         window.location.href = "/login";
-      });
-
-      socket.on("mapTileState", (mapTileState) => {
-        console.log(mapTileState);
-      });
-
-      socket.on("message", (message) => {
-        appendMessageToTerminal(message);
       });
 
       socket.on("safeMessage", (message) => {

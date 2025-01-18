@@ -37,7 +37,7 @@ async function map(user) {
                 mapTileState[direction] = "wall";
             }
         });
-        worldEmitter.emit(`mapTileStateFor${user.username}`, mapTileState);
+        worldEmitter.emit(`mapRequestFor${user.username}`, mapTileState);
     }
     catch (error) {
         catchErrorHandlerForFunction(`map`, error, user?.name);

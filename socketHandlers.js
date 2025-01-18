@@ -57,13 +57,13 @@ export const formPromptForUserHandler = async (formData, socket) => {
         }
     }
 };
-export const mapTileStateForUserHandler = async (mapTileState, socket) => {
+export const mapRequestForUserHandler = async (mapTileState, socket) => {
     try {
         console.log(mapTileState);
-        socket.emit(`mapTileState`, mapTileState);
+        socket.emit(`mapRequest`, mapTileState);
     }
     catch (error) {
-        catchErrorHandlerForFunction(`mapTileStateForUserHandler`, error);
+        catchErrorHandlerForFunction(`mapRequestForUserHandler`, error);
     }
 };
 export const messageArrayForUserHandler = async (messageArray, socket) => {

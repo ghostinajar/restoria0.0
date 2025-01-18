@@ -13,7 +13,7 @@ import userSentCommandHandler from "./util/userSentCommandHandler.js";
 import { IDescription } from "./model/classes/Description.js";
 import {
   formPromptForUserHandler,
-  mapTileStateForUserHandler,
+  mapRequestForUserHandler,
   messageArrayForUserHandler,
   messageForUserHandler,
   messageForUsersRoomHandler,
@@ -89,11 +89,12 @@ const setupSocket = (io: any) => {
         }
       );
       worldEmitter.on(
-        `mapTileStateFor${user.username}`,
+        `mapRequestFor${user.username}`,
         async (mapTileState: any) => {
-          mapTileStateForUserHandler(mapTileState, socket);
+          mapRequestForUserHandler(mapTileState, socket);
         }
-      )
+      );
+
       worldEmitter.on(
         `messageArrayFor${user.username}`,
         async (messageArray: Array<IMessage>) => {
