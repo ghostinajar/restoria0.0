@@ -54,6 +54,7 @@ import { purifyCommandInput } from "./util/purify.js";
 import { ILocation } from "./model/classes/Location.js";
 import { ISuggestion, refersToObjectType } from "./model/classes/Suggestion.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
+import { IMapTileState } from "./commands/map.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -90,8 +91,8 @@ const setupSocket = (io: any) => {
       );
       worldEmitter.on(
         `mapRequestFor${user.username}`,
-        async (mapTileState: any) => {
-          mapRequestForUserHandler(mapTileState, socket);
+        async (zoneFloorName: string, mapTileState: IMapTileState) => {
+          mapRequestForUserHandler(zoneFloorName, mapTileState, socket);
         }
       );
 

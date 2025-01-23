@@ -8,21 +8,24 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 
 export interface IMapTileState {
-  zone: string;
   mapCoords: [number, number, number];
   mapTile: {
     character: string;
     color: string;
     wallColor: string;
   };
-  north: string;
-  east: string;
-  south: string;
-  west: string;
+  walls: {
+    north: string;
+    east: string;
+    south: string;
+    west: string;
+    [key: string]: string;
+  };
   [key: string]:
     | string
     | [number, number, number]
-    | { character: string; color: string; wallColor: string };
+    | { character: string; color: string; wallColor: string }
+    | { north: string; east: string; south: string; west: string };
 }
 
 async function map(user: IUser) {
@@ -36,29 +39,36 @@ async function map(user: IUser) {
       throw new Error("map command couldn't find user's zone.");
     }
 
+    const zoneFloorName = `${zone.name} Floor ${room.mapCoords[2]}`
+
     const mapTileState: IMapTileState = {
-      zone: zone.name,
       mapCoords: room.mapCoords,
       mapTile: room.mapTile,
-      north: "?",
-      east: "?",
-      south: "?",
-      west: "?",
+      walls: {
+        north: "?",
+        east: "?",
+        south: "?",
+        west: "?",
+      },
     };
-    const directions = ["north", "east", "south", "west"];
 
+    // populate walls
+    const directions = ["north", "east", "south", "west"];
     directions.forEach((direction) => {
       if (room.exits[direction]) {
         if (room.exits[direction].isClosed) {
-          mapTileState[direction] = "closed";
+          mapTileState.walls[direction] = "closed";
         } else {
-          mapTileState[direction] = "open";
+          mapTileState.walls[direction] = "open";
+        }
+        if (room.exits[direction].hiddenByDefault) {
+          mapTileState.walls[direction] = "wall";
         }
       } else {
-        mapTileState[direction] = "wall";
+        mapTileState.walls[direction] = "wall";
       }
     });
-    worldEmitter.emit(`mapRequestFor${user.username}`, mapTileState);
+    worldEmitter.emit(`mapRequestFor${user.username}`, zoneFloorName, mapTileState);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`map`, error, user?.name);
   }

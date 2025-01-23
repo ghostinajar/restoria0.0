@@ -1,154 +1,196 @@
 <!-- map -->
-<div id="map" class="sideForm" style="display: none"></div>
+<div id="mapDiv" class="sideForm" style="display: none"></div>
 
 <script>
   let db;
-  let zoneCache = {};
+  let mapDiv = document.getElementById("mapDiv");
+  let mapCache = {
+    zoneFloorName: "",
+    mapTileStates: {},
+  };
 
-  // Open (or create) the database
-  let request = indexedDB.open("restoria", 1);
+  function initiateDB() {
+    return new Promise((resolve, reject) => {
+      let request = indexedDB.open("restoria", 1);
 
-  request.onupgradeneeded = function (event) {
-    db = event.target.result;
-    // Create an object store for explored zones
-    let objectStore = db.createObjectStore("exploredZones", {
-      keyPath: "zoneFloor",
+      request.onupgradeneeded = function (event) {
+        db = event.target.result;
+        let objectStore = db.createObjectStore("zoneFloorMaps", {
+          keyPath: "zoneFloorName",
+        });
+        objectStore.createIndex("zoneFloorName", "zoneFloorName", {
+          unique: true,
+        });
+      };
+
+      request.onsuccess = function (event) {
+        db = event.target.result;
+        resolve(db);
+      };
+
+      request.onerror = function (event) {
+        console.error("Database error:", event.target.error);
+        reject(event.target.error);
+      };
     });
-    objectStore.createIndex("zoneFloorIndex", "zoneFloor", { unique: true });
-  };
+  }
+  initiateDB();
 
-  request.onsuccess = function (event) {
-    db = event.target.result;
-    console.log("Database initialized!");
-  };
-
-  function handleMapTileState(mapTileState) {
+  async function loadMapByName(zoneFloorName) {
     if (!db) {
       console.error("Database not initialized.");
       return;
     }
 
-    if (!mapTileState.zone || !Array.isArray(mapTileState.mapCoords)) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(["zoneFloorMaps"], "readonly");
+      const objectStore = transaction.objectStore("zoneFloorMaps");
+      const getRequest = objectStore.get(zoneFloorName);
+
+      getRequest.onsuccess = function (event) {
+        let zoneFloorMap = event.target.result;
+        if (!zoneFloorMap || !zoneFloorMap.zoneFloorName || !zoneFloorMap.mapTileStates) {
+          zoneFloorMap = {
+            zoneFloorName: zoneFloorName,
+            mapTileStates: {},
+          };
+        }
+        console.log("loadMapByName putting zoneFloorMap to cache:", zoneFloorMap);
+        mapCache = zoneFloorMap;
+        resolve(mapCache);
+      };
+
+      getRequest.onerror = function (event) {
+        console.error("Error loading map:", event.target.error);
+        mapCache = {
+          zoneFloorName: zoneFloorName,
+          mapTileStates: {},
+        };
+        reject(event.target.error);
+      };
+    });
+  }
+
+  async function saveMap() {
+    if (!db) {
+      console.error("Database not initialized.");
+      return;
+    }
+
+    console.log("saveMap trying to save to db:", db);
+    console.log(
+      "saveMap trying to save mapCache for zoneFloorName:",
+      mapCache.zoneFloorName
+    );
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(["zoneFloorMaps"], "readwrite");
+      const objectStore = transaction.objectStore("zoneFloorMaps");
+      const putRequest = objectStore.put(mapCache);
+
+      putRequest.onsuccess = function (event) {
+        console.log("Map saved successfully to objectStore:", objectStore);
+        resolve();
+      };
+
+      putRequest.onerror = function (event) {
+        console.error("Error saving map:", event.target.error);
+        reject(event.target.error);
+      };
+    });
+  }
+
+  function putMapTileStateInCache(mapTileState) {
+    if (!mapTileState || !mapTileState.mapCoords) {
+      console.error("Invalid mapTileState:", mapTileState);
+      return;
+    }
+
+    mapCache.mapTileStates[mapTileState.mapCoords.join(",")] = mapTileState;
+  }
+
+  function populateMap(userMapCoords) {
+    if (!userMapCoords) {
+      console.error("Invalid mapCoords:", userMapCoords);
+      return;
+    }
+
+    mapDiv.innerHTML = ""; // Clear previous map
+
+    // display mapCache.zoneFloorName centered above the map
+    let zoneFloorNameDiv = document.createElement("div");
+    zoneFloorNameDiv.style.position = "absolute";
+    zoneFloorNameDiv.style.top = "20px";
+    zoneFloorNameDiv.style.left = "50%";
+    zoneFloorNameDiv.style.transform = "translateX(-50%)";
+    zoneFloorNameDiv.style.color = "white";
+    zoneFloorNameDiv.innerText = mapCache.zoneFloorName || "Unknown Zone Name";
+    mapDiv.appendChild(zoneFloorNameDiv);
+
+    // with userMapCoords in the center, display map tiles
+    let mapRadius = 8;
+    for (let i = -mapRadius; i <= mapRadius; i++) {
+      for (let j = -mapRadius; j <= mapRadius; j++) {
+        let mapTileCoords = [userMapCoords[0] + i, userMapCoords[1] + j];
+        let mapTileState = mapCache.mapTileStates[mapTileCoords.join(",")];
+        if (!mapTileState) {
+          mapTileState = {
+            mapCoords: mapTileCoords,
+            mapTile: {
+              character: "",
+              color: "black",
+              wallColor: "black",
+            },
+            walls: {
+              north: "open",
+              east: "open",
+              south: "open",
+              west: "open",
+            },
+          };
+        }
+
+        let mapTile = document.createElement("div");
+        mapTile.style.width = "2rem";
+        mapTile.style.height = "2rem";
+        mapTile.style.display = "inline-block";
+        mapTile.style.color = mapTileState.mapTile.color;
+        mapTile.innerText = mapTileState.mapTile.character;
+        // set mapTile borders based on mapTileState.walls values being "open" (no border), "wall" (single line), or "closed" (double line)
+        const wallStyles = {
+          open: "none",
+          wall: `1px solid ${mapTileState.mapTile.wallColor}`,
+          closed: `2px solid ${mapTileState.mapTile.wallColor}`,
+        };
+        mapTile.style.borderTop = wallStyles[mapTileState.walls.north];
+        mapTile.style.borderRight = wallStyles[mapTileState.walls.east];
+        mapTile.style.borderBottom = wallStyles[mapTileState.walls.south];
+        mapTile.style.borderLeft = wallStyles[mapTileState.walls.west];
+        mapDiv.appendChild(mapTile);
+      }
+      mapDiv.appendChild(document.createElement("br"));
+    }
+  }
+
+  socket.on("mapRequest", async function (zoneFloorName, mapTileState) {
+    console.log("mapRequest received:", zoneFloorName, mapTileState);
+    if (!zoneFloorName || !mapTileState) {
       console.error("Invalid mapTileState data:", mapTileState);
       return;
     }
 
-    let zone = mapTileState.zone;
-    let mapCoords = mapTileState.mapCoords.join(',');
-    let floor = mapTileState.mapCoords[2];
-    let zoneFloor = `${zone} Floor ${floor}`;
-
-    // Remove redundant properties
-    delete mapTileState.zone;
-    delete mapTileState.mapCoords;
-
-    // Update the in-memory cache
-    if (!zoneCache[zoneFloor]) {
-      zoneCache[zoneFloor] = { zoneFloor: zoneFloor, map: {} };
-    }
-    zoneCache[zoneFloor].map[mapCoords] = mapTileState;
-
-    // Ensure the zoneFloor property is set correctly
-    zoneCache[zoneFloor].zoneFloor = zoneFloor;
-
-    // Initiate a transaction on "exploredZones" with readwrite privs
-    let transaction = db.transaction(["exploredZones"], "readwrite");
-    let objectStore = transaction.objectStore("exploredZones");
-
-    // Store the updated zone data
-    let putRequest = objectStore.put(zoneCache[zoneFloor]);
-
-    putRequest.onsuccess = function (event) {
-      console.log("mapTileState updated for zoneFloor:", zoneFloor, mapCoords);
-    };
-
-    putRequest.onerror = function (event) {
-      console.error("Error updating mapTileState:", event.target.error);
-    };
-
-    transaction.oncomplete = function () {
-      console.log("Transaction completed successfully.");
-    };
-
-    transaction.onerror = function (event) {
-      console.error("Transaction error:", event.target.error);
-    };
-  }
-
-  function displayMap(zone, floor) {
-    if (!db) {
-      console.error("Database not initialized.");
-      return;
+    if (mapCache.zoneFloorName !== zoneFloorName) {
+      console.log("zoneFloorName mismatch, loading new map:", zoneFloorName);
+      if (mapCache.zoneFloorName) {
+        await saveMap();
+      }
+      await loadMapByName(zoneFloorName);
+      console.log("mapCache after loadMapByName:", mapCache);
     }
 
-    let zoneFloor = `${zone} Floor ${floor}`;
-    let zoneData = zoneCache[zoneFloor];
-    if (!zoneData) {
-      console.error("No data found for zoneFloor:", zoneFloor);
-      return;
-    }
-
-    let mapDiv = document.getElementById("map");
-    mapDiv.innerHTML = ""; // Clear previous map
-
-    for (let mapCoords in zoneData.map) {
-      let mapTileState = zoneData.map[mapCoords];
-      let tileDiv = document.createElement("div");
-      tileDiv.className = "map-tile";
-      tileDiv.style.position = "absolute";
-      tileDiv.style.left = `${mapCoords.split(',')[0] * 50}px`;
-      tileDiv.style.top = `${mapCoords.split(',')[1] * 50}px`;
-      tileDiv.style.width = "50px";
-      tileDiv.style.height = "50px";
-      tileDiv.style.border = `1px solid ${mapTileState.mapTile.wallColor}`;
-      tileDiv.style.color = mapTileState.mapTile.color;
-      tileDiv.innerText = mapTileState.mapTile.character;
-
-      // Add borders based on directions
-      if (mapTileState.north === "wall") {
-        tileDiv.style.borderTop = `1px solid ${mapTileState.mapTile.wallColor}`;
-      } else if (mapTileState.north === "closed") {
-        tileDiv.style.borderTop = `2px solid ${mapTileState.mapTile.wallColor}`;
-      } else {
-        tileDiv.style.borderTop = "none";
-      }
-
-      if (mapTileState.east === "wall") {
-        tileDiv.style.borderRight = `1px solid ${mapTileState.mapTile.wallColor}`;
-      } else if (mapTileState.east === "closed") {
-        tileDiv.style.borderRight = `2px solid ${mapTileState.mapTile.wallColor}`;
-      } else {
-        tileDiv.style.borderRight = "none";
-      }
-
-      if (mapTileState.south === "wall") {
-        tileDiv.style.borderBottom = `1px solid ${mapTileState.mapTile.wallColor}`;
-      } else if (mapTileState.south === "closed") {
-        tileDiv.style.borderBottom = `2px solid ${mapTileState.mapTile.wallColor}`;
-      } else {
-        tileDiv.style.borderBottom = "none";
-      }
-
-      if (mapTileState.west === "wall") {
-        tileDiv.style.borderLeft = `1px solid ${mapTileState.mapTile.wallColor}`;
-      } else if (mapTileState.west === "closed") {
-        tileDiv.style.borderLeft = `2px solid ${mapTileState.mapTile.wallColor}`;
-      } else {
-        tileDiv.style.borderLeft = "none";
-      }
-
-      mapDiv.appendChild(tileDiv);
-    }
-
-    mapDiv.style.display = "block"; // Show the map
-  }
-
-  socket.on("mapTileState", function (mapTileState) {
-    handleMapTileState(mapTileState);
-  });
-
-  socket.on("mapRequest", function (mapTileState) {
-    handleMapTileState(mapTileState);
-    displayMap(mapTileState.zone, mapTileState.mapCoords[2]);
+    putMapTileStateInCache(mapTileState);
+    console.log("mapCache after putMapTileStateInCache:", mapCache);
+    populateMap(mapTileState.mapCoords);
+    resetActiveFormTo(mapDiv);
   });
 </script>

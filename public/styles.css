@@ -332,6 +332,15 @@ ul {
   z-index: 1000;
 }
 
+.zone-floor-name {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 20px;
+}
+
 #commandSend {
   margin-left: 0.5rem;
 }

@@ -43,6 +43,7 @@ import saveSuggestions from "./commands/saveSuggestions.js";
 import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
+import { IMapTileState } from "./commands/map.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
@@ -79,12 +80,12 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
 };
 
 export const mapRequestForUserHandler = async (
-  mapTileState: string,
+  zoneFloorName: string,
+  mapTileState: IMapTileState,
   socket: any
 ) => {
   try {
-    console.log(mapTileState);
-    socket.emit(`mapRequest`, mapTileState);
+    socket.emit(`mapRequest`, zoneFloorName, mapTileState);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`mapRequestForUserHandler`, error);
   }
