@@ -28,14 +28,19 @@ const setupSocket = (io) => {
                 return;
             }
             // Remove existing event listeners for the user before adding new ones
-            worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
-            worldEmitter.removeAllListeners(`mapTileStateFor${user.username}`);
-            worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
-            worldEmitter.removeAllListeners(`messageFor${user.username}`);
-            worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
-            worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
-            worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
-            worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
+            function removeAllListenersForUser(user) {
+                worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
+                worldEmitter.removeAllListeners(`mapRequestFor${user.username}`);
+                worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
+                worldEmitter.removeAllListeners(`messageFor${user.username}`);
+                worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
+                worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
+                worldEmitter.removeAllListeners(`safeMessageArrayFor${user.username}`);
+                worldEmitter.removeAllListeners(`safeMessageFor${user.username}`);
+                worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
+                worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
+            }
+            removeAllListenersForUser(user);
             // Listen for game events
             worldEmitter.on(`formPromptFor${user.username}`, async (formData) => {
                 formPromptForUserHandler(formData, socket);
@@ -46,20 +51,20 @@ const setupSocket = (io) => {
             worldEmitter.on(`messageArrayFor${user.username}`, async (messageArray) => {
                 messageArrayForUserHandler(messageArray, socket);
             });
-            worldEmitter.on(`safeMessageArrayFor${user.username}`, async (messageArray) => {
-                safeMessageArrayForUserHandler(messageArray, socket);
-            });
             worldEmitter.on(`messageFor${user.username}`, async (message) => {
                 messageForUserHandler(message, socket);
-            });
-            worldEmitter.on(`safeMessageFor${user.username}`, async (message) => {
-                safeMessageForUserHandler(message, socket);
             });
             worldEmitter.on(`messageFor${user.username}sRoom`, async (message) => {
                 messageForUsersRoomHandler(message, socket, user);
             });
             worldEmitter.on(`messageFor${user.username}sZone`, async (message) => {
                 messageForUsersZoneHandler(message, socket, user);
+            });
+            worldEmitter.on(`safeMessageArrayFor${user.username}`, async (messageArray) => {
+                safeMessageArrayForUserHandler(messageArray, socket);
+            });
+            worldEmitter.on(`safeMessageFor${user.username}`, async (message) => {
+                safeMessageForUserHandler(message, socket);
             });
             worldEmitter.on(`user${user.username}LeavingGame`, async (user) => {
                 userXLeavingGameHandler(user, socket);
@@ -140,13 +145,7 @@ const setupSocket = (io) => {
                     // Then, zonemanager will alert userManager to remove user from users map
                     worldEmitter.emit(`socketDisconnectedUser`, user);
                     // Remove existing event listeners for user
-                    worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
-                    worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
-                    worldEmitter.removeAllListeners(`messageFor${user.username}`);
-                    worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
-                    worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
-                    worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
-                    worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
+                    removeAllListenersForUser(user);
                 }
                 catch (error) {
                     catchErrorHandlerForFunction(`socket.on('disconnect')`, error, user?.name);
