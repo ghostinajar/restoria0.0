@@ -67,17 +67,15 @@
       });
 
     socket.on("openSuggestForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = suggestForm;
-
       refersToObjectType = formData.refersToObjectType;
       generateStringSelectOptions(formData.names, suggestSelect);
-      if (formData.refersToObjectType === "item" || formData.refersToObjectType === "mob") {
+      if (
+        formData.refersToObjectType === "item" ||
+        formData.refersToObjectType === "mob"
+      ) {
         suggestSelect.value = formData.defaultOption;
       }
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(suggestForm);
     });
   });
 </script>

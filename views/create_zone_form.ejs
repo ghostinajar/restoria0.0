@@ -113,11 +113,7 @@
       });
 
     socket.on("openCreateZoneForm", () => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = createZoneForm;
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(createZoneForm);
     });
   });
 </script>

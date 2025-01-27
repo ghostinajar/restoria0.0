@@ -46,13 +46,15 @@
     <script>
       const messagesContainer = document.getElementById("messagesContainer");
       const messages = document.getElementById("messages");
-      let activeForm = editUserForm;
+      let activeSideBarElement = editUserForm;
 
-      function resetActiveFormTo(form) {
-        activeForm.reset();
-        activeForm.style.display = "none";
-        activeForm = form;
-        activeForm.style.display = "block";
+      function resetActiveSidebarElementTo(element) {
+        if (activeSideBarElement.tagName === "FORM") {
+          activeSideBarElement.reset();
+        }
+        activeSideBarElement.style.display = "none";
+        activeSideBarElement = element;
+        activeSideBarElement.style.display = "block";
         input.value = "";
       }
 

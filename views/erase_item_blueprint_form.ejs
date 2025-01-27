@@ -63,12 +63,12 @@
 
     eraseItemBlueprintForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      if ((itemBlueprintNames.length === 1)) {
+      if (itemBlueprintNames.length === 1) {
         appendMessageToTerminal({
           type: "rejection",
           content: "Don't erase your last itemBlueprint!",
         });
-        activeForm.style = "display: none";
+        activeSideBarElement.style = "display: none";
         return;
       }
       const selectedOption =
@@ -94,16 +94,12 @@
       });
 
     socket.on("openEraseItemBlueprintForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = eraseItemBlueprintForm;
       itemBlueprintNames = formData.itemBlueprintNames;
       generateStringSelectOptions(
         formData.itemBlueprintNames,
         eraseItemSelectItem
       );
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(eraseItemBlueprintForm);
     });
   });
 </script>

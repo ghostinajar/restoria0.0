@@ -111,11 +111,7 @@
       });
 
     socket.on("openEditZoneForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = editZoneForm;
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(editZoneForm);
       // Set the values of the fields based on formData
       zoneId = formData.zoneId;
       editZoneName.value = formData.name || "";

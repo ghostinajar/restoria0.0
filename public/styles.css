@@ -244,6 +244,14 @@ ul {
   overflow: auto;
 }
 
+.zone-floor-name {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+}
+
 .tabs {
   display: flex;
   justify-content: flex-start;

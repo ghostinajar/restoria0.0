@@ -75,11 +75,7 @@
       });
 
     socket.on("openEditUserForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = editUserForm;
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(editUserForm);
       // Set the values of the textareas based on formData
       editUserExamineUser.value = formData.examine || "";
       editUserStudyUser.value = formData.study || "";

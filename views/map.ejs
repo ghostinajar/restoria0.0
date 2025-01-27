@@ -11,7 +11,11 @@
 
   function initiateDB() {
     return new Promise((resolve, reject) => {
-      let request = indexedDB.open("restoria", 1);
+      const request = indexedDB.open("restoria", 1);
+
+      request.onerror = (event) => {
+        reject(`Database error: ${event.target.error}`);
+      };
 
       request.onupgradeneeded = function (event) {
         db = event.target.result;
@@ -23,14 +27,20 @@
         });
       };
 
-      request.onsuccess = function (event) {
+      request.onsuccess = (event) => {
         db = event.target.result;
-        resolve(db);
-      };
 
-      request.onerror = function (event) {
-        console.error("Database error:", event.target.error);
-        reject(event.target.error);
+        // Handle database connection errors
+        db.onerror = (event) => {
+          console.error("Database error:", event.target.error);
+        };
+
+        // Handle connection closing
+        window.addEventListener("beforeunload", () => {
+          db.close();
+        });
+
+        resolve(db);
       };
     });
   }
@@ -49,13 +59,20 @@
 
       getRequest.onsuccess = function (event) {
         let zoneFloorMap = event.target.result;
-        if (!zoneFloorMap || !zoneFloorMap.zoneFloorName || !zoneFloorMap.mapTileStates) {
+        if (
+          !zoneFloorMap ||
+          !zoneFloorMap.zoneFloorName ||
+          !zoneFloorMap.mapTileStates
+        ) {
           zoneFloorMap = {
             zoneFloorName: zoneFloorName,
             mapTileStates: {},
           };
         }
-        console.log("loadMapByName putting zoneFloorMap to cache:", zoneFloorMap);
+        console.log(
+          "loadMapByName putting zoneFloorMap to cache:",
+          zoneFloorMap
+        );
         mapCache = zoneFloorMap;
         resolve(mapCache);
       };
@@ -119,11 +136,7 @@
 
     // display mapCache.zoneFloorName centered above the map
     let zoneFloorNameDiv = document.createElement("div");
-    zoneFloorNameDiv.style.position = "absolute";
-    zoneFloorNameDiv.style.top = "20px";
-    zoneFloorNameDiv.style.left = "50%";
-    zoneFloorNameDiv.style.transform = "translateX(-50%)";
-    zoneFloorNameDiv.style.color = "white";
+    zoneFloorNameDiv.classList.add("zone-floor-name");
     zoneFloorNameDiv.innerText = mapCache.zoneFloorName || "Unknown Zone Name";
     mapDiv.appendChild(zoneFloorNameDiv);
 
@@ -180,17 +193,20 @@
     }
 
     if (mapCache.zoneFloorName !== zoneFloorName) {
-      console.log("zoneFloorName mismatch, loading new map:", zoneFloorName);
+      console.log(
+        "Received a mapTileState from a different zone, loading new map:",
+        zoneFloorName
+      );
       if (mapCache.zoneFloorName) {
         await saveMap();
       }
       await loadMapByName(zoneFloorName);
       console.log("mapCache after loadMapByName:", mapCache);
     }
-
-    putMapTileStateInCache(mapTileState);
+    await new Promise((resolve) => setTimeout(resolve, 1));
     console.log("mapCache after putMapTileStateInCache:", mapCache);
-    populateMap(mapTileState.mapCoords);
-    resetActiveFormTo(mapDiv);
+    await new Promise((resolve) => setTimeout(resolve, 1));
+
+    resetActiveSidebarElementTo(mapDiv);
   });
 </script>

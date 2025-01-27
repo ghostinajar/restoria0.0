@@ -39,11 +39,7 @@
       });
 
     socket.on("openCreateExitForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = createExitForm;
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(createExitForm);
 
       // Update the direction select element
       directionSelect.innerHTML = ""; // Clear existing options

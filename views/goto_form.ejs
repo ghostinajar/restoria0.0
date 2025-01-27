@@ -57,25 +57,23 @@
       });
 
     socket.on("openGotoForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = gotoForm;
       zoneNames = formData.zoneNames;
       generateStringSelectOptions(zoneNames, gotoSelectZone);
       generateStringSelectOptions(zoneNames[0].roomNames, gotoSelectRoom);
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(gotoForm);
     });
 
     gotoSelectZone.addEventListener("change", function (event) {
-  const selectedZoneId = gotoSelectZone.value;
-  const selectedZone = zoneNames.find((zone) => zone._id === selectedZoneId); 
-  
-  gotoSelectRoom.innerHTML = '';
+      const selectedZoneId = gotoSelectZone.value;
+      const selectedZone = zoneNames.find(
+        (zone) => zone._id === selectedZoneId
+      );
 
-  if (selectedZone && selectedZone.roomNames) {
-    generateStringSelectOptions(selectedZone.roomNames, gotoSelectRoom);
-  }
-});
+      gotoSelectRoom.innerHTML = "";
+
+      if (selectedZone && selectedZone.roomNames) {
+        generateStringSelectOptions(selectedZone.roomNames, gotoSelectRoom);
+      }
+    });
   });
 </script>

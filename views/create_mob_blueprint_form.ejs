@@ -131,11 +131,7 @@
       });
 
     socket.on("opencreateMobBlueprintForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = createMobBlueprintForm;
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(createMobBlueprintForm);
     });
   });
 </script>

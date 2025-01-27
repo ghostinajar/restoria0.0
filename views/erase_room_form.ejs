@@ -61,12 +61,12 @@
 
     eraseRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      if ((exitNames.length === 1)) {
+      if (exitNames.length === 1) {
         appendMessageToTerminal({
           type: "rejection",
           content: "Don't orphan this room by deleting its last neighbor!",
         });
-        activeForm.style = "display: none";
+        activeSideBarElement.style = "display: none";
         return;
       }
       const selectedOption =
@@ -88,16 +88,12 @@
       });
 
     socket.on("openEraseRoomForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = eraseRoomForm;
       exitNames = formData.exitNames;
       generateStringSelectOptions(
         formData.exitNames,
         document.getElementById("eraseRoomSelectRoom")
       );
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(eraseRoomForm);
     });
   });
 </script>

@@ -45,11 +45,7 @@
       });
 
     socket.on("openEraseZoneForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = eraseZoneForm;
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(eraseZoneForm);
     });
   });
 </script>

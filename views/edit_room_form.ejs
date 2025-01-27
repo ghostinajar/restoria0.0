@@ -464,13 +464,8 @@
       generateStringSelectOptions(mobBlueprints, editRoomMobNodeSelect);
       generateStringSelectOptions(itemBlueprints, editRoomItemNodeSelect);
 
-      // reset/hide open forms, show editRoomForm
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = editRoomForm;
-      activeForm.style.display = "block";
+      resetActiveSidebarElementTo(editRoomForm);      
       document.querySelector("#editRoomDescriptionTab").click();
-      input.value = "";
 
       // preset the values of the fields with data from server
       document.getElementById("roomId").textContent =

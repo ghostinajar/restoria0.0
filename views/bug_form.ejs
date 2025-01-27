@@ -1,10 +1,5 @@
 <!-- bug_form -->
-<form
-  id="bugForm"
-  class="sideForm"
-  style="display: none"
-  autocomplete="off"
->
+<form id="bugForm" class="sideForm" style="display: none" autocomplete="off">
   <ul>
     <li>
       <a class="cancelButton" id="cancelBugForm"> Cancel </a>
@@ -18,7 +13,7 @@
         id="bugDescription"
         name="bugDescription"
         maxlength="6400"
-        style="height:10rem;"
+        style="height: 10rem"
         required
       ></textarea>
     </li>
@@ -26,7 +21,7 @@
 
   <ul>
     <li>
-      <button type="submit" style="margin-left: 0;">Submit Bug Report</button>
+      <button type="submit" style="margin-left: 0">Submit Bug Report</button>
     </li>
   </ul>
 </form>
@@ -51,11 +46,7 @@
       });
 
     socket.on("openBugForm", () => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = bugForm;
-      activeForm.style.display = "block";
-      input.value = "";
+      resetActiveSidebarElementTo(bugForm);
     });
   });
 </script>

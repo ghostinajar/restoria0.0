@@ -841,7 +841,6 @@
       } else {
         editItemItemNodesTab.style.display = "none";
         editItemCapacityField.style.display = "none";
-
       }
     });
 
@@ -902,19 +901,15 @@
       generateStringSelectOptions(damageTypes, editItemDamageType);
 
       //reset/hide open forms, show editItemBlueprintForm
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = editItemBlueprintForm;
-      activeForm.style.display = "block";
-      document.querySelector("#editItemGeneralTab").click();
-      input.value = "";
       generateStringSelectOptions(
         formData.itemBlueprintNames,
         editItemSelectItem
       );
       selectedItemId = itemBlueprintNames[0]._id;
       populateEditItemFieldsFromId(selectedItemId);
+      resetActiveSidebarElementTo(editItemBlueprintForm);
       hideAndShowEditItemTabs();
+      document.querySelector("#editItemGeneralTab").click();
     });
 
     function hideEditItemTabs() {

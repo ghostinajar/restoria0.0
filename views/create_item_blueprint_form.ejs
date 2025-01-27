@@ -190,13 +190,9 @@
       });
 
     socket.on("openCreateItemBlueprintForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = createItemBlueprintForm;
-      activeForm.style.display = "block";
       itemTypes = formData.itemTypes;
-      generateStringSelectOptions(itemTypes, createItemType);
-      input.value = "";
+      generateStringSelectOptions(itemTypes, createItemType);      
+      resetActiveSidebarElementTo(createItemBlueprintForm);
     });
   });
 </script>

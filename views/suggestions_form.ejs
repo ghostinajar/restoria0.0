@@ -181,13 +181,7 @@
         ...roomNames,
       ]);
 
-      //reset/hide open forms, show suggestionsForm
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = suggestionsForm;
-      activeForm.style.display = "block";
-      // document.querySelector("#suggestionsRoomsTab").click();
-      input.value = "";
+      resetActiveSidebarElementTo(suggestionsForm);      
       showHelpArray(suggestionsHelp);
     });
 

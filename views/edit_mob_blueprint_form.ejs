@@ -336,6 +336,7 @@
     // to hold data from server on "edit item" command
     let selectedMob;
     let itemBlueprintNames;
+    let mobBlueprintNames;
     let mobBlueprintFullData;
     let selectedMobId = "";
     let affixTypes;
@@ -487,15 +488,10 @@
       generateStringSelectOptions(affixTypes, editMobAffix4);
       generateStringSelectOptions(affixTypes, editMobAffix5);
 
-      //reset/hide open forms, show editMobBlueprintForm
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = editMobBlueprintForm;
-      activeForm.style.display = "block";
       document.querySelector("#editMobGeneralTab").click();
-      input.value = "";
       selectedMobId = mobBlueprintNames[0]._id;
       populateEditMobFieldsFromId(selectedMobId);
+      resetActiveSidebarElementTo(editMobBlueprintForm);
     });
 
     editMobSelectMob.addEventListener("change", (e) => {

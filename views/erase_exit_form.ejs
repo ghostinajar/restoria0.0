@@ -39,12 +39,8 @@
       });
 
     socket.on("openEraseExitForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = eraseExitForm;
-      activeForm.style.display = "block";
-      input.value = "";
-
+      resetActiveSidebarElementTo(eraseExitForm);
+     
       // Update the direction select element
       directionSelect.innerHTML = ""; // Clear existing options
 

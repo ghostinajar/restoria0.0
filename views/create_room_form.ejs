@@ -125,21 +125,15 @@
       });
 
     socket.on("openCreateRoomForm", (formData) => {
-      activeForm.reset();
-      activeForm.style.display = "none";
-      activeForm = createRoomForm;
-      activeForm.style.display = "block";
-      input.value = "";
-
       // Update the direction select element
       directionSelect.innerHTML = ""; // Clear existing options
-
       formData.availableDirections.forEach((direction) => {
         const option = document.createElement("option");
         option.value = direction;
         option.textContent = direction;
         directionSelect.appendChild(option);
       });
+      resetActiveSidebarElementTo(createRoomForm);
     });
   });
 </script>
