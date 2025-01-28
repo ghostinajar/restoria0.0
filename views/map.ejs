@@ -88,7 +88,17 @@
     });
   }
 
+  let lastMapSaveTime = 0;
+
   async function saveMap() {
+    const now = Date.now();
+    console.log("saveMap called at:", now, "lastMapSaveTime:", lastMapSaveTime);
+    if (now - lastMapSaveTime < 5000) {
+      console.log("saveMap debounced, skipping save.");
+      return;
+    }
+    lastMapSaveTime = now;
+
     if (!db) {
       console.error("Database not initialized.");
       return;
@@ -203,10 +213,10 @@
       await loadMapByName(zoneFloorName);
       console.log("mapCache after loadMapByName:", mapCache);
     }
-    await new Promise((resolve) => setTimeout(resolve, 1));
+    putMapTileStateInCache(mapTileState)
     console.log("mapCache after putMapTileStateInCache:", mapCache);
-    await new Promise((resolve) => setTimeout(resolve, 1));
-
+    saveMap()
+    populateMap(mapTileState.mapCoords);
     resetActiveSidebarElementTo(mapDiv);
   });
 </script>
