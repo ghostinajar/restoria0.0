@@ -1,9 +1,14 @@
 <!-- map -->
-<div id="mapDiv" class="sideForm" style="display: none"></div>
+<div id="mapDiv" class="sideForm map" style="display: none">
+  <div id="zoneFloorNameDiv" class="zone-floor-name"></div>
+  <div id="mapGridDiv" class="map-grid"></div>
+</div>
 
 <script>
   let db;
   let mapDiv = document.getElementById("mapDiv");
+  let zoneFloorNameDiv = document.getElementById("zoneFloorNameDiv");
+  let mapGridDiv = document.getElementById("mapGridDiv");
   let mapCache = {
     zoneFloorName: "",
     mapTileStates: {},
@@ -142,13 +147,9 @@
       return;
     }
 
-    mapDiv.innerHTML = ""; // Clear previous map
+    mapGridDiv.innerHTML = ""; // Clear previous map grid
 
-    // display mapCache.zoneFloorName centered above the map
-    let zoneFloorNameDiv = document.createElement("div");
-    zoneFloorNameDiv.classList.add("zone-floor-name");
     zoneFloorNameDiv.innerText = mapCache.zoneFloorName || "Unknown Zone Name";
-    mapDiv.appendChild(zoneFloorNameDiv);
 
     // with userMapCoords in the center, display map tiles
     let mapRadius = 8;
@@ -161,8 +162,8 @@
             mapCoords: mapTileCoords,
             mapTile: {
               character: "",
-              color: "black",
-              wallColor: "black",
+              color: "white",
+              wallColor: "white",
             },
             walls: {
               north: "open",
@@ -174,24 +175,22 @@
         }
 
         let mapTile = document.createElement("div");
-        mapTile.style.width = "2rem";
-        mapTile.style.height = "2rem";
-        mapTile.style.display = "inline-block";
+        mapTile.classList.add("map-tile");
         mapTile.style.color = mapTileState.mapTile.color;
         mapTile.innerText = mapTileState.mapTile.character;
         // set mapTile borders based on mapTileState.walls values being "open" (no border), "wall" (single line), or "closed" (double line)
         const wallStyles = {
           open: "none",
           wall: `1px solid ${mapTileState.mapTile.wallColor}`,
-          closed: `2px solid ${mapTileState.mapTile.wallColor}`,
+          closed: `1px dashed ${mapTileState.mapTile.wallColor}`,
         };
         mapTile.style.borderTop = wallStyles[mapTileState.walls.north];
         mapTile.style.borderRight = wallStyles[mapTileState.walls.east];
         mapTile.style.borderBottom = wallStyles[mapTileState.walls.south];
         mapTile.style.borderLeft = wallStyles[mapTileState.walls.west];
-        mapDiv.appendChild(mapTile);
+        mapGridDiv.appendChild(mapTile);
       }
-      mapDiv.appendChild(document.createElement("br"));
+      mapGridDiv.appendChild(document.createElement("br"));
     }
   }
 
@@ -213,9 +212,9 @@
       await loadMapByName(zoneFloorName);
       console.log("mapCache after loadMapByName:", mapCache);
     }
-    putMapTileStateInCache(mapTileState)
+    putMapTileStateInCache(mapTileState);
     console.log("mapCache after putMapTileStateInCache:", mapCache);
-    saveMap()
+    saveMap();
     populateMap(mapTileState.mapCoords);
     resetActiveSidebarElementTo(mapDiv);
   });
