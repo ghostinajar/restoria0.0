@@ -75,6 +75,7 @@ async function processCommand(parsedCommand, user) {
             }
             case `goto`: {
                 await goto(user);
+                await map(user);
                 break;
             }
             case `help`: {
