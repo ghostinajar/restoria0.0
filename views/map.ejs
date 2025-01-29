@@ -74,10 +74,10 @@
             mapTileStates: {},
           };
         }
-        console.log(
-          "loadMapByName putting zoneFloorMap to cache:",
-          zoneFloorMap
-        );
+        // console.log(
+        //   "loadMapByName putting zoneFloorMap to cache:",
+        //   zoneFloorMap
+        // );
         mapCache = zoneFloorMap;
         resolve(mapCache);
       };
@@ -97,7 +97,7 @@
 
   async function saveMap() {
     const now = Date.now();
-    console.log("saveMap called at:", now, "lastMapSaveTime:", lastMapSaveTime);
+    // console.log("saveMap called at:", now, "lastMapSaveTime:", lastMapSaveTime);
     if (now - lastMapSaveTime < 5000) {
       console.log("saveMap debounced, skipping save.");
       return;
@@ -109,11 +109,11 @@
       return;
     }
 
-    console.log("saveMap trying to save to db:", db);
-    console.log(
-      "saveMap trying to save mapCache for zoneFloorName:",
-      mapCache.zoneFloorName
-    );
+    // console.log("saveMap trying to save to db:", db);
+    // console.log(
+    //   "saveMap trying to save mapCache for zoneFloorName:",
+    //   mapCache.zoneFloorName
+    // );
 
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(["zoneFloorMaps"], "readwrite");
@@ -121,7 +121,7 @@
       const putRequest = objectStore.put(mapCache);
 
       putRequest.onsuccess = function (event) {
-        console.log("Map saved successfully to objectStore:", objectStore);
+        // console.log("Map saved successfully to objectStore:", objectStore);
         resolve();
       };
 
@@ -153,10 +153,14 @@
 
     // with userMapCoords in the center, display map tiles
     let mapRadius = 8;
-    for (let i = -mapRadius; i <= mapRadius; i++) {
-      for (let j = -mapRadius; j <= mapRadius; j++) {
-        let mapTileCoords = [userMapCoords[0] + i, userMapCoords[1] + j];
-        let mapTileState = mapCache.mapTileStates[mapTileCoords.join(",")];
+    for (let y = -mapRadius; y <= mapRadius; y++) {
+      for (let x = -mapRadius; x <= mapRadius; x++) {
+        let mapTileCoords = [userMapCoords[0] + x, userMapCoords[1] + y];
+        let mapTileState =
+          mapCache.mapTileStates[
+            `${mapTileCoords.join(",")},${userMapCoords[2]}`
+          ];
+        console.log("mapTileState for", mapTileCoords, ":", mapTileState);
         if (!mapTileState) {
           mapTileState = {
             mapCoords: mapTileCoords,
@@ -176,8 +180,14 @@
 
         let mapTile = document.createElement("div");
         mapTile.classList.add("map-tile");
-        mapTile.style.color = mapTileState.mapTile.color;
-        mapTile.innerText = mapTileState.mapTile.character;
+        // set mapTile color and character, highlighting user position
+        if (`${mapTileCoords.join(",")},${userMapCoords[2]}` === userMapCoords.join(",")) {
+          mapTile.style.color = "yellow";
+          mapTile.innerText = "$";
+        } else {
+          mapTile.style.color = mapTileState.mapTile.color;
+          mapTile.innerText = mapTileState.mapTile.character;
+        }
         // set mapTile borders based on mapTileState.walls values being "open" (no border), "wall" (single line), or "closed" (double line)
         const wallStyles = {
           open: "none",
@@ -188,6 +198,9 @@
         mapTile.style.borderRight = wallStyles[mapTileState.walls.east];
         mapTile.style.borderBottom = wallStyles[mapTileState.walls.south];
         mapTile.style.borderLeft = wallStyles[mapTileState.walls.west];
+        // allow user to hover over tile to see mapCoords
+        mapTile.title = mapTileCoords.join(",");
+
         mapGridDiv.appendChild(mapTile);
       }
       mapGridDiv.appendChild(document.createElement("br"));
@@ -195,22 +208,22 @@
   }
 
   socket.on("mapRequest", async function (zoneFloorName, mapTileState) {
-    console.log("mapRequest received:", zoneFloorName, mapTileState);
+    // console.log("mapRequest received:", zoneFloorName, mapTileState);
     if (!zoneFloorName || !mapTileState) {
       console.error("Invalid mapTileState data:", mapTileState);
       return;
     }
 
     if (mapCache.zoneFloorName !== zoneFloorName) {
-      console.log(
-        "Received a mapTileState from a different zone, loading new map:",
-        zoneFloorName
-      );
+      // console.log(
+      //   "Received a mapTileState from a different zone, loading new map:",
+      //   zoneFloorName
+      // );
       if (mapCache.zoneFloorName) {
         await saveMap();
       }
       await loadMapByName(zoneFloorName);
-      console.log("mapCache after loadMapByName:", mapCache);
+      // console.log("mapCache after loadMapByName:", mapCache);
     }
     putMapTileStateInCache(mapTileState);
     console.log("mapCache after putMapTileStateInCache:", mapCache);
