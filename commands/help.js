@@ -9,6 +9,7 @@ function help(parsedCommand, user) {
     try {
         if (!parsedCommand.directObject) {
             const helpContents = htmlTableOfContentsForKeysOfObject(HELP);
+            worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, `Here are all the commands you can try in Restoria:`));
             worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, helpContents));
             worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, `What would you like help with? E.g. HELP CREATE`));
             return;

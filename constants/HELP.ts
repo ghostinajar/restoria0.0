@@ -254,6 +254,11 @@ const HELP: {
     `${padStringToLength79(`Keywords`)}`,
     `Keywords are single words that help users target something (an item, mob, etc.). Each keyword should also appear somewhere in the item or mob's description, and if it has a proper name (e.g. Greg), that name must be one of the keywords. For example, if a mob's 'look' description is "Greg the white kitten purrs gently in the corner." that mob's keywords might be "Greg, kitten, white". That way, a player could type "pet Greg", "pet kitten", or "pet white" to target him.`,
   ],
+  MAP: [
+    `This feature is still in development.`,
+    `${padStringToLength79(`MAP`)}`,
+    `Each square on your MAP shows a room near you, with your position at the center. Dotted lines show closed doors, and solid lines are walls (or hidden exits). By default, you should see a map every time you change location, or when you type MAP. Type MAP OFF to toggle this feature off. MAP 6 will change the radius of your map display to 6 rooms away.`,
+  ],
   MOB: [
     `This feature is still in development.`,
     `${padStringToLength79(`MOB, MONSTER, NPC`)}`,
