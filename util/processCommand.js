@@ -62,6 +62,7 @@ async function processCommand(parsedCommand, user) {
             case `exit`:
             case `exits`: {
                 await exits(user);
+                await map(user);
                 break;
             }
             case `exa`:
@@ -69,10 +70,12 @@ async function processCommand(parsedCommand, user) {
             case `l`:
             case `look`: {
                 await look(parsedCommand, user);
+                await map(user);
                 break;
             }
             case `goto`: {
                 await goto(user);
+                await map(user);
                 break;
             }
             case `help`: {
@@ -96,6 +99,7 @@ async function processCommand(parsedCommand, user) {
             case `d`:
             case `down`: {
                 await move(parsedCommand, user);
+                await map(user);
                 break;
             }
             case `quit`: {
@@ -104,6 +108,7 @@ async function processCommand(parsedCommand, user) {
             }
             case `recall`: {
                 await recall(user);
+                await map(user);
                 break;
             }
             case `say`: {
