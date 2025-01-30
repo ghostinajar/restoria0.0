@@ -275,9 +275,11 @@ const HELP = {
         `Rooms: "a shady garden", "the castle kitchen", "Bernie's Burger Shack"`,
     ],
     PASSWORD: [
-        `This feature is still in development.`,
         `${padStringToLength79(`PASSWORD`)}`,
-        `Password must be at least 8 characters long and include lowercase, uppercase, and a number.`,
+        `To change your password, type PASSWORD and your new pasword twice.`,
+        `E.g. to change your password to waTerm3lon, you would type:`,
+        `PASSWORD waTerm3lon waTerm3lon`,
+        `Your new password must be at least 8 characters long and include lowercase, uppercase, and a number.`,
     ],
     PRONOUNS: [
         `${padStringToLength79(`Pronouns`)}`,
