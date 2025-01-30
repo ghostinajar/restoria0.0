@@ -9,6 +9,7 @@ async function password(parsedCommand, user) {
     try {
         // fail if parsedCommand.string is empty
         if (!parsedCommand.string) {
+<<<<<<< HEAD
             help({
                 commandWord: "help",
                 directObject: "password",
@@ -17,6 +18,14 @@ async function password(parsedCommand, user) {
             return;
         }
         const passArray = parsedCommand.string.split(" ");
+=======
+            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Please enter new password twice (e.g. "PASSWORD new14Password new14Password").`));
+            return;
+        }
+        console.log(`parsedCommand.string=${parsedCommand.string}`);
+        const passArray = parsedCommand.string.split(" ");
+        console.log(`passArray=${passArray}`);
+>>>>>>> 5d683a3580be8f73d720d591425360e06e06778b
         // fail if passwords don't match
         if (passArray[0] !== passArray[1]) {
             help({
