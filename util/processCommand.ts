@@ -27,6 +27,7 @@ import updates from "../commands/updates.js";
 import studyresearch from "../commands/studyresearch.js";
 import map from "../commands/map.js";
 import password from "../commands/password.js";
+import sudobugs from "../commands/sudobugs.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -88,7 +89,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         help(parsedCommand, user);
         break;
       }
-      case `map` : {
+      case `map`: {
         await map(user);
         break;
       }
@@ -134,9 +135,13 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         stats(user);
         break;
       }
-      case `study`: 
+      case `study`:
+      case `sudobugs`: {
+        await sudobugs(parsedCommand, user);
+        break;
+      }
       case `research`: {
-        studyresearch(parsedCommand, user)
+        studyresearch(parsedCommand, user);
         break;
       }
       case `suggest`: {

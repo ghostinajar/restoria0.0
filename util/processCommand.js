@@ -25,6 +25,7 @@ import updates from "../commands/updates.js";
 import studyresearch from "../commands/studyresearch.js";
 import map from "../commands/map.js";
 import password from "../commands/password.js";
+import sudobugs from "../commands/sudobugs.js";
 async function processCommand(parsedCommand, user) {
     try {
         switch (parsedCommand.commandWord) {
@@ -129,6 +130,10 @@ async function processCommand(parsedCommand, user) {
                 break;
             }
             case `study`:
+            case `sudobugs`: {
+                await sudobugs(parsedCommand, user);
+                break;
+            }
             case `research`: {
                 studyresearch(parsedCommand, user);
                 break;
