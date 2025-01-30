@@ -23,6 +23,7 @@ export const validCommandWords = [
   "map",
   "n",
   "north",
+  "password",
   "quit",
   "recall",
   "research",

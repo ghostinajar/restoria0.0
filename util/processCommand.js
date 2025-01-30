@@ -24,6 +24,7 @@ import bugs from "../commands/bugs.js";
 import updates from "../commands/updates.js";
 import studyresearch from "../commands/studyresearch.js";
 import map from "../commands/map.js";
+import password from "../commands/password.js";
 async function processCommand(parsedCommand, user) {
     try {
         switch (parsedCommand.commandWord) {
@@ -75,7 +76,6 @@ async function processCommand(parsedCommand, user) {
             }
             case `goto`: {
                 await goto(user);
-                await map(user);
                 break;
             }
             case `help`: {
@@ -100,6 +100,10 @@ async function processCommand(parsedCommand, user) {
             case `down`: {
                 await move(parsedCommand, user);
                 await map(user);
+                break;
+            }
+            case `password`: {
+                await password(parsedCommand, user);
                 break;
             }
             case `quit`: {
