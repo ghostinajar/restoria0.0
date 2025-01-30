@@ -34,6 +34,7 @@ export const validCommandWords = [
     "stat",
     "stats",
     "study",
+    "sudobug",
     "sudobugs",
     "suggest",
     "suggestions",

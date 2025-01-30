@@ -28,6 +28,7 @@ import studyresearch from "../commands/studyresearch.js";
 import map from "../commands/map.js";
 import password from "../commands/password.js";
 import sudobugs from "../commands/sudobugs.js";
+import sudobug from "../commands/sudobug.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -136,6 +137,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `study`:
+      case `sudobug`: {
+        sudobug(parsedCommand, user);
+        break;
+      }
       case `sudobugs`: {
         await sudobugs(parsedCommand, user);
         break;
