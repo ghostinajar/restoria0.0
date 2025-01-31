@@ -20,10 +20,7 @@ async function who(user: IUser) {
       logger.error(`Error in who command.`);
       return;
     }
-
-    let message = makeMessage("who", JSON.stringify(whoArray));
-
-    worldEmitter.emit(`messageFor${user.username}`, message);
+    worldEmitter.emit(`whoArrayFor${user.username}`, whoArray);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("who", error, user.name);
   }

@@ -160,7 +160,7 @@
           mapCache.mapTileStates[
             `${mapTileCoords.join(",")},${userMapCoords[2]}`
           ];
-        console.log("mapTileState for", mapTileCoords, ":", mapTileState);
+        // console.log("mapTileState for", mapTileCoords, ":", mapTileState);
         if (!mapTileState) {
           mapTileState = {
             mapCoords: mapTileCoords,
@@ -226,7 +226,7 @@
       // console.log("mapCache after loadMapByName:", mapCache);
     }
     putMapTileStateInCache(mapTileState);
-    console.log("mapCache after putMapTileStateInCache:", mapCache);
+    // console.log("mapCache after putMapTileStateInCache:", mapCache);
     saveMap();
     populateMap(mapTileState.mapCoords);
     resetActiveSidebarElementTo(mapDiv);

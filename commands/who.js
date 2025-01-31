@@ -2,7 +2,6 @@
 // shows user all users signed into Restoria
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../util/makeMessage.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 async function who(user) {
     try {
@@ -15,8 +14,7 @@ async function who(user) {
             logger.error(`Error in who command.`);
             return;
         }
-        let message = makeMessage("who", JSON.stringify(whoArray));
-        worldEmitter.emit(`messageFor${user.username}`, message);
+        worldEmitter.emit(`whoArrayFor${user.username}`, whoArray);
     }
     catch (error) {
         catchErrorHandlerForFunction("who", error, user.name);

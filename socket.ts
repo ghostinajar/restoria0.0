@@ -169,6 +169,10 @@ const setupSocket = (io: any) => {
         }
       );
 
+      worldEmitter.on(`whoArrayFor${user.username}`, async (whoArray: any) => {
+        socket.emit(`whoArray`, whoArray);
+      });
+
       // Listen for client events
 
       socket.on(`userSentCommand`, async (userInput: string) => {

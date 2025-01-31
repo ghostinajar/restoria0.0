@@ -79,6 +79,62 @@
         appendSafeMessageToTerminal(message);
       });
 
+      socket.on("whoArray", (whoArray) => {
+        appendMulticolorStringToTerminal([
+          { color: "cyan_light", content: " -" },
+          { color: "yellow", content: "Lvl"},
+          { color: "cyan_light", content: "-" },
+          { color: "yellow", content: "Job"},
+          { color: "cyan_light", content: "----" },
+          { color: "yellow", content: "Name"},
+          {
+            color: "cyan_light",
+            content:
+                "---------------",
+          },
+        ]);
+        whoArray.forEach((who) => {
+          let classColor = "white";
+          // colorize class name
+          if (who.job === "warrior") {
+            classColor = "red";
+          } else if (who.job === "rogue") {
+            classColor = "purple";
+          } else if (who.job === "mage") {
+            classColor = "blue";
+          }
+          appendMulticolorStringToTerminal([
+            { color: "cyan_light", content: "|" },
+            {
+              color: "yellow",
+              content: who.level.toString().padEnd(4, " "),
+            },
+            { color: "cyan_light", content: "|" },
+            {
+              color: classColor,
+              content: who.job.padEnd(7, " "),
+            },
+            { color: "cyan_light", content: "|" },
+            {
+              color: "yellow",
+              content: who.name.padEnd(18, " "),
+            },
+            {
+              color: "cyan_light",
+              content: "|",
+            },
+          ]);
+        });
+        appendMulticolorStringToTerminal([
+          {
+            color: "cyan_light",
+            content:
+              " -------------------------------",
+          },
+        ]);
+        console.log(whoArray);
+      });
+
       window.addEventListener("beforeunload", function (event) {
         socket.disconnect();
       });
@@ -118,6 +174,19 @@
         item.classList.add("message-item");
         item.innerHTML = message.content;
         item.classList.add(message.type);
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+      function appendMulticolorStringToTerminal(multicolorString) {
+        const item = document.createElement("li");
+        item.classList.add("message-item");
+        // multicolorString is an array of objects with color and content properties
+        multicolorString.forEach((part) => {
+          const span = document.createElement("span");
+          span.classList.add(part.color);
+          span.textContent = part.content;
+          item.appendChild(span);
+        });
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       }

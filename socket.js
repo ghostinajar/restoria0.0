@@ -72,6 +72,9 @@ const setupSocket = (io) => {
             worldEmitter.on(`user${user.username}ChangingRooms`, async (originRoomId, originZoneId, destinationRoomId, destinationZoneId) => {
                 userXChangingRoomsHandler(originRoomId, originZoneId, destinationRoomId, destinationZoneId, socket, user);
             });
+            worldEmitter.on(`whoArrayFor${user.username}`, async (whoArray) => {
+                socket.emit(`whoArray`, whoArray);
+            });
             // Listen for client events
             socket.on(`userSentCommand`, async (userInput) => {
                 userInput = purifyCommandInput(userInput);
