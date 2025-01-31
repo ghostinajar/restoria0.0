@@ -5,12 +5,11 @@ import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import formatDate from "../util/formatDate.js";
-import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 
 async function updates(parsedCommand: IParsedCommand, user: IUser) {
   try {
-    let updateQuantity = 15;
+    let updateQuantity = 10;
     let requestedQuantity : number = Number(parsedCommand.directObject);
     if (requestedQuantity) {
       updateQuantity = requestedQuantity;
@@ -22,15 +21,14 @@ async function updates(parsedCommand: IParsedCommand, user: IUser) {
       { isFixed: true },
       { date: 1, description: 1, _id: 0 }
     )
-      .sort({ date: -1 })
+      .sort({ date: 1 })
       .limit(updateQuantity);
 
-    const fixedBugStrings = fixedBugs.map((bug) => {
+    const updatesArray = fixedBugs.map((bug) => {
       const formattedDate = formatDate(bug.date);
-      return makeMessage("success", `${formattedDate}: ${bug.description}`);
+      return {date: formattedDate, content: bug.description};
     });
-    fixedBugStrings.unshift(makeMessage(`help`, `Recent Updates in Restoria:`));
-    worldEmitter.emit(`messageArrayFor${user.username}`, fixedBugStrings);
+    worldEmitter.emit(`updatesArrayFor${user.username}`, updatesArray);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`bugs`, error, user?.name);
   }

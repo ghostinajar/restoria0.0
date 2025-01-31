@@ -79,18 +79,34 @@
         appendSafeMessageToTerminal(message);
       });
 
+      socket.on("updatesArray", (updatesArray) => {
+        appendSafeMessageToTerminal({
+          type: "help",
+          content: "Recent Updates To Restoria:",
+        });
+        updatesArray.forEach((update) => {
+          appendMulticolorStringToTerminal([
+            { color: "white", content: update.date + " "},
+            { color: "green", content: update.content },
+          ]);
+        });
+        appendSafeMessageToTerminal({
+          type: "help",
+          content: "Use UPDATES ALL to see the full list.",
+        });
+      });
+
       socket.on("whoArray", (whoArray) => {
         appendMulticolorStringToTerminal([
           { color: "cyan_light", content: " -" },
-          { color: "yellow", content: "Lvl"},
+          { color: "yellow", content: "Lvl" },
           { color: "cyan_light", content: "-" },
-          { color: "yellow", content: "Job"},
-          { color: "cyan_light", content: "----" },
-          { color: "yellow", content: "Name"},
+          { color: "yellow", content: "Job" },
+          { color: "cyan_light", content: "-----" },
+          { color: "yellow", content: "Name" },
           {
             color: "cyan_light",
-            content:
-                "---------------",
+            content: "--------------",
           },
         ]);
         whoArray.forEach((who) => {
@@ -128,8 +144,7 @@
         appendMulticolorStringToTerminal([
           {
             color: "cyan_light",
-            content:
-              " -------------------------------",
+            content: " -------------------------------",
           },
         ]);
         console.log(whoArray);

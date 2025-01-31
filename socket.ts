@@ -144,6 +144,13 @@ const setupSocket = (io: any) => {
       );
 
       worldEmitter.on(
+        `updatesArrayFor${user.username}`,
+        async (updatesArray: any) => {
+          socket.emit(`updatesArray`, updatesArray);
+        }
+      );
+
+      worldEmitter.on(
         `user${user.username}LeavingGame`,
         async (user: IUser) => {
           userXLeavingGameHandler(user, socket);

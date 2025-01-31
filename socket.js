@@ -66,6 +66,9 @@ const setupSocket = (io) => {
             worldEmitter.on(`safeMessageFor${user.username}`, async (message) => {
                 safeMessageForUserHandler(message, socket);
             });
+            worldEmitter.on(`updatesArrayFor${user.username}`, async (updatesArray) => {
+                socket.emit(`updatesArray`, updatesArray);
+            });
             worldEmitter.on(`user${user.username}LeavingGame`, async (user) => {
                 userXLeavingGameHandler(user, socket);
             });
