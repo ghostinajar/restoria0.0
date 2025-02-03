@@ -100,11 +100,22 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
           user
         );
         const availableDirections = await getAvailableExitsForCreateRoom(user);
-        worldEmitter.emit(`formPromptFor${user.username}`, {
-          form: `createRoomForm`,
-          availableDirections: availableDirections,
-        });
-        break;
+        if (availableDirections.length === 0) {
+          worldEmitter.emit(
+            `messageFor${user.username}`,
+            makeMessage(
+              `rejection`,
+              `There are already rooms in every direction! Create somewhere else.`
+            )
+          );
+          break;
+        } else {
+          worldEmitter.emit(`formPromptFor${user.username}`, {
+            form: `createRoomForm`,
+            availableDirections: availableDirections,
+          });
+          break;
+        }
       }
       case `zone`: {
         if (user.unpublishedZoneTally >= 5 && !user.isAdmin) {
