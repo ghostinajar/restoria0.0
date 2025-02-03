@@ -15,12 +15,14 @@ async function updates(parsedCommand, user) {
             updateQuantity = 0;
         }
         const fixedBugs = await Bug.find({ isFixed: true }, { date: 1, description: 1, _id: 0 })
-            .sort({ date: 1 })
+            .sort({ date: -1 })
             .limit(updateQuantity);
+        // format the date and description of each bug and sort oldest to newest
         const updatesArray = fixedBugs.map((bug) => {
             const formattedDate = formatDate(bug.date);
             return { date: formattedDate, content: bug.description };
         });
+        updatesArray.reverse();
         worldEmitter.emit(`updatesArrayFor${user.username}`, updatesArray);
     }
     catch (error) {

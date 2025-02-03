@@ -21,13 +21,18 @@ async function updates(parsedCommand: IParsedCommand, user: IUser) {
       { isFixed: true },
       { date: 1, description: 1, _id: 0 }
     )
-      .sort({ date: 1 })
+      .sort({ date: -1 })
       .limit(updateQuantity);
 
+
+    // format the date and description of each bug and sort oldest to newest
     const updatesArray = fixedBugs.map((bug) => {
       const formattedDate = formatDate(bug.date);
       return {date: formattedDate, content: bug.description};
-    });
+    })
+
+    updatesArray.reverse();
+    
     worldEmitter.emit(`updatesArrayFor${user.username}`, updatesArray);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`bugs`, error, user?.name);
