@@ -1,5 +1,6 @@
 // validCommandWords
 export const validCommandWords = [
+    "autoexamine",
     "bug",
     "bugs",
     "create",
@@ -59,6 +60,7 @@ export const commandsWith1Param = [
     "assist",
     "attack",
     "autoassist",
+    "autoexamine",
     "autoflee",
     "backstab",
     "bash",

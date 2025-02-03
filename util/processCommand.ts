@@ -29,10 +29,15 @@ import map from "../commands/map.js";
 import password from "../commands/password.js";
 import sudobugs from "../commands/sudobugs.js";
 import sudobug from "../commands/sudobug.js";
+import autoExamine from "../commands/autoExamine.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
     switch (parsedCommand.commandWord) {
+      case `autoexamine`: {
+        await autoExamine(parsedCommand, user);
+        break;
+      }
       case `bug`: {
         help(
           {

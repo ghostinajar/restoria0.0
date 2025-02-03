@@ -100,6 +100,13 @@ export const userSchema = new Schema({
         ref: "User",
         default: null,
     },
+    preferences: {
+        type: {
+            autoExamine: { type: Boolean, required: true, default: true },
+        },
+        required: true,
+        default: () => ({ autoExamine: false }),
+    }
 });
 userSchema.pre("save", function (next) {
     // Prevent runtimeProps from being stored in DB

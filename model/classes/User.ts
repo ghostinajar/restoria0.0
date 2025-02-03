@@ -59,6 +59,9 @@ export interface IUser extends mongoose.Document {
   equipped: IEquipped;
   affixes: Array<IAffix>;
   editor: mongoose.Types.ObjectId | null;
+  preferences: {
+    autoExamine: boolean;
+  };
   runtimeProps?: IAgentRuntimeProps;
   comparePassword(candidatePassword: string): Promise<boolean>;
   calculateMaxHp(): number;
@@ -154,6 +157,13 @@ export const userSchema = new Schema<IUser>({
     ref: "User",
     default: null,
   },
+  preferences: {
+    type: {
+      autoExamine: { type: Boolean, required: true, default: true },
+    },
+    required: true,
+    default: () => ({ autoExamine: false }),
+  }
 });
 
 userSchema.pre("save", function (next) {
