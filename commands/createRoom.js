@@ -14,6 +14,7 @@ import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
+import lookExamine from "./lookExamine.js";
 async function createRoom(roomFormData, user) {
     try {
         if (!roomFormData.direction || roomFormData.direction == ``) {
@@ -32,12 +33,7 @@ async function createRoom(roomFormData, user) {
         if (!availableDirections.includes(roomFormData.direction)) {
             throw new Error(`exit already exists (this shouldn't be possible). Author ${user._id} trying to create ${roomFormData.direction} from room ${originRoom.name}.`);
         }
-        const roomDescription = {
-            examine: roomFormData.examine,
-            study: roomFormData.study,
-            research: roomFormData.research,
-        };
-        truncateDescription(roomDescription, user);
+        truncateDescription(roomFormData.description, user);
         let newRoomData = {
             _id: new mongoose.Types.ObjectId(),
             author: user._id,
@@ -47,10 +43,10 @@ async function createRoom(roomFormData, user) {
             history: historyStartingNow(),
             playerCap: 18,
             mobCap: 18,
-            isDark: roomFormData.isDark,
-            isIndoors: roomFormData.isIndoors,
-            isOnWater: roomFormData.isOnWater,
-            isUnderwater: roomFormData.isUnderwater,
+            isDark: false,
+            isIndoors: false,
+            isOnWater: false,
+            isUnderwater: false,
             noMounts: false,
             noMobs: false,
             noMagic: false,
@@ -59,7 +55,7 @@ async function createRoom(roomFormData, user) {
             mountIdForSale: [],
             mapCoords: [...originRoom.mapCoords], // spread to avoid mutation of original
             mapTile: { character: "·", color: "white", wallColor: "white" },
-            description: roomDescription,
+            description: roomFormData.description,
             exits: {},
             mobNodes: [],
             itemNodes: [],
@@ -123,6 +119,7 @@ async function createRoom(roomFormData, user) {
         await originZone.initRooms();
         logger.info(`Author "${user.name}" created room "${newRoomData.name}".`);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created ${newRoomData.name}, ${roomFormData.direction} from here!`));
+        await lookExamine({ commandWord: "look" }, user);
         await exits(user);
     }
     catch (error) {

@@ -93,7 +93,12 @@ const roomSchema = new Schema({
     },
     description: {
         type: descriptionSchema,
-        default: () => ({}),
+        default: () => ({
+            look: "This room's author can use EDIT ROOM to add a LOOK description.",
+            examine: "This room's author can use EDIT ROOM to add an EXAMINE description.",
+            study: "",
+            research: ""
+        }),
     },
     exits: {
         north: {

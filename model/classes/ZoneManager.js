@@ -33,7 +33,7 @@ class ZoneManager {
             let zone = await this.getZoneById(location.inZone);
             const room = zone?.rooms.find((room) => room._id.toString() === location.inRoom.toString());
             if (!room) {
-                logger.error(`lookArrayRequestedHandler got an undefined room for location ${JSON.stringify(location)}`);
+                logger.error(`roomRequestedHandler got an undefined room for location ${JSON.stringify(location)}`);
                 return;
             }
             worldEmitter.emit(`zoneManagerReturningRoom${room._id.toString()}`, room);

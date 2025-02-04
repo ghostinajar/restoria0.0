@@ -6,7 +6,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 import relocateUser from "../util/relocateUser.js";
-import look from "./look.js";
+import lookExamine from "./lookExamine.js";
 
 async function recall(user: IUser) {
   try {
@@ -27,7 +27,7 @@ async function recall(user: IUser) {
         `You close your eyes and concentrate. When you open them, you're back in Restoria City.`
       )
     );
-    await look({ commandWord: "look" }, user);
+    await lookExamine({ commandWord: "look" }, user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("recall", error, user.name)
   }

@@ -8,11 +8,11 @@ import { IUser } from "../model/classes/User.js";
 import { IDescription } from "../model/classes/Description.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IMobBlueprint } from "../model/classes/MobBlueprint.js";
-import look from "./look.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import lookExamine from "./lookExamine.js";
 
 export interface ICreateMobFormData {
   name: string;
@@ -91,7 +91,7 @@ async function createMobBlueprint(
         `You created a mob blueprint for ${newMobBlueprint.name}. To place one here, type EDIT ROOM`
       )
     );
-    await look({ commandWord: "look" }, user);
+    await lookExamine({ commandWord: "look" }, user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("createMobBlueprint", error, user.name)
   }

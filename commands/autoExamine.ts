@@ -9,7 +9,7 @@ import { IParsedCommand } from "../util/parseCommand.js";
 function messageON(user: IUser) {
   messageToUsername(
     user.username,
-    `Autoexamine ON: You'll see a full (EXAMINE) description when you enter a room.`,
+    `Autoexamine ON: You'll see full (EXAMINE) descriptions, even when you LOOK.`,
     "success"
   );
 }
@@ -17,7 +17,7 @@ function messageON(user: IUser) {
 function messageOFF(user: IUser) {
   messageToUsername(
     user.username,
-    `Autoexamine OFF: You'll see a shorter (LOOK) description when you enter a room.`,
+    `Autoexamine OFF: Use LOOK for short descriptions, and EXAMINE for longer ones.`,
     "success"
   );
 }

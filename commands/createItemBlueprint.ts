@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import { IUser } from "../model/classes/User.js";
 import truncateDescription from "../util/truncateDescription.js";
 import { IItemBlueprint } from "../model/classes/ItemBlueprint.js";
-import look from "./look.js";
 import DAMAGE_TYPE from "../constants/DAMAGE_TYPE.js";
 import ITEM_TYPE from "../constants/ITEM_TYPE.js";
 import SPELL from "../constants/SPELL.js";
@@ -15,6 +14,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import lookExamine from "./lookExamine.js";
 
 export interface ICreateItemBlueprintFormData {
   name: string;
@@ -145,7 +145,7 @@ async function createItemBlueprint(
         `You made an item blueprint: ${newItemBlueprint.name}. Type EDIT ITEM to modify it, or EDIT ROOM to place one here.`
       )
     );
-    await look({ commandWord: "look" }, user);
+    await lookExamine({ commandWord: "look" }, user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("createItemBlueprint", error, user.name)
   }

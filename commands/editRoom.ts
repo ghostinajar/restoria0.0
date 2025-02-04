@@ -11,6 +11,7 @@ import truncateDescription from "../util/truncateDescription.js";
 import { IExit } from "../model/classes/Exit.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import lookExamine from "./lookExamine.js";
 
 export interface IEditRoomFormData {
   _id: string | mongoose.Types.ObjectId;
@@ -52,18 +53,12 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
       return;
     }
 
-    const newRoomDescription: IDescription = {
-      examine: roomData.description.examine,
-      study: roomData.description.study,
-      research: roomData.description.research,
-    };
-
-    truncateDescription(newRoomDescription, user);
+    truncateDescription(roomData.description, user);
 
     room.history.modifiedDate = new Date();
 
     room.name = roomData.name;
-    room.description = newRoomDescription;
+    room.description = roomData.description;
     room.isDark = roomData.isDark;
     room.isIndoors = roomData.isIndoors;
     room.isOnWater = roomData.isOnWater;
@@ -97,6 +92,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
 
     await zone.save();
     await zone.initRooms();
+    await lookExamine({commandWord: 'look'}, user)
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage(`success`, `Room updated!`)

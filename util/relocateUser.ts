@@ -1,5 +1,5 @@
 import exits from "../commands/exits.js";
-import look from "../commands/look.js";
+import lookExamine from "../commands/lookExamine.js";
 import logger from "../logger.js";
 import { ILocation } from "../model/classes/Location.js";
 import { IRoom } from "../model/classes/Room.js";
@@ -86,7 +86,7 @@ async function relocateUser(user: IUser, destinationLocation: ILocation) {
       destinationRoom.fromZoneId.toString()
     );
 
-    await look({ commandWord: `look` }, user);
+    await lookExamine({ commandWord: `look` }, user);
     await exits(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`relocateUser`, error, user?.name);

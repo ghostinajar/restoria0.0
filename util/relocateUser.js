@@ -1,5 +1,5 @@
 import exits from "../commands/exits.js";
-import look from "../commands/look.js";
+import lookExamine from "../commands/lookExamine.js";
 import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
@@ -37,7 +37,7 @@ async function relocateUser(user, destinationLocation) {
         user.location = destinationLocation;
         //notify socket to update chats
         worldEmitter.emit(`user${user.username}ChangingRooms`, originRoom._id.toString(), originRoom.fromZoneId.toString(), destinationRoom._id.toString(), destinationRoom.fromZoneId.toString());
-        await look({ commandWord: `look` }, user);
+        await lookExamine({ commandWord: `look` }, user);
         await exits(user);
     }
     catch (error) {

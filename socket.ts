@@ -1,11 +1,10 @@
 // socket
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
-import { INewRoomData } from "./commands/createRoom.js";
+import { ICreateRoomFormData } from "./commands/createRoom.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import makeMessage from "./util/makeMessage.js";
-import look from "./commands/look.js";
 import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSocket.js";
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
@@ -55,6 +54,7 @@ import { ILocation } from "./model/classes/Location.js";
 import { ISuggestion, refersToObjectType } from "./model/classes/Suggestion.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
 import { IMapTileState } from "./commands/map.js";
+import lookExamine from "./commands/lookExamine.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -195,7 +195,7 @@ const setupSocket = (io: any) => {
         await userSubmittedCreateExitHandler(direction, user);
       });
 
-      socket.on(`userSubmittedCreateRoom`, async (roomData: INewRoomData) => {
+      socket.on(`userSubmittedCreateRoom`, async (roomData: ICreateRoomFormData) => {
         await userSubmittedCreateRoomHandler(roomData, user);
       });
 
@@ -304,13 +304,13 @@ const setupSocket = (io: any) => {
         }
       );
 
-      // On connection, alert room and look
+      // On connection, alert room and lookExamine
       let userArrivedMessage = makeMessage(
         `userArrived`,
         `${user.name} entered Restoria.`
       );
       worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);
-      await look({ commandWord: `look` }, user);
+      await lookExamine({ commandWord: `look` }, user);
       await exits(user);
       stats(user);
 

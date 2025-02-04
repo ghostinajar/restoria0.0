@@ -2,7 +2,6 @@
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import makeMessage from "./util/makeMessage.js";
-import look from "./commands/look.js";
 import authenticateSessionUserOnSocket from "./util/authenticateSessionUserOnSocket.js";
 import disconnectMultiplayerOnSocket from "./util/disconnectMultiplayerOnSocket.js";
 import setupUserOnSocket from "./util/setupUserOnSocket.js";
@@ -12,6 +11,7 @@ import stats from "./commands/stats.js";
 import exits from "./commands/exits.js";
 import { purifyCommandInput } from "./util/purify.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
+import lookExamine from "./commands/lookExamine.js";
 const setupSocket = (io) => {
     try {
         io.on(`connection`, async (socket) => {
@@ -136,10 +136,10 @@ const setupSocket = (io) => {
             socket.on(`userSubmittedSuggestions`, async (suggestions) => {
                 userSubmittedSuggestionsHandler(suggestions, user, socket);
             });
-            // On connection, alert room and look
+            // On connection, alert room and lookExamine
             let userArrivedMessage = makeMessage(`userArrived`, `${user.name} entered Restoria.`);
             worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);
-            await look({ commandWord: `look` }, user);
+            await lookExamine({ commandWord: `look` }, user);
             await exits(user);
             stats(user);
             socket.on(`disconnect`, async () => {

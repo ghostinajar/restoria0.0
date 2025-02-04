@@ -1,7 +1,6 @@
 // processCommand
 import logger from "../logger.js";
 import exits from "../commands/exits.js";
-import look from "../commands/look.js";
 import quit from "../commands/quit.js";
 import say from "../commands/say.js";
 import shout from "../commands/shout.js";
@@ -30,6 +29,7 @@ import password from "../commands/password.js";
 import sudobugs from "../commands/sudobugs.js";
 import sudobug from "../commands/sudobug.js";
 import autoExamine from "../commands/autoExamine.js";
+import lookExamine from "../commands/lookExamine.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -83,7 +83,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       case `examine`:
       case `l`:
       case `look`: {
-        await look(parsedCommand, user);
+        await lookExamine(parsedCommand, user);
         await map(user);
         break;
       }
@@ -142,16 +142,16 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `study`:
+      case `research`: {
+        studyresearch(parsedCommand, user);
+        break;
+      }
       case `sudobug`: {
         sudobug(parsedCommand, user);
         break;
       }
       case `sudobugs`: {
         await sudobugs(parsedCommand, user);
-        break;
-      }
-      case `research`: {
-        studyresearch(parsedCommand, user);
         break;
       }
       case `suggest`: {

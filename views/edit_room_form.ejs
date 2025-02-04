@@ -74,6 +74,16 @@
         />
       </li>
       <li>
+        <label for="editRoomLook">Look</label>
+        <input
+          id="editRoomLook"
+          name="editRoomLook"
+          type="text"
+          maxlength="79"
+          required
+        />
+      </li>
+      <li>
         <label for="editRoomExamine">Examine</label>
         <textarea
           id="editRoomExamine"
@@ -305,6 +315,7 @@
     );
 
     const editRoomName = document.getElementById("editRoomName");
+    const editRoomLook = document.getElementById("editRoomLook");
     const editRoomExamine = document.getElementById("editRoomExamine");
     const editRoomStudy = document.getElementById("editRoomStudy");
     const editRoomResearch = document.getElementById("editRoomResearch");
@@ -382,6 +393,9 @@
     editRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
       workingEditRoomData.name = DOMPurify.sanitize(editRoomName.value);
+      workingEditRoomData.description.look = DOMPurify.sanitize(
+        editRoomLook.value
+      );
       workingEditRoomData.description.examine = DOMPurify.sanitize(
         editRoomExamine.value
       );
@@ -464,13 +478,14 @@
       generateStringSelectOptions(mobBlueprints, editRoomMobNodeSelect);
       generateStringSelectOptions(itemBlueprints, editRoomItemNodeSelect);
 
-      resetActiveSidebarElementTo(editRoomForm);      
+      resetActiveSidebarElementTo(editRoomForm);
       document.querySelector("#editRoomDescriptionTab").click();
 
       // preset the values of the fields with data from server
       document.getElementById("roomId").textContent =
         `Id: ${workingEditRoomData._id}` || "error: room id not found";
       editRoomName.value = workingEditRoomData.name || "";
+      editRoomLook.value = workingEditRoomData.description.look || "";
       editRoomExamine.value = workingEditRoomData.description.examine || "";
       editRoomStudy.value = workingEditRoomData.description.study || "";
       editRoomResearch.value = workingEditRoomData.description.research || "";

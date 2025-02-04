@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import { IUser } from "../model/classes/User.js";
 import ROOM_TYPE from "../constants/ROOM_TYPE.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
-import { IDescription } from "../model/classes/Description.js";
 import truncateDescription from "../util/truncateDescription.js";
 import exits from "./exits.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
@@ -16,25 +15,20 @@ import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
-import COLOR from "../constants/COLOR.js";
+import lookExamine from "./lookExamine.js";
 
-export interface INewRoomData {
+export interface ICreateRoomFormData {
   name: string;
   direction: string;
-  isDark: boolean;
-  isIndoors: boolean;
-  isOnWater: boolean;
-  isUnderwater: boolean;
-  noMounts: boolean;
-  noMobs: boolean;
-  noMagic: boolean;
-  noCombat: boolean;
-  examine: string;
-  study: string;
-  research: string;
+  description: {
+    look: string;
+    examine: string;
+    study: string;
+    research: string;
+  }
 }
 
-async function createRoom(roomFormData: INewRoomData, user: IUser) {
+async function createRoom(roomFormData: ICreateRoomFormData, user: IUser) {
   try {
     if (!roomFormData.direction || roomFormData.direction == ``) {
       worldEmitter.emit(
@@ -63,12 +57,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       );
     }
 
-    const roomDescription: IDescription = {
-      examine: roomFormData.examine,
-      study: roomFormData.study,
-      research: roomFormData.research,
-    };
-    truncateDescription(roomDescription, user);
+    truncateDescription(roomFormData.description, user);
 
     let newRoomData: IRoom = {
       _id: new mongoose.Types.ObjectId(),
@@ -79,10 +68,10 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       history: historyStartingNow(),
       playerCap: 18,
       mobCap: 18,
-      isDark: roomFormData.isDark,
-      isIndoors: roomFormData.isIndoors,
-      isOnWater: roomFormData.isOnWater,
-      isUnderwater: roomFormData.isUnderwater,
+      isDark: false,
+      isIndoors: false,
+      isOnWater: false,
+      isUnderwater: false,
       noMounts: false,
       noMobs: false,
       noMagic: false,
@@ -91,7 +80,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
       mountIdForSale: [],
       mapCoords: [...originRoom.mapCoords] as [number, number, number], // spread to avoid mutation of original
       mapTile: {character: "·", color: "white", wallColor: "white"},
-      description: roomDescription,
+      description: roomFormData.description,
       exits: {},
       mobNodes: [],
       itemNodes: [],
@@ -207,6 +196,7 @@ async function createRoom(roomFormData: INewRoomData, user: IUser) {
         `You created ${newRoomData.name}, ${roomFormData.direction} from here!`
       )
     );
+    await lookExamine({commandWord: "look"}, user);
     await exits(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("createRoom", error, user.name);

@@ -36,7 +36,7 @@ import createItemBlueprint, {
 import createMobBlueprint, {
   ICreateMobFormData,
 } from "./commands/createMobBlueprint.js";
-import createRoom, { INewRoomData } from "./commands/createRoom.js";
+import createRoom, { ICreateRoomFormData } from "./commands/createRoom.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
@@ -44,6 +44,7 @@ import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import { IMapTileState } from "./commands/map.js";
+import lookExamine from "./commands/lookExamine.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
@@ -336,6 +337,7 @@ export const userSubmittedEraseRoomHandler = async (
       "success",
       `You permanently erased the room ${formData.name}.`
     );
+    await lookExamine({ commandWord: "look" }, user);
     worldEmitter.emit(`messageFor${user.username}`, message);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
@@ -422,7 +424,7 @@ export const userSubmittedCreateMobBlueprintHandler = async (
 };
 
 export const userSubmittedCreateRoomHandler = async (
-  roomData: INewRoomData,
+  roomData: ICreateRoomFormData,
   user: IUser
 ) => {
   try {

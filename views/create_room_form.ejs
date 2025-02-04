@@ -13,10 +13,10 @@
   <h2>Create Room</h2>
   <ul>
     <li>
-      <label for="newRoomName">Name:</label>
+      <label for="createRoomName">Name:</label>
       <input
-        id="newRoomName"
-        name="newRoomName"
+        id="createRoomName"
+        name="createRoomName"
         type="text"
         autocomplete="on"
         maxlength="60"
@@ -24,8 +24,8 @@
       />
     </li>
     <li>
-      <label for="newRoomDirection">Direction:</label>
-      <select id="newRoomDirection" name="newRoomDirection" required>
+      <label for="createRoomDirection">Direction:</label>
+      <select id="createRoomDirection" name="createRoomDirection" required>
         <option value="north">north</option>
         <option value="east">east</option>
         <option value="south">south</option>
@@ -34,53 +34,23 @@
         <option value="down">down</option>
       </select>
     </li>
-    <div style="display: block">
-      <li style="display: inline-block">
-        <label for="newIsDark">Dark</label>
-        <input
-          type="checkbox"
-          id="newIsDark"
-          name="newIsDark"
-          value="newIsDark"
-        />
-      </li>
-      <li style="display: inline-block">
-        <label for="newIsIndoors">Indoors</label>
-        <input
-          type="checkbox"
-          id="newIsIndoors"
-          name="newIsIndoors"
-          value="newIsIndoors"
-        />
-      </li>
-    </div>
-    <div style="display: block">
-      <li style="display: inline-block">
-        <label for="newIsOnWater">On Water</label>
-        <input
-          type="checkbox"
-          id="newIsOnWater"
-          name="newIsOnWater"
-          value="newIsOnWater"
-        />
-      </li>
-      <li style="display: inline-block">
-        <label for="newIsUnderwater">Underwater</label>
-        <input
-          type="checkbox"
-          id="newIsUnderwater"
-          name="newIsUnderwater"
-          value="newIsUnderwater"
-        />
-      </li>
-    </div>
 
     <h3>Description</h3>
     <li>
-      <label for="newExamineRoom">Examine:</label>
+      <label for="createRoomLook">Look:</label>
+      <input
+        id="createRoomLook"
+        name="createRoomLook"
+        type="text"
+        maxlength="79"
+        required
+      />
+    </li>
+    <li>
+      <label for="createRoomExamine">Examine:</label>
       <textarea
-        id="newExamineRoom"
-        name="newExamineRoom"
+        id="createRoomExamine"
+        name="createRoomExamine"
         type="text"
         maxlength="240"
       ></textarea>
@@ -92,26 +62,23 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const createRoomForm = document.getElementById("createRoomForm");
-    const directionSelect = document.getElementById("newRoomDirection");
+    const createRoomDirection = document.getElementById("createRoomDirection");
 
     createRoomForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const roomData = {
-        name: DOMPurify.sanitize(document.getElementById("newRoomName").value),
-        direction: document.getElementById("newRoomDirection").value,
-        isDark: document.getElementById("newIsDark").checked,
-        isIndoors: document.getElementById("newIsIndoors").checked,
-        isOnWater: document.getElementById("newIsOnWater").checked,
-        isUnderwater: document.getElementById("newIsUnderwater").checked,
-        noMounts: false,
-        noMobs: false,
-        noMagic: false,
-        noCombat: false,
-        examine: DOMPurify.sanitize(
-          document.getElementById("newExamineRoom").value
-        ),
-        study: "",
-        research: "",
+        name: DOMPurify.sanitize(document.getElementById("createRoomName").value),
+        direction: createRoomDirection.value,
+        description: {
+          look: DOMPurify.sanitize(
+            document.getElementById("createRoomLook").value
+          ),
+          examine: DOMPurify.sanitize(
+            document.getElementById("createRoomExamine").value
+          ),
+          study: "",
+          research: "",
+        },
       };
       socket.emit("userSubmittedCreateRoom", roomData);
       createRoomForm.reset();
@@ -126,12 +93,12 @@
 
     socket.on("openCreateRoomForm", (formData) => {
       // Update the direction select element
-      directionSelect.innerHTML = ""; // Clear existing options
+      createRoomDirection.innerHTML = ""; // Clear existing options
       formData.availableDirections.forEach((direction) => {
         const option = document.createElement("option");
         option.value = direction;
         option.textContent = direction;
-        directionSelect.appendChild(option);
+        createRoomDirection.appendChild(option);
       });
       resetActiveSidebarElementTo(createRoomForm);
     });

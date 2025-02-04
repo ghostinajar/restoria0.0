@@ -5,11 +5,11 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import mongoose from "mongoose";
 import truncateDescription from "../util/truncateDescription.js";
-import look from "./look.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import lookExamine from "./lookExamine.js";
 async function createMobBlueprint(mobFormData, user) {
     try {
         // logger.debug(`Trying to create mob blueprint ${mobFormData.name}.`);
@@ -59,7 +59,7 @@ async function createMobBlueprint(mobFormData, user) {
         // logger.debug(`Saved zone ${originZone.name} with mob blueprints for ${originZone.mobBlueprints.map(mob => mob.name)}`)
         logger.info(`Author "${user.name}" created mob blueprint "${newMobBlueprint.name}".`);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created a mob blueprint for ${newMobBlueprint.name}. To place one here, type EDIT ROOM`));
-        await look({ commandWord: "look" }, user);
+        await lookExamine({ commandWord: "look" }, user);
     }
     catch (error) {
         catchErrorHandlerForFunction("createMobBlueprint", error, user.name);

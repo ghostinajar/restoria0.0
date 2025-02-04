@@ -3,10 +3,10 @@
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
 function messageON(user) {
-    messageToUsername(user.username, `Autoexamine ON: You'll see a full (EXAMINE) description when you enter a room.`, "success");
+    messageToUsername(user.username, `Autoexamine ON: You'll see full (EXAMINE) descriptions, even when you LOOK.`, "success");
 }
 function messageOFF(user) {
-    messageToUsername(user.username, `Autoexamine OFF: You'll see a shorter (LOOK) description when you enter a room.`, "success");
+    messageToUsername(user.username, `Autoexamine OFF: Use LOOK for short descriptions, and EXAMINE for longer ones.`, "success");
 }
 async function autoExamine(parsedCommand, user) {
     try {

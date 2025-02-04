@@ -25,6 +25,7 @@ import saveSuggestions from "./commands/saveSuggestions.js";
 import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
+import lookExamine from "./commands/lookExamine.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     const formEventMap = {
         bugForm: "openBugForm",
@@ -211,6 +212,7 @@ export const userSubmittedEraseRoomHandler = async (formData, user) => {
         await zone.eraseRoomById(formData._id);
         logger.info(`User ${user.name} erased room ${formData.name}, id: ${formData._id}`);
         let message = makeMessage("success", `You permanently erased the room ${formData.name}.`);
+        await lookExamine({ commandWord: "look" }, user);
         worldEmitter.emit(`messageFor${user.username}`, message);
     }
     catch (error) {

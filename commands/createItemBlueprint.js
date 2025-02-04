@@ -5,7 +5,6 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import logger from "../logger.js";
 import mongoose from "mongoose";
 import truncateDescription from "../util/truncateDescription.js";
-import look from "./look.js";
 import DAMAGE_TYPE from "../constants/DAMAGE_TYPE.js";
 import ITEM_TYPE from "../constants/ITEM_TYPE.js";
 import SPELL from "../constants/SPELL.js";
@@ -13,6 +12,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import lookExamine from "./lookExamine.js";
 async function createItemBlueprint(itemFormData, user) {
     try {
         // logger.debug(`Trying to create item blueprint ${itemFormData.name}.`);
@@ -91,7 +91,7 @@ async function createItemBlueprint(itemFormData, user) {
         // logger.debug(`Saved zone ${originZone.name} with item blueprints for ${originZone.itemBlueprints.map(item => item.name)}`)
         logger.info(`Author "${user.name}" created item blueprint "${newItemBlueprint.name}".`);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You made an item blueprint: ${newItemBlueprint.name}. Type EDIT ITEM to modify it, or EDIT ROOM to place one here.`));
-        await look({ commandWord: "look" }, user);
+        await lookExamine({ commandWord: "look" }, user);
     }
     catch (error) {
         catchErrorHandlerForFunction("createItemBlueprint", error, user.name);

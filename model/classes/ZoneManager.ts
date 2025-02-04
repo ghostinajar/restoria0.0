@@ -46,7 +46,7 @@ class ZoneManager {
       );
       if (!room) {
         logger.error(
-          `lookArrayRequestedHandler got an undefined room for location ${JSON.stringify(
+          `roomRequestedHandler got an undefined room for location ${JSON.stringify(
             location
           )}`
         );

@@ -7,6 +7,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import lookExamine from "./lookExamine.js";
 async function editRoom(room, roomData, user) {
     try {
         const zone = await getZoneOfUser(user);
@@ -17,15 +18,10 @@ async function editRoom(room, roomData, user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Tsk, you aren't an author of this zone. GOTO one of your own and EDIT there.`));
             return;
         }
-        const newRoomDescription = {
-            examine: roomData.description.examine,
-            study: roomData.description.study,
-            research: roomData.description.research,
-        };
-        truncateDescription(newRoomDescription, user);
+        truncateDescription(roomData.description, user);
         room.history.modifiedDate = new Date();
         room.name = roomData.name;
-        room.description = newRoomDescription;
+        room.description = roomData.description;
         room.isDark = roomData.isDark;
         room.isIndoors = roomData.isIndoors;
         room.isOnWater = roomData.isOnWater;
@@ -57,6 +53,7 @@ async function editRoom(room, roomData, user) {
         room.exits = roomData.exits;
         await zone.save();
         await zone.initRooms();
+        await lookExamine({ commandWord: 'look' }, user);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Room updated!`));
     }
     catch (error) {
