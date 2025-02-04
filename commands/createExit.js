@@ -9,6 +9,7 @@ import makeExitToRoomId from "../util/makeExitToRoomId.js";
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import getOppositeDirection from "../util/getOppositeDirection.js";
+import lookExamine from "./lookExamine.js";
 async function createExit(direction, user) {
     try {
         const originRoom = await getRoomOfUser(user);
@@ -20,15 +21,15 @@ async function createExit(direction, user) {
             throw new Error(`Room not found for ${user.name}.`);
         }
         if (originRoom.exits[direction]) {
-            throw new Error(`create_exit form submitted for an existing exit to the ${direction} of room ${originRoom._id}`);
+            throw new Error(`create_exit form submitted for an existing exit ${direction} of room ${originRoom._id}`);
         }
         const destinationCoords = getMapCoordsInDirection(direction, originRoom.mapCoords);
         if (!destinationCoords) {
-            throw new Error(`couldn't get valid destinationCoords to the ${direction} of room ${originRoom._id}`);
+            throw new Error(`couldn't get valid destinationCoords ${direction} of room ${originRoom._id}`);
         }
         const destinationRoom = getRoomInZoneByCoords(destinationCoords, zone);
         if (!destinationRoom) {
-            throw new Error(`couldn't get valid destinationRoom to the ${direction} of room ${originRoom._id}`);
+            throw new Error(`couldn't get valid destinationRoom ${direction} of room ${originRoom._id}`);
         }
         originRoom.exits[direction] = makeExitToRoomId(destinationRoom._id, zone._id);
         let oppositeDirection = getOppositeDirection(direction);
@@ -38,7 +39,8 @@ async function createExit(direction, user) {
         destinationRoom.exits[oppositeDirection] = makeExitToRoomId(originRoom._id, zone._id);
         await zone.save();
         await zone.initRooms();
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created an exit to the ${direction}.`));
+        await lookExamine({ commandWord: "look" }, user);
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created an exit ${direction}.`));
     }
     catch (error) {
         catchErrorHandlerForFunction(`createExit`, error, user?.name);

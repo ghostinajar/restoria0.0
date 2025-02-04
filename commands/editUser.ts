@@ -30,7 +30,7 @@ async function editUser(user: IUser, userDescription: IDescription) {
       `messageFor${user.username}`,
       makeMessage(
         `success`,
-        `User description saved! Type 'examine ${user.name}' to view it.`
+        `User description saved!`
       )
     );
     return;

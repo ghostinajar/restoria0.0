@@ -10,6 +10,7 @@ import makeExitToRoomId from "../util/makeExitToRoomId.js";
 import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import getOppositeDirection from "../util/getOppositeDirection.js";
+import lookExamine from "./lookExamine.js";
 
 async function createExit(direction: string, user: IUser) {
   try {
@@ -25,7 +26,7 @@ async function createExit(direction: string, user: IUser) {
 
     if (originRoom.exits[direction]) {
       throw new Error(
-        `create_exit form submitted for an existing exit to the ${direction} of room ${originRoom._id}`
+        `create_exit form submitted for an existing exit ${direction} of room ${originRoom._id}`
       );
     }
 
@@ -35,14 +36,14 @@ async function createExit(direction: string, user: IUser) {
     );
     if (!destinationCoords) {
       throw new Error(
-        `couldn't get valid destinationCoords to the ${direction} of room ${originRoom._id}`
+        `couldn't get valid destinationCoords ${direction} of room ${originRoom._id}`
       );
     }
 
     const destinationRoom = getRoomInZoneByCoords(destinationCoords, zone);
     if (!destinationRoom) {
       throw new Error(
-        `couldn't get valid destinationRoom to the ${direction} of room ${originRoom._id}`
+        `couldn't get valid destinationRoom ${direction} of room ${originRoom._id}`
       );
     }
 
@@ -63,10 +64,10 @@ async function createExit(direction: string, user: IUser) {
 
     await zone.save();
     await zone.initRooms();
-
+    await lookExamine({ commandWord: "look" }, user);
     worldEmitter.emit(
       `messageFor${user.username}`,
-      makeMessage("success", `You created an exit to the ${direction}.`)
+      makeMessage("success", `You created an exit ${direction}.`)
     );
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`createExit`, error, user?.name);

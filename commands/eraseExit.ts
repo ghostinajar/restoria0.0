@@ -8,6 +8,7 @@ import getOppositeDirection from "../util/getOppositeDirection.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
+import lookExamine from "./lookExamine.js";
 
 async function eraseExit(direction: string, user: IUser) {
   try {
@@ -38,7 +39,7 @@ async function eraseExit(direction: string, user: IUser) {
 
     let oppositeDirection = getOppositeDirection(direction);
     if (!oppositeDirection) {
-      throw new Error(`couldn't get opposite direction of ${direction}`)
+      throw new Error(`couldn't get opposite direction of ${direction}`);
     }
 
     originRoom.exits[direction] = null;
@@ -48,11 +49,12 @@ async function eraseExit(direction: string, user: IUser) {
 
     await zone.save();
     await zone.initRooms();
+    await lookExamine({ commandWord: "look" }, user);
+
     worldEmitter.emit(
       `messageFor${user.username}`,
-      makeMessage("success", `You erased the exit to the ${direction}.`)
+      makeMessage("success", `You erased the ${direction} exit.`)
     );
-
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedEraseExitHandler`,

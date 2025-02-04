@@ -13,6 +13,16 @@
   <h2>Edit User</h2>
   <ul>
     <li>
+      <label for="editUserLook">Look</label>
+      <input
+        id="editUserLook"
+        name="editUserLook"
+        type="text"
+        maxlength="79"
+        required
+      />
+    </li>
+    <li>
       <label for="editUserExamineUser">Examine:</label>
       <textarea
         id="editUserExamineUser"
@@ -50,6 +60,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const editUserForm = document.getElementById("editUserForm");
+    const editUserLook = document.getElementById("editUserLook");
     const editUserExamineUser = document.getElementById("editUserExamineUser");
     const editUserStudyUser = document.getElementById("editUserStudyUser");
     const editUserResearchUser = document.getElementById(
@@ -59,6 +70,7 @@
     editUserForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const userDescription = {
+        look: DOMPurify.sanitize(editUserLook.value),
         examine: DOMPurify.sanitize(editUserExamineUser.value),
         study: DOMPurify.sanitize(editUserStudyUser.value),
         research: DOMPurify.sanitize(editUserResearchUser.value),

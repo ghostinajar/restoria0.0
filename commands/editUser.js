@@ -14,7 +14,7 @@ async function editUser(user, userDescription) {
         }
         user.history.modifiedDate = new Date();
         await user.save();
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `User description saved! Type 'examine ${user.name}' to view it.`));
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `User description saved!`));
         return;
     }
     catch (error) {
