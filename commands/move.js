@@ -61,13 +61,13 @@ async function move(parsedCommand, user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `A mysterious force blocks your way.`));
             return;
         }
+        // Message user
+        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`userMove`, `You move ${requestedDirection}.`));
         // Message user's origin room
         worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`userMove`, `${user.name} went ${direction}.`));
         await relocateUser(user, originRoom.exits[direction].destinationLocation);
         // Message user's destination room
         worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`userMove`, `${user.name} arrived.`));
-        // Message user
-        worldEmitter.emit(`messageFor${user.username}`, makeMessage(`userMove`, `You move ${requestedDirection}.`));
     }
     catch (error) {
         catchErrorHandlerForFunction("move", error, user.name);

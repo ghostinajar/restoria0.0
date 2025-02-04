@@ -49,7 +49,9 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
     // get origin room of user
     const originRoom = await getRoomOfUser(user);
     if (!originRoom) {
-      throw new Error( `Error in move, couldn't find origin room for user ${user.name}`)
+      throw new Error(
+        `Error in move, couldn't find origin room for user ${user.name}`
+      );
     }
 
     // check if the exit is defined
@@ -86,6 +88,11 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
 
+    // Message user
+    worldEmitter.emit(
+      `messageFor${user.username}`,
+      makeMessage(`userMove`, `You move ${requestedDirection}.`)
+    );
 
     // Message user's origin room
     worldEmitter.emit(
@@ -99,14 +106,8 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
       `messageFor${user.username}sRoom`,
       makeMessage(`userMove`, `${user.name} arrived.`)
     );
-
-    // Message user
-    worldEmitter.emit(
-      `messageFor${user.username}`,
-      makeMessage(`userMove`, `You move ${requestedDirection}.`)
-    );
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("move", error, user.name)
+    catchErrorHandlerForFunction("move", error, user.name);
   }
 }
 
