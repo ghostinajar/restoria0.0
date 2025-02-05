@@ -45,6 +45,8 @@ import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import { IMapTileState } from "./commands/map.js";
 import lookExamine from "./commands/lookExamine.js";
+import automap from "./commands/autoMap.js";
+import eraseRoom from "./commands/eraseRoom.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
@@ -324,28 +326,7 @@ export const userSubmittedEraseRoomHandler = async (
   },
   user: IUser
 ) => {
-  try {
-    const zone = await getZoneOfUser(user);
-    if (!zone) {
-      throw new Error(`Couldn't get ${user.username}'s zone.`);
-    }
-    await zone.eraseRoomById(formData._id);
-    logger.info(
-      `User ${user.name} erased room ${formData.name}, id: ${formData._id}`
-    );
-    let message = makeMessage(
-      "success",
-      `You permanently erased the room ${formData.name}.`
-    );
-    await lookExamine({ commandWord: "look" }, user);
-    worldEmitter.emit(`messageFor${user.username}`, message);
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(
-      `userSubmittedEraseRoomHandler`,
-      error,
-      user?.name
-    );
-  }
+  eraseRoom(formData, user);
 };
 
 export const userSubmittedEraseZoneHandler = async (
@@ -554,6 +535,7 @@ export const userSubmittedSuggestionsHandler = async (
       throw new Error(`Couldn't get ${user.username}'s zone.`);
     }
     await saveSuggestions(suggestions, zone);
+    stats(user);
     socket.emit(
       "message",
       makeMessage("success", `We saved the suggestions for ${zone.name}.`)

@@ -98,6 +98,7 @@ export const commandsWith1Param = [
   "leader",
   "locate",
   "look",
+  "map",
   "mount",
   "offer",
   "open",

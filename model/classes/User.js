@@ -103,9 +103,11 @@ export const userSchema = new Schema({
     preferences: {
         type: {
             autoExamine: { type: Boolean, required: true, default: true },
+            mapRadius: { type: Number, required: true, default: 8 },
+            autoMap: { type: Boolean, required: true, default: true },
         },
         required: true,
-        default: () => ({ autoExamine: false }),
+        default: () => ({ autoExamine: false, mapRadius: 8, autoMap: true, }),
     }
 });
 userSchema.pre("save", function (next) {

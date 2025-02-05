@@ -6,6 +6,8 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
+import messageToUsername from "../util/messageToUsername.js";
+import { IParsedCommand } from "../util/parseCommand.js";
 
 export interface IMapTileState {
   mapCoords: [number, number, number];
@@ -28,8 +30,62 @@ export interface IMapTileState {
     | { north: string; east: string; south: string; west: string };
 }
 
-async function map(user: IUser) {
+async function map(parsedCommand: IParsedCommand, user: IUser) {
   try {
+    let directObject = parsedCommand.directObject?.toLowerCase();
+
+    // handle invalid parameters (we can only use undefined, ON, OFF, or a number)
+    if (
+      directObject !== undefined &&
+      directObject.toString() !== "off" &&
+      directObject.toString() !== "on" &&
+      isNaN(Number(directObject))
+    ) {
+      messageToUsername(
+        user.username,
+        `Try MAP (on its own), MAP ON, MAP OFF, or MAP 7 (changes map radius to 7).`,
+        `help`
+      );
+      messageToUsername(user.username, `Read HELP MAP to learn more.`, `help`);
+      return;
+    }
+
+    // handle a number parameter
+    if (!isNaN(Number(directObject))) {
+      let newMapRadius = Number(directObject);
+      if (newMapRadius > 10) {
+        directObject = "10";
+      } else if (newMapRadius < 1) {
+        directObject = "1";
+      }
+      messageToUsername(
+        user.username,
+        `MAP radius set to ${newMapRadius}! It can be any number from 1-10.`,
+        `help`
+      );
+      user.preferences.mapRadius = newMapRadius;
+    }
+
+    // handle "on" or "off" parameter
+    if (parsedCommand.directObject?.toLowerCase() === "off") {
+      user.preferences.autoMap = false;
+      messageToUsername(
+        user.username,
+        `Auto MAP is OFF.`,
+        `help`
+      );
+    }
+    if (parsedCommand.directObject?.toLowerCase() === "on") {
+      user.preferences.autoMap = true;
+      messageToUsername(
+        user.username,
+        `Auto MAP is ON.`,
+        `help`
+      );
+    }
+
+    console.log(user.preferences);
+
     const room = await getRoomOfUser(user);
     if (!room) {
       throw new Error("map command couldn't find user's room.");
@@ -39,7 +95,7 @@ async function map(user: IUser) {
       throw new Error("map command couldn't find user's zone.");
     }
 
-    const zoneFloorName = `${zone.name} Floor ${room.mapCoords[2]}`
+    const zoneFloorName = `${zone.name} Floor ${room.mapCoords[2]}`;
 
     const mapTileState: IMapTileState = {
       mapCoords: room.mapCoords,
@@ -68,7 +124,11 @@ async function map(user: IUser) {
         mapTileState.walls[direction] = "wall";
       }
     });
-    worldEmitter.emit(`mapRequestFor${user.username}`, zoneFloorName, mapTileState);
+    worldEmitter.emit(
+      `mapRequestFor${user.username}`,
+      zoneFloorName,
+      mapTileState
+    );
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`map`, error, user?.name);
   }
