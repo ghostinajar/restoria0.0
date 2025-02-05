@@ -1,6 +1,7 @@
 // autoExamine
 // user can toggle to see examine description of rooms they enter
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import emitUserPreferenceToClient from "../util/emitUserPreferenceToClient.js";
 import messageToUsername from "../util/messageToUsername.js";
 function messageON(user) {
     messageToUsername(user.username, `Autoexamine ON: You'll see full (EXAMINE) descriptions, even when you LOOK.`, "success");
@@ -29,6 +30,7 @@ async function autoExamine(parsedCommand, user) {
             messageOFF(user);
         }
         user.save();
+        await emitUserPreferenceToClient(user, "autoExamine", user.preferences.autoExamine);
     }
     catch (error) {
         catchErrorHandlerForFunction(`autoExamine`, error, user?.name);

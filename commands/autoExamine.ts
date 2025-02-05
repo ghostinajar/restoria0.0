@@ -3,6 +3,7 @@
 
 import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import emitUserPreferenceToClient from "../util/emitUserPreferenceToClient.js";
 import messageToUsername from "../util/messageToUsername.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 
@@ -41,6 +42,11 @@ async function autoExamine(parsedCommand: IParsedCommand, user: IUser) {
       messageOFF(user);
     }
     user.save();
+    await emitUserPreferenceToClient(
+      user,
+      "autoExamine",
+      user.preferences.autoExamine
+    );
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`autoExamine`, error, user?.name);
   }

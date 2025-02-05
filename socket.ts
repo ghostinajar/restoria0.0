@@ -80,6 +80,7 @@ const setupSocket = (io: any) => {
         worldEmitter.removeAllListeners(`messageFor${user.username}`);
         worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
         worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
+        worldEmitter.removeAllListeners(`preferenceFor${user.username}`);
         worldEmitter.removeAllListeners(`safeMessageArrayFor${user.username}`);
         worldEmitter.removeAllListeners(`safeMessageFor${user.username}`);
         worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
@@ -126,6 +127,13 @@ const setupSocket = (io: any) => {
         `messageFor${user.username}sZone`,
         async (message: IMessage) => {
           messageForUsersZoneHandler(message, socket, user);
+        }
+      );
+
+      worldEmitter.on(
+        `preferenceFor${user.username}`,
+        async (preference: { type: string; setting: any }) => {
+          socket.emit(`userPreference`, preference)
         }
       );
 
@@ -195,9 +203,12 @@ const setupSocket = (io: any) => {
         await userSubmittedCreateExitHandler(direction, user);
       });
 
-      socket.on(`userSubmittedCreateRoom`, async (roomData: ICreateRoomFormData) => {
-        await userSubmittedCreateRoomHandler(roomData, user);
-      });
+      socket.on(
+        `userSubmittedCreateRoom`,
+        async (roomData: ICreateRoomFormData) => {
+          await userSubmittedCreateRoomHandler(roomData, user);
+        }
+      );
 
       socket.on(`userSubmittedCreateZone`, async (zoneData: IZoneData) => {
         await userSubmittedCreateZoneHandler(zoneData, user);
@@ -313,6 +324,11 @@ const setupSocket = (io: any) => {
       await lookExamine({ commandWord: `look` }, user);
       await exits(user);
       stats(user);
+
+      // send a lean copy of user.preferences to client socket for cache
+      const userPreferencesCopy = JSON.parse(JSON.stringify(user.preferences)); //deep copy
+      delete userPreferencesCopy._id;
+      socket.emit(`userPreferences`, userPreferencesCopy);
 
       socket.on(`disconnect`, async () => {
         try {

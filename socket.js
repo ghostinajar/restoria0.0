@@ -35,6 +35,7 @@ const setupSocket = (io) => {
                 worldEmitter.removeAllListeners(`messageFor${user.username}`);
                 worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
                 worldEmitter.removeAllListeners(`messageFor${user.username}sZone`);
+                worldEmitter.removeAllListeners(`preferenceFor${user.username}`);
                 worldEmitter.removeAllListeners(`safeMessageArrayFor${user.username}`);
                 worldEmitter.removeAllListeners(`safeMessageFor${user.username}`);
                 worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
@@ -59,6 +60,9 @@ const setupSocket = (io) => {
             });
             worldEmitter.on(`messageFor${user.username}sZone`, async (message) => {
                 messageForUsersZoneHandler(message, socket, user);
+            });
+            worldEmitter.on(`preferenceFor${user.username}`, async (preference) => {
+                socket.emit(`userPreference`, preference);
             });
             worldEmitter.on(`safeMessageArrayFor${user.username}`, async (messageArray) => {
                 safeMessageArrayForUserHandler(messageArray, socket);
@@ -142,6 +146,12 @@ const setupSocket = (io) => {
             await lookExamine({ commandWord: `look` }, user);
             await exits(user);
             stats(user);
+            // send a lean deep copy of user.preferences to client socket for cache
+            const userPreferencesCopy = JSON.parse(JSON.stringify(user.preferences)); //deep copy
+            delete userPreferencesCopy._id;
+            console.log(userPreferencesCopy);
+            console.log(`userPreferencesCopy has ${Object.keys(userPreferencesCopy).length} properties`);
+            socket.emit(`userPreferences`, userPreferencesCopy);
             socket.on(`disconnect`, async () => {
                 try {
                     let message = makeMessage("quit", `${user.name} left Restoria.`);

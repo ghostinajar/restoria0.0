@@ -4,6 +4,7 @@
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import emitUserPreferenceToClient from "../util/emitUserPreferenceToClient.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import messageToUsername from "../util/messageToUsername.js";
@@ -58,33 +59,29 @@ async function map(parsedCommand: IParsedCommand, user: IUser) {
       } else if (newMapRadius < 1) {
         directObject = "1";
       }
+      user.preferences.mapRadius = newMapRadius;
+      await user.save();
+      await emitUserPreferenceToClient(user, "mapRadius", newMapRadius)
       messageToUsername(
         user.username,
         `MAP radius set to ${newMapRadius}! It can be any number from 1-10.`,
         `help`
       );
-      user.preferences.mapRadius = newMapRadius;
     }
 
     // handle "on" or "off" parameter
     if (parsedCommand.directObject?.toLowerCase() === "off") {
       user.preferences.autoMap = false;
-      messageToUsername(
-        user.username,
-        `Auto MAP is OFF.`,
-        `help`
-      );
+      await user.save();
+      await emitUserPreferenceToClient(user, "autoMap", false)
+      messageToUsername(user.username, `Auto MAP is OFF.`, `help`);
     }
     if (parsedCommand.directObject?.toLowerCase() === "on") {
       user.preferences.autoMap = true;
-      messageToUsername(
-        user.username,
-        `Auto MAP is ON.`,
-        `help`
-      );
+      await user.save();
+      await emitUserPreferenceToClient(user, "autoMap", true)
+      messageToUsername(user.username, `Auto MAP is ON.`, `help`);
     }
-
-    console.log(user.preferences);
 
     const room = await getRoomOfUser(user);
     if (!room) {
