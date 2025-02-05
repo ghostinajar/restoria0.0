@@ -146,11 +146,9 @@ const setupSocket = (io) => {
             await lookExamine({ commandWord: `look` }, user);
             await exits(user);
             stats(user);
-            // send a lean deep copy of user.preferences to client socket for cache
+            // send a lean copy of user.preferences to client socket for cache
             const userPreferencesCopy = JSON.parse(JSON.stringify(user.preferences)); //deep copy
             delete userPreferencesCopy._id;
-            console.log(userPreferencesCopy);
-            console.log(`userPreferencesCopy has ${Object.keys(userPreferencesCopy).length} properties`);
             socket.emit(`userPreferences`, userPreferencesCopy);
             socket.on(`disconnect`, async () => {
                 try {

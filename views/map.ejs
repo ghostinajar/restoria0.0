@@ -152,7 +152,7 @@
     zoneFloorNameDiv.innerText = mapCache.zoneFloorName || "Unknown Zone Name";
 
     // with userMapCoords in the center, display map tiles
-    let mapRadius = 8;
+    let mapRadius = userPreferences.mapRadius || 8;
     for (let y = -mapRadius; y <= mapRadius; y++) {
       for (let x = -mapRadius; x <= mapRadius; x++) {
         let mapTileCoords = [userMapCoords[0] + x, userMapCoords[1] + y];
