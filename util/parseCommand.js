@@ -12,7 +12,16 @@ function parseCommand(command) {
         parsedCommand.commandWord = splitCommand[0].toLowerCase();
         function parseAndPackageObject(objectStr, isDirectObject) {
             const lowerObj = objectStr.toLowerCase();
-            if (hasOrdinalPrefix(lowerObj)) {
+            if (lowerObj.startsWith('all.')) {
+                if (isDirectObject) {
+                    parsedCommand.targetsAll = true;
+                    parsedCommand.directObject = lowerObj.substring(4); // removes 'all.'
+                }
+                else {
+                    parsedCommand.indirectObject = lowerObj;
+                }
+            }
+            else if (hasOrdinalPrefix(lowerObj)) {
                 const { ordinal, object } = parseOrdinalFromObject(lowerObj);
                 if (isDirectObject) {
                     parsedCommand.directObjectOrdinal = ordinal;

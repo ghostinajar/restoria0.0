@@ -30,6 +30,7 @@ import sudobugs from "../commands/sudobugs.js";
 import sudobug from "../commands/sudobug.js";
 import autoExamine from "../commands/autoExamine.js";
 import lookExamine from "../commands/lookExamine.js";
+import get from "../commands/get.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -83,6 +84,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       case `l`:
       case `look`: {
         await lookExamine(parsedCommand, user);
+        break;
+      }
+      case `get` : {
+        await get(parsedCommand, user);
         break;
       }
       case `goto`: {
