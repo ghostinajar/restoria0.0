@@ -81,7 +81,7 @@ async function lookExamine(parsedCommand: IParsedCommand, user: IUser) {
       objectDescription.content = `${targetObject.description.examine}`
     }
     if (!objectDescription.content || objectDescription.content === "undefined") {
-      objectDescription.content = `This zone's author needs to add a ${targetObject.description[lookOrExamine]} description here.`
+      objectDescription.content = `This zone's author needs to add a description here.`
     }
     lookExamineArray.push(objectDescription);
 
