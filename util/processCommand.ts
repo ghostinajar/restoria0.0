@@ -86,10 +86,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await lookExamine(parsedCommand, user);
         break;
       }
-      case `get` : {
-        await get(parsedCommand, user);
-        break;
-      }
+      // case `get` : {
+      //   await get(parsedCommand, user);
+      //   break;
+      // }
       case `goto`: {
         await goto(user);
         break;
