@@ -9,64 +9,91 @@ import messageToUsername from "../util/messageToUsername.js";
 import relocateItem from "../util/relocateItem.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 
+function failToFindItem(username: string, itemName: string) {
+  messageToUsername(
+    username,
+    `You can't seem to find the ${itemName}.`,
+    `help`
+  );
+}
+
 async function get(parsedCommand: IParsedCommand, user: IUser) {
   try {
     // fail if item not specified
-    let specifiedItem = parsedCommand.directObject;
-    if (!specifiedItem) {
+    let specifiedItemKeyword = parsedCommand.directObject;
+    if (!specifiedItemKeyword) {
       console.log("messaging user");
       messageToUsername(user.username, `What do you want to get?`, `help`);
       return;
     }
 
-    // fail if container not specified and object not found in room.inventory
-    let specifiedContainer = parsedCommand.indirectObject;
+    let specifiedContainerKeyword =
+      parsedCommand.indirectObject || "the ground";
     let room = await getRoomOfUser(user);
     if (!room) {
       throw new Error(`Room not found for user ${user.name}.`);
     }
-    function failToFindItem(username: string, itemName: string) {
-      messageToUsername(
-        username,
-        `You can't seem to find the ${itemName}.`,
-        `help`
+
+    // handle direct get (from room inventory)
+    if (specifiedContainerKeyword === "the ground") {
+      //handle single object (directObjectOrdinal is an integer or unspecifed)
+      let itemToGet = await findObjectInInventory(
+        room.inventory,
+        specifiedItemKeyword,
+        parsedCommand.directObjectOrdinal
       );
-    }
-    if (
-      !specifiedContainer &&
-      !room.inventory.some((item: IItem) =>
-        item.keywords.some((keyword) => keyword.toLowerCase() === specifiedItem)
-      )
-    ) {
-      failToFindItem(user.username, specifiedItem);
+      if (!itemToGet) {
+        failToFindItem(user.username, specifiedItemKeyword);
+        return;
+      }
+
+      // fail if item is a fixture
+      if (itemToGet.tags.fixture) {
+        messageToUsername(
+          user.username,
+          `You can't get ${itemToGet.name}, because it's fixed in place.`,
+          `help`
+        );
+        return;
+      }
+      relocateItem(itemToGet, room.inventory, user.inventory);
+      messageToUsername(
+        user.username,
+        `You got ${itemToGet.name} from the ground.`,
+        `success`
+      );
+
+      console.log(user.inventory.map((item) => item.name));
+      // await user.save();
       return;
     }
 
-    // fail if container specified but only found in room.mobs
-    let userInventoryHasEligibleContainers = user.inventory.some(
+    // handle get from container
+
+    const userInventoryHasEligibleContainers = user.inventory.some(
       (container: IItem) =>
         container.keywords.some(
-          (keyword) => keyword.toLowerCase() === specifiedContainer
+          (keyword) => keyword.toLowerCase() === specifiedContainerKeyword
         )
+    );
+    const roomInventoryHasEligibleContainers = room.inventory.some(
+      (container: IItem) =>
+        container.keywords.some(
+          (keyword) => keyword.toLowerCase() === specifiedContainerKeyword
+        )
+    );
+    const mobsHaveSpecifiedContainerKeywordAsKeyword = room.mobs.some((mob) =>
+      mob.keywords.includes(specifiedContainerKeyword)
+    );
+    const usersHaveSpecifiedContainerKeywordAsUsername = room.users.some(
+      (user) => user.username === specifiedContainerKeyword
     );
 
-    let roomInventoryHasEligibleContainers = room.inventory.some(
-      (container: IItem) =>
-        container.keywords.some(
-          (keyword) => keyword.toLowerCase() === specifiedContainer
-        )
-    );
-    let mobsHaveSpecifiedContainerAsKeyword = false;
-    if (specifiedContainer) {
-      mobsHaveSpecifiedContainerAsKeyword = room.mobs.some((mob) =>
-        mob.keywords.includes(specifiedContainer)
-      );
-    }
+    // fail if container only found in room.mobs
     if (
-      specifiedContainer &&
       !userInventoryHasEligibleContainers &&
       !roomInventoryHasEligibleContainers &&
-      mobsHaveSpecifiedContainerAsKeyword
+      mobsHaveSpecifiedContainerKeywordAsKeyword
     ) {
       messageToUsername(
         user.username,
@@ -76,18 +103,11 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
 
-    // fail if container specified but only found in room.users
-    let usersHaveSpecifiedContainerAsUsername = false;
-    if (specifiedContainer) {
-      usersHaveSpecifiedContainerAsUsername = room.users.some(
-        (user) => user.username === specifiedContainer
-      );
-    }
+    // fail if container only found in room.users
     if (
-      specifiedContainer &&
       !userInventoryHasEligibleContainers &&
       !roomInventoryHasEligibleContainers &&
-      usersHaveSpecifiedContainerAsUsername
+      usersHaveSpecifiedContainerKeywordAsUsername
     ) {
       messageToUsername(
         user.username,
@@ -97,61 +117,70 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       return;
     }
 
-    // fail if container specified but not found anywhere
+    // fail if container not found anywhere
     function failToFindContainer(username: string, itemName: string) {
       messageToUsername(
         username,
-        `You can't seem to find the ${specifiedContainer} to get it from.`,
+        `You can't seem to find the ${specifiedContainerKeyword} to get it from.`,
         `help`
       );
     }
     if (
-      specifiedContainer &&
       !userInventoryHasEligibleContainers &&
       !roomInventoryHasEligibleContainers &&
-      !usersHaveSpecifiedContainerAsUsername &&
-      !mobsHaveSpecifiedContainerAsKeyword
+      !usersHaveSpecifiedContainerKeywordAsUsername &&
+      !mobsHaveSpecifiedContainerKeywordAsKeyword
     ) {
-      failToFindContainer(user.username, specifiedContainer);
+      failToFindContainer(user.username, specifiedContainerKeyword);
       return;
     }
+
     // fail if container specified but not found by ordinal
     let originInventory: IItem[] | undefined;
     if (userInventoryHasEligibleContainers) {
       let originContainer = await findObjectInInventory(
         user.inventory,
-        specifiedContainer as string,
+        specifiedContainerKeyword,
         parsedCommand.indirectObjectOrdinal
       );
-      originInventory = originContainer?.inventory;
+      if (originContainer) {
+        originInventory = originContainer.inventory;
+      }
     }
     if (!originInventory && roomInventoryHasEligibleContainers) {
       let originContainer = await findObjectInInventory(
         room.inventory,
-        specifiedContainer as string,
+        specifiedContainerKeyword,
         parsedCommand.indirectObjectOrdinal
       );
-      originInventory = originContainer?.inventory;
+      if (originContainer) {
+        originInventory = originContainer.inventory;
+      }
     }
     if (!originInventory) {
-      failToFindContainer(user.username, specifiedContainer as string);
+      failToFindContainer(user.username, specifiedContainerKeyword);
       return;
     }
 
     // fail if item not found in container
     let itemToGet = await findObjectInInventory(
       originInventory,
-      specifiedItem,
+      specifiedItemKeyword,
       parsedCommand.directObjectOrdinal
     );
     if (!itemToGet) {
-      failToFindItem(user.username, specifiedItem);
+      failToFindItem(user.username, specifiedItemKeyword);
       return;
     }
 
+    // success!
     // move item from container to user inventory
     relocateItem(itemToGet, originInventory, user.inventory);
-    messageToUsername(user.username, `You got ${itemToGet.name}.`, `success`);
+    messageToUsername(
+      user.username,
+      `You got ${itemToGet.name} from ${specifiedContainerKeyword}.`,
+      `success`
+    );
     console.log(user.inventory.map((item) => item.name));
     // await user.save();
   } catch (error: unknown) {

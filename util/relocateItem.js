@@ -1,5 +1,5 @@
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
-async function relocateItem(item, destinationInventory, originInventory) {
+async function relocateItem(item, originInventory, destinationInventory) {
     try {
         destinationInventory.push(item);
         originInventory.splice(originInventory.indexOf(item), 1);

@@ -6,12 +6,14 @@ async function findObjectInInventory(inventory, objectKeyword, objectOrdinal) {
         // find eligible matches
         const filteredInventory = inventory.filter((item) => item.keywords.some((keyword) => keyword.includes(objectKeyword)));
         let foundObject;
-        if (objectOrdinal !== undefined &&
-            objectOrdinal !== "all" &&
-            objectOrdinal < filteredInventory.length) {
-            foundObject = filteredInventory[objectOrdinal];
+        if (objectOrdinal !== undefined && objectOrdinal !== "all") {
+            // Check if the requested ordinal exists in the filtered inventory
+            foundObject = objectOrdinal < filteredInventory.length
+                ? filteredInventory[objectOrdinal]
+                : undefined;
         }
         else {
+            // If no ordinal specified or "all" requested, return first match if any
             foundObject = filteredInventory[0];
         }
         return foundObject;

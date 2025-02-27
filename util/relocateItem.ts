@@ -5,8 +5,8 @@ import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 async function relocateItem(
   item: IItem,
-  destinationInventory: IItem[],
-  originInventory: IItem[]
+  originInventory: IItem[],
+  destinationInventory: IItem[]
 ) {
   try {
     destinationInventory.push(item);
