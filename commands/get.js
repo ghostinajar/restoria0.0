@@ -22,19 +22,37 @@ async function get(parsedCommand, user) {
         }
         // handle direct get (from room inventory)
         if (specifiedContainerKeyword === "the ground") {
-            //handle single object (directObjectOrdinal is an integer or unspecifed)
             let itemToGet = await findObjectInInventory(room.inventory, specifiedItemKeyword, parsedCommand.directObjectOrdinal);
             if (!itemToGet) {
                 failToFindItem(user.username, specifiedItemKeyword);
                 return;
             }
-            // fail if item is a fixture
-            if (itemToGet.tags.fixture) {
-                messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
-                return;
+            // handle "all"
+            if (parsedCommand.targetsAll) {
+                let itemsToGet = room.inventory.filter((item) => item.keywords.some((keyword) => keyword.includes(specifiedItemKeyword)));
+                if (!itemsToGet) {
+                    failToFindItem(user.username, specifiedItemKeyword);
+                    return;
+                }
+                itemsToGet.forEach((itemToGet) => {
+                    if (itemToGet.tags.fixture) {
+                        messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
+                        return;
+                    }
+                    relocateItem(itemToGet, room.inventory, user.inventory);
+                    messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
+                });
             }
-            relocateItem(itemToGet, room.inventory, user.inventory);
-            messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
+            else {
+                //handle single object (directObjectOrdinal is an integer or unspecifed
+                // fail if item is a fixture
+                if (itemToGet.tags.fixture) {
+                    messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
+                    return;
+                }
+                relocateItem(itemToGet, room.inventory, user.inventory);
+                messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
+            }
             console.log(user.inventory.map((item) => item.name));
             // await user.save();
             return;
@@ -71,20 +89,24 @@ async function get(parsedCommand, user) {
         }
         // fail if container specified but not found by ordinal
         let originInventory;
+        let originContainer;
         if (userInventoryHasEligibleContainers) {
-            let originContainer = await findObjectInInventory(user.inventory, specifiedContainerKeyword, parsedCommand.indirectObjectOrdinal);
+            originContainer = await findObjectInInventory(user.inventory, specifiedContainerKeyword, parsedCommand.indirectObjectOrdinal);
             if (originContainer) {
                 originInventory = originContainer.inventory;
             }
         }
         if (!originInventory && roomInventoryHasEligibleContainers) {
-            let originContainer = await findObjectInInventory(room.inventory, specifiedContainerKeyword, parsedCommand.indirectObjectOrdinal);
+            originContainer = await findObjectInInventory(room.inventory, specifiedContainerKeyword, parsedCommand.indirectObjectOrdinal);
             if (originContainer) {
                 originInventory = originContainer.inventory;
             }
         }
         if (!originInventory) {
             failToFindContainer(user.username, specifiedContainerKeyword);
+            return;
+        }
+        if (!originContainer) {
             return;
         }
         // fail if item not found in container
@@ -95,8 +117,27 @@ async function get(parsedCommand, user) {
         }
         // success!
         // move item from container to user inventory
-        relocateItem(itemToGet, originInventory, user.inventory);
-        messageToUsername(user.username, `You got ${itemToGet.name} from ${specifiedContainerKeyword}.`, `success`);
+        if (parsedCommand.targetsAll) {
+            // handle get all
+            let itemsToGet = originInventory.filter((item) => item.keywords.some((keyword) => keyword.includes(specifiedItemKeyword)));
+            if (!itemsToGet) {
+                failToFindItem(user.username, specifiedItemKeyword);
+                return;
+            }
+            itemsToGet.forEach((itemToGet) => {
+                if (itemToGet.tags.fixture) {
+                    messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
+                    return;
+                }
+                relocateItem(itemToGet, originInventory, user.inventory);
+                messageToUsername(user.username, `You got ${itemToGet.name} from ${originContainer.name}.`, `success`);
+            });
+        }
+        else {
+            // handle get single object
+            relocateItem(itemToGet, originInventory, user.inventory);
+            messageToUsername(user.username, `You got ${itemToGet.name} from ${specifiedContainerKeyword}.`, `success`);
+        }
         console.log(user.inventory.map((item) => item.name));
         // await user.save();
     }
