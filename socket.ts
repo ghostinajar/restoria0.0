@@ -1,4 +1,5 @@
 // socket
+// organizes messages to and from client sockets
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
 import { ICreateRoomFormData } from "./commands/createRoom.js";
@@ -40,6 +41,7 @@ import {
   safeMessageArrayForUserHandler,
   safeMessageForUserHandler,
   userSubmittedBugHandler,
+  userSubmittedEditMapHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -55,6 +57,7 @@ import { ISuggestion, refersToObjectType } from "./model/classes/Suggestion.js";
 import catchErrorHandlerForFunction from "./util/catchErrorHandlerForFunction.js";
 import { IMapTileState } from "./commands/map.js";
 import lookExamine from "./commands/lookExamine.js";
+import { IMapTile } from "./model/classes/Room.js";
 
 const setupSocket = (io: any) => {
   try {
@@ -83,8 +86,10 @@ const setupSocket = (io: any) => {
         worldEmitter.removeAllListeners(`preferenceFor${user.username}`);
         worldEmitter.removeAllListeners(`safeMessageArrayFor${user.username}`);
         worldEmitter.removeAllListeners(`safeMessageFor${user.username}`);
+        worldEmitter.removeAllListeners(`updatesArrayFor${user.username}`);
         worldEmitter.removeAllListeners(`user${user.username}LeavingGame`);
         worldEmitter.removeAllListeners(`user${user.username}ChangingRooms`);
+        worldEmitter.removeAllListeners(`whoArrayFor${user.username}`);
       }
       removeAllListenersForUser(user);
 
@@ -227,6 +232,13 @@ const setupSocket = (io: any) => {
         `userSubmittedEditItemBlueprint`,
         async (itemBlueprintData: IEditItemBlueprintFormData) => {
           await userSubmittedEditItemBlueprintHandler(itemBlueprintData, user);
+        }
+      );
+
+      socket.on(
+        `userSubmittedEditMap`,
+        async (editMapData: IMapTile) => {
+          await userSubmittedEditMapHandler(editMapData, user);
         }
       );
 

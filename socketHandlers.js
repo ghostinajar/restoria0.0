@@ -26,6 +26,7 @@ import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import eraseRoom from "./commands/eraseRoom.js";
+import editMap from "./commands/editMap.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     const formEventMap = {
         bugForm: "openBugForm",
@@ -35,6 +36,7 @@ export const formPromptForUserHandler = async (formData, socket) => {
         createRoomForm: "openCreateRoomForm",
         createZoneForm: "openCreateZoneForm",
         editItemBlueprintForm: "openEditItemBlueprintForm",
+        editMapForm: "openEditMapForm",
         editMobBlueprintForm: "openEditMobBlueprintForm",
         editRoomForm: "openEditRoomForm",
         editUserForm: "openEditUserForm",
@@ -134,6 +136,15 @@ export const userSubmittedEditItemBlueprintHandler = async (itemBlueprintData, u
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEditItemBlueprintHandler`, error);
+    }
+};
+export const userSubmittedEditMapHandler = async (editMapData, user) => {
+    try {
+        await editMap(editMapData, user);
+        stats(user);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`userSubmittedEditMapHandler`, error, user?.name);
     }
 };
 export const userSubmittedEditMobBlueprintHandler = async (mobBlueprintData, user) => {

@@ -14,6 +14,9 @@ import getNameById from "../util/getNameById.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import HELP from "../constants/HELP.js";
 import help from "./help.js";
+function sendRejectionMessage(username) {
+    worldEmitter.emit(`messageFor${username}`, makeMessage(`rejection`, `Edit what? Try EDIT ITEM, EDIT MAP, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`));
+}
 async function edit(parsedCommand, user) {
     try {
         let target = parsedCommand.directObject;
@@ -21,8 +24,9 @@ async function edit(parsedCommand, user) {
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
         }
+        const rejectionString = `Edit what? Try EDIT ITEM, EDIT MAP, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`;
         if (!target) {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Edit what? Try EDIT ITEM, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`));
+            sendRejectionMessage(user.username);
             return;
         }
         if (target !== "user" && target !== "character") {
@@ -56,6 +60,17 @@ async function edit(parsedCommand, user) {
             case `monster`:
             case `npc`:
                 worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
+            case `map`: {
+                const room = await getRoomOfUser(user);
+                if (!room) {
+                    throw new Error(`room not found for user ${user.name}`);
+                }
+                worldEmitter.emit(`formPromptFor${user.username}`, {
+                    form: `editMapForm`,
+                    mapTile: room.mapTile,
+                });
+                break;
+            }
             case `mob`: {
                 const zone = await getZoneOfUser(user);
                 if (!zone) {
@@ -150,7 +165,7 @@ async function edit(parsedCommand, user) {
                 break;
             }
             default: {
-                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Edit what? Try EDIT ITEM, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`));
+                sendRejectionMessage(user.username);
                 return;
             }
         }

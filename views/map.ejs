@@ -160,7 +160,9 @@
           mapCache.mapTileStates[
             `${mapTileCoords.join(",")},${userMapCoords[2]}`
           ];
-        // console.log("mapTileState for", mapTileCoords, ":", mapTileState);
+        if (mapTileState) {
+          console.log("mapTileState found for", mapTileCoords, ":", mapTileState.mapTile);
+        }
         if (!mapTileState) {
           mapTileState = {
             mapCoords: mapTileCoords,
@@ -182,17 +184,17 @@
         mapTile.classList.add("map-tile");
         // set mapTile color and character, highlighting user position
         if (`${mapTileCoords.join(",")},${userMapCoords[2]}` === userMapCoords.join(",")) {
-          mapTile.style.color = "yellow";
+          mapTile.style.color = `var(--yellow)`;
           mapTile.innerText = "$";
         } else {
-          mapTile.style.color = mapTileState.mapTile.color;
+          mapTile.style.color = `var(--${mapTileState.mapTile.color})`;
           mapTile.innerText = mapTileState.mapTile.character;
         }
         // set mapTile borders based on mapTileState.walls values being "open" (no border), "wall" (single line), or "closed" (double line)
         const wallStyles = {
           open: "none",
-          wall: `1px solid ${mapTileState.mapTile.wallColor}`,
-          closed: `1px dashed ${mapTileState.mapTile.wallColor}`,
+          wall: `1px solid var(--${mapTileState.mapTile.wallColor})`,
+          closed: `1px dashed var(--${mapTileState.mapTile.wallColor})`,
         };
         mapTile.style.borderTop = wallStyles[mapTileState.walls.north];
         mapTile.style.borderRight = wallStyles[mapTileState.walls.east];

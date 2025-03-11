@@ -1,0 +1,212 @@
+<!-- edit_map_form -->
+<form
+  id="editMapForm"
+  class="sideForm"
+  style="display: none"
+  autocomplete="off"
+>
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelEditMapForm"> Cancel </a>
+    </li>
+  </ul>
+  <h2>Edit Map Tile</h2>
+  <ul>
+    <li>
+      <label for="editMapCharacter">Character:</label>
+      <input
+        id="editMapCharacter"
+        name="editMapCharacter"
+        type="text"
+        maxlength="1"
+        required
+      />
+    </li>
+
+    <li>
+      <label for="editMapColor">Character Color:</label>
+      <select id="editMapColor" name="editMapColor" required style="background-color: inherit; outline: 1px solid white;">
+        <option value="black" style="color: var(--black)">black</option>
+        <!-- <option value="grey_dark" style="color: var(--grey_dark)">dark grey</option> --> <!-- This is the bg color -->        
+         <option value="grey" style="color: var(--grey)">grey</option>
+        <option value="grey_light" style="color: var(--grey_light)">light grey</option>
+        <option value="white" style="color: var(--white)">white</option>
+        <option value="purple_light" style="color: var(--purple_light)">light purple</option>
+        <option value="purple" style="color: var(--purple)">purple</option>
+        <option value="purple_dark" style="color: var(--purple_dark)">dark purple</option>
+        <option value="blue_light" style="color: var(--blue_light)">light blue</option>
+        <option value="blue" style="color: var(--blue)">blue</option>
+        <option value="blue_dark" style="color: var(--blue_dark)">dark blue</option>
+        <option value="cyan_light" style="color: var(--cyan_light)">light cyan</option>
+        <option value="cyan" style="color: var(--cyan)">cyan</option>
+        <option value="cyan_dark" style="color: var(--cyan_dark)">dark cyan</option>
+        <option value="green_light" style="color: var(--green_light)">light green</option>
+        <option value="green" style="color: var(--green)">green</option>
+        <option value="green_dark" style="color: var(--green_dark)">dark green</option>
+        <option value="yellow_light" style="color: var(--yellow_light)">light yellow</option>
+        <option value="yellow" style="color: var(--yellow)">yellow</option>
+        <option value="yellow_dark" style="color: var(--yellow_dark)">dark yellow</option>
+        <option value="orange_light" style="color: var(--orange_light)">light orange</option>
+        <option value="orange" style="color: var(--orange)">orange</option>
+        <option value="orange_dark" style="color: var(--orange_dark)">dark orange</option>
+        <option value="red_light" style="color: var(--red_light)">light red</option>
+        <option value="red" style="color: var(--red)">red</option>
+        <option value="red_dark" style="color: var(--red_dark)">dark red</option>
+        <option value="magenta_light" style="color: var(--magenta_light)">light magenta</option>
+        <option value="magenta" style="color: var(--magenta)">magenta</option>
+        <option value="magenta_dark" style="color: var(--magenta_dark)">dark magenta</option>
+        <option value="brown" style="color: var(--brown)">brown</option>
+      </select>
+    </li>
+
+    <li>
+      <label for="editMapWallColor">Wall Color:</label>
+      <select id="editMapWallColor" name="editMapWallColor" required style="background-color: inherit; outline: 1px solid white;">
+        <option value="black" style="color: var(--black)">black</option>
+        <!-- <option value="grey_dark" style="color: var(--grey_dark)">dark grey</option> --> <!-- This is the bg color -->
+        <option value="grey" style="color: var(--grey)">grey</option>
+        <option value="grey_light" style="color: var(--grey_light)">light grey</option>
+        <option value="white" style="color: var(--white)">white</option>
+        <option value="purple_light" style="color: var(--purple_light)">light purple</option>
+        <option value="purple" style="color: var(--purple)">purple</option>
+        <option value="purple_dark" style="color: var(--purple_dark)">dark purple</option>
+        <option value="blue_light" style="color: var(--blue_light)">light blue</option>
+        <option value="blue" style="color: var(--blue)">blue</option>
+        <option value="blue_dark" style="color: var(--blue_dark)">dark blue</option>
+        <option value="cyan_light" style="color: var(--cyan_light)">light cyan</option>
+        <option value="cyan" style="color: var(--cyan)">cyan</option>
+        <option value="cyan_dark" style="color: var(--cyan_dark)">dark cyan</option>
+        <option value="green_light" style="color: var(--green_light)">light green</option>
+        <option value="green" style="color: var(--green)">green</option>
+        <option value="green_dark" style="color: var(--green_dark)">dark green</option>
+        <option value="yellow_light" style="color: var(--yellow_light)">light yellow</option>
+        <option value="yellow" style="color: var(--yellow)">yellow</option>
+        <option value="yellow_dark" style="color: var(--yellow_dark)">dark yellow</option>
+        <option value="orange_light" style="color: var(--orange_light)">light orange</option>
+        <option value="orange" style="color: var(--orange)">orange</option>
+        <option value="orange_dark" style="color: var(--orange_dark)">dark orange</option>
+        <option value="red_light" style="color: var(--red_light)">light red</option>
+        <option value="red" style="color: var(--red)">red</option>
+        <option value="red_dark" style="color: var(--red_dark)">dark red</option>
+        <option value="magenta_light" style="color: var(--magenta_light)">light magenta</option>
+        <option value="magenta" style="color: var(--magenta)">magenta</option>
+        <option value="magenta_dark" style="color: var(--magenta_dark)">dark magenta</option>
+        <option value="brown" style="color: var(--brown)">brown</option>
+      </select>
+    </li>
+
+    <h3>Preview:</h3>
+    <li>
+      <div id="previewTile" class="map-tile"></div>
+    </li>
+  </ul>
+  <button type="submit">Save Map Tile</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const editMapForm = document.getElementById(
+      "editMapForm"
+    );
+    const editMapCharacter = document.getElementById("editMapCharacter");
+    const editMapColor = document.getElementById("editMapColor");
+    const editMapWallColor = document.getElementById("editMapWallColor");
+    const cancelEditMapForm = document.getElementById("cancelEditMapForm");
+    const previewTile = document.getElementById("previewTile");
+
+    // Add these functions to update select colors
+    function updateSelectColor(selectElement) {
+      const selectedOption = selectElement.options[selectElement.selectedIndex];
+      const color = getComputedStyle(document.documentElement).getPropertyValue(`--${selectElement.value}`);
+      selectElement.style.color = color;
+    }
+
+    function updatePreview() {
+      const character = editMapCharacter.value || '·';
+      const color = getComputedStyle(document.documentElement).getPropertyValue(`--${editMapColor.value}`);
+      const wallColor = getComputedStyle(document.documentElement).getPropertyValue(`--${editMapWallColor.value}`);
+      
+      previewTile.innerText = character;
+      previewTile.style.color = color;
+      
+      // Add wall preview with a basic border on all sides
+      previewTile.style.border = `1px solid ${wallColor}`;
+    }
+
+    editMapColor.addEventListener('change', () => updateSelectColor(editMapColor));
+    editMapWallColor.addEventListener('change', () => updateSelectColor(editMapWallColor));
+
+    // Update preview when any input changes
+    editMapCharacter.addEventListener('input', updatePreview);
+    editMapColor.addEventListener('change', updatePreview);
+    editMapWallColor.addEventListener('change', updatePreview);
+
+    editMapForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      const char = editMapCharacter.value;
+      
+      // Validate character length
+      if (char.length !== 1) {
+        alert("Character must be exactly 1 character long");
+        return;
+      }
+      console.log(`char is 1 character long! ${char}`);
+
+      // Validate character is safe
+      const unsafeCharRegex = /[<>&"'`\\\x00-\x1F\x7F]/;
+      if (unsafeCharRegex.test(char)) {
+        alert(`Sorry, that character cannot be used as a map tile. Examples of invalid characters include: <, >, &, ", ', \`, \\, and invisible characters.`);
+        editMapCharacter.value = `·`;
+        return;
+      }
+      console.log(`char is safe! ${char}`);
+
+      // Optional: Ensure character is visible/printable
+      if (!/\S/.test(char)) {
+        alert("Please use a visible character for the map tile");
+        editMapCharacter.value = `·`;
+        return;
+      }
+      console.log(`char is visible! ${char}`);
+
+      const editMapFormData = {
+        character: char,
+        color: editMapColor.value,
+        wallColor: editMapWallColor.value,
+      };
+      
+      socket.emit("userSubmittedEditMap", editMapFormData);
+      editMapForm.reset();
+      editMapForm.style.display = "none";
+    });
+
+    cancelEditMapForm.addEventListener("click", function () {
+      editMapForm.style.display = "none";
+      });
+
+    socket.on("openEditMapForm", (formData) => {
+      console.log("Opening edit map form with data:", formData);
+      resetActiveSidebarElementTo(editMapForm);
+      if (!formData.mapTile.character) {
+        editMapCharacter.value = `·`;
+      } else {
+        editMapCharacter.value = formData.mapTile.character;
+      }
+      if (!formData.mapTile.color) {
+        editMapColor.value = `white`;
+      } else {
+        editMapColor.value = formData.mapTile.color;
+      }
+      if (!formData.mapTile.wallColor) {
+        editMapWallColor.value = `white`;
+      } else {
+        editMapWallColor.value = formData.mapTile.wallColor;
+      }
+      // Add these lines to set initial colors
+      updateSelectColor(editMapColor);
+      updateSelectColor(editMapWallColor);
+      updatePreview(); // Add this line to update preview when form opens
+    });
+  });
+</script>

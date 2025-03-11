@@ -45,6 +45,8 @@ import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import { IMapTileState } from "./commands/map.js";
 import eraseRoom from "./commands/eraseRoom.js";
+import editMap from "./commands/editMap.js";
+import { IMapTile } from "./model/classes/Room.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
@@ -55,6 +57,7 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     createRoomForm: "openCreateRoomForm",
     createZoneForm: "openCreateZoneForm",
     editItemBlueprintForm: "openEditItemBlueprintForm",
+    editMapForm: "openEditMapForm",
     editMobBlueprintForm: "openEditMobBlueprintForm",
     editRoomForm: "openEditRoomForm",
     editUserForm: "openEditUserForm",
@@ -198,6 +201,22 @@ export const userSubmittedEditItemBlueprintHandler = async (
     catchErrorHandlerForFunction(
       `userSubmittedEditItemBlueprintHandler`,
       error
+    );
+  }
+};
+
+export const userSubmittedEditMapHandler = async (
+  editMapData: IMapTile,
+  user: IUser
+) => {
+  try {
+    await editMap(editMapData, user);
+    stats(user);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(
+      `userSubmittedEditMapHandler`,
+      error,
+      user?.name
     );
   }
 };
