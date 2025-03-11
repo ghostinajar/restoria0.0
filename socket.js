@@ -46,8 +46,8 @@ const setupSocket = (io) => {
             worldEmitter.on(`formPromptFor${user.username}`, async (formData) => {
                 formPromptForUserHandler(formData, socket);
             });
-            worldEmitter.on(`mapRequestFor${user.username}`, async (zoneFloorName, mapTileState) => {
-                mapRequestForUserHandler(zoneFloorName, mapTileState, socket);
+            worldEmitter.on(`mapRequestFor${user.username}`, async (zoneFloorName, mapTileState, autoMapSetting) => {
+                mapRequestForUserHandler(zoneFloorName, mapTileState, autoMapSetting, socket);
             });
             worldEmitter.on(`messageArrayFor${user.username}`, async (messageArray) => {
                 messageArrayForUserHandler(messageArray, socket);

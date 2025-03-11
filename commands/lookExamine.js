@@ -7,7 +7,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import selectTargetByOrdinal from "../util/selectTargetByOrdinal.js";
 import messageMissingTargetToUser from "../util/messageMissingTargetToUser.js";
 import makeMessage from "../util/makeMessage.js";
-import automap from "./autoMap.js";
+import map from "./map.js";
 async function lookExamine(parsedCommand, user) {
     try {
         const room = await getRoomOfUser(user);
@@ -80,7 +80,7 @@ async function lookExamine(parsedCommand, user) {
             }
         }
         worldEmitter.emit(`messageArrayFor${user.username}`, lookExamineArray);
-        await automap(user);
+        await map({ commandWord: "map" }, user);
     }
     catch (error) {
         catchErrorHandlerForFunction("lookExamine", error, user.name);

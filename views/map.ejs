@@ -207,7 +207,7 @@
     }
   }
 
-  socket.on("mapRequest", async function (zoneFloorName, mapTileState) {
+  socket.on("mapRequest", async function (zoneFloorName, mapTileState, autoMapSetting) {
     // console.log("mapRequest received:", zoneFloorName, mapTileState);
     if (!zoneFloorName || !mapTileState) {
       console.error("Invalid mapTileState data:", mapTileState);
@@ -229,6 +229,8 @@
     // console.log("mapCache after putMapTileStateInCache:", mapCache);
     saveMap();
     populateMap(mapTileState.mapCoords);
-    resetActiveSidebarElementTo(mapDiv);
+    if (autoMapSetting) {
+      resetActiveSidebarElementTo(mapDiv);
+    }
   });
 </script>

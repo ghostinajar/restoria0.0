@@ -44,8 +44,6 @@ import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import { IMapTileState } from "./commands/map.js";
-import lookExamine from "./commands/lookExamine.js";
-import automap from "./commands/autoMap.js";
 import eraseRoom from "./commands/eraseRoom.js";
 
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
@@ -85,10 +83,11 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
 export const mapRequestForUserHandler = async (
   zoneFloorName: string,
   mapTileState: IMapTileState,
+  autoMapSetting: boolean,
   socket: any
 ) => {
   try {
-    socket.emit(`mapRequest`, zoneFloorName, mapTileState);
+    socket.emit(`mapRequest`, zoneFloorName, mapTileState, autoMapSetting);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`mapRequestForUserHandler`, error);
   }

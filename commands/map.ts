@@ -124,7 +124,8 @@ async function map(parsedCommand: IParsedCommand, user: IUser) {
     worldEmitter.emit(
       `mapRequestFor${user.username}`,
       zoneFloorName,
-      mapTileState
+      mapTileState,
+      user.preferences.autoMap
     );
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`map`, error, user?.name);

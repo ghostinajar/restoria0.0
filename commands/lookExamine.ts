@@ -8,13 +8,13 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import selectTargetByOrdinal from "../util/selectTargetByOrdinal.js";
 import messageMissingTargetToUser from "../util/messageMissingTargetToUser.js";
-import roomSchema, { IRoom } from "../model/classes/Room.js";
+import { IRoom } from "../model/classes/Room.js";
 import IMessage from "../types/Message.js";
 import makeMessage from "../util/makeMessage.js";
 import { IMob } from "../model/classes/Mob.js";
 import { IItem } from "../model/classes/Item.js";
 import { IDescription } from "../model/classes/Description.js";
-import automap from "./autoMap.js";
+import map from "./map.js";
 
 async function lookExamine(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -116,7 +116,7 @@ async function lookExamine(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     worldEmitter.emit(`messageArrayFor${user.username}`, lookExamineArray);
-    await automap(user);
+    await map({commandWord: "map"}, user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("lookExamine", error, user.name);
   }

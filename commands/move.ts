@@ -9,7 +9,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import relocateUser from "../util/relocateUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import automap from "./autoMap.js";
+import map from "./map.js";
 
 async function move(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -107,7 +107,7 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
       `messageFor${user.username}sRoom`,
       makeMessage(`userMove`, `${user.name} arrived.`)
     );
-    await automap(user);
+    await map({commandWord: "map"}, user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("move", error, user.name);
   }

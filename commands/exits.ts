@@ -7,7 +7,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import IMessage from "../types/Message.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import automap from "./autoMap.js";
+import map from "./map.js";
 
 async function exits(user: IUser) {
   try {
@@ -76,7 +76,7 @@ async function exits(user: IUser) {
       }
     }
     worldEmitter.emit(`messageArrayFor${user.username}`, exitsArray);
-    await automap(user);
+    await map({commandWord: "map"}, user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("exits", error, user.name);
   }

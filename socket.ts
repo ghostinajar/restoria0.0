@@ -97,8 +97,17 @@ const setupSocket = (io: any) => {
       );
       worldEmitter.on(
         `mapRequestFor${user.username}`,
-        async (zoneFloorName: string, mapTileState: IMapTileState) => {
-          mapRequestForUserHandler(zoneFloorName, mapTileState, socket);
+        async (
+          zoneFloorName: string,
+          mapTileState: IMapTileState,
+          autoMapSetting: boolean
+        ) => {
+          mapRequestForUserHandler(
+            zoneFloorName,
+            mapTileState,
+            autoMapSetting,
+            socket
+          );
         }
       );
 
@@ -133,7 +142,7 @@ const setupSocket = (io: any) => {
       worldEmitter.on(
         `preferenceFor${user.username}`,
         async (preference: { type: string; setting: any }) => {
-          socket.emit(`userPreference`, preference)
+          socket.emit(`userPreference`, preference);
         }
       );
 

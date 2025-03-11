@@ -82,7 +82,7 @@ async function map(parsedCommand, user) {
                 mapTileState.walls[direction] = "wall";
             }
         });
-        worldEmitter.emit(`mapRequestFor${user.username}`, zoneFloorName, mapTileState);
+        worldEmitter.emit(`mapRequestFor${user.username}`, zoneFloorName, mapTileState, user.preferences.autoMap);
     }
     catch (error) {
         catchErrorHandlerForFunction(`map`, error, user?.name);
