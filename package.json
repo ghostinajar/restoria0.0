@@ -1,7 +1,7 @@
 {
   "name": "restoria",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "a text-based MORPG where players are authors of the game world",
   "type": "module",
   "scripts": {
     "start": "node app.js"
