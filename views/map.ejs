@@ -1,11 +1,17 @@
 <!-- map -->
 <div id="mapDiv" class="sideForm map" style="display: none">
+  <ul>
+    <li>
+      <a class="cancelButton" id="cancelMap"> Close Map </a>
+    </li>
+  </ul>
   <div id="zoneFloorNameDiv" class="zone-floor-name"></div>
   <div id="mapGridDiv" class="map-grid"></div>
 </div>
 
 <script>
   let db;
+  let cancelButton = document.getElementById("cancelMap");
   let mapDiv = document.getElementById("mapDiv");
   let zoneFloorNameDiv = document.getElementById("zoneFloorNameDiv");
   let mapGridDiv = document.getElementById("mapGridDiv");
@@ -50,6 +56,10 @@
     });
   }
   initiateDB();
+
+  cancelButton.addEventListener("click", () => {
+    mapDiv.style.display = "none";
+  });
 
   async function loadMapByName(zoneFloorName) {
     if (!db) {
@@ -161,7 +171,12 @@
             `${mapTileCoords.join(",")},${userMapCoords[2]}`
           ];
         if (mapTileState) {
-          console.log("mapTileState found for", mapTileCoords, ":", mapTileState.mapTile);
+          console.log(
+            "mapTileState found for",
+            mapTileCoords,
+            ":",
+            mapTileState.mapTile
+          );
         }
         if (!mapTileState) {
           mapTileState = {
@@ -183,7 +198,10 @@
         let mapTile = document.createElement("div");
         mapTile.classList.add("map-tile");
         // set mapTile color and character, highlighting user position
-        if (`${mapTileCoords.join(",")},${userMapCoords[2]}` === userMapCoords.join(",")) {
+        if (
+          `${mapTileCoords.join(",")},${userMapCoords[2]}` ===
+          userMapCoords.join(",")
+        ) {
           mapTile.style.color = `var(--yellow)`;
           mapTile.innerText = "$";
         } else {
@@ -209,30 +227,33 @@
     }
   }
 
-  socket.on("mapRequest", async function (zoneFloorName, mapTileState, autoMapSetting) {
-    // console.log("mapRequest received:", zoneFloorName, mapTileState);
-    if (!zoneFloorName || !mapTileState) {
-      console.error("Invalid mapTileState data:", mapTileState);
-      return;
-    }
-
-    if (mapCache.zoneFloorName !== zoneFloorName) {
-      // console.log(
-      //   "Received a mapTileState from a different zone, loading new map:",
-      //   zoneFloorName
-      // );
-      if (mapCache.zoneFloorName) {
-        await saveMap();
+  socket.on(
+    "mapRequest",
+    async function (zoneFloorName, mapTileState, autoMapSetting) {
+      // console.log("mapRequest received:", zoneFloorName, mapTileState);
+      if (!zoneFloorName || !mapTileState) {
+        console.error("Invalid mapTileState data:", mapTileState);
+        return;
       }
-      await loadMapByName(zoneFloorName);
-      // console.log("mapCache after loadMapByName:", mapCache);
+
+      if (mapCache.zoneFloorName !== zoneFloorName) {
+        // console.log(
+        //   "Received a mapTileState from a different zone, loading new map:",
+        //   zoneFloorName
+        // );
+        if (mapCache.zoneFloorName) {
+          await saveMap();
+        }
+        await loadMapByName(zoneFloorName);
+        // console.log("mapCache after loadMapByName:", mapCache);
+      }
+      putMapTileStateInCache(mapTileState);
+      // console.log("mapCache after putMapTileStateInCache:", mapCache);
+      saveMap();
+      populateMap(mapTileState.mapCoords);
+      if (autoMapSetting) {
+        resetActiveSidebarElementTo(mapDiv);
+      }
     }
-    putMapTileStateInCache(mapTileState);
-    // console.log("mapCache after putMapTileStateInCache:", mapCache);
-    saveMap();
-    populateMap(mapTileState.mapCoords);
-    if (autoMapSetting) {
-      resetActiveSidebarElementTo(mapDiv);
-    }
-  });
+  );
 </script>
