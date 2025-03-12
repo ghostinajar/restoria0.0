@@ -15,38 +15,35 @@
       <p style="color: red"><%= errorMessage %></p>
       <% } %>
       <li>
-        <form action="/register" method="post">
+        <form action="/register" method="post" class="registration-form">
           <ul>
             <li>
               <label for="name">Name: </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autocomplete="name"
-                required
-              />
-            </li>
-            <li>
-              <small
-                >Name must be letters only (max. 18), no unique irl names (e.g. no "Obama")</small
-              >
+              <div class="input-container">
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  required
+                />
+                <small class="help-text">Letters only, up to 18 characters.</small>
+                <div class="invalid-feedback">Letters only, up to 18 characters.</div>
+              </div>
             </li>
             <li>
               <label for="new-password">Password:</label>
-              <input
-                id="new-password"
-                name="password"
-                type="password"
-                autocomplete="new-password"
-                required
-              />
-            </li>
-            <li>
-              <small
-                >Password must be at least 8 characters long and include
-                lowercase, uppercase, and a number.</small
-              >
+              <div class="input-container">
+                <input
+                  id="new-password"
+                  name="password"
+                  type="password"
+                  autocomplete="new-password"
+                  required
+                />
+                <small class="help-text">Minimum 8 characters, must include uppercase, lowercase, and number.</small>
+                <div class="invalid-feedback">Minimum 8 characters, must include uppercase, lowercase, and number.</div>
+              </div>
             </li>
             <li>
               <label for="pronouns">Pronouns:</label>
@@ -80,18 +77,33 @@
 </html>
 
 <script>
-  document.querySelector("form").addEventListener("submit", function (e) {
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector("form");
+    const nameInput = document.getElementById("name");
     const passwordInput = document.getElementById("new-password");
-    const password = passwordInput.value;
 
-    const passwordRequirements = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    // Real-time name validation
+    nameInput.addEventListener('input', function() {
+        const isValid = /^[A-Za-z]{1,18}$/.test(this.value);
+        this.classList.toggle('is-invalid', !isValid);
+    });
 
-    if (!passwordRequirements.test(password)) {
-      e.preventDefault();
-      alert(
-        "Password must be at least 8 characters long and include lowercase, uppercase, and a number."
-      );
-      passwordInput.focus();
-    }
-  });
+    // Real-time password validation
+    passwordInput.addEventListener('input', function() {
+        const isValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(this.value);
+        this.classList.toggle('is-invalid', !isValid);
+    });
+
+    // Form submission validation
+    form.addEventListener("submit", function (e) {
+        const passwordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(passwordInput.value);
+        const nameValid = /^[A-Za-z]{1,18}$/.test(nameInput.value);
+
+        if (!passwordValid || !nameValid) {
+            e.preventDefault();
+            if (!nameValid) nameInput.classList.add('is-invalid');
+            if (!passwordValid) passwordInput.classList.add('is-invalid');
+        }
+    });
+});
 </script>

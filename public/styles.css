@@ -560,3 +560,47 @@ ul {
 .telepath {
   color: var(--red_light);
 }
+
+.registration-form .input-container {
+  display: inline-block;
+  position: relative;
+}
+
+.registration-form .help-text,
+.registration-form .invalid-feedback {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: 10px;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.registration-form .help-text {
+  color: var(--grey);
+}
+
+.registration-form .invalid-feedback {
+  color: var(--red);
+}
+
+.registration-form input:focus {
+  outline: 2px solid var(--blue);
+}
+
+.registration-form input.is-invalid {
+  outline: 2px solid var(--red);
+}
+
+.registration-form input:focus + .help-text {
+  display: block;
+}
+
+.registration-form input.is-invalid + .help-text {
+  display: none;
+}
+
+.registration-form input.is-invalid ~ .invalid-feedback {
+  display: block;
+}
