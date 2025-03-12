@@ -44,6 +44,7 @@ function help(parsedCommand, user) {
             case `examine`:
             case `study`:
             case `research`:
+            case `edit_user`:
                 target = `description`;
                 break;
             case `delete`:

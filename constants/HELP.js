@@ -19,6 +19,11 @@ const HELP = {
         `${padStringToLength79(`Author, Character, User`)}`,
         `The words author, character, and user all refer to the same thing: a human person who plays Restoria. Everyone in the game is an author in the sense that they can CREATE zones and their contents. We are all users and characters in the sense that we interact with the world of zones created by other authors, often in a role-playing style of gameplay. A person may have multiple user accounts representing different characters. That's why "user", "character", and "author" are used interchangeably in Restoria.`,
     ],
+    AUTOEXAMINE: [
+        `${padStringToLength79(`Autoexamine`)}`,
+        `While LOOK descriptions are short (<80 characters), and EXAMINE descriptions are longer (<240 characters), some users prefer to only see one or the other when they enter a room. You can type AUTOEXAMINE OFF if you prefer to only see short descriptions when entering a room, or AUTOEXAMINE ON to see longer ones. You can also type AUTOEXAMINE on its own to toggle the setting.`,
+        `<span style="color:var(--green)">See also HELP DESCRIPTION.</span>`,
+    ],
     BUG: [
         `Restoria's first beta was coded and written by Ralu (aka Mark Wells), so of course it is full of dumb bugs. If you find one, type BUG to report it, and include lots of details about what happened, and what you were doing when it happened (e.g. the last commands you tried to use, the buggy result, what you were expecting, etc). The game will automatically record your username, the date & time, and your location in the game when you submit the report, so please try to report from the time and place you observed the bug. If you can't, then include those details in your description too, please. You can type BUGS to see a "todo" list of bugfixes Ralu is working on.`,
     ],
@@ -71,6 +76,7 @@ const HELP = {
         `<span style="color:var(--red)">Capacity:</span> determines how many items it can hold.`,
         `<span style="color:var(--red)">Look:</span> how the player sees the item when they look or enter a room`,
         `<span style="color:var(--red)">Examine:</span> a paragraph a player seens when they examine the item.`,
+        `<span style="color:var(--green)">See also HELP AUTOEXAMINE.</span>`,
     ],
     CREATE_MOB: [
         `${padStringToLength79(`CREATE MOB`)}`,
@@ -82,6 +88,7 @@ const HELP = {
         `<span style="color:var(--red)">Job:</span> determines abilities and combat style`,
         `<span style="color:var(--red)">Look:</span> how the player sees the mob when they look or enter a room`,
         `<span style="color:var(--red)">Examine:</span> a paragraph a player sees when they examine the mob`,
+        `<span style="color:var(--green)">See also HELP AUTOEXAMINE.</span>`,
     ],
     CREATE_ROOM: [
         `${padStringToLength79(`CREATE ROOM`)}`,
@@ -102,14 +109,16 @@ const HELP = {
         `<span style="color:var(--red)">Look:</span> a sentence shown to a player when they survey the wilderness nearby`,
         `e.g. "Clouds of spores and odd, fungal shapes protrude from the horizon."`,
         `<span style="color:var(--red)">Examine:</span> a paragraph a player sees when they examine the zone`,
+        `<span style="color:var(--green)">See also HELP AUTOEXAMINE.</span>`,
         `<span style="color:var(--red)">Study:</span> a player learns some more details when they study the zone`,
         `<span style="color:var(--red)">Research:</span> the full history of the zone, in paragraphs`,
         `A good research text rewards the reader with some secrets about the zone.`,
     ],
     DESCRIPTION: [
         `${padStringToLength79(`DESCRIPTION, LOOK, EXAMINE, STUDY, RESEARCH`)}`,
-        `<span style="color:var(--red)">Look:</span> A 'look' description should fit on one line (80 characters or less). It is a full sentence, and a reader's first impression of the item, mob, user, or zone it describes. The 'look' descriptions of every item, mob, and user in a room are shown automatically to a player when they enter that room, and when they use the LOOK command on its own. Users can't change their own 'look' descriptions. A room has no 'look' description (its 'examine' description is used for both).`,
-        `<span style="color:var(--red)">Examine:</span> When a reader uses the EXAMINE command on an item, mob, or user, this short paragraph (240 characters or less) is what they see. For a room, the 'examine' description is shown for both EXAMINE and LOOK commands (ie. a user also automatically sees a room's 'examine' description when they enter it, and when they use the LOOK command on its own.`,
+        `<span style="color:var(--red)">Look:</span> A 'look' description should fit on one line (80 characters or less). It is a full sentence, and a reader's first impression of the item, mob, user, room, or zone it describes. The 'look' descriptions of everything obvious in a room are shown automatically to a player when they enter it, and when they use the LOOK command on its own. Users can't change their own 'look' descriptions.`,
+        `<span style="color:var(--red)">Examine:</span> When a reader uses the EXAMINE command on an item, mob, or user, this short paragraph (240 characters or less) is what they see. For a room, the 'examine' will appear automatically if they have AUTOEXAMINE ON.`,
+        `<span style="color:var(--green)">See also HELP AUTOEXAMINE.</span>`,
         `<span style="color:var(--red)">Study:</span> When a reader uses the STUDY command on an item, mob, user, room, or zone, this long description (640 characters or less) is what they see. It should include rich detail that a reader wouldn't notice at first glance, and may even share secrets to reward those careful and patient readers who take the time to STUDY.`,
         `<span style="color:var(--red)">Research:</span> When a reader uses the RESEARCH command on an item, mob, user, room, or zone, this complete story (1600 characters or less) is shown to them. Good authors will use the 'research' description to tell some history. They may explain why certain things in their zone are they way they are. This is also a fun place to include easter eggs or major secrets about your zone, since only the best and most deserving readers explore with the RESEARCH command.`,
     ],
@@ -134,7 +143,9 @@ const HELP = {
     EDIT_ROOM: [
         `${padStringToLength79(`EDIT ROOM Description`)}`,
         `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
-        `<span style="color:var(--red)">Examine:</span> a paragraph a player sees when they look or enter the room`,
+        `<span style="color:var(--red)">Look:</span> a very short description of the room (shown automatically with AUTOEXAMINE OFF)`,
+        `<span style="color:var(--red)">Examine:</span> a paragraph a player sees when they look or enter the room (with AUTOEXAMINE ON)`,
+        `<span style="color:var(--green)">See also HELP AUTOEXAMINE.</span>`,
         `<span style="color:var(--red)">Study:</span> a player learns some history when they study the room`,
         `<span style="color:var(--red)">Research:</span> tells the full history of the room, in paragraphs`,
         `A good research text rewards the reader with some secrets about the room. Read HELP DESCRIPTION for more.`,
@@ -149,20 +160,6 @@ const HELP = {
         `<span style="color:var(--red)">No Mobs:</span> mobs can't enter this room`,
         `<span style="color:var(--red)">No Magic:</span> no one can cast spells in this room`,
         `<span style="color:var(--red)">No Combat:</span> no one can enter combat in this room`,
-    ],
-    EDIT_USER: [
-        `${padStringToLength79(`EDIT USER`)}`,
-        `<span style="color:var(--red)">User Name:</span> letters only (max. 18), no unique irl names (e.g. no "Obama")`,
-        `<span style="color:var(--red)">Password:</span> has min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
-        `<span style="color:var(--red)">Pronouns:</span> may appear in place of a name ("Greg eats." vs "<u>He</u> eats.")`,
-        `<span style="color:var(--red)">Job:</span> determines abilities, spells, and fighting style in combat`,
-        `Read HELP DESCRIPTION for more.`,
-    ],
-    EDIT_ZONE: [
-        `${padStringToLength79(`EDIT ZONE`)}`,
-        `<span style="color:var(--red)">Name:</span> letters only (max. 18), no unique irl names (e.g. no "Obama")`,
-        `<span style="color:var(--red)">Password:</span> has min. 8 characters, including uppercase, lowercase, <u>and</u> number`,
-        `Read HELP DESCRIPTION for more.`,
     ],
     EDITOR: [
         `${padStringToLength79(`EDITOR`)}`,

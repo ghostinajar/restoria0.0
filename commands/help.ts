@@ -15,7 +15,10 @@ function help(parsedCommand: IParsedCommand, user: IUser) {
       const helpContents = htmlTableOfContentsForKeysOfObject(HELP);
       worldEmitter.emit(
         `safeMessageFor${user.username}`,
-        makeMessage(`help`, `Here are all the commands you can try in Restoria:`)
+        makeMessage(
+          `help`,
+          `Here are all the commands you can try in Restoria:`
+        )
       );
       worldEmitter.emit(
         `safeMessageFor${user.username}`,
@@ -61,6 +64,7 @@ function help(parsedCommand: IParsedCommand, user: IUser) {
       case `examine`:
       case `study`:
       case `research`:
+      case `edit_user`:
         target = `description`;
         break;
       case `delete`:
