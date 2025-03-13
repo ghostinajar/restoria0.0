@@ -16,6 +16,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
 import lookExamine from "./lookExamine.js";
+import packAndSendMapTileStateToUser from "../util/packAndSendMapTileStateToUser.js";
 
 export interface ICreateRoomFormData {
   name: string;
@@ -25,7 +26,7 @@ export interface ICreateRoomFormData {
     examine: string;
     study: string;
     research: string;
-  }
+  };
 }
 
 async function createRoom(roomFormData: ICreateRoomFormData, user: IUser) {
@@ -79,7 +80,7 @@ async function createRoom(roomFormData: ICreateRoomFormData, user: IUser) {
       itemsForSale: [],
       mountIdForSale: [],
       mapCoords: [...originRoom.mapCoords] as [number, number, number], // spread to avoid mutation of original
-      mapTile: {character: "·", color: "white", wallColor: "white"},
+      mapTile: { character: "·", color: "white", wallColor: "white" },
       description: roomFormData.description,
       exits: {},
       mobNodes: [],
@@ -187,6 +188,7 @@ async function createRoom(roomFormData: ICreateRoomFormData, user: IUser) {
     originZone.rooms.push(newRoomData);
     await originZone.save();
     await originZone.initRooms();
+    await packAndSendMapTileStateToUser(user, newRoomData, originZone);
 
     logger.info(`Author "${user.name}" created room "${newRoomData.name}".`);
     worldEmitter.emit(
@@ -196,7 +198,7 @@ async function createRoom(roomFormData: ICreateRoomFormData, user: IUser) {
         `You created ${newRoomData.name}, ${roomFormData.direction} from here!`
       )
     );
-    await lookExamine({commandWord: "look"}, user);
+    await lookExamine({ commandWord: "look" }, user);
     await exits(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("createRoom", error, user.name);

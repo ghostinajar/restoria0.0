@@ -15,6 +15,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import makeExitToRoomId from "../util/makeExitToRoomId.js";
 import lookExamine from "./lookExamine.js";
+import packAndSendMapTileStateToUser from "../util/packAndSendMapTileStateToUser.js";
 async function createRoom(roomFormData, user) {
     try {
         if (!roomFormData.direction || roomFormData.direction == ``) {
@@ -117,6 +118,7 @@ async function createRoom(roomFormData, user) {
         originZone.rooms.push(newRoomData);
         await originZone.save();
         await originZone.initRooms();
+        await packAndSendMapTileStateToUser(user, newRoomData, originZone);
         logger.info(`Author "${user.name}" created room "${newRoomData.name}".`);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created ${newRoomData.name}, ${roomFormData.direction} from here!`));
         await lookExamine({ commandWord: "look" }, user);
