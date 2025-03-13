@@ -11,6 +11,7 @@ import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import getOppositeDirection from "../util/getOppositeDirection.js";
 import lookExamine from "./lookExamine.js";
+import packAndSendMapTileStateToUser from "../util/packAndSendMapTileStateToUser.js";
 
 async function createExit(direction: string, user: IUser) {
   try {
@@ -64,6 +65,11 @@ async function createExit(direction: string, user: IUser) {
 
     await zone.save();
     await zone.initRooms();
+
+    //update user's map for destination room
+    await packAndSendMapTileStateToUser(user, destinationRoom, zone);
+
+    // NB lookExamine will also pack and send mapTileState for origin room
     await lookExamine({ commandWord: "look" }, user);
     worldEmitter.emit(
       `messageFor${user.username}`,

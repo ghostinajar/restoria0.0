@@ -8,6 +8,7 @@ import getOppositeDirection from "../util/getOppositeDirection.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
+import packAndSendMapTileStateToUser from "../util/packAndSendMapTileStateToUser.js";
 import lookExamine from "./lookExamine.js";
 
 async function eraseExit(direction: string, user: IUser) {
@@ -49,6 +50,7 @@ async function eraseExit(direction: string, user: IUser) {
 
     await zone.save();
     await zone.initRooms();
+    packAndSendMapTileStateToUser(user, destinationRoom, zone);
     await lookExamine({ commandWord: "look" }, user);
 
     worldEmitter.emit(

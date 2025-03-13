@@ -10,6 +10,7 @@ import makeMessage from "../util/makeMessage.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import getOppositeDirection from "../util/getOppositeDirection.js";
 import lookExamine from "./lookExamine.js";
+import packAndSendMapTileStateToUser from "../util/packAndSendMapTileStateToUser.js";
 async function createExit(direction, user) {
     try {
         const originRoom = await getRoomOfUser(user);
@@ -39,6 +40,9 @@ async function createExit(direction, user) {
         destinationRoom.exits[oppositeDirection] = makeExitToRoomId(originRoom._id, zone._id);
         await zone.save();
         await zone.initRooms();
+        //update user's map for destination room
+        await packAndSendMapTileStateToUser(user, destinationRoom, zone);
+        // NB lookExamine will also pack and send mapTileState for origin room
         await lookExamine({ commandWord: "look" }, user);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage("success", `You created an exit ${direction}.`));
     }
