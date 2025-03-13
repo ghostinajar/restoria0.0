@@ -11,8 +11,8 @@
 
 <script>
   let db;
-  let cancelButton = document.getElementById("cancelMap");
   let mapDiv = document.getElementById("mapDiv");
+  let cancelMap = document.getElementById("cancelMap");
   let zoneFloorNameDiv = document.getElementById("zoneFloorNameDiv");
   let mapGridDiv = document.getElementById("mapGridDiv");
   let mapCache = {
@@ -57,10 +57,7 @@
   }
   initiateDB();
 
-  cancelButton.addEventListener("click", () => {
-    mapDiv.style.display = "none";
-  });
-
+  // loads a mapCache from db
   async function loadMapByName(zoneFloorName) {
     if (!db) {
       console.error("Database not initialized.");
@@ -105,6 +102,7 @@
 
   let lastMapSaveTime = 0;
 
+  // saves mapCache to db
   async function saveMap() {
     const now = Date.now();
     // console.log("saveMap called at:", now, "lastMapSaveTime:", lastMapSaveTime);
@@ -151,6 +149,7 @@
     mapCache.mapTileStates[mapTileState.mapCoords.join(",")] = mapTileState;
   }
 
+  // uses relevant tiles from mapCache to prepare map grid for display
   function populateMap(userMapCoords) {
     if (!userMapCoords) {
       console.error("Invalid mapCoords:", userMapCoords);
@@ -227,33 +226,46 @@
     }
   }
 
-  socket.on(
-    "mapRequest",
-    async function (zoneFloorName, mapTileState, autoMapSetting) {
-      // console.log("mapRequest received:", zoneFloorName, mapTileState);
-      if (!zoneFloorName || !mapTileState) {
-        console.error("Invalid mapTileState data:", mapTileState);
-        return;
-      }
+  cancelMap.addEventListener("click", () => {
+    mapDiv.style.display = "none";
+  });
 
-      if (mapCache.zoneFloorName !== zoneFloorName) {
-        // console.log(
-        //   "Received a mapTileState from a different zone, loading new map:",
-        //   zoneFloorName
-        // );
-        if (mapCache.zoneFloorName) {
-          await saveMap();
-        }
-        await loadMapByName(zoneFloorName);
-        // console.log("mapCache after loadMapByName:", mapCache);
-      }
-      putMapTileStateInCache(mapTileState);
-      // console.log("mapCache after putMapTileStateInCache:", mapCache);
-      saveMap();
-      populateMap(mapTileState.mapCoords);
-      if (autoMapSetting) {
-        resetActiveSidebarElementTo(mapDiv);
-      }
+  // handles mapTileState events from server (load map, put mapTileState in cache, save map)
+  async function mapTileStateHandler(zoneFloorName, mapTileState) {
+    if (!zoneFloorName || !mapTileState) {
+      console.error("Invalid mapTileState data:", mapTileState);
+      return;
     }
-  );
+
+    if (mapCache.zoneFloorName !== zoneFloorName) {
+      // console.log(
+      //   "Received a mapTileState from a different zone, loading new map:",
+      //   zoneFloorName
+      // );
+      if (mapCache.zoneFloorName) {
+        await saveMap();
+      }
+      await loadMapByName(zoneFloorName);
+      // console.log("mapCache after loadMapByName:", mapCache);
+    }
+    putMapTileStateInCache(mapTileState);
+    // console.log("mapCache after putMapTileStateInCache:", mapCache);
+    await saveMap();
+  }
+
+  // handles mapRequest from server (handle mapTileState, populate map, display mapDiv)
+  async function mapRequestHandler(zoneFloorName, mapTileState) {
+    await mapTileStateHandler(zoneFloorName, mapTileState);
+    await populateMap(mapTileState.mapCoords);
+    resetActiveSidebarElementTo(mapDiv);
+  }
+
+  socket.on("mapTileState", async function (zoneFloorName, mapTileState) {
+    await mapTileStateHandler(zoneFloorName, mapTileState);
+  });
+
+  // listens for mapRequest from server, loads map and populates map grid, displays mapDiv
+  socket.on("mapRequest", async function (zoneFloorName, mapTileState) {
+    await mapRequestHandler(zoneFloorName, mapTileState);
+  });
 </script>

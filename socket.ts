@@ -42,6 +42,7 @@ import {
   safeMessageForUserHandler,
   userSubmittedBugHandler,
   userSubmittedEditMapHandler,
+  mapTileStateForUserHandler,
 } from "./socketHandlers.js";
 import stats from "./commands/stats.js";
 import { IEditRoomFormData } from "./commands/editRoom.js";
@@ -100,17 +101,30 @@ const setupSocket = (io: any) => {
           formPromptForUserHandler(formData, socket);
         }
       );
+
       worldEmitter.on(
         `mapRequestFor${user.username}`,
         async (
           zoneFloorName: string,
           mapTileState: IMapTileState,
-          autoMapSetting: boolean
         ) => {
           mapRequestForUserHandler(
             zoneFloorName,
             mapTileState,
-            autoMapSetting,
+            socket
+          );
+        }
+      );
+
+      worldEmitter.on(
+        `mapTileStateFor${user.username}`,
+        async (
+          zoneFloorName: string,
+          mapTileState: IMapTileState,
+        ) => {
+          mapTileStateForUserHandler(
+            zoneFloorName,
+            mapTileState,
             socket
           );
         }

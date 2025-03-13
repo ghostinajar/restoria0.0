@@ -5,7 +5,6 @@ import makeMessage from "../util/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import map from "./map.js";
 async function exits(user) {
     try {
         const room = await getRoomOfUser(user);
@@ -65,7 +64,6 @@ async function exits(user) {
             }
         }
         worldEmitter.emit(`messageArrayFor${user.username}`, exitsArray);
-        await map({ commandWord: "map" }, user);
     }
     catch (error) {
         catchErrorHandlerForFunction("exits", error, user.name);

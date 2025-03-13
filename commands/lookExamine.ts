@@ -14,7 +14,7 @@ import makeMessage from "../util/makeMessage.js";
 import { IMob } from "../model/classes/Mob.js";
 import { IItem } from "../model/classes/Item.js";
 import { IDescription } from "../model/classes/Description.js";
-import map from "./map.js";
+import autoMap from "./autoMap.js";
 
 async function lookExamine(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -116,7 +116,7 @@ async function lookExamine(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     worldEmitter.emit(`messageArrayFor${user.username}`, lookExamineArray);
-    await map({commandWord: "map"}, user);
+    await autoMap(user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("lookExamine", error, user.name);
   }

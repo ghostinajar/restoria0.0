@@ -6,7 +6,6 @@ import makeMessage from "../util/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import relocateUser from "../util/relocateUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import map from "./map.js";
 async function move(parsedCommand, user) {
     try {
         let requestedDirection = parsedCommand.commandWord;
@@ -69,7 +68,6 @@ async function move(parsedCommand, user) {
         await relocateUser(user, originRoom.exits[direction].destinationLocation);
         // Message user's destination room
         worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`userMove`, `${user.name} arrived.`));
-        await map({ commandWord: "map" }, user);
     }
     catch (error) {
         catchErrorHandlerForFunction("move", error, user.name);

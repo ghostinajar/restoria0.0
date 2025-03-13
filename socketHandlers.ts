@@ -86,13 +86,24 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
 export const mapRequestForUserHandler = async (
   zoneFloorName: string,
   mapTileState: IMapTileState,
-  autoMapSetting: boolean,
   socket: any
 ) => {
   try {
-    socket.emit(`mapRequest`, zoneFloorName, mapTileState, autoMapSetting);
+    socket.emit(`mapRequest`, zoneFloorName, mapTileState);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`mapRequestForUserHandler`, error);
+  }
+};
+
+export const mapTileStateForUserHandler = async (
+  zoneFloorName: string,
+  mapTileState: IMapTileState,
+  socket: any
+) => {
+  try {
+    socket.emit(`mapTileState`, zoneFloorName, mapTileState);
+  } catch (error: unknown) {
+    catchErrorHandlerForFunction(`mapTileStateForUserHandler`, error);
   }
 };
 

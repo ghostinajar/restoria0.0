@@ -60,12 +60,20 @@ export const formPromptForUserHandler = async (formData, socket) => {
         }
     }
 };
-export const mapRequestForUserHandler = async (zoneFloorName, mapTileState, autoMapSetting, socket) => {
+export const mapRequestForUserHandler = async (zoneFloorName, mapTileState, socket) => {
     try {
-        socket.emit(`mapRequest`, zoneFloorName, mapTileState, autoMapSetting);
+        socket.emit(`mapRequest`, zoneFloorName, mapTileState);
     }
     catch (error) {
         catchErrorHandlerForFunction(`mapRequestForUserHandler`, error);
+    }
+};
+export const mapTileStateForUserHandler = async (zoneFloorName, mapTileState, socket) => {
+    try {
+        socket.emit(`mapTileState`, zoneFloorName, mapTileState);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`mapTileStateForUserHandler`, error);
     }
 };
 export const messageArrayForUserHandler = async (messageArray, socket) => {
