@@ -493,6 +493,17 @@ ul {
   z-index: 1000;
 }
 
+#commandInput::placeholder {
+  color: #888;
+  font-style: italic;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;  
+}
+
+#commandInput:focus::placeholder {
+  opacity: 0.5;
+}
+
 #commandSend {
   margin-left: 0.5rem;
 }
