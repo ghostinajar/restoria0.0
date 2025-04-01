@@ -136,7 +136,7 @@ async function get(parsedCommand, user) {
         else {
             // handle get single object
             relocateItem(itemToGet, originInventory, user.inventory);
-            messageToUsername(user.username, `You got ${itemToGet.name} from ${specifiedContainerKeyword}.`, `success`);
+            messageToUsername(user.username, `You got ${itemToGet.name} from ${originContainer.name}.`, `success`);
         }
         console.log(user.inventory.map((item) => item.name));
         // await user.save();

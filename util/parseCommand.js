@@ -8,11 +8,23 @@ function parseCommand(command) {
         const parsedCommand = {
             commandWord: ``,
         };
-        const splitCommand = command.split(" ");
+        let splitCommand = command.split(" ");
+        // treat "look at/in" as "look"
+        if (splitCommand[0] === "look") {
+            if (splitCommand[1] === "at" || splitCommand[1] === "in") {
+                splitCommand.splice(1, 1);
+            }
+        }
+        // treat "get x from y" as "get x y"
+        if (splitCommand[0] === "get") {
+            if (splitCommand[2] === "from") {
+                splitCommand.splice(2, 1);
+            }
+        }
         parsedCommand.commandWord = splitCommand[0].toLowerCase();
         function parseAndPackageObject(objectStr, isDirectObject) {
             const lowerObj = objectStr.toLowerCase();
-            if (lowerObj.startsWith('all.')) {
+            if (lowerObj.startsWith("all.")) {
                 if (isDirectObject) {
                     parsedCommand.targetsAll = true;
                     parsedCommand.directObject = lowerObj.substring(4); // removes 'all.'

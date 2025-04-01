@@ -237,7 +237,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       relocateItem(itemToGet, originInventory, user.inventory);
       messageToUsername(
         user.username,
-        `You got ${itemToGet.name} from ${specifiedContainerKeyword}.`,
+        `You got ${itemToGet.name} from ${originContainer.name}.`,
         `success`
       );
     }
