@@ -6,6 +6,8 @@ import makeMessage from "../util/makeMessage.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import relocateUser from "../util/relocateUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import lookExamine from "./lookExamine.js";
+import exits from "./exits.js";
 async function move(parsedCommand, user) {
     try {
         let requestedDirection = parsedCommand.commandWord;
@@ -49,6 +51,8 @@ async function move(parsedCommand, user) {
         const exit = originRoom.exits[direction];
         if (!exit || !originRoom.exits || !originRoom.exits[direction]) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `There's no exit in that direction.`));
+            await lookExamine({ commandWord: `look` }, user);
+            await exits(user);
             return;
         }
         // get destination room

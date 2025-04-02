@@ -9,7 +9,8 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import relocateUser from "../util/relocateUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import autoMap from "./autoMap.js";
+import lookExamine from "./lookExamine.js";
+import exits from "./exits.js";
 
 async function move(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -62,6 +63,8 @@ async function move(parsedCommand: IParsedCommand, user: IUser) {
         `messageFor${user.username}`,
         makeMessage(`rejection`, `There's no exit in that direction.`)
       );
+      await lookExamine({ commandWord: `look` }, user);
+      await exits(user);
       return;
     }
 
