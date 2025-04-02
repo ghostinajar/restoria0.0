@@ -2,7 +2,6 @@
 // takes an ordinal, keyword, and array, and returns the correct target
 import { IItem } from "../model/classes/Item.js";
 import { IMob } from "../model/classes/Mob.js";
-import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
 function selectTargetByOrdinal(
@@ -12,7 +11,7 @@ function selectTargetByOrdinal(
 ): IItem | IMob | undefined {
   try {
     const filteredArray = array.filter((object) =>
-      object.keywords.includes(keyword)
+      object.keywords.some((key) => key.startsWith(keyword))
     );
     return filteredArray[ordinal];
   } catch (error: unknown) {

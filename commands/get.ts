@@ -49,7 +49,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       if (parsedCommand.targetsAll) {
         let itemsToGet = room.inventory.filter((item) =>
           item.keywords.some((keyword) =>
-            keyword.includes(specifiedItemKeyword)
+            keyword.startsWith(specifiedItemKeyword)
           )
         );
         if (!itemsToGet) {
@@ -111,7 +111,9 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         )
     );
     const mobsHaveSpecifiedContainerKeywordAsKeyword = room.mobs.some((mob) =>
-      mob.keywords.includes(specifiedContainerKeyword)
+      mob.keywords.some((keyword) =>
+        keyword.startsWith(specifiedContainerKeyword)
+      )
     );
     const usersHaveSpecifiedContainerKeywordAsUsername = room.users.some(
       (user) => user.username === specifiedContainerKeyword
@@ -210,7 +212,9 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
     if (parsedCommand.targetsAll) {
       // handle get all
       let itemsToGet = originInventory.filter((item) =>
-        item.keywords.some((keyword) => keyword.includes(specifiedItemKeyword))
+        item.keywords.some((keyword) =>
+          keyword.startsWith(specifiedItemKeyword)
+        )
       );
       if (!itemsToGet) {
         failToFindItem(user.username, specifiedItemKeyword);

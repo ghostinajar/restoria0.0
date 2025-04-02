@@ -18,25 +18,31 @@ async function lookExamine(parsedCommand, user) {
         const lookExamineArray = [];
         const lookOrExamine = parsedCommand.commandWord;
         let targetObject;
+        let targetOrdinal = parsedCommand.directObjectOrdinal || 0;
         // set targetObject if it's a room (or no target)
         if (!targetKeyword || targetKeyword === "room") {
             targetObject = room;
         }
-        // set targetObject if it's a user
-        let userObject = room.users.find((user) => user.username === targetKeyword);
-        if (userObject) {
-            targetObject = userObject;
+        if (!targetObject) {
+            // set targetObject if it's a user
+            let userObject = room.users.find((user) => user.username === targetKeyword);
+            if (userObject) {
+                targetObject = userObject;
+            }
         }
-        // set targetObject if it's a mob
-        let targetOrdinal = parsedCommand.directObjectOrdinal || 0;
-        let mobObject = selectTargetByOrdinal(targetOrdinal, targetKeyword, room.mobs);
-        if (mobObject) {
-            targetObject = mobObject;
+        if (!targetObject) {
+            // set targetObject if it's a mob
+            let mobObject = selectTargetByOrdinal(targetOrdinal, targetKeyword, room.mobs);
+            if (mobObject) {
+                targetObject = mobObject;
+            }
         }
-        // set targetObject if it's an item
-        let itemObject = selectTargetByOrdinal(targetOrdinal, targetKeyword, room.inventory);
-        if (itemObject) {
-            targetObject = itemObject;
+        if (!targetObject) {
+            // set targetObject if it's an item
+            let itemObject = selectTargetByOrdinal(targetOrdinal, targetKeyword, room.inventory);
+            if (itemObject) {
+                targetObject = itemObject;
+            }
         }
         // message user target is missing
         if (!targetObject) {
@@ -54,7 +60,8 @@ async function lookExamine(parsedCommand, user) {
         if (user.preferences.autoExamine) {
             objectDescription.content = `${targetObject.description.examine}`;
         }
-        if (!objectDescription.content || objectDescription.content === "undefined") {
+        if (!objectDescription.content ||
+            objectDescription.content === "undefined") {
             objectDescription.content = `This zone's author needs to add a description here.`;
         }
         lookExamineArray.push(objectDescription);

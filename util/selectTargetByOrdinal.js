@@ -1,7 +1,7 @@
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 function selectTargetByOrdinal(ordinal, keyword, array) {
     try {
-        const filteredArray = array.filter((object) => object.keywords.includes(keyword));
+        const filteredArray = array.filter((object) => object.keywords.some((key) => key.startsWith(keyword)));
         return filteredArray[ordinal];
     }
     catch (error) {

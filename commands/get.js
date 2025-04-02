@@ -29,7 +29,7 @@ async function get(parsedCommand, user) {
             }
             // handle "all"
             if (parsedCommand.targetsAll) {
-                let itemsToGet = room.inventory.filter((item) => item.keywords.some((keyword) => keyword.includes(specifiedItemKeyword)));
+                let itemsToGet = room.inventory.filter((item) => item.keywords.some((keyword) => keyword.startsWith(specifiedItemKeyword)));
                 if (!itemsToGet) {
                     failToFindItem(user.username, specifiedItemKeyword);
                     return;
@@ -60,7 +60,7 @@ async function get(parsedCommand, user) {
         // handle get from container
         const userInventoryHasEligibleContainers = user.inventory.some((container) => container.keywords.some((keyword) => keyword.toLowerCase() === specifiedContainerKeyword));
         const roomInventoryHasEligibleContainers = room.inventory.some((container) => container.keywords.some((keyword) => keyword.toLowerCase() === specifiedContainerKeyword));
-        const mobsHaveSpecifiedContainerKeywordAsKeyword = room.mobs.some((mob) => mob.keywords.includes(specifiedContainerKeyword));
+        const mobsHaveSpecifiedContainerKeywordAsKeyword = room.mobs.some((mob) => mob.keywords.some((keyword) => keyword.startsWith(specifiedContainerKeyword)));
         const usersHaveSpecifiedContainerKeywordAsUsername = room.users.some((user) => user.username === specifiedContainerKeyword);
         // fail if container only found in room.mobs
         if (!userInventoryHasEligibleContainers &&
@@ -119,7 +119,7 @@ async function get(parsedCommand, user) {
         // move item from container to user inventory
         if (parsedCommand.targetsAll) {
             // handle get all
-            let itemsToGet = originInventory.filter((item) => item.keywords.some((keyword) => keyword.includes(specifiedItemKeyword)));
+            let itemsToGet = originInventory.filter((item) => item.keywords.some((keyword) => keyword.startsWith(specifiedItemKeyword)));
             if (!itemsToGet) {
                 failToFindItem(user.username, specifiedItemKeyword);
                 return;
