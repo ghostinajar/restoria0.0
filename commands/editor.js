@@ -4,6 +4,7 @@ import User from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
+import save from "./save.js";
 async function editor(parsedCommand, user) {
     try {
         let editorHelpArray = [];
@@ -25,7 +26,7 @@ async function editor(parsedCommand, user) {
         }
         if (target === "none") {
             user.editor = null;
-            await user.save();
+            await save(user);
             editorHelpArray.push(makeMessage("success", `Editor removed. To choose someone, give their name, e.g. EDITOR RALU`));
             worldEmitter.emit(`messageArrayFor${user.username}`, editorHelpArray);
             return;
@@ -36,7 +37,7 @@ async function editor(parsedCommand, user) {
             return;
         }
         user.editor = newEditor._id;
-        await user.save();
+        await save(user);
         editorHelpArray.push(makeMessage("success", `Your new editor is ${newEditor.name}.`));
         worldEmitter.emit(`messageArrayFor${user.username}`, editorHelpArray);
     }

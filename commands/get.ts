@@ -8,6 +8,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import messageToUsername from "../util/messageToUsername.js";
 import relocateItem from "../util/relocateItem.js";
 import { IParsedCommand } from "../util/parseCommand.js";
+import save from "./save.js";
 
 function failToFindItem(username: string, itemName: string) {
   messageToUsername(
@@ -22,7 +23,6 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
     // fail if item not specified
     let specifiedItemKeyword = parsedCommand.directObject;
     if (!specifiedItemKeyword) {
-      console.log("messaging user");
       messageToUsername(user.username, `What do you want to get?`, `help`);
       return;
     }
@@ -91,8 +91,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           `success`
         );
       }
-      console.log(user.inventory.map((item) => item.name));
-      // await user.save();
+      await save(user, true);
       return;
     }
 
@@ -246,8 +245,8 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       );
     }
 
-    console.log(user.inventory.map((item) => item.name));
-    // await user.save();
+    await save(user, true);
+    return;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`get`, error, user?.name);
   }

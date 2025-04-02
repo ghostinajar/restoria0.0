@@ -136,7 +136,8 @@ async function createZone(zoneFormData: IZoneData, user: IUser) {
       user.unpublishedZoneTally = 0;
     }
     user.unpublishedZoneTally++;
-    user.save();
+    // save user regardless of debounce on save(user), so users can't prevent it
+    await user.save();
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage("success", `You created a zone: ${newZoneData.name}!`)

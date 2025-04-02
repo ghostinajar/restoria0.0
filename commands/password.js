@@ -5,6 +5,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import makeMessage from "../util/makeMessage.js";
 import saltAndHashPassword from "../util/saltAndHashPassword.js";
 import help from "./help.js";
+import save from "./save.js";
 async function password(parsedCommand, user) {
     try {
         // fail if parsedCommand.string is empty
@@ -47,7 +48,7 @@ async function password(parsedCommand, user) {
         }
         // save new password and notify success
         user.password = encryptedPassword;
-        await user.save();
+        await save(user);
         worldEmitter.emit(`messageFor${user.username}`, makeMessage(`success`, `Your password has been changed successfully.`));
     }
     catch (error) {

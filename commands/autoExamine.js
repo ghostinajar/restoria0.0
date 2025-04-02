@@ -3,6 +3,7 @@
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import emitUserPreferenceToClient from "../util/emitUserPreferenceToClient.js";
 import messageToUsername from "../util/messageToUsername.js";
+import save from "./save.js";
 function messageON(user) {
     messageToUsername(user.username, `Autoexamine ON: You'll see full (EXAMINE) descriptions, even when you LOOK.`, "success");
 }
@@ -29,7 +30,7 @@ async function autoExamine(parsedCommand, user) {
         else {
             messageOFF(user);
         }
-        user.save();
+        await save(user);
         await emitUserPreferenceToClient(user, "autoExamine", user.preferences.autoExamine);
     }
     catch (error) {

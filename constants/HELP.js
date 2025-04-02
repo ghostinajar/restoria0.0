@@ -300,6 +300,13 @@ const HELP = {
         `${padStringToLength79(`RULES`)}`,
         `We protect the safety, dignity, and fun of Restoria users by removing players who abuse others. Everything we say and do in Restoria is logged, and if you are found to be intentionally bothering anyone else in the game, your account may be deleted without warning. In this case, your writing, character experience, equipment & items, and everything else associated with your account would be permanently removed (another good reason why everyone should keep a backup of all their writing, e.g. on Google Drive). If you don't have good intentions towards all other players at all times, stop playing Restoria until you do.`,
     ],
+    SAVE: [
+        `${padStringToLength79(`SAVE`)}`,
+        `Changes you make to your zones (as an author, e.g. EDIT MOB) are saved when you submit the form, and are different from saving your character's data.`,
+        `The SAVE command manually saves your (non-zone) character data. The game also tries to do this for you automatically (e.g. when you make a change with AUTOEXAMINE, EDIT USER, EDITOR, MAP, PASSWORD, or GET an item, etc.).`,
+        `<span style="color:var(--red)">REMEMBER:</span>`,
+        `To protect our database, Restoria won't SAVE your character (manually or automatically) more than once every 10 seconds.`,
+    ],
     SAY: [
         `${padStringToLength79(`SAY`)}`,
         `User the SAY command to communicate with users in the same room.`,

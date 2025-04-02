@@ -5,6 +5,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
+import save from "./save.js";
 
 async function editor(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -49,7 +50,7 @@ async function editor(parsedCommand: IParsedCommand, user: IUser) {
 
     if (target === "none") {
       user.editor = null;
-      await user.save();
+      await save(user);
 
       editorHelpArray.push(
         makeMessage(
@@ -72,7 +73,7 @@ async function editor(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     user.editor = newEditor._id;
-    await user.save();
+    await save(user);
 
     editorHelpArray.push(
       makeMessage("success", `Your new editor is ${newEditor.name}.`)

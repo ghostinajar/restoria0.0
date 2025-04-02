@@ -8,6 +8,7 @@ import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import saltAndHashPassword from "../util/saltAndHashPassword.js";
 import help from "./help.js";
+import save from "./save.js";
 
 async function password(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -92,7 +93,7 @@ async function password(parsedCommand: IParsedCommand, user: IUser) {
 
     // save new password and notify success
     user.password = encryptedPassword;
-    await user.save();
+    await save(user);
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage(`success`, `Your password has been changed successfully.`)

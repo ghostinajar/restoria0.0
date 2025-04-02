@@ -3,6 +3,7 @@ import findObjectInInventory from "../util/findObjectInInventory.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
 import messageToUsername from "../util/messageToUsername.js";
 import relocateItem from "../util/relocateItem.js";
+import save from "./save.js";
 function failToFindItem(username, itemName) {
     messageToUsername(username, `You can't seem to find the ${itemName}.`, `help`);
 }
@@ -11,7 +12,6 @@ async function get(parsedCommand, user) {
         // fail if item not specified
         let specifiedItemKeyword = parsedCommand.directObject;
         if (!specifiedItemKeyword) {
-            console.log("messaging user");
             messageToUsername(user.username, `What do you want to get?`, `help`);
             return;
         }
@@ -53,8 +53,7 @@ async function get(parsedCommand, user) {
                 relocateItem(itemToGet, room.inventory, user.inventory);
                 messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
             }
-            console.log(user.inventory.map((item) => item.name));
-            // await user.save();
+            await save(user, true);
             return;
         }
         // handle get from container
@@ -138,8 +137,8 @@ async function get(parsedCommand, user) {
             relocateItem(itemToGet, originInventory, user.inventory);
             messageToUsername(user.username, `You got ${itemToGet.name} from ${originContainer.name}.`, `success`);
         }
-        console.log(user.inventory.map((item) => item.name));
-        // await user.save();
+        await save(user, true);
+        return;
     }
     catch (error) {
         catchErrorHandlerForFunction(`get`, error, user?.name);

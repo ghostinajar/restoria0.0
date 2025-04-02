@@ -29,6 +29,7 @@ import sudobug from "../commands/sudobug.js";
 import autoExamine from "../commands/autoExamine.js";
 import lookExamine from "../commands/lookExamine.js";
 import get from "../commands/get.js";
+import save from "../commands/save.js";
 async function processCommand(parsedCommand, user) {
     try {
         switch (parsedCommand.commandWord) {
@@ -121,6 +122,10 @@ async function processCommand(parsedCommand, user) {
             }
             case `recall`: {
                 await recall(user);
+                break;
+            }
+            case `save`: {
+                save(user);
                 break;
             }
             case `say`: {

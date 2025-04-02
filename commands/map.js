@@ -8,6 +8,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import messageToUsername from "../util/messageToUsername.js";
 import packMapTileStateForRoom from "../util/packMapTileStateForRoom.js";
+import save from "./save.js";
 async function map(parsedCommand, user) {
     try {
         let directObject = parsedCommand.directObject?.toLowerCase();
@@ -30,20 +31,20 @@ async function map(parsedCommand, user) {
                 directObject = "1";
             }
             user.preferences.mapRadius = newMapRadius;
-            await user.save();
+            await save(user);
             await emitUserPreferenceToClient(user, "mapRadius", newMapRadius);
             messageToUsername(user.username, `MAP radius set to ${newMapRadius}! It can be any number from 1-10.`, `help`);
         }
         // handle "on" or "off" parameter
         if (parsedCommand.directObject?.toLowerCase() === "off") {
             user.preferences.autoMap = false;
-            await user.save();
+            await save(user);
             await emitUserPreferenceToClient(user, "autoMap", false);
             messageToUsername(user.username, `Auto MAP is OFF.`, `help`);
         }
         if (parsedCommand.directObject?.toLowerCase() === "on") {
             user.preferences.autoMap = true;
-            await user.save();
+            await save(user);
             await emitUserPreferenceToClient(user, "autoMap", true);
             messageToUsername(user.username, `Auto MAP is ON.`, `help`);
         }

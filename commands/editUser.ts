@@ -6,6 +6,7 @@ import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import makeMessage from "../util/makeMessage.js";
 import truncateDescription from "../util/truncateDescription.js";
+import save from "./save.js";
 
 async function editUser(user: IUser, userDescription: IDescription) {
   try {
@@ -25,17 +26,14 @@ async function editUser(user: IUser, userDescription: IDescription) {
     }
 
     user.history.modifiedDate = new Date();
-    await user.save();
+    await save(user);
     worldEmitter.emit(
       `messageFor${user.username}`,
-      makeMessage(
-        `success`,
-        `User description saved!`
-      )
+      makeMessage(`success`, `User description saved!`)
     );
     return;
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("editUser", error, user.name)
+    catchErrorHandlerForFunction("editUser", error, user.name);
   }
 }
 

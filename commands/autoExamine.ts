@@ -6,6 +6,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import emitUserPreferenceToClient from "../util/emitUserPreferenceToClient.js";
 import messageToUsername from "../util/messageToUsername.js";
 import { IParsedCommand } from "../util/parseCommand.js";
+import save from "./save.js";
 
 function messageON(user: IUser) {
   messageToUsername(
@@ -41,7 +42,7 @@ async function autoExamine(parsedCommand: IParsedCommand, user: IUser) {
     } else {
       messageOFF(user);
     }
-    user.save();
+    await save(user);
     await emitUserPreferenceToClient(
       user,
       "autoExamine",
