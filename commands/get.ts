@@ -100,14 +100,14 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
 
     const userInventoryHasEligibleContainers = user.inventory.some(
       (container: IItem) =>
-        container.keywords.some(
-          (keyword) => keyword.toLowerCase() === specifiedContainerKeyword
+        container.keywords.some((keyword) =>
+          keyword.toLowerCase().startsWith(specifiedContainerKeyword)
         )
     );
     const roomInventoryHasEligibleContainers = room.inventory.some(
       (container: IItem) =>
-        container.keywords.some(
-          (keyword) => keyword.toLowerCase() === specifiedContainerKeyword
+        container.keywords.some((keyword) =>
+          keyword.toLowerCase().startsWith(specifiedContainerKeyword)
         )
     );
     const mobsHaveSpecifiedContainerKeywordAsKeyword = room.mobs.some((mob) =>
@@ -116,7 +116,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       )
     );
     const usersHaveSpecifiedContainerKeywordAsUsername = room.users.some(
-      (user) => user.username === specifiedContainerKeyword
+      (user) => user.username.startsWith(specifiedContainerKeyword)
     );
 
     // fail if container only found in room.mobs

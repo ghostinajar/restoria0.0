@@ -58,10 +58,10 @@ async function get(parsedCommand, user) {
             return;
         }
         // handle get from container
-        const userInventoryHasEligibleContainers = user.inventory.some((container) => container.keywords.some((keyword) => keyword.toLowerCase() === specifiedContainerKeyword));
-        const roomInventoryHasEligibleContainers = room.inventory.some((container) => container.keywords.some((keyword) => keyword.toLowerCase() === specifiedContainerKeyword));
+        const userInventoryHasEligibleContainers = user.inventory.some((container) => container.keywords.some((keyword) => keyword.toLowerCase().startsWith(specifiedContainerKeyword)));
+        const roomInventoryHasEligibleContainers = room.inventory.some((container) => container.keywords.some((keyword) => keyword.toLowerCase().startsWith(specifiedContainerKeyword)));
         const mobsHaveSpecifiedContainerKeywordAsKeyword = room.mobs.some((mob) => mob.keywords.some((keyword) => keyword.startsWith(specifiedContainerKeyword)));
-        const usersHaveSpecifiedContainerKeywordAsUsername = room.users.some((user) => user.username === specifiedContainerKeyword);
+        const usersHaveSpecifiedContainerKeywordAsUsername = room.users.some((user) => user.username.startsWith(specifiedContainerKeyword));
         // fail if container only found in room.mobs
         if (!userInventoryHasEligibleContainers &&
             !roomInventoryHasEligibleContainers &&
