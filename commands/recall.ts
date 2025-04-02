@@ -27,7 +27,6 @@ async function recall(user: IUser) {
         `You close your eyes and concentrate. When you open them, you're back in Restoria City.`
       )
     );
-    await lookExamine({ commandWord: "look" }, user);
   } catch (error: unknown) {
     catchErrorHandlerForFunction("recall", error, user.name)
   }
