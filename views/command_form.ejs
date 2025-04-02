@@ -85,7 +85,14 @@
 
     commandForm.addEventListener("submit", (e) => {
       e.preventDefault();
+
+      // echo the command to the terminal
       if (input.value) {
+        appendMessageToTerminal({
+            type: "grey_light",
+            content: `${input.value}`,
+          });
+
         const parsedCommand = parseCommand(input.value);
 
         const directions = ["n","e","s","w","u","d","north","east","south","west","up","down"]

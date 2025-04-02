@@ -12,12 +12,15 @@
   --grey: #aaaaaa;
   --grey_light: #e5e5e5;
   --white: #fff;
+  --magenta_light: #ffa3ff;
+  --magenta: #ff00ff;
+  --magenta_dark: #cd00cd;
   --purple_light: #d191ff;
-  --purple: #ae3cff;
-  --purple_dark: #7700cb;
+  --purple: #b753ff;
+  --purple_dark: #9705ff;
   --blue_light: #a5bdff;
-  --blue: #5c5cff;
-  --blue_dark: #2626fc;
+  --blue: #7474ff;
+  --blue_dark: #4d4efb;
   --cyan_light: #a2ffff;
   --cyan: #00ffff;
   --cyan_dark: #00cdcd;
@@ -31,12 +34,11 @@
   --orange: #ff8859;
   --orange_dark: #bc4a1d;
   --red_light: #f88181;
-  --red: #ff0000;
-  --red_dark: #cd0000;
-  --magenta_light: #ffa3ff;
-  --magenta: #ff00ff;
-  --magenta_dark: #cd00cd;
-  --brown: #977447;
+  --red: #ff2e2e;
+  --red_dark: #d40000;
+  --brown_light: #c9b08d;
+  --brown: #a47e4d;
+  --brown_dark: #84663e;
 }
 
 .black {
@@ -497,7 +499,7 @@ ul {
   color: #888;
   font-style: italic;
   opacity: 0.8;
-  transition: opacity 0.3s ease;  
+  transition: opacity 0.3s ease;
 }
 
 #commandInput:focus::placeholder {
