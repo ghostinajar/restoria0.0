@@ -36,17 +36,6 @@
     <li style="display: inline-block">
       <label for="createItemType">Type:</label>
       <select id="createItemType" name="createItemType" required>
-        <option value="armor">armor</option>
-        <option value="fishing_rod">fishing rod</option>
-        <option value="gold">gold</option>
-        <option value="key">key</option>
-        <option value="none" selected>none</option>
-        <option value="potion">potion</option>
-        <option value="scroll">scroll</option>
-        <option value="token">token</option>
-        <option value="treasure">treasure</option>
-        <option value="wand">wand</option>
-        <option value="weapon">weapon</option>
       </select>
     </li>
     <li style="display: inline-block">
@@ -191,7 +180,8 @@
 
     socket.on("openCreateItemBlueprintForm", (formData) => {
       itemTypes = formData.itemTypes;
-      generateStringSelectOptions(itemTypes, createItemType);      
+      generateStringSelectOptions(itemTypes, createItemType); 
+      createItemType.value = "none";     
       resetActiveSidebarElementTo(createItemBlueprintForm);
     });
   });
