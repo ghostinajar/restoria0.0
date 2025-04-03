@@ -13,38 +13,28 @@
   <h2>Edit User</h2>
   <ul>
     <li>
-      <label for="editUserLook">Look</label>
-      <input
-        id="editUserLook"
-        name="editUserLook"
-        type="text"
-        maxlength="79"
-        required
-      />
-    </li>
-    <li>
-      <label for="editUserExamineUser">Examine:</label>
+      <label for="editUserExamine">Examine:</label>
       <textarea
-        id="editUserExamineUser"
-        name="editUserExamineUser"
+        id="editUserExamine"
+        name="editUserExamine"
         type="text"
         maxlength="240"
       ></textarea>
     </li>
     <li>
-      <label for="editUserStudyUser">Study:</label>
+      <label for="editUserStudy">Study:</label>
       <textarea
-        id="editUserStudyUser"
-        name="editUserStudyUser"
+        id="editUserStudy"
+        name="editUserStudy"
         type="text"
         maxlength="640"
       ></textarea>
     </li>
     <li>
-      <label for="editUserResearchUser">Research:</label>
+      <label for="editUserResearch">Research:</label>
       <textarea
-        id="editUserResearchUser"
-        name="editUserResearchUser"
+        id="editUserResearch"
+        name="editUserResearch"
         type="text"
         maxlength="1600"
       ></textarea>
@@ -60,20 +50,16 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const editUserForm = document.getElementById("editUserForm");
-    const editUserLook = document.getElementById("editUserLook");
-    const editUserExamineUser = document.getElementById("editUserExamineUser");
-    const editUserStudyUser = document.getElementById("editUserStudyUser");
-    const editUserResearchUser = document.getElementById(
-      "editUserResearchUser"
-    );
+    const editUserExamine = document.getElementById("editUserExamine");
+    const editUserStudy = document.getElementById("editUserStudy");
+    const editUserResearch = document.getElementById("editUserResearch");
 
     editUserForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const userDescription = {
-        look: DOMPurify.sanitize(editUserLook.value),
-        examine: DOMPurify.sanitize(editUserExamineUser.value),
-        study: DOMPurify.sanitize(editUserStudyUser.value),
-        research: DOMPurify.sanitize(editUserResearchUser.value),
+        examine: DOMPurify.sanitize(editUserExamine.value),
+        study: DOMPurify.sanitize(editUserStudy.value),
+        research: DOMPurify.sanitize(editUserResearch.value),
       };
       socket.emit("userSubmittedEditUser", userDescription);
       editUserForm.reset();
@@ -89,9 +75,9 @@
     socket.on("openEditUserForm", (formData) => {
       resetActiveSidebarElementTo(editUserForm);
       // Set the values of the textareas based on formData
-      editUserExamineUser.value = formData.examine || "";
-      editUserStudyUser.value = formData.study || "";
-      editUserResearchUser.value = formData.research || "";
+      editUserExamine.value = formData.examine || "";
+      editUserStudy.value = formData.study || "";
+      editUserResearch.value = formData.research || "";
     });
   });
 </script>

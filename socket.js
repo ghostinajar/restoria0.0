@@ -32,6 +32,7 @@ const setupSocket = (io) => {
             function removeAllListenersForUser(user) {
                 worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
                 worldEmitter.removeAllListeners(`mapRequestFor${user.username}`);
+                worldEmitter.removeAllListeners(`mapTileStateFor${user.username}`);
                 worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
                 worldEmitter.removeAllListeners(`messageFor${user.username}`);
                 worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
