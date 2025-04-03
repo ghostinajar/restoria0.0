@@ -80,6 +80,7 @@ const setupSocket = (io: any) => {
       function removeAllListenersForUser(user: IUser) {
         worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
         worldEmitter.removeAllListeners(`mapRequestFor${user.username}`);
+        worldEmitter.removeAllListeners(`mapTileStateFor${user.username}`);
         worldEmitter.removeAllListeners(`messageArrayFor${user.username}`);
         worldEmitter.removeAllListeners(`messageFor${user.username}`);
         worldEmitter.removeAllListeners(`messageFor${user.username}sRoom`);
@@ -104,29 +105,15 @@ const setupSocket = (io: any) => {
 
       worldEmitter.on(
         `mapRequestFor${user.username}`,
-        async (
-          zoneFloorName: string,
-          mapTileState: IMapTileState,
-        ) => {
-          mapRequestForUserHandler(
-            zoneFloorName,
-            mapTileState,
-            socket
-          );
+        async (zoneFloorName: string, mapTileState: IMapTileState) => {
+          mapRequestForUserHandler(zoneFloorName, mapTileState, socket);
         }
       );
 
       worldEmitter.on(
         `mapTileStateFor${user.username}`,
-        async (
-          zoneFloorName: string,
-          mapTileState: IMapTileState,
-        ) => {
-          mapTileStateForUserHandler(
-            zoneFloorName,
-            mapTileState,
-            socket
-          );
+        async (zoneFloorName: string, mapTileState: IMapTileState) => {
+          mapTileStateForUserHandler(zoneFloorName, mapTileState, socket);
         }
       );
 
@@ -249,12 +236,9 @@ const setupSocket = (io: any) => {
         }
       );
 
-      socket.on(
-        `userSubmittedEditMap`,
-        async (editMapData: IMapTile) => {
-          await userSubmittedEditMapHandler(editMapData, user);
-        }
-      );
+      socket.on(`userSubmittedEditMap`, async (editMapData: IMapTile) => {
+        await userSubmittedEditMapHandler(editMapData, user);
+      });
 
       socket.on(
         `userSubmittedEditMobBlueprint`,

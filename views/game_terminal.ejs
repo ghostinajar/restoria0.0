@@ -51,9 +51,6 @@
       let activeSideBarElement = editUserForm;
 
       function resetActiveSidebarElementTo(element) {
-        if (activeSideBarElement.tagName === "FORM") {
-          activeSideBarElement.reset();
-        }
         activeSideBarElement.style.display = "none";
         activeSideBarElement = element;
         activeSideBarElement.style.display = "block";

@@ -496,7 +496,7 @@ ul {
 }
 
 #commandInput::placeholder {
-  color: #888;
+  color: var(--orange_dark);
   font-style: italic;
   opacity: 0.8;
   transition: opacity 0.3s ease;
