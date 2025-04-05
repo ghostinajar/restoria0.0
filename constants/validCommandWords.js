@@ -29,6 +29,8 @@ export const validCommandWords = [
     "quit",
     "recall",
     "research",
+    "roomsum",
+    "roomsummary",
     "save",
     "say",
     "shout",

@@ -11,9 +11,10 @@ class ZoneManager {
     constructor() {
         this.zones = new Map();
         worldEmitter.on("closeZoneRequested", this.closeZoneRequestedHandler);
-        worldEmitter.on("roomRequested", this.roomRequestedHandler);
-        worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
         worldEmitter.on("placeUserRequest", this.placeUserRequestHandler);
+        worldEmitter.on("roomRequested", this.roomRequestedHandler);
+        worldEmitter.on("roomSummaryRequested", this.roomSummaryRequestedHandler);
+        worldEmitter.on("socketDisconnectedUser", this.userLogoutHandler);
         worldEmitter.on("zoneRequested", this.zoneRequestedHandler);
     }
     zones;
@@ -40,6 +41,31 @@ class ZoneManager {
         }
         catch (error) {
             catchErrorHandlerForFunction("ZoneManager.roomRequestedHandler", error);
+        }
+    };
+    roomSummaryRequestedHandler = async () => {
+        try {
+            let summary = [];
+            // Iterate through each zone
+            for (const [_, zone] of this.zones) {
+                summary.push(`\nRooms in zone ${zone.name} (${zone._id}):`);
+                // Iterate through each room in the zone
+                for (const room of zone.rooms) {
+                    summary.push(`\n${room.name} (${room._id}):`);
+                    summary.push(`  Items: ${room.inventory.map(item => `${item.name} (${item._id})`).join(', ') || 'none'}`);
+                    summary.push(`  Mobs: ${room.mobs.map(mob => `${mob.name} (${mob._id})`).join(', ') || 'none'}`);
+                    summary.push(`  Users: ${room.users.map(user => `${user.name} (${user._id})`).join(', ') || 'none'}`);
+                }
+            }
+            if (summary.length === 0) {
+                logger.info('No active zones found.');
+            }
+            else {
+                logger.info(summary.join('\n'));
+            }
+        }
+        catch (error) {
+            catchErrorHandlerForFunction(`ZoneManager.roomSummaryRequestedHandler`, error);
         }
     };
     userLogoutHandler = async (user) => {
@@ -93,6 +119,7 @@ class ZoneManager {
             // add to zones map
             this.zones.set(zone._id.toString(), zone);
             logger.info(`zoneManager added ${zone.name} to zones.`);
+            logger.info(`active zones in zoneManager: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
             // if blueprints are empty, add dummy data (necessary for user forms)
             if (zone.itemBlueprints.length === 0) {
                 zone.itemBlueprints = [
@@ -262,9 +289,10 @@ class ZoneManager {
     clearContents() {
         this.zones.clear();
         worldEmitter.off("closeZoneRequested", this.closeZoneRequestedHandler);
-        worldEmitter.off("roomRequested", this.roomRequestedHandler);
-        worldEmitter.off("socketDisconnectedUser", this.userLogoutHandler);
         worldEmitter.off("placeUserRequest", this.placeUserRequestHandler);
+        worldEmitter.off("roomRequested", this.roomRequestedHandler);
+        worldEmitter.off("roomSummaryRequested", this.roomSummaryRequestedHandler);
+        worldEmitter.off("socketDisconnectedUser", this.userLogoutHandler);
         worldEmitter.off("zoneRequested", this.zoneRequestedHandler);
     }
 }

@@ -32,6 +32,7 @@ import autoExamine from "../commands/autoExamine.js";
 import lookExamine from "../commands/lookExamine.js";
 import get from "../commands/get.js";
 import save from "../commands/save.js";
+import roomSummary from "../commands/roomSummary.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -128,6 +129,11 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `recall`: {
         await recall(user);
+        break;
+      }
+      case `roomsum`:
+      case `roomsummary`: {
+        await roomSummary(user);
         break;
       }
       case `save`: {
