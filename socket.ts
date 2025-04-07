@@ -78,6 +78,7 @@ const setupSocket = (io: any) => {
 
       // Remove existing event listeners for the user before adding new ones
       function removeAllListenersForUser(user: IUser) {
+        worldEmitter.removeAllListeners(`eraseMapTileFor${user.username}`);
         worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
         worldEmitter.removeAllListeners(`mapRequestFor${user.username}`);
         worldEmitter.removeAllListeners(`mapTileStateFor${user.username}`);
@@ -96,6 +97,13 @@ const setupSocket = (io: any) => {
       removeAllListenersForUser(user);
 
       // Listen for game events
+      worldEmitter.on(
+        `eraseMapTileFor${user.username}`,
+        async (zoneFloorName: string, roomCoords: number[]) => {
+          socket.emit(`eraseMapTile`, zoneFloorName, roomCoords);
+        }
+      );
+
       worldEmitter.on(
         `formPromptFor${user.username}`,
         async (formData: any) => {

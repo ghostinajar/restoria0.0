@@ -7,6 +7,7 @@ import mobBlueprintSchema from "./MobBlueprint.js";
 import itemBlueprintSchema from "./ItemBlueprint.js";
 import suggestionSchema from "./Suggestion.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
+import recall from "../../commands/recall.js";
 const { Schema } = mongoose;
 const zoneSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -129,6 +130,13 @@ zoneSchema.methods.eraseMobBlueprintById = async function (id) {
 };
 zoneSchema.methods.eraseRoomById = async function (id) {
     try {
+        // sends any users currently in the room to recall
+        const room = this.rooms.find((room) => room._id.toString() === id);
+        if (room) {
+            room.users.forEach(async (user) => {
+                await recall(user);
+            });
+        }
         // Remove the room from the zone
         this.rooms = this.rooms.filter((room) => room._id.toString() !== id.toString());
         // Loop through each room and remove exits that lead to the deleted room

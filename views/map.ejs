@@ -264,6 +264,24 @@
     await mapTileStateHandler(zoneFloorName, mapTileState);
   });
 
+  // handles eraseMapTile event from server (erase mapTileState, save map)
+  socket.on("eraseMapTile", async function (zoneFloorName, mapCoords) {
+    if (!zoneFloorName || !mapCoords) {
+      console.error("Invalid eraseMapTile data:", zoneFloorName, mapCoords);
+      return;
+    }
+
+    if (mapCache.zoneFloorName !== zoneFloorName) {
+      console.log(
+        "Received a eraseMapTile from a different zone, loading new map:",
+        zoneFloorName
+      );
+      await loadMapByName(zoneFloorName);
+    }
+    delete mapCache.mapTileStates[mapCoords.join(",")];
+    await saveMap();
+  });
+
   // listens for mapRequest from server, loads map and populates map grid, displays mapDiv
   socket.on("mapRequest", async function (zoneFloorName, mapTileState) {
     await mapRequestHandler(zoneFloorName, mapTileState);

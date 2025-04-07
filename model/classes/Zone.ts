@@ -9,6 +9,8 @@ import suggestionSchema, { ISuggestion } from "./Suggestion.js";
 import { IItemNode } from "./ItemNode.js";
 import { IMobNode } from "./MobNode.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
+import { IUser } from "./User.js";
+import recall from "../../commands/recall.js";
 
 const { Schema } = mongoose;
 
@@ -175,6 +177,14 @@ zoneSchema.methods.eraseMobBlueprintById = async function (id: string) {
 
 zoneSchema.methods.eraseRoomById = async function (id: string) {
   try {
+    // sends any users currently in the room to recall
+    const room = this.rooms.find((room: IRoom) => room._id.toString() === id);
+    if (room) {
+      room.users.forEach(async (user: IUser) => {
+        await recall(user);
+      });
+    }
+
     // Remove the room from the zone
     this.rooms = this.rooms.filter(
       (room: IRoom) => room._id.toString() !== id.toString()

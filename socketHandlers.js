@@ -60,6 +60,14 @@ export const formPromptForUserHandler = async (formData, socket) => {
         }
     }
 };
+export const eraseMapTileForUserHandler = async (zoneFloorName, mapCoords, socket) => {
+    try {
+        socket.emit(`eraseMapTile`, zoneFloorName, mapCoords);
+    }
+    catch (error) {
+        catchErrorHandlerForFunction(`eraseMapTileForUserHandler`, error);
+    }
+};
 export const mapRequestForUserHandler = async (zoneFloorName, mapTileState, socket) => {
     try {
         socket.emit(`mapRequest`, zoneFloorName, mapTileState);
