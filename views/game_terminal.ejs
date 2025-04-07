@@ -30,10 +30,9 @@
       include('create_item_blueprint_form'); %> <%-
       include('create_mob_blueprint_form'); %> <%- include('create_room_form');
       %> <%- include('create_zone_form'); %> <%-
-      include('edit_item_blueprint_form'); %> <%-
-      include('edit_map_form'); %> <%-
-      include('edit_mob_blueprint_form'); %> <%- include('edit_room_form'); %>
-      <%- include('edit_user_form'); %> <%- include('edit_zone_form'); %> <%-
+      include('edit_item_blueprint_form'); %> <%- include('edit_map_form'); %>
+      <%- include('edit_mob_blueprint_form'); %> <%- include('edit_room_form');
+      %> <%- include('edit_user_form'); %> <%- include('edit_zone_form'); %> <%-
       include('erase_exit_form'); %> <%- include('erase_item_blueprint_form');
       %> <%- include('erase_mob_blueprint_form'); %> <%-
       include('erase_room_form'); %> <%- include('erase_zone_form'); %> <%-
@@ -45,6 +44,7 @@
     <%- include('command_form'); %>
 
     <script>
+      const isMobileDevice = /Mobi|Android/i.test(navigator.userAgent);
       let userPreferences = {};
       const messagesContainer = document.getElementById("messagesContainer");
       const messages = document.getElementById("messages");

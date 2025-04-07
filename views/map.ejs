@@ -257,7 +257,9 @@
   async function mapRequestHandler(zoneFloorName, mapTileState) {
     await mapTileStateHandler(zoneFloorName, mapTileState);
     await populateMap(mapTileState.mapCoords);
-    resetActiveSidebarElementTo(mapDiv);
+    if (!isMobileDevice) {
+      resetActiveSidebarElementTo(mapDiv);
+    }
   }
 
   socket.on("mapTileState", async function (zoneFloorName, mapTileState) {

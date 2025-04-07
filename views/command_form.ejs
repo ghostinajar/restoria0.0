@@ -117,6 +117,16 @@
           return;
         }
 
+        const MOBILE_UNFRIENDLY_COMMANDS = ["map"];
+        if (MOBILE_UNFRIENDLY_COMMANDS.includes(parsedCommand.commandWord) && isMobileDevice) {
+          appendMessageToTerminal({
+            type: "rejection",
+            content: `Sorry, '${parsedCommand.commandWord}' is not supported on mobile.`,
+          });
+          input.value = "";
+          return;
+        }
+
         // Add command to history before clearing input
         addToHistory(input.value);
         
