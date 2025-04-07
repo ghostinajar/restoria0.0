@@ -48,13 +48,21 @@ class ZoneManager {
             let summary = [];
             // Iterate through each zone
             for (const [_, zone] of this.zones) {
-                summary.push(`\nRooms in zone ${zone.name} (${zone._id}):`);
+                summary.push(`\nOccupied Rooms in zone ${zone.name} (${zone._id}):`);
                 // Iterate through each room in the zone
                 for (const room of zone.rooms) {
-                    summary.push(`\n${room.name} (${room._id}):`);
-                    summary.push(`  Items: ${room.inventory.map(item => `${item.name} (${item._id})`).join(', ') || 'none'}`);
-                    summary.push(`  Mobs: ${room.mobs.map(mob => `${mob.name} (${mob._id})`).join(', ') || 'none'}`);
-                    summary.push(`  Users: ${room.users.map(user => `${user.name} (${user._id})`).join(', ') || 'none'}`);
+                    if (room.inventory.length > 0 || room.mobs.length > 0 || room.users.length > 0) {
+                        summary.push(`${room.name} (${room._id}):`);
+                    }
+                    if (room.inventory.length > 0) {
+                        summary.push(`  Items: ${room.inventory.map(item => `${item.name} (${item._id})`).join(', ') || 'none'}`);
+                    }
+                    if (room.mobs.length > 0) {
+                        summary.push(`  Mobs: ${room.mobs.map(mob => `${mob.name} (${mob._id})`).join(', ') || 'none'}`);
+                    }
+                    if (room.users.length > 0) {
+                        summary.push(`  **USERS**: ${room.users.map(user => `${user.name} (${user._id})`).join(', ') || 'none'}`);
+                    }
                 }
             }
             if (summary.length === 0) {
