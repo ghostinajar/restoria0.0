@@ -97,7 +97,7 @@ const roomSchema = new Schema({
             look: "This room's author can use EDIT ROOM to add a LOOK description.",
             examine: "This room's author can use EDIT ROOM to add an EXAMINE description.",
             study: "",
-            research: ""
+            research: "",
         }),
     },
     exits: {
@@ -138,9 +138,47 @@ const roomSchema = new Schema({
             default: () => ({}),
         },
     ],
-    inventory: [],
-    mobs: [],
-    users: [],
+}, {
+    toJSON: {
+        virtuals: true,
+    },
+    toObject: {
+        virtuals: true,
+    },
+});
+// Add virtual properties for mobs, inventory, and users
+roomSchema
+    .virtual("mobs")
+    .get(function () {
+    if (!this._mobs) {
+        this._mobs = [];
+    }
+    return this._mobs;
+})
+    .set(function (v) {
+    this._mobs = v;
+});
+roomSchema
+    .virtual("inventory")
+    .get(function () {
+    if (!this._inventory) {
+        this._inventory = [];
+    }
+    return this._inventory;
+})
+    .set(function (v) {
+    this._inventory = v;
+});
+roomSchema
+    .virtual("users")
+    .get(function () {
+    if (!this._users) {
+        this._users = [];
+    }
+    return this._users;
+})
+    .set(function (v) {
+    this._users = v;
 });
 //since there will only ever be one instance of a Room, the Room class will have
 //arrays to store active mobs, inventory, and users inside the room.
@@ -174,25 +212,22 @@ roomSchema.methods.removeEntityFrom = function (entityType, instance) {
 };
 roomSchema.methods.initiate = async function () {
     try {
-        //loadout mobs array
-        this.mobs = [];
+        // Reset volatile properties
+        this._mobs = [];
+        this._inventory = [];
+        // Load mobs from nodes
         if (this.mobNodes) {
             await activateMobNodes(this.mobNodes, this.mobs);
         }
-        //loadout inventory array
-        this.inventory = [];
+        // Load items from nodes
         await activateItemNodes(this.itemNodes, this.inventory);
-        //open users array
-        this.users = [];
+        // No need to initialize users here as the virtual property handles it
     }
     catch (error) {
         catchErrorHandlerForFunction(`Room.initiate for room id ${this._id}`, error);
     }
 };
 roomSchema.pre("save", function (next) {
-    this.mobs = [];
-    this.inventory = [];
-    this.users = [];
     next();
 });
 roomSchema.methods.clearContents = async function () {
