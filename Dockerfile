@@ -1,18 +1,26 @@
-# Step 1: Use an official Node.js runtime as a base image
-FROM node:20
+# Stage 1: Builder
+FROM node:20-slim as builder
 
-# Step 2: Set the working directory in the container
+# Set working directory
 WORKDIR /usr/src/app
 
-# Step 3: Copy package files and install dependencies
+# Only copy package files and install production dependencies
 COPY package*.json ./
-RUN npm install --production
+RUN npm ci --omit=dev
 
-# Step 4: Copy the rest of the app files
+# Copy the rest of the app
 COPY . .
 
-# Step 5: Expose the port your app runs on
+# Stage 2: Final image
+FROM node:20-slim
+
+WORKDIR /usr/src/app
+
+# Copy only what's needed from builder stage
+COPY --from=builder /usr/src/app ./
+
+# Expose the app port
 EXPOSE 3000
 
-# Step 6: Define the command to run your app
+# Run the app
 CMD ["npm", "start"]
