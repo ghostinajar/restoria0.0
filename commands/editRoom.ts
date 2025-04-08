@@ -12,6 +12,9 @@ import { IExit } from "../model/classes/Exit.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
 import lookExamine from "./lookExamine.js";
+import { Direction, directions } from "../constants/DIRECTIONS.js";
+import getRoomByLocation from "../util/getRoomByLocation.js";
+import matchExitFrom from "../util/matchExitFrom.js";
 
 export interface IEditRoomFormData {
   _id: string | mongoose.Types.ObjectId;
@@ -46,10 +49,15 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
       throw new Error(`Couldn't get ${user.username}'s zone.`);
     }
 
+    // This scolding only runs if user has somehow circumvented the initial check
     if (user._id.toString() !== zone.author.toString()) {
-      worldEmitter.emit(`messageFor${user.username}`, makeMessage(
-        `rejection`, `Tsk, you aren't an author of this zone. GOTO one of your own and EDIT there.`
-      ))
+      worldEmitter.emit(
+        `messageFor${user.username}`,
+        makeMessage(
+          `rejection`,
+          `Tsk, you aren't an author of this zone. GOTO one of your own and EDIT there.`
+        )
+      );
       return;
     }
 
@@ -88,11 +96,48 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
       });
     });
 
+    // Find which exits have different properties after edit
+    const changedExits: Direction[] = (directions as Direction[]).filter(
+      (direction: Direction) => {
+        const oldExit = room.exits[direction];
+        const newExit = roomData.exits[direction];
+
+        if (oldExit && newExit) {
+          return (
+            oldExit.hiddenByDefault !== newExit.hiddenByDefault ||
+            oldExit.closedByDefault !== newExit.closedByDefault ||
+            oldExit.keyItemBlueprint !== newExit.keyItemBlueprint
+          );
+        }
+        return false;
+      }
+    );
+    console.log("changed exits" + changedExits);
+
+    changedExits.forEach(async (direction: Direction) => {
+      // retrieve the destination room object via getRoomByLocation
+      const exit = room.exits[direction];
+      if (!exit) {
+        throw new Error(`Exit ${direction} not found in room.`);
+      }
+      const location = exit.destinationLocation;
+      const destinationRoom = await getRoomByLocation(location);
+      if (!destinationRoom) {
+        throw new Error(
+          `Destination room for exit ${direction} not found in zone.`
+        );
+      }
+
+      // run matchExitFrom on the rooms to make their properties match
+      console.log(`matching exit from ${room.name} to ${destinationRoom.name}`);
+      await matchExitFrom(room, destinationRoom, direction);
+    });
+
     room.exits = roomData.exits;
 
     await zone.save();
     await zone.initRooms();
-    await lookExamine({commandWord: 'look'}, user)
+    await lookExamine({ commandWord: "look" }, user);
     worldEmitter.emit(
       `messageFor${user.username}`,
       makeMessage(`success`, `Room updated!`)
