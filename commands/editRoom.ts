@@ -50,7 +50,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
     }
 
     // This scolding only runs if user has somehow circumvented the initial check
-    if (user._id.toString() !== zone.author.toString()) {
+    if (user._id.toString() !== zone.author.toString() && !user.isAdmin) {
       worldEmitter.emit(
         `messageFor${user.username}`,
         makeMessage(

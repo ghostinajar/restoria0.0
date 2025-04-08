@@ -18,7 +18,7 @@ async function editRoom(room, roomData, user) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
         }
         // This scolding only runs if user has somehow circumvented the initial check
-        if (user._id.toString() !== zone.author.toString()) {
+        if (user._id.toString() !== zone.author.toString() && !user.isAdmin) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Tsk, you aren't an author of this zone. GOTO one of your own and EDIT there.`));
             return;
         }

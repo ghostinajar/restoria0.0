@@ -2,7 +2,8 @@ import Zone from "../model/classes/Zone.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 async function getZoneNamesByAuthorId(authorId) {
     try {
-        const zones = await Zone.find({ author: authorId })
+        const query = authorId ? { author: authorId } : {};
+        const zones = await Zone.find(query)
             .select("name _id rooms")
             .populate({
             path: "rooms",
