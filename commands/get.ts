@@ -20,6 +20,16 @@ function failToFindItem(username: string, itemName: string) {
 
 async function get(parsedCommand: IParsedCommand, user: IUser) {
   try {
+    // fail if user inventory is full
+    if (user.inventory.length >= user.capacity) {
+      messageToUsername(
+        user.username,
+        `You can't get anything while your INVENTORY is full. Try DROP or GIVE to make space.`,
+        `help`
+      );
+      return;
+    }
+
     // fail if item not specified
     let specifiedItemKeyword = parsedCommand.directObject;
     if (!specifiedItemKeyword) {

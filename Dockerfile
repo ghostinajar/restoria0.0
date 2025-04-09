@@ -1,5 +1,5 @@
 # Stage 1: Builder
-FROM node:20-slim as builder
+FROM node:23-slim AS builder
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -12,7 +12,7 @@ RUN npm ci --omit=dev
 COPY . .
 
 # Stage 2: Final image
-FROM node:20-slim
+FROM node:23-slim
 
 WORKDIR /usr/src/app
 
