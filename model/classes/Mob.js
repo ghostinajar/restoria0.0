@@ -40,6 +40,7 @@ class Mob {
             this.chatters = blueprint.chatters;
         this.emotes = blueprint.emotes;
         this.inventory = [];
+        this.capacity = blueprint.capacity;
     }
     _id;
     author;
@@ -61,5 +62,6 @@ class Mob {
     chatters;
     emotes;
     inventory;
+    capacity;
 }
 export default Mob;

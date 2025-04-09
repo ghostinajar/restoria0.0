@@ -35,7 +35,6 @@ export interface IUser extends mongoose.Document {
   password: string;
   salt: string;
   isAdmin: boolean;
-  isTeacher: boolean;
   author: mongoose.Types.ObjectId | null;
   location: ILocation;
   pronouns: number;
@@ -50,11 +49,11 @@ export interface IUser extends mongoose.Document {
   jobLevels: IJobLevels;
   description: IDescription;
   users: Array<mongoose.Types.ObjectId>;
-  students?: Array<mongoose.Types.ObjectId>;
   unpublishedZoneTally: number;
   //may change when training is implemented
   trained: Array<ITrained>;
   inventory: Array<IItem>;
+  capacity: number;
   storage: Array<IItem>;
   equipped: IEquipped;
   affixes: Array<IAffix>;
@@ -78,7 +77,6 @@ export const userSchema = new Schema<IUser>({
   password: { type: String, required: true }, // as a salted hash
   salt: { type: String, required: true },
   isAdmin: { type: Boolean, required: true, default: false },
-  isTeacher: { type: Boolean, required: true, default: false },
   author: {
     type: Schema.Types.ObjectId,
     default: null,
@@ -113,11 +111,6 @@ export const userSchema = new Schema<IUser>({
     required: true,
     default: () => [],
   },
-  students: {
-    type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    required: true,
-    default: () => [],
-  },
   unpublishedZoneTally: { type: Number, required: true, default: 0 },
   trained: {
     type: [{ name: String, level: Number }],
@@ -125,6 +118,7 @@ export const userSchema = new Schema<IUser>({
     default: () => [],
   },
   inventory: { type: [itemSchema], required: true, default: () => [] },
+  capacity: { type: Number, required: true, default: 30 },
   storage: { type: [itemSchema], required: true, default: () => [] },
   equipped: {
     type: {

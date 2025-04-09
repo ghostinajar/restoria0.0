@@ -33,6 +33,7 @@ export interface IMobBlueprint {
     chatters: Array<IChatter>;
     emotes: Array<IEmote>;
     itemNodes: Array<IItemNode>;
+    capacity: number;
 }
 
 const mobBlueprintSchema = new Schema<IMobBlueprint>({
@@ -80,6 +81,10 @@ const mobBlueprintSchema = new Schema<IMobBlueprint>({
         type: itemNodeSchema,
         default: () => ({})
     }],
+    capacity: {
+        type: Number,
+        default: 10
+    }
 });
 
 export default mobBlueprintSchema;

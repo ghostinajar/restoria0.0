@@ -21,7 +21,6 @@ class Ticker {
     }
     emitTick() {
         worldEmitter.emit('tick');
-        console.log('Tick event emitted' + new Date().toLocaleTimeString());
     }
 }
 export default Ticker;

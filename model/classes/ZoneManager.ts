@@ -6,10 +6,11 @@ import { IUser } from "./User.js";
 import mongoose from "mongoose";
 import { IRoom } from "./Room.js";
 import { ILocation } from "./Location.js";
-import COMPLETION_STATUS from "../../constants/COMPLETION_STATUS.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import relocateUser from "../../util/relocateUser.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
+import { DEFAULT_GOBLIN } from "../../constants/DEFAULT_GOBLIN.js";
+import { DEFAULT_APPLE } from "../../constants/DEFAULT_APPLE.js";
 
 class ZoneManager {
   constructor() {
@@ -28,7 +29,7 @@ class ZoneManager {
   closeZoneRequestedHandler = async (zoneId: string) => {
     try {
       await this.removeZoneById(new mongoose.Types.ObjectId(zoneId));
-      worldEmitter.emit(`zone${zoneId}Closed`, true)
+      worldEmitter.emit(`zone${zoneId}Closed`, true);
       return true;
     } catch (error: unknown) {
       catchErrorHandlerForFunction(
@@ -62,35 +63,59 @@ class ZoneManager {
   roomSummaryRequestedHandler = async () => {
     try {
       let summary = [];
-      
+
       // Iterate through each zone
       for (const [_, zone] of this.zones) {
         summary.push(`\nOccupied Rooms in zone ${zone.name} (${zone._id}):`);
-        
+
         // Iterate through each room in the zone
         for (const room of zone.rooms) {
-          if (room.inventory.length > 0 || room.mobs.length > 0 || room.users.length > 0) {
+          if (
+            room.inventory.length > 0 ||
+            room.mobs.length > 0 ||
+            room.users.length > 0
+          ) {
             summary.push(`${room.name} (${room._id}):`);
           }
           if (room.inventory.length > 0) {
-            summary.push(`  Items: ${room.inventory.map(item => `${item.name} (${item._id})`).join(', ') || 'none'}`);
+            summary.push(
+              `  Items: ${
+                room.inventory
+                  .map((item) => `${item.name} (${item._id})`)
+                  .join(", ") || "none"
+              }`
+            );
           }
           if (room.mobs.length > 0) {
-            summary.push(`  Mobs: ${room.mobs.map(mob => `${mob.name} (${mob._id})`).join(', ') || 'none'}`);
+            summary.push(
+              `  Mobs: ${
+                room.mobs.map((mob) => `${mob.name} (${mob._id})`).join(", ") ||
+                "none"
+              }`
+            );
           }
           if (room.users.length > 0) {
-            summary.push(`  **USERS**: ${room.users.map(user => `${user.name} (${user._id})`).join(', ') || 'none'}`);
+            summary.push(
+              `  **USERS**: ${
+                room.users
+                  .map((user) => `${user.name} (${user._id})`)
+                  .join(", ") || "none"
+              }`
+            );
           }
         }
       }
 
       if (summary.length === 0) {
-        logger.info('No active zones found.');
+        logger.info("No active zones found.");
       } else {
-        logger.info(summary.join('\n'));
+        logger.info(summary.join("\n"));
       }
     } catch (error: unknown) {
-      catchErrorHandlerForFunction(`ZoneManager.roomSummaryRequestedHandler`, error);
+      catchErrorHandlerForFunction(
+        `ZoneManager.roomSummaryRequestedHandler`,
+        error
+      );
     }
   };
 
@@ -134,7 +159,9 @@ class ZoneManager {
     try {
       let zone = await this.getZoneById(zoneId);
       if (!zone) {
-        logger.error(`zoneManager.zoneRequestedHandler failed to return zone id ${zoneId}`);
+        logger.error(
+          `zoneManager.zoneRequestedHandler failed to return zone id ${zoneId}`
+        );
         return;
       }
       worldEmitter.emit(`zone${zoneId.toString()}Loaded`, zone);
@@ -148,96 +175,27 @@ class ZoneManager {
       //load from db
       const zone: IZone | null = await Zone.findById(id);
       if (!zone) {
-        logger.error(`zoneManager.addZoneById couldn't get a zone with id ${id} from db`);
+        logger.error(
+          `zoneManager.addZoneById couldn't get a zone with id ${id} from db`
+        );
         return undefined;
       }
 
       // add to zones map
       this.zones.set(zone._id.toString(), zone);
       logger.info(`zoneManager added ${zone.name} to zones.`);
-      logger.info(`active zones in zoneManager: ${JSON.stringify(Array.from(this.zones.values()).map(zone => zone.name))}`);
+      logger.info(
+        `active zones in zoneManager: ${JSON.stringify(
+          Array.from(this.zones.values()).map((zone) => zone.name)
+        )}`
+      );
 
       // if blueprints are empty, add dummy data (necessary for user forms)
       if (zone.itemBlueprints.length === 0) {
-        zone.itemBlueprints = [
-          {
-            _id: new mongoose.Types.ObjectId(),
-            author: new mongoose.Types.ObjectId("665bc7ca1eeaedf3a5da7446"),
-            name: `an apple`,
-            itemType: `none`,
-            price: 0,
-            minimumLevel: 0,
-            history: {
-              creationDate: new Date(),
-              modifiedDate: new Date(),
-              completionStatus: COMPLETION_STATUS.DRAFT,
-            },
-            description: {
-              look: `There's a basic apple here.`,
-              examine: `It's red and shiny. With this kind of apple, when you've seen one you've seen them all.`,
-            },
-            tags: {
-              cleric: true,
-              mage: true,
-              rogue: true,
-              warrior: true,
-              dark: true,
-              neutral: true,
-              light: true, //can be equipped by players with a light aura
-              guild: false,
-              food: true,
-              lamp: false, //lights up the room
-              hidden: false,
-              fixture: false,
-              quest: false,
-              temporary: false,
-              container: false,
-            },
-            keywords: ["apple"],
-            tweakDuration: 182,
-          },
-        ];
+        zone.itemBlueprints = [DEFAULT_APPLE];
       }
       if (zone.mobBlueprints.length === 0) {
-        zone.mobBlueprints = [
-          {
-            _id: new mongoose.Types.ObjectId(),
-            author: new mongoose.Types.ObjectId("665bc7ca1eeaedf3a5da7446"),
-            name: "a goblin",
-            pronouns: 1,
-            history: {
-              creationDate: new Date(),
-              modifiedDate: new Date(),
-              completionStatus: COMPLETION_STATUS.DRAFT,
-            },
-            level: 1,
-            job: "rogue",
-            statBlock: {
-              strength: 10,
-              dexterity: 10,
-              constitution: 10,
-              intelligence: 10,
-              wisdom: 10,
-              charisma: 10,
-              spirit: 10,
-            },
-            goldHeld: 0,
-            isUnique: false,
-            isMount: false,
-            isAggressive: false,
-            chattersToPlayer: false,
-            emotesToPlayer: false,
-            description: {
-              look: `There's a basic goblin here.`,
-              examine: `He's green and mean. With this kind of goblin, when you've seen one you've seen them all.`,
-            },
-            keywords: [`goblin`],
-            affixes: [],
-            chatters: [],
-            emotes: [],
-            itemNodes: [],
-          },
-        ];
+        zone.mobBlueprints = [DEFAULT_GOBLIN];
       }
 
       await zone.initRooms();
@@ -330,7 +288,9 @@ class ZoneManager {
         this.zones.delete(id.toString());
         logger.info(`Zonemanager closed zone id ${id}.`);
       } else {
-        logger.info(`Zonemanager tried to close zone id ${id}, but it wasn't even loaded in zones.`);
+        logger.info(
+          `Zonemanager tried to close zone id ${id}, but it wasn't even loaded in zones.`
+        );
       }
     } catch (error: unknown) {
       catchErrorHandlerForFunction(`ZoneManager.removeZoneById`, error);

@@ -52,5 +52,9 @@ const mobBlueprintSchema = new Schema({
             type: itemNodeSchema,
             default: () => ({})
         }],
+    capacity: {
+        type: Number,
+        default: 10
+    }
 });
 export default mobBlueprintSchema;

@@ -19,7 +19,6 @@ export const userSchema = new Schema({
     password: { type: String, required: true }, // as a salted hash
     salt: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
-    isTeacher: { type: Boolean, required: true, default: false },
     author: {
         type: Schema.Types.ObjectId,
         default: null,
@@ -54,11 +53,6 @@ export const userSchema = new Schema({
         required: true,
         default: () => [],
     },
-    students: {
-        type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-        required: true,
-        default: () => [],
-    },
     unpublishedZoneTally: { type: Number, required: true, default: 0 },
     trained: {
         type: [{ name: String, level: Number }],
@@ -66,6 +60,7 @@ export const userSchema = new Schema({
         default: () => [],
     },
     inventory: { type: [itemSchema], required: true, default: () => [] },
+    capacity: { type: Number, required: true, default: 30 },
     storage: { type: [itemSchema], required: true, default: () => [] },
     equipped: {
         type: {

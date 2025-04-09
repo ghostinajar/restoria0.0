@@ -28,6 +28,7 @@ export interface IMob {
   chatters: Array<IChatter>;
   emotes: Array<IEmote>;
   inventory: Array<IItem>;
+  capacity: number;
   equipped: IEquipped;
 }
 
@@ -72,6 +73,7 @@ class Mob implements IMob {
     this.chatters = blueprint.chatters;
     this.emotes = blueprint.emotes;
     this.inventory = [];
+    this.capacity = blueprint.capacity;
   }
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
@@ -93,6 +95,7 @@ class Mob implements IMob {
   chatters: Array<IChatter>;
   emotes: Array<IEmote>;
   inventory: Array<IItem>;
+  capacity: number;
 }
 
 export default Mob;

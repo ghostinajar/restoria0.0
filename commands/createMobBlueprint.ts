@@ -35,7 +35,7 @@ async function createMobBlueprint(
 
     let zone = await getZoneOfUser(user);
     if (!zone) {
-      throw new Error(`Couldn't find zone to create mob.`)
+      throw new Error(`Couldn't find zone to create mob.`);
     }
 
     const mobDescription: IDescription = {
@@ -73,6 +73,7 @@ async function createMobBlueprint(
       chatters: [],
       emotes: [],
       itemNodes: [],
+      capacity: 10,
     };
     // logger.debug(`createMobBlueprint made newMobBlueprint: ${JSON.stringify(newMobBlueprint)}`);
 
@@ -93,7 +94,7 @@ async function createMobBlueprint(
     );
     await lookExamine({ commandWord: "look" }, user);
   } catch (error: unknown) {
-    catchErrorHandlerForFunction("createMobBlueprint", error, user.name)
+    catchErrorHandlerForFunction("createMobBlueprint", error, user.name);
   }
 }
 

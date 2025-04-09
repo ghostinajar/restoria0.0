@@ -51,6 +51,7 @@ async function createMobBlueprint(mobFormData, user) {
             chatters: [],
             emotes: [],
             itemNodes: [],
+            capacity: 10,
         };
         // logger.debug(`createMobBlueprint made newMobBlueprint: ${JSON.stringify(newMobBlueprint)}`);
         zone.mobBlueprints.push(newMobBlueprint);
