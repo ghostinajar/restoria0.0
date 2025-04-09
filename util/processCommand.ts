@@ -33,6 +33,7 @@ import lookExamine from "../commands/lookExamine.js";
 import get from "../commands/get.js";
 import save from "../commands/save.js";
 import roomSummary from "../commands/roomSummary.js";
+import inventory from "../commands/inventory.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -98,6 +99,12 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `help`: {
         help(parsedCommand, user);
+        break;
+      }
+      case `i`:
+      case `inv`:
+      case `inventory`: {
+        await inventory(user);
         break;
       }
       case `map`: {

@@ -3,6 +3,7 @@ import COMPLETION_STATUS from "./COMPLETION_STATUS.js";
 export const DEFAULT_APPLE = {
     _id: new mongoose.Types.ObjectId(),
     author: new mongoose.Types.ObjectId("665bc7ca1eeaedf3a5da7446"),
+    fromZone: new mongoose.Types.ObjectId("664f8ca70cc5ae9b173969a8"),
     name: `an apple`,
     itemType: `none`,
     price: 0,

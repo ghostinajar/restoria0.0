@@ -15,6 +15,10 @@ const itemBlueprintSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    fromZone: {
+        type: Schema.Types.ObjectId,
+        ref: "Zone",
+    },
     name: String,
     itemType: String,
     price: {

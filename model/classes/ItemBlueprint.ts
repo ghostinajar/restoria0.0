@@ -27,6 +27,7 @@ export interface ISpellCharges {
 export interface IItemBlueprint {
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
+  fromZone: mongoose.Types.ObjectId;
   name: string;
   itemType: string;
   price: number;
@@ -86,6 +87,10 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",
+  },
+  fromZone: {
+    type: Schema.Types.ObjectId,
+    ref: "Zone",
   },
   name: String,
   itemType: String,

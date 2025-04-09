@@ -30,6 +30,7 @@ async function createItemBlueprint(itemFormData, user) {
         const newItemBlueprint = {
             _id: new mongoose.Types.ObjectId(),
             author: user._id,
+            fromZone: zone._id,
             name: itemFormData.name,
             itemType: itemFormData.itemType,
             price: putNumberInRange(0, 100000, itemFormData.price, user),
