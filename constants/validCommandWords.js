@@ -17,6 +17,7 @@ export const validCommandWords = [
     "d",
     "delete",
     "down",
+    "drop",
     "get",
     "goto",
     "help",

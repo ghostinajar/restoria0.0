@@ -32,6 +32,7 @@ import get from "../commands/get.js";
 import save from "../commands/save.js";
 import roomSummary from "../commands/roomSummary.js";
 import inventory from "../commands/inventory.js";
+import drop from "../commands/drop.js";
 async function processCommand(parsedCommand, user) {
     try {
         switch (parsedCommand.commandWord) {
@@ -55,6 +56,10 @@ async function processCommand(parsedCommand, user) {
             }
             case `create`: {
                 await create(parsedCommand, user);
+                break;
+            }
+            case `drop`: {
+                await drop(parsedCommand, user);
                 break;
             }
             case `edit`: {
