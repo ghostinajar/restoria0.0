@@ -9,14 +9,7 @@ import messageToUsername from "../util/messageToUsername.js";
 import relocateItem from "../util/relocateItem.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import save from "./save.js";
-
-function failToFindItem(username: string, itemName: string) {
-  messageToUsername(
-    username,
-    `You can't seem to find the ${itemName}.`,
-    `help`
-  );
-}
+import messageMissingTargetToUser from "../util/messageMissingTargetToUser.js";
 
 async function get(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -52,7 +45,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         parsedCommand.directObjectOrdinal
       );
       if (!itemToGet) {
-        failToFindItem(user.username, specifiedItemKeyword);
+        messageMissingTargetToUser(user, specifiedItemKeyword);
         return;
       }
       // handle "all"
@@ -63,7 +56,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           )
         );
         if (!itemsToGet) {
-          failToFindItem(user.username, specifiedItemKeyword);
+          messageMissingTargetToUser(user, specifiedItemKeyword);
           return;
         }
         itemsToGet.forEach((itemToGet) => {
@@ -212,7 +205,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       parsedCommand.directObjectOrdinal
     );
     if (!itemToGet) {
-      failToFindItem(user.username, specifiedItemKeyword);
+      messageMissingTargetToUser(user, specifiedItemKeyword);
       return;
     }
 
@@ -226,7 +219,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         )
       );
       if (!itemsToGet) {
-        failToFindItem(user.username, specifiedItemKeyword);
+        messageMissingTargetToUser(user, specifiedItemKeyword);
         return;
       }
       itemsToGet.forEach((itemToGet) => {

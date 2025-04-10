@@ -4,11 +4,14 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import messageToUsername from "../util/messageToUsername.js";
 import relocateItem from "../util/relocateItem.js";
 import save from "./save.js";
-function failToFindItem(username, itemName) {
-    messageToUsername(username, `You can't seem to find the ${itemName}.`, `help`);
-}
+import messageMissingTargetToUser from "../util/messageMissingTargetToUser.js";
 async function get(parsedCommand, user) {
     try {
+        // fail if user inventory is full
+        if (user.inventory.length >= user.capacity) {
+            messageToUsername(user.username, `You can't get anything while your INVENTORY is full. Try DROP or GIVE to make space.`, `help`);
+            return;
+        }
         // fail if item not specified
         let specifiedItemKeyword = parsedCommand.directObject;
         if (!specifiedItemKeyword) {
@@ -24,14 +27,14 @@ async function get(parsedCommand, user) {
         if (specifiedContainerKeyword === "the ground") {
             let itemToGet = await findObjectInInventory(room.inventory, specifiedItemKeyword, parsedCommand.directObjectOrdinal);
             if (!itemToGet) {
-                failToFindItem(user.username, specifiedItemKeyword);
+                messageMissingTargetToUser(user, specifiedItemKeyword);
                 return;
             }
             // handle "all"
             if (parsedCommand.targetsAll) {
                 let itemsToGet = room.inventory.filter((item) => item.keywords.some((keyword) => keyword.startsWith(specifiedItemKeyword)));
                 if (!itemsToGet) {
-                    failToFindItem(user.username, specifiedItemKeyword);
+                    messageMissingTargetToUser(user, specifiedItemKeyword);
                     return;
                 }
                 itemsToGet.forEach((itemToGet) => {
@@ -111,7 +114,7 @@ async function get(parsedCommand, user) {
         // fail if item not found in container
         let itemToGet = await findObjectInInventory(originInventory, specifiedItemKeyword, parsedCommand.directObjectOrdinal);
         if (!itemToGet) {
-            failToFindItem(user.username, specifiedItemKeyword);
+            messageMissingTargetToUser(user, specifiedItemKeyword);
             return;
         }
         // success!
@@ -120,7 +123,7 @@ async function get(parsedCommand, user) {
             // handle get all
             let itemsToGet = originInventory.filter((item) => item.keywords.some((keyword) => keyword.startsWith(specifiedItemKeyword)));
             if (!itemsToGet) {
-                failToFindItem(user.username, specifiedItemKeyword);
+                messageMissingTargetToUser(user, specifiedItemKeyword);
                 return;
             }
             itemsToGet.forEach((itemToGet) => {
