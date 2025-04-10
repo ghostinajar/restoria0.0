@@ -38,8 +38,15 @@ async function lookExamine(parsedCommand, user) {
             }
         }
         if (!targetObject) {
-            // set targetObject if it's an item
+            // set targetObject if it's an item on the ground
             let itemObject = selectTargetByOrdinal(targetOrdinal, targetKeyword, room.inventory);
+            if (itemObject) {
+                targetObject = itemObject;
+            }
+        }
+        if (!targetObject) {
+            // set targetObject if it's an item in user's inventory
+            let itemObject = selectTargetByOrdinal(targetOrdinal, targetKeyword, user.inventory);
             if (itemObject) {
                 targetObject = itemObject;
             }
