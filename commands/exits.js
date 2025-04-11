@@ -63,6 +63,9 @@ async function exits(user) {
                 }
             }
         }
+        if (exitsArray.length === 0 || !exitsArray[0]) {
+            exitsArray.push(makeMessage("exit", `There are no obvious exits.`));
+        }
         worldEmitter.emit(`messageArrayFor${user.username}`, exitsArray);
     }
     catch (error) {

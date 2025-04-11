@@ -10,20 +10,20 @@ async function sudobugs(parsedCommand, user) {
             return;
         }
         const allBugs = await Bug.find({}, { date: 1, description: 1, isValid: 1, isFixed: 1, _id: 1 });
-        const allBugsArray = [];
         allBugs.forEach((bug) => {
             let valid = "";
             let fixed = "";
+            let type = "red";
             if (bug.isValid) {
                 valid = "valid";
+                type = "yellow";
             }
             if (bug.isFixed) {
                 fixed = "fixed";
+                type = "green";
             }
-            allBugsArray.push(`${bug._id} ${valid} ${fixed}:\n${bug.description}`);
+            messageToUsername(user?.username, `${bug._id} ${valid} ${fixed}:\n${bug.description}`, type, true);
         });
-        const allBugsString = allBugsArray.join("\n\n");
-        messageToUsername(user?.username, `${allBugsString}`, "success", true);
     }
     catch (error) {
         catchErrorHandlerForFunction(`sudobugs`, error, user?.name);

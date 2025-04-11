@@ -7,7 +7,6 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import IMessage from "../types/Message.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import autoMap from "./autoMap.js";
 
 async function exits(user: IUser) {
   try {
@@ -74,6 +73,9 @@ async function exits(user: IUser) {
           exitsArray.push(message);
         }
       }
+    }
+    if (exitsArray.length === 0 || !exitsArray[0]) {
+      exitsArray.push(makeMessage("exit", `There are no obvious exits.`));
     }
     worldEmitter.emit(`messageArrayFor${user.username}`, exitsArray);
   } catch (error: unknown) {
