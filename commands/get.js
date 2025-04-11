@@ -37,12 +37,12 @@ async function get(parsedCommand, user) {
                     messageMissingTargetToUser(user, specifiedItemKeyword);
                     return;
                 }
-                itemsToGet.forEach((itemToGet) => {
+                itemsToGet.forEach(async (itemToGet) => {
                     if (itemToGet.tags.fixture) {
                         messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
                         return;
                     }
-                    relocateItem(itemToGet, room.inventory, user.inventory);
+                    await relocateItem(itemToGet, room.inventory, user.inventory);
                     messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
                 });
             }
@@ -53,7 +53,7 @@ async function get(parsedCommand, user) {
                     messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
                     return;
                 }
-                relocateItem(itemToGet, room.inventory, user.inventory);
+                await relocateItem(itemToGet, room.inventory, user.inventory);
                 messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
             }
             await save(user, true);
@@ -126,18 +126,18 @@ async function get(parsedCommand, user) {
                 messageMissingTargetToUser(user, specifiedItemKeyword);
                 return;
             }
-            itemsToGet.forEach((itemToGet) => {
+            itemsToGet.forEach(async (itemToGet) => {
                 if (itemToGet.tags.fixture) {
                     messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
                     return;
                 }
-                relocateItem(itemToGet, originInventory, user.inventory);
+                await relocateItem(itemToGet, originInventory, user.inventory);
                 messageToUsername(user.username, `You got ${itemToGet.name} from ${originContainer.name}.`, `success`);
             });
         }
         else {
             // handle get single object
-            relocateItem(itemToGet, originInventory, user.inventory);
+            await relocateItem(itemToGet, originInventory, user.inventory);
             messageToUsername(user.username, `You got ${itemToGet.name} from ${originContainer.name}.`, `success`);
         }
         await save(user, true);

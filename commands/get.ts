@@ -59,7 +59,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           messageMissingTargetToUser(user, specifiedItemKeyword);
           return;
         }
-        itemsToGet.forEach((itemToGet) => {
+        itemsToGet.forEach(async (itemToGet) => {
           if (itemToGet.tags.fixture) {
             messageToUsername(
               user.username,
@@ -68,7 +68,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
             );
             return;
           }
-          relocateItem(itemToGet, room.inventory, user.inventory);
+          await relocateItem(itemToGet, room.inventory, user.inventory);
           messageToUsername(
             user.username,
             `You got ${itemToGet.name} from the ground.`,
@@ -87,7 +87,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           );
           return;
         }
-        relocateItem(itemToGet, room.inventory, user.inventory);
+        await relocateItem(itemToGet, room.inventory, user.inventory);
         messageToUsername(
           user.username,
           `You got ${itemToGet.name} from the ground.`,
@@ -222,7 +222,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         messageMissingTargetToUser(user, specifiedItemKeyword);
         return;
       }
-      itemsToGet.forEach((itemToGet) => {
+      itemsToGet.forEach(async (itemToGet) => {
         if (itemToGet.tags.fixture) {
           messageToUsername(
             user.username,
@@ -231,7 +231,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           );
           return;
         }
-        relocateItem(itemToGet, originInventory, user.inventory);
+        await relocateItem(itemToGet, originInventory, user.inventory);
         messageToUsername(
           user.username,
           `You got ${itemToGet.name} from ${originContainer.name}.`,
@@ -240,7 +240,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       });
     } else {
       // handle get single object
-      relocateItem(itemToGet, originInventory, user.inventory);
+      await relocateItem(itemToGet, originInventory, user.inventory);
       messageToUsername(
         user.username,
         `You got ${itemToGet.name} from ${originContainer.name}.`,

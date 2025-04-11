@@ -31,6 +31,7 @@ export const validCommandWords = [
     "n",
     "north",
     "password",
+    "put",
     "quit",
     "recall",
     "research",

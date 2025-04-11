@@ -39,8 +39,8 @@ async function drop(parsedCommand: IParsedCommand, user: IUser) {
         messageMissingTargetToUser(user, targetKeyword);
         return;
       }
-      itemsToDrop.forEach((itemToDrop) => {
-        relocateItem(itemToDrop, user.inventory, room.inventory);
+      itemsToDrop.forEach(async (itemToDrop) => {
+        await relocateItem(itemToDrop, user.inventory, room.inventory);
         messageToUsername(
           user.username,
           `You dropped ${itemToDrop.name} on the ground.`,
@@ -66,7 +66,7 @@ async function drop(parsedCommand: IParsedCommand, user: IUser) {
         return;
       }
 
-      relocateItem(itemToDrop, user.inventory, user.inventory);
+      await relocateItem(itemToDrop, user.inventory, room.inventory);
       messageToUsername(
         user.username,
         `You dropped ${itemToDrop.name} on the ground.`,

@@ -26,8 +26,8 @@ async function drop(parsedCommand, user) {
                 messageMissingTargetToUser(user, targetKeyword);
                 return;
             }
-            itemsToDrop.forEach((itemToDrop) => {
-                relocateItem(itemToDrop, user.inventory, room.inventory);
+            itemsToDrop.forEach(async (itemToDrop) => {
+                await relocateItem(itemToDrop, user.inventory, room.inventory);
                 messageToUsername(user.username, `You dropped ${itemToDrop.name} on the ground.`, `success`);
             });
             worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} dropped some items on the ground.`));
@@ -39,7 +39,7 @@ async function drop(parsedCommand, user) {
                 messageMissingTargetToUser(user, targetKeyword);
                 return;
             }
-            relocateItem(itemToDrop, user.inventory, user.inventory);
+            await relocateItem(itemToDrop, user.inventory, room.inventory);
             messageToUsername(user.username, `You dropped ${itemToDrop.name} on the ground.`, `success`);
             worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} dropped ${itemToDrop.name} on the ground.`));
         }

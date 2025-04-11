@@ -25,7 +25,6 @@ async function inventory(user: IUser) {
 
     // Loop through the inventory and count items by their blueprint ID
     for (const item of user.inventory) {
-      console.log(item);
       const blueprintKey = item.itemBlueprint.toString(); // Use the blueprint ID as the key
       if (!itemCounts[blueprintKey]) {
         itemCounts[blueprintKey] = { name: item.name, count: 0 };
@@ -51,7 +50,6 @@ async function inventory(user: IUser) {
         `You're holding ${user.inventory.length}/${user.capacity} items.`
       )
     );
-    console.log(inventoryMessageArray);
     worldEmitter.emit(`messageArrayFor${user.username}`, inventoryMessageArray);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`inventory`, error, user?.name);

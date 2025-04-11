@@ -34,6 +34,7 @@ import roomSummary from "../commands/roomSummary.js";
 import inventory from "../commands/inventory.js";
 import drop from "../commands/drop.js";
 import give from "../commands/give.js";
+import put from "../commands/put.js";
 async function processCommand(parsedCommand, user) {
     try {
         switch (parsedCommand.commandWord) {
@@ -132,6 +133,10 @@ async function processCommand(parsedCommand, user) {
             }
             case `password`: {
                 await password(parsedCommand, user);
+                break;
+            }
+            case `put`: {
+                await put(parsedCommand, user);
                 break;
             }
             case `quit`: {
