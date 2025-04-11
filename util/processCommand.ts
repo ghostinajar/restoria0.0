@@ -35,6 +35,7 @@ import save from "../commands/save.js";
 import roomSummary from "../commands/roomSummary.js";
 import inventory from "../commands/inventory.js";
 import drop from "../commands/drop.js";
+import give from "../commands/give.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -96,6 +97,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `get`: {
         await get(parsedCommand, user);
+        break;
+      }
+      case `give`: {
+        await give(parsedCommand, user);
         break;
       }
       case `goto`: {
