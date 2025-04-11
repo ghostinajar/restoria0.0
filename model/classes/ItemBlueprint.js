@@ -67,7 +67,7 @@ const itemBlueprintSchema = new Schema({
             type: Boolean,
             default: false,
         },
-        dark: {
+        moon: {
             type: Boolean,
             default: true,
         },
@@ -75,10 +75,10 @@ const itemBlueprintSchema = new Schema({
             type: Boolean,
             default: false,
         },
-        light: {
+        sun: {
             type: Boolean,
             default: false,
-        }, //can be equipped by players with a light aura
+        },
         guild: {
             type: Boolean,
             default: false,
@@ -90,7 +90,7 @@ const itemBlueprintSchema = new Schema({
         lamp: {
             type: Boolean,
             default: false,
-        }, //lights up the room
+        },
         hidden: {
             type: Boolean,
             default: false,

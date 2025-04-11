@@ -31,13 +31,13 @@ export interface IItem {
   tags: {
     cleric: boolean;
     container: boolean;
-    dark: boolean;
+    moon: boolean;
     fixture: boolean;
     food: boolean;
     guild: boolean;
     hidden: boolean;
-    lamp: boolean; //lights up the room
-    light: boolean; //can be equipped by players with a light aura
+    lamp: boolean;
+    sun: boolean;
     mage: boolean;
     neutral: boolean;
     quest: boolean;
@@ -116,13 +116,13 @@ const itemSchema = new Schema<IItem>({
   tags: {
     cleric: Boolean,
     container: Boolean,
-    dark: Boolean,
+    moon: Boolean,
     fixture: Boolean,
     food: Boolean,
     guild: Boolean,
     hidden: Boolean,
-    lamp: Boolean, //lights up the room
-    light: Boolean, //can be equipped by players with a light aura
+    lamp: Boolean, 
+    sun: Boolean, 
     mage: Boolean,
     neutral: Boolean,
     quest: Boolean,

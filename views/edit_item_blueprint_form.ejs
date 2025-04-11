@@ -243,16 +243,16 @@
           <input type="checkbox" id="editItemWarrior" name="editItemWarrior" />
         </li>
         <li>
-          <label for="editItemDark">Dark:</label>
-          <input type="checkbox" id="editItemDark" name="editItemDark" />
+          <label for="editItemMoon">Moon:</label>
+          <input type="checkbox" id="editItemMoon" name="editItemMoon" />
         </li>
         <li>
           <label for="editItemNeutral">Neutral:</label>
           <input type="checkbox" id="editItemNeutral" name="editItemNeutral" />
         </li>
         <li>
-          <label for="editItemLight">Light:</label>
-          <input type="checkbox" id="editItemLight" name="editItemLight" />
+          <label for="editItemSun">Sun:</label>
+          <input type="checkbox" id="editItemSun" name="editItemSun" />
         </li>
       </div>
       <div style="display: inline-block; width: 48%">
@@ -600,9 +600,9 @@
     const editItemMage = document.getElementById("editItemMage");
     const editItemRogue = document.getElementById("editItemRogue");
     const editItemWarrior = document.getElementById("editItemWarrior");
-    const editItemDark = document.getElementById("editItemDark");
+    const editItemMoon = document.getElementById("editItemMoon");
     const editItemNeutral = document.getElementById("editItemNeutral");
-    const editItemLight = document.getElementById("editItemLight");
+    const editItemSun = document.getElementById("editItemSun");
     const editItemFood = document.getElementById("editItemFood");
     const editItemLamp = document.getElementById("editItemLamp");
     const editItemHidden = document.getElementById("editItemHidden");
@@ -726,9 +726,9 @@
           mage: editItemMage.checked || false,
           rogue: editItemRogue.checked || false,
           warrior: editItemWarrior.checked || false,
-          dark: editItemDark.checked || false,
+          moon: editItemMoon.checked || false,
           neutral: editItemNeutral.checked || false,
-          light: editItemLight.checked || false,
+          sun: editItemSun.checked || false,
           guild: false,
           food: editItemFood.checked || false,
           lamp: editItemLamp.checked || false,
@@ -963,9 +963,9 @@
         editItemMage.checked = selectedItem.tags.mage || true;
         editItemRogue.checked = selectedItem.tags.rogue || true;
         editItemWarrior.checked = selectedItem.tags.warrior || true;
-        editItemDark.checked = selectedItem.tags.dark || true;
+        editItemMoon.checked = selectedItem.tags.moon || true;
         editItemNeutral.checked = selectedItem.tags.neutral || true;
-        editItemLight.checked = selectedItem.tags.light || true;
+        editItemSun.checked = selectedItem.tags.sun || true;
         editItemFood.checked = selectedItem.tags.food || false;
         editItemLamp.checked = selectedItem.tags.lamp || false;
         editItemHidden.checked = selectedItem.tags.hidden || false;

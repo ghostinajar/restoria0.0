@@ -42,12 +42,12 @@ export interface IItemBlueprint {
     mage: boolean;
     rogue: boolean;
     warrior: boolean;
-    dark: boolean;
+    moon: boolean;
     neutral: boolean;
-    light: boolean; //can be equipped by players with a light aura
+    sun: boolean; 
     guild: boolean;
     food: boolean;
-    lamp: boolean; //lights up the room
+    lamp: boolean;
     hidden: boolean;
     fixture: boolean;
     quest: boolean;
@@ -140,7 +140,7 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
       type: Boolean,
       default: false,
     },
-    dark: {
+    moon: {
       type: Boolean,
       default: true,
     },
@@ -148,10 +148,10 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
       type: Boolean,
       default: false,
     },
-    light: {
+    sun: {
       type: Boolean,
       default: false,
-    }, //can be equipped by players with a light aura
+    }, 
     guild: {
       type: Boolean,
       default: false,
@@ -163,7 +163,7 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     lamp: {
       type: Boolean,
       default: false,
-    }, //lights up the room
+    },
     hidden: {
       type: Boolean,
       default: false,

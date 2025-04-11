@@ -44,13 +44,13 @@ const itemSchema = new Schema({
     tags: {
         cleric: Boolean,
         container: Boolean,
-        dark: Boolean,
+        moon: Boolean,
         fixture: Boolean,
         food: Boolean,
         guild: Boolean,
         hidden: Boolean,
-        lamp: Boolean, //lights up the room
-        light: Boolean, //can be equipped by players with a light aura
+        lamp: Boolean,
+        sun: Boolean,
         mage: Boolean,
         neutral: Boolean,
         quest: Boolean,

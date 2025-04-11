@@ -45,12 +45,12 @@ export interface IEditItemBlueprintFormData {
     mage: boolean;
     rogue: boolean;
     warrior: boolean;
-    dark: boolean;
+    moon: boolean;
     neutral: boolean;
-    light: boolean; //can be equipped by players with a light aura
+    sun: boolean; 
     guild: boolean;
     food: boolean;
-    lamp: boolean; //lights up the room
+    lamp: boolean; 
     hidden: boolean;
     fixture: boolean;
     quest: boolean;
