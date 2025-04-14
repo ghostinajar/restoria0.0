@@ -398,11 +398,11 @@ ul {
 
 /* Individual map tiles */
 .map-tile {
-  width: 1rem;
-  height: 1rem;
+  width: 1ch;
+  height: 1em;
   display: inline-block;
   text-align: center;
-  line-height: 1rem;
+  line-height: 1;
   font-size: 1rem;
   vertical-align: top;
 }
