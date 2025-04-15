@@ -23,9 +23,9 @@ export interface ICreateRoomFormData {
   direction: string;
   description: {
     look: string;
-    examine: string;
-    study: string;
-    research: string;
+    examine?: string;
+    study?: string;
+    research?: string;
   };
 }
 

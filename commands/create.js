@@ -8,6 +8,7 @@ import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRo
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
+import create_handleCreateRoomWithDirection from "./create_handleCreateRoomWithDirection.js";
 import help from "./help.js";
 async function create(parsedCommand, user) {
     try {
@@ -70,16 +71,25 @@ async function create(parsedCommand, user) {
                     directObject: "create_room",
                 }, user);
                 const availableDirections = await getAvailableExitsForCreateRoom(user);
+                // handle no available directions for new room
                 if (availableDirections.length === 0) {
                     worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `There are already rooms in every direction! Create somewhere else.`));
                     break;
                 }
                 else {
-                    worldEmitter.emit(`formPromptFor${user.username}`, {
-                        form: `createRoomForm`,
-                        availableDirections: availableDirections,
-                    });
-                    break;
+                    // handle direct room creation if user provided direction
+                    if (parsedCommand.indirectObject) {
+                        await create_handleCreateRoomWithDirection(parsedCommand.indirectObject, user, parsedCommand.string);
+                        break;
+                    }
+                    else {
+                        // handle room creation form if no direction provided
+                        worldEmitter.emit(`formPromptFor${user.username}`, {
+                            form: `createRoomForm`,
+                            availableDirections: availableDirections,
+                        });
+                        break;
+                    }
                 }
             }
             case `zone`: {

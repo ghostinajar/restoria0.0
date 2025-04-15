@@ -10,6 +10,7 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
+import create_handleCreateRoomWithDirection from "./create_handleCreateRoomWithDirection.js";
 import help from "./help.js";
 
 async function create(parsedCommand: IParsedCommand, user: IUser) {
@@ -18,7 +19,10 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
     if (!target) {
       worldEmitter.emit(
         `messageFor${user.username}`,
-        makeMessage(`rejection`, `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`)
+        makeMessage(
+          `rejection`,
+          `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`
+        )
       );
       return;
     }
@@ -100,6 +104,8 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
           user
         );
         const availableDirections = await getAvailableExitsForCreateRoom(user);
+
+        // handle no available directions for new room
         if (availableDirections.length === 0) {
           worldEmitter.emit(
             `messageFor${user.username}`,
@@ -110,11 +116,22 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
           );
           break;
         } else {
-          worldEmitter.emit(`formPromptFor${user.username}`, {
-            form: `createRoomForm`,
-            availableDirections: availableDirections,
-          });
-          break;
+          // handle direct room creation if user provided direction
+          if (parsedCommand.indirectObject) {
+            await create_handleCreateRoomWithDirection(
+              parsedCommand.indirectObject,
+              user,
+              parsedCommand.string
+            );
+            break;
+          } else {
+            // handle room creation form if no direction provided
+            worldEmitter.emit(`formPromptFor${user.username}`, {
+              form: `createRoomForm`,
+              availableDirections: availableDirections,
+            });
+            break;
+          }
         }
       }
       case `zone`: {
@@ -143,7 +160,10 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       default: {
         worldEmitter.emit(
           `messageFor${user.username}`,
-          makeMessage(`rejection`, `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`)
+          makeMessage(
+            `rejection`,
+            `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`
+          )
         );
         return;
       }

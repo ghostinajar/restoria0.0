@@ -12,6 +12,15 @@ export const directions = [
   "down",
 ];
 
+export const directionsAbbrev = [
+  "n",
+  "e",
+  "s",
+  "w",
+  "u",
+  "d",
+];
+
 export const oppositeDirections = {
   north: 'south',
   south: 'north',
