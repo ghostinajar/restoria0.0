@@ -67,7 +67,7 @@ const HELP: {
   ],
   CREATE_EXIT: [
     `${padStringToLength79(`CREATE EXIT`)}`,
-    `Open an exit between this room and an adjacent room. If there's no available room in a direction, it won't appear on the form. If the "Direction" dropdown is empty, try CREATE ROOM instead.`,
+    `Open an exit between this room and an adjacent room. This is only possible if there's a room in the direction you specify. E.g. ""CREATE EXIT NORTH" will only work if there's already a room to the North.`,
   ],
   CREATE_ITEM: [
     `${padStringToLength79(`CREATE ITEM`)}`,

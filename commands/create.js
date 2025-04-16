@@ -1,5 +1,6 @@
 // create
 // switch on target to open create form for item, mob, room, zone, or user/character
+import { directionCorrectionString, directions, directionsAbbrev, expandAbbreviatedDirection, } from "../constants/DIRECTIONS.js";
 import { itemTypes } from "../constants/ITEM_TYPE.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
@@ -7,8 +8,10 @@ import getAvailableExitsForCreateExit from "../util/getAvailableExitsForCreateEx
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import makeMessage from "../util/makeMessage.js";
+import messageToUsername from "../util/messageToUsername.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import create_handleCreateRoomWithDirection from "./create_handleCreateRoomWithDirection.js";
+import createExit from "./createExit.js";
 import help from "./help.js";
 async function create(parsedCommand, user) {
     try {
@@ -32,11 +35,31 @@ async function create(parsedCommand, user) {
                     commandWord: "help",
                     directObject: "create_exit",
                 }, user);
+                const providedDirection = parsedCommand.indirectObject?.toLowerCase();
+                if (!providedDirection) {
+                    messageToUsername(user.username, `Which direction? E.g. CREATE EXIT NORTH or CREATE EXIT N.`, `rejection`, true);
+                    return;
+                }
+                console.log(parsedCommand);
+                console.log(providedDirection);
+                // handle invalid direction provided
+                if (!directions.includes(providedDirection) &&
+                    !directionsAbbrev.includes(providedDirection)) {
+                    messageToUsername(user.username, directionCorrectionString, `rejection`, true);
+                    return;
+                }
+                // handle direction abbreviation
+                const expandedDirection = expandAbbreviatedDirection(providedDirection);
+                if (!expandedDirection) {
+                    throw new Error(`Couldn't expand direction ${providedDirection} for ${user.username}.`);
+                }
+                // handle no room in that direction
                 const availableExits = await getAvailableExitsForCreateExit(user);
-                worldEmitter.emit(`formPromptFor${user.username}`, {
-                    form: `createExitForm`,
-                    availableExits: availableExits,
-                });
+                if (!availableExits || !availableExits.includes(expandedDirection)) {
+                    messageToUsername(user.username, `There's an existing exit there, or no room to exit to! Try another direction.`, `rejection`, true);
+                    return;
+                }
+                await createExit(expandedDirection, user);
                 break;
             }
             case `object`:

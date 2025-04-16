@@ -22,7 +22,6 @@ import createMobBlueprint from "./commands/createMobBlueprint.js";
 import createRoom from "./commands/createRoom.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
-import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import eraseRoom from "./commands/eraseRoom.js";
@@ -30,7 +29,6 @@ import editMap from "./commands/editMap.js";
 export const formPromptForUserHandler = async (formData, socket) => {
     const formEventMap = {
         bugForm: "openBugForm",
-        createExitForm: "openCreateExitForm",
         createItemBlueprintForm: "openCreateItemBlueprintForm",
         createMobBlueprintForm: "opencreateMobBlueprintForm",
         createRoomForm: "openCreateRoomForm",
@@ -140,9 +138,6 @@ export const messageForUsersZoneHandler = async (message, socket, user) => {
 };
 export const userSubmittedBugHandler = async (description, user) => {
     await bug(description, user);
-};
-export const userSubmittedCreateExitHandler = async (direction, user) => {
-    await createExit(direction, user);
 };
 export const userSubmittedEditItemBlueprintHandler = async (itemBlueprintData, user) => {
     try {

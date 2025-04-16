@@ -37,12 +37,12 @@ async function give(parsedCommand, user) {
         }
         // fail if no recipient found
         if (!recipient || !recipient.inventory) {
-            messageToUsername(user.username, `There's no one called ${recipientKeyword} here.`, `failure`, false);
+            messageToUsername(user.username, `There's no one called ${recipientKeyword} here.`, `rejection`, false);
             return;
         }
         // fail if recipient has no inventory room
         if (recipient.inventory.length >= recipient.capacity) {
-            messageToUsername(user.username, `${recipient.name} can't carry any more items.`, `failure`, false);
+            messageToUsername(user.username, `${recipient.name} can't carry any more items.`, `rejection`, false);
             return;
         }
         // relocate the item, save and notify users

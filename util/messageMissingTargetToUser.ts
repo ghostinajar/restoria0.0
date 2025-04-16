@@ -7,7 +7,7 @@ function messageMissingTargetToUser(user: IUser, keyword: string) {
   messageToUsername(
     user.username,
     `You can't seem to find the ${keyword}.`,
-    `failure`,
+    `rejection`,
     false
   );
 }

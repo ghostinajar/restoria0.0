@@ -40,7 +40,6 @@ import createRoom, { ICreateRoomFormData } from "./commands/createRoom.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
-import createExit from "./commands/createExit.js";
 import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import { IMapTileState } from "./commands/map.js";
@@ -51,7 +50,6 @@ import { IMapTile } from "./model/classes/Room.js";
 export const formPromptForUserHandler = async (formData: any, socket: any) => {
   const formEventMap: Record<string, string> = {
     bugForm: "openBugForm",
-    createExitForm: "openCreateExitForm",
     createItemBlueprintForm: "openCreateItemBlueprintForm",
     createMobBlueprintForm: "opencreateMobBlueprintForm",
     createRoomForm: "openCreateRoomForm",
@@ -203,13 +201,6 @@ export const userSubmittedBugHandler = async (
   user: IUser
 ) => {
   await bug(description, user);
-};
-
-export const userSubmittedCreateExitHandler = async (
-  direction: string,
-  user: IUser
-) => {
-  await createExit(direction, user);
 };
 
 export const userSubmittedEditItemBlueprintHandler = async (

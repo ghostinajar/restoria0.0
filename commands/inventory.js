@@ -7,7 +7,7 @@ import messageToUsername from "../util/messageToUsername.js";
 async function inventory(user) {
     try {
         if (user.inventory.length === 0) {
-            messageToUsername(user.username, `You're not carrying anything.`, `failure`, true);
+            messageToUsername(user.username, `You're not carrying anything.`, `rejection`, true);
             return;
         }
         // start counting the number of each item in the inventory

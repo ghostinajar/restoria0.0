@@ -35,7 +35,6 @@ import {
   userSubmittedEditUserHandler,
   userSubmittedSuggestHandler,
   userSubmittedSuggestionsHandler,
-  userSubmittedCreateExitHandler,
   userSubmittedEraseExitHandler,
   userSubmittedEraseZoneHandler,
   safeMessageArrayForUserHandler,
@@ -220,10 +219,6 @@ const setupSocket = (io: any) => {
 
       socket.on(`userSubmittedBug`, async (description: string) => {
         await userSubmittedBugHandler(description, user);
-      });
-
-      socket.on(`userSubmittedCreateExit`, async (direction: string) => {
-        await userSubmittedCreateExitHandler(direction, user);
       });
 
       socket.on(

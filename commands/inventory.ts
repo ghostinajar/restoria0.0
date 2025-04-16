@@ -14,7 +14,7 @@ async function inventory(user: IUser) {
       messageToUsername(
         user.username,
         `You're not carrying anything.`,
-        `failure`,
+        `rejection`,
         true
       );
       return;

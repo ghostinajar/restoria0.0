@@ -30,7 +30,7 @@ async function studyresearch(parsedCommand: IParsedCommand, user: IUser) {
           worldEmitter.emit(
             `messageFor${user.username}`,
             makeMessage(
-              `failure`,
+              `rejection`,
               `There's not much to research about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`
             )
           );
@@ -47,7 +47,7 @@ async function studyresearch(parsedCommand: IParsedCommand, user: IUser) {
           worldEmitter.emit(
             `messageFor${user.username}`,
             makeMessage(
-              `failure`,
+              `rejection`,
               `There's not much to study about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`
             )
           );

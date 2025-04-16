@@ -1,7 +1,7 @@
 // create_handleCreateRoomWithDirection
 // utility for create command, handles "CREATE ROOM DIRECTION ?NAME"
 // (create the room directly when a user has included a direction and optional room name in the command)
-import { directions, directionsAbbrev } from "../constants/DIRECTIONS.js";
+import { directionCorrectionString, directions, directionsAbbrev, } from "../constants/DIRECTIONS.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
 import createRoom from "./createRoom.js";
@@ -17,11 +17,12 @@ async function create_handleCreateRoomWithDirection(direction, user, roomName) {
         // reject invalid direction parameter (must be "north" or "n", etc)
         if (!directions.includes(direction.toLowerCase()) &&
             !directionsAbbrev.includes(direction.toLowerCase())) {
-            messageToUsername(user.username, `Invalid direction. Valid directions are: ${directions.join(", ")} (or ${directionsAbbrev.join(", ")}).`);
+            messageToUsername(user.username, directionCorrectionString, `rejection`, true);
             return;
         }
         // if direction is abbreviated, convert to full direction
-        const fullDirection = directions.find((dir => dir.startsWith(direction.toLowerCase()))) || direction.toLowerCase();
+        const fullDirection = directions.find((dir) => dir.startsWith(direction.toLowerCase())) ||
+            direction.toLowerCase();
         if (!fullDirection) {
             throw new Error("Invalid fullDirection.");
         }

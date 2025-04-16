@@ -2,7 +2,11 @@
 // utility for create command, handles "CREATE ROOM DIRECTION ?NAME"
 // (create the room directly when a user has included a direction and optional room name in the command)
 
-import { directions, directionsAbbrev } from "../constants/DIRECTIONS.js";
+import {
+  directionCorrectionString,
+  directions,
+  directionsAbbrev,
+} from "../constants/DIRECTIONS.js";
 import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
@@ -27,36 +31,30 @@ async function create_handleCreateRoomWithDirection(
       !directions.includes(direction.toLowerCase()) &&
       !directionsAbbrev.includes(direction.toLowerCase())
     ) {
-      messageToUsername(
-        user.username,
-        `Invalid direction. Valid directions are: ${directions.join(
-          ", "
-        )} (or ${directionsAbbrev.join(", ")}).`
-      );
+      messageToUsername(user.username, directionCorrectionString, `rejection`, true);
       return;
     }
 
     // if direction is abbreviated, convert to full direction
-    const fullDirection = directions.find((dir =>
-      dir.startsWith(direction.toLowerCase())
-    )) || direction.toLowerCase();
+    const fullDirection =
+      directions.find((dir) => dir.startsWith(direction.toLowerCase())) ||
+      direction.toLowerCase();
 
     if (!fullDirection) {
       throw new Error("Invalid fullDirection.");
     }
 
-    const roomData : ICreateRoomFormData = {
+    const roomData: ICreateRoomFormData = {
       name: roomName || `This zone's author needs to name this room.`,
       direction: fullDirection,
       description: {
         look: `This zone's author needs to write a LOOK description here.`,
         examine: `This zone's author needs to write an EXAMINE description here.`,
       },
-    }
+    };
 
     // call createRoom to create the room directly
     const room = await createRoom(roomData, user);
-
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `create_handleCreateRoomWithDirection`,

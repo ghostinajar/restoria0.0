@@ -17,7 +17,7 @@ async function studyresearch(parsedCommand, user) {
                     worldEmitter.emit(`messageArrayFor${user.username}`, messageArray);
                 }
                 else {
-                    worldEmitter.emit(`messageFor${user.username}`, makeMessage(`failure`, `There's not much to research about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`));
+                    worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `There's not much to research about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`));
                 }
             }
             else {
@@ -28,7 +28,7 @@ async function studyresearch(parsedCommand, user) {
                     worldEmitter.emit(`messageArrayFor${user.username}`, messageArray);
                 }
                 else {
-                    worldEmitter.emit(`messageFor${user.username}`, makeMessage(`failure`, `There's not much to study about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`));
+                    worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `There's not much to study about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`));
                 }
             }
         }

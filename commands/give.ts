@@ -67,7 +67,7 @@ async function give(parsedCommand: IParsedCommand, user: IUser) {
       messageToUsername(
         user.username,
         `There's no one called ${recipientKeyword} here.`,
-        `failure`,
+        `rejection`,
         false
       );
       return;
@@ -78,7 +78,7 @@ async function give(parsedCommand: IParsedCommand, user: IUser) {
       messageToUsername(
         user.username,
         `${recipient.name} can't carry any more items.`,
-        `failure`,
+        `rejection`,
         false
       );
       return;
