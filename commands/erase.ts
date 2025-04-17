@@ -16,6 +16,7 @@ import {
   directions,
   directionsAbbrev,
   expandAbbreviatedDirection,
+  processDirection,
 } from "../constants/DIRECTIONS.js";
 import help from "./help.js";
 import logger from "../logger.js";
@@ -91,36 +92,10 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
         );
 
         const providedDirection = parsedCommand.indirectObject?.toLowerCase();
-        if (!providedDirection) {
-          messageToUsername(
-            user.username,
-            `Which direction? E.g. ERASE EXIT NORTH or ERASE EXIT N.`,
-            `rejection`,
-            true
-          );
+        const processedDirection = processDirection(providedDirection, user);
+        if (!processedDirection) {
+          // NB processDirection has handled notifying user of missing/invalid direction
           return;
-        }
-
-        // handle invalid direction provided
-        if (
-          !directions.includes(providedDirection) &&
-          !directionsAbbrev.includes(providedDirection)
-        ) {
-          messageToUsername(
-            user.username,
-            directionCorrectionString,
-            `rejection`,
-            true
-          );
-          return;
-        }
-
-        // handle direction abbreviation
-        const expandedDirection = expandAbbreviatedDirection(providedDirection);
-        if (!expandedDirection) {
-          throw new Error(
-            `Couldn't expand direction ${providedDirection} for ${user.username}.`
-          );
         }
 
         // handle no exit in that direction
@@ -134,17 +109,16 @@ async function erase(parsedCommand: IParsedCommand, user: IUser) {
             eraseableExits.push(direction);
           }
         });
-        if (!eraseableExits.includes(expandedDirection)) {
+        if (!eraseableExits.includes(processedDirection)) {
           messageToUsername(
             user.username,
-            `There's no exit ${expandedDirection} to erase.`,
+            `There's no exit ${processedDirection} to erase.`,
             `rejection`,
             true
           );
           return;
         }
-        console.log(expandedDirection);
-        await eraseExit(expandedDirection, user);
+        await eraseExit(processedDirection, user);
         break;
       }
       case `object`:

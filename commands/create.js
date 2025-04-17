@@ -1,6 +1,6 @@
 // create
 // switch on target to open create form for item, mob, room, zone, or user/character
-import { directionCorrectionString, directions, directionsAbbrev, expandAbbreviatedDirection, } from "../constants/DIRECTIONS.js";
+import { processDirection, } from "../constants/DIRECTIONS.js";
 import { itemTypes } from "../constants/ITEM_TYPE.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
@@ -36,28 +36,18 @@ async function create(parsedCommand, user) {
                     directObject: "create_exit",
                 }, user);
                 const providedDirection = parsedCommand.indirectObject?.toLowerCase();
-                if (!providedDirection) {
-                    messageToUsername(user.username, `Which direction? E.g. CREATE EXIT NORTH or CREATE EXIT N.`, `rejection`, true);
+                const processedDirection = processDirection(providedDirection, user);
+                if (!processedDirection) {
+                    // NB processDirection has handled notifying user of missing/invalid direction
                     return;
-                }
-                // handle invalid direction provided
-                if (!directions.includes(providedDirection) &&
-                    !directionsAbbrev.includes(providedDirection)) {
-                    messageToUsername(user.username, directionCorrectionString, `rejection`, true);
-                    return;
-                }
-                // handle direction abbreviation
-                const expandedDirection = expandAbbreviatedDirection(providedDirection);
-                if (!expandedDirection) {
-                    throw new Error(`Couldn't expand direction ${providedDirection} for ${user.username}.`);
                 }
                 // handle no room in that direction
                 const availableExits = await getAvailableExitsForCreateExit(user);
-                if (!availableExits || !availableExits.includes(expandedDirection)) {
-                    messageToUsername(user.username, `There's an existing exit there, or no room to exit to! Try another direction.`, `rejection`, true);
+                if (!availableExits || !availableExits.includes(processedDirection)) {
+                    messageToUsername(user.username, `Sorry, we can't create an exit ${processedDirection}. Try CREATE ROOM.`, `rejection`, true);
                     return;
                 }
-                await createExit(expandedDirection, user);
+                await createExit(processedDirection, user);
                 break;
             }
             case `object`:

@@ -6,7 +6,7 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import { directionCorrectionString, directions, directionsAbbrev, expandAbbreviatedDirection, } from "../constants/DIRECTIONS.js";
+import { directions, processDirection, } from "../constants/DIRECTIONS.js";
 import help from "./help.js";
 import logger from "../logger.js";
 import messageToUsername from "../util/messageToUsername.js";
@@ -48,20 +48,10 @@ async function erase(parsedCommand, user) {
                     directObject: "erase_exit",
                 }, user);
                 const providedDirection = parsedCommand.indirectObject?.toLowerCase();
-                if (!providedDirection) {
-                    messageToUsername(user.username, `Which direction? E.g. ERASE EXIT NORTH or ERASE EXIT N.`, `rejection`, true);
+                const processedDirection = processDirection(providedDirection, user);
+                if (!processedDirection) {
+                    // NB processDirection has handled notifying user of missing/invalid direction
                     return;
-                }
-                // handle invalid direction provided
-                if (!directions.includes(providedDirection) &&
-                    !directionsAbbrev.includes(providedDirection)) {
-                    messageToUsername(user.username, directionCorrectionString, `rejection`, true);
-                    return;
-                }
-                // handle direction abbreviation
-                const expandedDirection = expandAbbreviatedDirection(providedDirection);
-                if (!expandedDirection) {
-                    throw new Error(`Couldn't expand direction ${providedDirection} for ${user.username}.`);
                 }
                 // handle no exit in that direction
                 const room = await getRoomOfUser(user);
@@ -74,11 +64,11 @@ async function erase(parsedCommand, user) {
                         eraseableExits.push(direction);
                     }
                 });
-                if (!eraseableExits.includes(expandedDirection)) {
-                    messageToUsername(user.username, `There's no exit ${expandedDirection} to erase.`, `rejection`, true);
+                if (!eraseableExits.includes(processedDirection)) {
+                    messageToUsername(user.username, `There's no exit ${processedDirection} to erase.`, `rejection`, true);
                     return;
                 }
-                await eraseExit(expandedDirection, user);
+                await eraseExit(processedDirection, user);
                 break;
             }
             case `object`:
