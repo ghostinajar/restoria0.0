@@ -22,7 +22,6 @@ import createMobBlueprint from "./commands/createMobBlueprint.js";
 import createRoom from "./commands/createRoom.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
-import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import eraseRoom from "./commands/eraseRoom.js";
 import editMap from "./commands/editMap.js";
@@ -39,7 +38,6 @@ export const formPromptForUserHandler = async (formData, socket) => {
         editRoomForm: "openEditRoomForm",
         editUserForm: "openEditUserForm",
         editZoneForm: "openEditZoneForm",
-        eraseExitForm: "openEraseExitForm",
         eraseItemBlueprintForm: "openEraseItemBlueprintForm",
         eraseMobBlueprintForm: "openEraseMobBlueprintForm",
         eraseRoomForm: "openEraseRoomForm",
@@ -191,9 +189,6 @@ export const userSubmittedEditZoneHandler = async (zoneData, user) => {
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedEditZoneHandler`, error, user?.name);
     }
-};
-export const userSubmittedEraseExitHandler = async (direction, user) => {
-    await eraseExit(direction, user);
 };
 export const userSubmittedEraseItemBlueprintHandler = async (formData, user) => {
     try {

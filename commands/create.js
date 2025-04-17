@@ -40,8 +40,6 @@ async function create(parsedCommand, user) {
                     messageToUsername(user.username, `Which direction? E.g. CREATE EXIT NORTH or CREATE EXIT N.`, `rejection`, true);
                     return;
                 }
-                console.log(parsedCommand);
-                console.log(providedDirection);
                 // handle invalid direction provided
                 if (!directions.includes(providedDirection) &&
                     !directionsAbbrev.includes(providedDirection)) {

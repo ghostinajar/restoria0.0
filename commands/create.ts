@@ -57,7 +57,6 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
         );
 
         const providedDirection = parsedCommand.indirectObject?.toLowerCase();
-
         if (!providedDirection) {
           messageToUsername(
             user.username,
@@ -67,9 +66,6 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
           );
           return;
         }
-
-        console.log(parsedCommand);
-        console.log(providedDirection);
 
         // handle invalid direction provided
         if (

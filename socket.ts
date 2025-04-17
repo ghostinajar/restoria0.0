@@ -35,7 +35,6 @@ import {
   userSubmittedEditUserHandler,
   userSubmittedSuggestHandler,
   userSubmittedSuggestionsHandler,
-  userSubmittedEraseExitHandler,
   userSubmittedEraseZoneHandler,
   safeMessageArrayForUserHandler,
   safeMessageForUserHandler,
@@ -266,10 +265,6 @@ const setupSocket = (io: any) => {
 
       socket.on(`userSubmittedEditZone`, async (zoneData: IZoneData) => {
         await userSubmittedEditZoneHandler(zoneData, user);
-      });
-
-      socket.on(`userSubmittedEraseExit`, async (direction: string) => {
-        await userSubmittedEraseExitHandler(direction, user);
       });
 
       socket.on(

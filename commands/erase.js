@@ -6,9 +6,11 @@ import getRoomOfUser from "../util/getRoomOfUser.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import { directions } from "../constants/DIRECTIONS.js";
+import { directionCorrectionString, directions, directionsAbbrev, expandAbbreviatedDirection, } from "../constants/DIRECTIONS.js";
 import help from "./help.js";
 import logger from "../logger.js";
+import messageToUsername from "../util/messageToUsername.js";
+import eraseExit from "./eraseExit.js";
 async function erase(parsedCommand, user) {
     try {
         const target = parsedCommand.directObject;
@@ -45,6 +47,23 @@ async function erase(parsedCommand, user) {
                     commandWord: "help",
                     directObject: "erase_exit",
                 }, user);
+                const providedDirection = parsedCommand.indirectObject?.toLowerCase();
+                if (!providedDirection) {
+                    messageToUsername(user.username, `Which direction? E.g. ERASE EXIT NORTH or ERASE EXIT N.`, `rejection`, true);
+                    return;
+                }
+                // handle invalid direction provided
+                if (!directions.includes(providedDirection) &&
+                    !directionsAbbrev.includes(providedDirection)) {
+                    messageToUsername(user.username, directionCorrectionString, `rejection`, true);
+                    return;
+                }
+                // handle direction abbreviation
+                const expandedDirection = expandAbbreviatedDirection(providedDirection);
+                if (!expandedDirection) {
+                    throw new Error(`Couldn't expand direction ${providedDirection} for ${user.username}.`);
+                }
+                // handle no exit in that direction
                 const room = await getRoomOfUser(user);
                 if (!room) {
                     throw new Error(`No room found for user ${user.name}`);
@@ -55,10 +74,11 @@ async function erase(parsedCommand, user) {
                         eraseableExits.push(direction);
                     }
                 });
-                worldEmitter.emit(`formPromptFor${user.username}`, {
-                    form: `eraseExitForm`,
-                    eraseableExits: eraseableExits,
-                });
+                if (!eraseableExits.includes(expandedDirection)) {
+                    messageToUsername(user.username, `There's no exit ${expandedDirection} to erase.`, `rejection`, true);
+                    return;
+                }
+                await eraseExit(expandedDirection, user);
                 break;
             }
             case `object`:

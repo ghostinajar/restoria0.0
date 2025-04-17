@@ -40,7 +40,6 @@ import createRoom, { ICreateRoomFormData } from "./commands/createRoom.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
-import eraseExit from "./commands/eraseExit.js";
 import eraseZone from "./commands/eraseZone.js";
 import { IMapTileState } from "./commands/map.js";
 import eraseRoom from "./commands/eraseRoom.js";
@@ -60,7 +59,6 @@ export const formPromptForUserHandler = async (formData: any, socket: any) => {
     editRoomForm: "openEditRoomForm",
     editUserForm: "openEditUserForm",
     editZoneForm: "openEditZoneForm",
-    eraseExitForm: "openEraseExitForm",
     eraseItemBlueprintForm: "openEraseItemBlueprintForm",
     eraseMobBlueprintForm: "openEraseMobBlueprintForm",
     eraseRoomForm: "openEraseRoomForm",
@@ -288,13 +286,6 @@ export const userSubmittedEditZoneHandler = async (
       user?.name
     );
   }
-};
-
-export const userSubmittedEraseExitHandler = async (
-  direction: string,
-  user: IUser
-) => {
-  await eraseExit(direction, user);
 };
 
 export const userSubmittedEraseItemBlueprintHandler = async (
