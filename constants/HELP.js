@@ -268,8 +268,12 @@ const HELP = {
         `${padStringToLength79(`Keywords`)}`,
         `Keywords are single words that help users target something (an item, mob, etc.). Each keyword should also appear somewhere in the item or mob's description, and if it has a proper name (e.g. Greg), that name must be one of the keywords. For example, if a mob's 'look' description is "Greg the white kitten purrs gently in the corner." that mob's keywords might be "Greg, kitten, white". That way, a player could type "pet Greg", "pet kitten", or "pet white" to target him.`,
     ],
+    LIGHT: [
+        `${padStringToLength79(`LIGHT`)}`,
+        `LIGHT can be an ambiguous word. In Restoria, a LIGHT weapon can be thrown or wielded in the off-hand. An item that can illuminate a dark room is a LAMP.`,
+    ],
     LOOK_COMMAND: [
-        `${padStringToLength79(`Keywords`)}`,
+        `${padStringToLength79(`LOOK COMMAND`)}`,
         `Use LOOK on its own to see the contents of the room you're in. You can also LOOK at or in something (e.g. LOOK APPLE, LOOK CHEST). You can use an ordinal (e.g. to look at the second apple, LOOK 2.APPLE, or in the second chest LOOK APPLE 2.CHEST).`,
     ],
     MAP: [
