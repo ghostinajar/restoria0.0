@@ -10,6 +10,8 @@ import relocateItem from "../util/relocateItem.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import save from "./save.js";
 import messageMissingTargetToUser from "../util/messageMissingTargetToUser.js";
+import worldEmitter from "../model/classes/WorldEmitter.js";
+import makeMessage from "../util/makeMessage.js";
 
 async function get(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -75,8 +77,15 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
             `success`
           );
         });
+        worldEmitter.emit(
+          `messageFor${user.username}sRoom`,
+          makeMessage(
+            `itemIsHere`,
+            `${user.name} got some items from the ground.`
+          )
+        );
       } else {
-        //handle single object (directObjectOrdinal is an integer or unspecifed
+        //handle single object (directObjectOrdinal is an integer or unspecifed)
 
         // fail if item is a fixture
         if (itemToGet.tags.fixture) {
@@ -92,6 +101,13 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           user.username,
           `You got ${itemToGet.name} from the ground.`,
           `success`
+        );
+        worldEmitter.emit(
+          `messageFor${user.username}sRoom`,
+          makeMessage(
+            `itemIsHere`,
+            `${user.name} got ${itemToGet.name} from the ground.`
+          )
         );
       }
       await save(user, true);
@@ -238,6 +254,13 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           `success`
         );
       });
+      worldEmitter.emit(
+        `messageFor${user.username}sRoom`,
+        makeMessage(
+          `itemIsHere`,
+          `${user.name} got some items from ${originContainer.name}.`
+        )
+      );
     } else {
       // handle get single object
       await relocateItem(itemToGet, originInventory, user.inventory);
@@ -245,6 +268,13 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         user.username,
         `You got ${itemToGet.name} from ${originContainer.name}.`,
         `success`
+      );
+      worldEmitter.emit(
+        `messageFor${user.username}sRoom`,
+        makeMessage(
+          `itemIsHere`,
+          `${user.name} got ${itemToGet.name} from ${originContainer.name}.`
+        )
       );
     }
 

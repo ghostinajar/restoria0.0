@@ -5,6 +5,8 @@ import messageToUsername from "../util/messageToUsername.js";
 import relocateItem from "../util/relocateItem.js";
 import save from "./save.js";
 import messageMissingTargetToUser from "../util/messageMissingTargetToUser.js";
+import worldEmitter from "../model/classes/WorldEmitter.js";
+import makeMessage from "../util/makeMessage.js";
 async function get(parsedCommand, user) {
     try {
         // fail if user inventory is full
@@ -45,9 +47,10 @@ async function get(parsedCommand, user) {
                     await relocateItem(itemToGet, room.inventory, user.inventory);
                     messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
                 });
+                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} got some items from the ground}.`));
             }
             else {
-                //handle single object (directObjectOrdinal is an integer or unspecifed
+                //handle single object (directObjectOrdinal is an integer or unspecifed)
                 // fail if item is a fixture
                 if (itemToGet.tags.fixture) {
                     messageToUsername(user.username, `You can't get ${itemToGet.name}, because it's fixed in place.`, `help`);
@@ -55,6 +58,7 @@ async function get(parsedCommand, user) {
                 }
                 await relocateItem(itemToGet, room.inventory, user.inventory);
                 messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
+                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} got ${itemToGet.name} from the ground.`));
             }
             await save(user, true);
             return;
@@ -134,11 +138,13 @@ async function get(parsedCommand, user) {
                 await relocateItem(itemToGet, originInventory, user.inventory);
                 messageToUsername(user.username, `You got ${itemToGet.name} from ${originContainer.name}.`, `success`);
             });
+            worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} got some items from ${originContainer.name}.`));
         }
         else {
             // handle get single object
             await relocateItem(itemToGet, originInventory, user.inventory);
             messageToUsername(user.username, `You got ${itemToGet.name} from ${originContainer.name}.`, `success`);
+            worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} got ${itemToGet.name} from ${originContainer.name}.`));
         }
         await save(user, true);
         return;
