@@ -19,7 +19,6 @@ import editZone from "./commands/editZone.js";
 import relocateUser from "./util/relocateUser.js";
 import createItemBlueprint from "./commands/createItemBlueprint.js";
 import createMobBlueprint from "./commands/createMobBlueprint.js";
-import createRoom from "./commands/createRoom.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
 import eraseZone from "./commands/eraseZone.js";
@@ -260,16 +259,6 @@ export const userSubmittedCreateMobBlueprintHandler = async (mobBlueprintData, u
     }
     catch (error) {
         catchErrorHandlerForFunction(`userSubmittedCreateMobBlueprintHandler`, error, user?.name);
-    }
-};
-export const userSubmittedCreateRoomHandler = async (roomData, user) => {
-    try {
-        purifyDescriptionOfObject(roomData);
-        await createRoom(roomData, user);
-        stats(user);
-    }
-    catch (error) {
-        catchErrorHandlerForFunction(`userSubmittedCreateRoomHandler`, error, user?.name);
     }
 };
 export const userSubmittedCreateZoneHandler = async (zoneData, user) => {

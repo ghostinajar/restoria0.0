@@ -97,13 +97,7 @@ const HELP: {
   CREATE_ROOM: [
     `${padStringToLength79(`CREATE ROOM`)}`,
     `A Room is a specific area of a zone, and there should be many rooms in a zone. Despite being called "Room", a Room can be any specific location, even an outdoor area without walls. Examples of rooms could be "A Walkway in the Garden", "The Smallest Dungeon Cell", or "Persephone's Walk-In Closet". If a Zone is a large area where many parts of a story can happen, a Room is a specific place where a specific event (e.g. a conversation, a battle) can happen.`,
-    `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--yellow_light)">A Long Hallway</span>' or '<span style="color: var(--yellow_light)">The Potion Shoppe'</span>`,
-    `<span style="color:var(--red)">Direction:</span> the location of the new room, from where you create it`,
-    `<span style="color:var(--red)">Dark:</span> items, mobs, and players are hidden unless a lamp is present`,
-    `<span style="color:var(--red)">Indoors:</span> weather won't take effect here`,
-    `<span style="color:var(--red)">On Water:</span> players and mobs can't enter without levitate`,
-    `<span style="color:var(--red)">Underwater:</span> players will take drowning damage without magic`,
-    `<span style="color:var(--red)">Examine:</span> a paragraph a player sees when they look or enter the room`,
+    `e.g. CREATE ROOM NORTH will create a room to the North. You can add the name of the room, if you know it already (e.g. CREATE ROOM NORTH A Peaceful Meadow)`,
   ],
   CREATE_ZONE: [
     `${padStringToLength79(`CREATE ZONE, EDIT ZONE`)}`,
@@ -179,7 +173,7 @@ const HELP: {
   ],
   ERASE_EXIT: [
     `${padStringToLength79(`ERASE EXIT`)}`,
-    `Remove an exit between this room and an adjacent room. Erasing an exit can make some rooms in your zone inaccessible. You can use GOTO, then CREATE EXIT or CREATE ROOM to reconnect them.`,
+    `Remove an exit between this room and an adjacent room (e.g. ERASE ROOM NORTH). Erasing an exit can make some rooms in your zone inaccessible. You can use GOTO, then CREATE EXIT or CREATE ROOM to reconnect them.`,
   ],
   EXITS: [
     `${padStringToLength79(`EXITS, EDIT ROOM Exits`)}`,

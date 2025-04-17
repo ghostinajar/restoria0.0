@@ -2,7 +2,6 @@
 // organizes messages to and from client sockets
 import logger from "./logger.js";
 import worldEmitter from "./model/classes/WorldEmitter.js";
-import { ICreateRoomFormData } from "./commands/createRoom.js";
 import { IUser } from "./model/classes/User.js";
 import IMessage from "./types/Message.js";
 import makeMessage from "./util/makeMessage.js";
@@ -30,7 +29,6 @@ import {
   userSubmittedCreateMobBlueprintHandler,
   userXChangingRoomsHandler,
   userXLeavingGameHandler,
-  userSubmittedCreateRoomHandler,
   userSubmittedCreateZoneHandler,
   userSubmittedEditUserHandler,
   userSubmittedSuggestHandler,
@@ -219,13 +217,6 @@ const setupSocket = (io: any) => {
       socket.on(`userSubmittedBug`, async (description: string) => {
         await userSubmittedBugHandler(description, user);
       });
-
-      socket.on(
-        `userSubmittedCreateRoom`,
-        async (roomData: ICreateRoomFormData) => {
-          await userSubmittedCreateRoomHandler(roomData, user);
-        }
-      );
 
       socket.on(`userSubmittedCreateZone`, async (zoneData: IZoneData) => {
         await userSubmittedCreateZoneHandler(zoneData, user);

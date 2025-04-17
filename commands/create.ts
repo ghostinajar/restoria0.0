@@ -1,12 +1,6 @@
 // create
 // switch on target to open create form for item, mob, room, zone, or user/character
-import {
-  directionCorrectionString,
-  directions,
-  directionsAbbrev,
-  expandAbbreviatedDirection,
-  processDirection,
-} from "../constants/DIRECTIONS.js";
+import { processDirection } from "../constants/DIRECTIONS.js";
 import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
@@ -18,8 +12,8 @@ import makeMessage from "../util/makeMessage.js";
 import messageToUsername from "../util/messageToUsername.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import userHasZoneAuthorId from "../util/userHasZoneAuthorId.js";
-import create_handleCreateRoomWithDirection from "./create_handleCreateRoomWithDirection.js";
 import createExit from "./createExit.js";
+import createRoom from "./createRoom.js";
 import help from "./help.js";
 
 async function create(parsedCommand: IParsedCommand, user: IUser) {
@@ -47,6 +41,8 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       }
     }
 
+    const providedDirection = parsedCommand.indirectObject?.toLowerCase();
+
     switch (target) {
       case `exit`: {
         help(
@@ -57,7 +53,6 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
           user
         );
 
-        const providedDirection = parsedCommand.indirectObject?.toLowerCase();
         const processedDirection = processDirection(providedDirection, user);
         if (!processedDirection) {
           // NB processDirection has handled notifying user of missing/invalid direction
@@ -128,36 +123,32 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
           },
           user
         );
-        const availableDirections = await getAvailableExitsForCreateRoom(user);
+        const processedDirection = processDirection(providedDirection, user);
+        if (!processedDirection) {
+          // NB processDirection has handled notifying user of missing/invalid direction
+          return;
+        }
 
+        const availableDirections = await getAvailableExitsForCreateRoom(user);
         // handle no available directions for new room
         if (availableDirections.length === 0) {
           worldEmitter.emit(
             `messageFor${user.username}`,
             makeMessage(
               `rejection`,
-              `There are already rooms in every direction! Create somewhere else.`
+              `There are already rooms in every direction! CREATE somewhere else.`
             )
           );
           break;
-        } else {
-          // handle direct room creation if user provided direction
-          if (parsedCommand.indirectObject) {
-            await create_handleCreateRoomWithDirection(
-              parsedCommand.indirectObject,
-              user,
-              parsedCommand.string
-            );
-            break;
-          } else {
-            // handle room creation form if no direction provided
-            worldEmitter.emit(`formPromptFor${user.username}`, {
-              form: `createRoomForm`,
-              availableDirections: availableDirections,
-            });
-            break;
-          }
         }
+
+        // handle direct room creation
+        await createRoom(
+          processedDirection,
+          user,
+          parsedCommand.string || `This zone's author needs to name this room.`
+        );
+        break;
       }
       case `zone`: {
         if (user.unpublishedZoneTally >= 5 && !user.isAdmin) {

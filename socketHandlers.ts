@@ -36,7 +36,7 @@ import createItemBlueprint, {
 import createMobBlueprint, {
   ICreateMobFormData,
 } from "./commands/createMobBlueprint.js";
-import createRoom, { ICreateRoomFormData } from "./commands/createRoom.js";
+import createRoom from "./commands/createRoom.js";
 import { IDescription } from "./model/classes/Description.js";
 import editUser from "./commands/editUser.js";
 import saveSuggestions from "./commands/saveSuggestions.js";
@@ -421,23 +421,6 @@ export const userSubmittedCreateMobBlueprintHandler = async (
   } catch (error: unknown) {
     catchErrorHandlerForFunction(
       `userSubmittedCreateMobBlueprintHandler`,
-      error,
-      user?.name
-    );
-  }
-};
-
-export const userSubmittedCreateRoomHandler = async (
-  roomData: ICreateRoomFormData,
-  user: IUser
-) => {
-  try {
-    purifyDescriptionOfObject(roomData);
-    await createRoom(roomData, user);
-    stats(user);
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(
-      `userSubmittedCreateRoomHandler`,
       error,
       user?.name
     );
