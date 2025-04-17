@@ -63,7 +63,7 @@ const HELP: {
   ],
   CREATE: [
     `${padStringToLength79(`CREATE`)}`,
-    `You are an author in Restoria, and authors can CREATE ZONE, CREATE ITEM, CREATE MOB, CREATE ROOM, and CREATE EXIT to add things to zones they own. Each option opens a form to enter your writing, and the HELP for each form will display automatically when it opens.`,
+    `You are an author in Restoria, and authors can CREATE ZONE, CREATE ITEM, CREATE MOB, CREATE ROOM, and CREATE EXIT to add things to zones they own. For rooms and exits, you need to provide a direction (e.g. CREATE ROOM N). The other options each open a form to enter your writing, and the HELP for each form will display automatically when it opens.`,
   ],
   CREATE_EXIT: [
     `${padStringToLength79(`CREATE EXIT`)}`,
@@ -77,9 +77,8 @@ const HELP: {
     `<span style="color:var(--red)">MinLvl:</span> player must be at least this level to use or equip it`,
     `<span style="color:var(--red)">Price:</span> costs to purchase (selling price will be less)`,
     `<span style="color:var(--red)">Container:</span> this item may spawn or hold other items inside`,
-    `<span style="color:var(--red)">Capacity:</span> determines how many items it can hold.`,
     `<span style="color:var(--red)">Look:</span> how the player sees the item when they look or enter a room`,
-    `<span style="color:var(--red)">Examine:</span> a paragraph a player seens when they examine the item.`,
+    `<span style="color:var(--red)">Examine:</span> a paragraph a player seens when they examine the item`,
     `<span style="color:var(--green)">See also HELP AUTOEXAMINE.</span>`,
   ],
   CREATE_MOB: [
@@ -115,10 +114,19 @@ const HELP: {
   DESCRIPTION: [
     `${padStringToLength79(`DESCRIPTION, LOOK, EXAMINE, STUDY, RESEARCH`)}`,
     `<span style="color:var(--red)">Look:</span> A 'look' description should fit on one line (80 characters or less). It is a full sentence, and a reader's first impression of the item, mob, user, room, or zone it describes. The 'look' descriptions of everything obvious in a room are shown automatically to a player when they enter it, and when they use the LOOK command on its own. Users can't change their own 'look' descriptions.`,
+    `<span style="color:var(--green)">See also HELP LOOK COMMAND.</span>`,
     `<span style="color:var(--red)">Examine:</span> When a reader uses the EXAMINE command on an item, mob, or user, this short paragraph (240 characters or less) is what they see. For a room, the 'examine' will appear automatically if they have AUTOEXAMINE ON.`,
     `<span style="color:var(--green)">See also HELP AUTOEXAMINE.</span>`,
     `<span style="color:var(--red)">Study:</span> When a reader uses the STUDY command on an item, mob, user, room, or zone, this long description (640 characters or less) is what they see. It should include rich detail that a reader wouldn't notice at first glance, and may even share secrets to reward those careful and patient readers who take the time to STUDY.`,
     `<span style="color:var(--red)">Research:</span> When a reader uses the RESEARCH command on an item, mob, user, room, or zone, this complete story (1600 characters or less) is shown to them. Good authors will use the 'research' description to tell some history. They may explain why certain things in their zone are they way they are. This is also a fun place to include easter eggs or major secrets about your zone, since only the best and most deserving readers explore with the RESEARCH command.`,
+  ],
+  DROP: [
+    `${padStringToLength79(`DROP`)}`,
+    `Sometimes you want to get rid of an item. You can DROP it on the ground in most place (e.g. DROP APPLE). You can use an ordinal if you want to drop the second apple in your inventory (e.g. DROP 2.APPLE), or all items matching a keyword (e.g. DROP ALL.POTION).`,
+  ],
+  EDIT: [
+    `${padStringToLength79(`EDIT`)}`,
+    `You can EDIT most things in a zone you created. EDIT ZONE, EDIT ROOM, EDIT MAP, EDIT ITEM, EDIT MOB, and even EDIT USER are ways to change various details of the things you write in Restoria.`,
   ],
   EDIT_ITEM: [
     `${padStringToLength79(`EDIT ITEM`)}`,
@@ -130,6 +138,10 @@ const HELP: {
     `<span style="color:var(--red)">Container:</span> this item may spawn or hold other items inside`,
     `<span style="color:var(--red)">Capacity:</span> determines how many items it can hold.`,
   ],
+  EDIT_MAP: [
+    `${padStringToLength79(`EDIT MAP`)}`,
+    `For now this lets you change the character and color of a room's tile on the map. In the future, we'd like to improve this feature, so you could edit the whole map for a floor at once, without having to move around to each room.`,
+  ],
   EDIT_MOB: [
     `${padStringToLength79(`EDIT MOB`)}`,
     `<span style="color:var(--red)">Name:</span> e.g '<span style="color: var(--green_light)">a green goblin</span>' or '<span style="color: var(--green_light)">Greg the blacksmith'</span>`,
@@ -138,6 +150,7 @@ const HELP: {
     `<span style="color:var(--red)">Level:</span> determines its stats and learned spells and abilities`,
     `<span style="color:var(--red)">Job:</span> determines abilities and combat style`,
     `<span style="color:var(--red)">Spirit:</span> negative is a moon spirit, 0 is neutral, positive is a sun spirit`,
+    `<span style="color:var(--green)">See also HELP UNIQUE, HELP MOUNT, HELP AGGRESSIVE</span>`,
   ],
   EDIT_ROOM: [
     `${padStringToLength79(`EDIT ROOM Description`)}`,
@@ -159,6 +172,7 @@ const HELP: {
     `<span style="color:var(--red)">No Mobs:</span> mobs can't enter this room`,
     `<span style="color:var(--red)">No Magic:</span> no one can cast spells in this room`,
     `<span style="color:var(--red)">No Combat:</span> no one can enter combat in this room`,
+    `<span style="color:var(--red)">Cap:</span>how many players/mobs can fit inside before more are blocked from entering`,
   ],
   EDITOR: [
     `${padStringToLength79(`EDITOR`)}`,
@@ -169,7 +183,7 @@ const HELP: {
       `ERASE, DELETE, ERASE ITEM, ERASE MOB, ERASE ROOM, ERASE USER, ERASE ZONE`
     )}`,
     `Use the ERASE or DELETE command to ERASE ITEM, ERASE MOB, or ERASE ROOM in your zone. To erase a user, contact Ralu or another game administrator. Except in special circumstances, we'll only erase one of your users per month. You can't erase a zone; edit or erase its contents instead.`,
-    `Remember, <span style="color:var(--red)">ERASE cannot be undone!</span> We recommend saving all your writing somewhere, (e.g. Google Drive), so you have a back-up copy of your hard work. Some wise authors do all their writing in another doc, then copy/paste into Restoria. Why not back up your writing before you ERASE, just in case?`,
+    `Remember, <span style="color:var(--red)">ERASE cannot be undone!</span> We recommend saving all your writing somewhere, (e.g. Google Drive), so you have a back-up copy of your hard work. Wise authors do all their writing in another doc, then copy/paste into Restoria. Why not back up your writing before you ERASE, just in case?`,
   ],
   ERASE_EXIT: [
     `${padStringToLength79(`ERASE EXIT`)}`,
@@ -177,10 +191,19 @@ const HELP: {
   ],
   EXITS: [
     `${padStringToLength79(`EXITS, EDIT ROOM Exits`)}`,
+    `The EXITS command shows a user where they can go from their current location.`,
     `Exits allow users and mobs to move between rooms in a zone. An exit will always spawn closed and locked if a key is assigned to it.`,
     `<span style="color:var(--red)">Key:</span> someone can unlock the exit if this item is in their inventory`,
     `<span style="color:var(--red)">Hidden:</span> exit can't be seen or used, except by those who successfully SEARCH`,
     `<span style="color:var(--red)">Closed:</span> closed by default when the zone is spawned`,
+  ],
+  GET: [
+    `${padStringToLength79(`GET`)}`,
+    `You can GET items from the ground (e.g. GET APPLE) or a container (e.g. GET APPLE BAG). You can use an ordinal (e.g. to get the second apple, GET 2.APPLE, or from the second chest GET APPLE 2.CHEST). You can use ALL to get everything with a given keyword (e.g. GET ALL.POTION). You can't select ALL containers.`,
+  ],
+  GIVE: [
+    `${padStringToLength79(`GIVE`)}`,
+    `If there's room in their inventory, you can GIVE an item to a player or mob (e.g. GIVE APPLE RALU). You can use an ordinal (e.g. to give the second apple, GIVE 2.APPLE RALU, or to the second goblin GIVE APPLE 2.GOBLIN). To avoid spammy giving, you can only give one item at a time.`,
   ],
   GOTO: [
     `${padStringToLength79(`GOTO`)}`,
@@ -192,6 +215,10 @@ const HELP: {
       `HIDDEN_ITEM, HIDDEN_USER, HIDDEN_MOB, HIDDEN_EXIT`
     )}`,
     `Hidden things don't show up normally on LOOK. Some will appear after a SEARCH, and some may only be detected with certain magic.`,
+  ],
+  INVENTORY: [
+    `${padStringToLength79(`INVENTORY`)}`,
+    `Type INVENTORY or I to see all the items you're carrying. To see inside your containers, use LOOK (e.g. LOOK BAG).`,
   ],
   ITEM_NODE: [
     `${padStringToLength79(`Item Node`)}`,
@@ -251,10 +278,14 @@ const HELP: {
     `${padStringToLength79(`Keywords`)}`,
     `Keywords are single words that help users target something (an item, mob, etc.). Each keyword should also appear somewhere in the item or mob's description, and if it has a proper name (e.g. Greg), that name must be one of the keywords. For example, if a mob's 'look' description is "Greg the white kitten purrs gently in the corner." that mob's keywords might be "Greg, kitten, white". That way, a player could type "pet Greg", "pet kitten", or "pet white" to target him.`,
   ],
+  LOOK_COMMAND: [
+    `${padStringToLength79(`Keywords`)}`,
+    `Use LOOK on its own to see the contents of the room you're in. You can also LOOK at or in something (e.g. LOOK APPLE, LOOK CHEST). You can use an ordinal (e.g. to look at the second apple, LOOK 2.APPLE, or in the second chest LOOK APPLE 2.CHEST).`,
+  ],
   MAP: [
     `This feature is still in development.`,
     `${padStringToLength79(`MAP`)}`,
-    `Each square on your MAP shows a room near you, with your position at the center. Dotted lines show closed doors, and solid lines are walls (or hidden exits). By default, you should see a map every time you change location, or when you type MAP. Type MAP OFF to toggle this feature off. MAP 6 will change the radius of your map display to 6 rooms away.`,
+    `Each square on your MAP shows a room near you, with your position at the center. Dotted lines show closed doors, and solid lines are walls (or hidden exits). By default, you should see a map every time you change location, or when you type MAP. Type MAP OFF or MAP ON to toggle this feature. MAP 6 will change the radius of your map display to 6 rooms away.`,
   ],
   MOB: [
     `This feature is still in development.`,
@@ -293,6 +324,10 @@ const HELP: {
     `${padStringToLength79(`Pronouns`)}`,
     `A pronoun is a part of speech we use in place of a noun or name, usually to avoid constant repetition of the name. For example, instead of saying "Greg, the Blacksmith brushes Greg, the Blacksmith's teeth before Greg, the Blacksmith goes to bed," we can say "Greg brushes HIS teeth before HE goes to bed." "It" and "They" are also pronouns. We can use "it" as a pronoun for things that have no gender (e.g. "It looks valuable."), and "they" for someone whose gender we don't know (e.g. "Someone left their sweater here. I hope they come back to find it.").`,
   ],
+  PUT: [
+    `${padStringToLength79(`QUIT`)}`,
+    `If an item is a container and has room, you can PUT other items inside (e.g. PUT APPLE BAG). You can use an ordinal (e.g. to put the second apple in the bag, PUT 2.APPLE BAG, or to put the apple in the second bag PUT APPLE 2.BAG). You can use ALL to put everything with a given keyword inside (e.g. PUT ALL.POTION BAG).`,
+  ],
   QUIT: [
     `${padStringToLength79(`QUIT`)}`,
     `Use the QUIT command to leave the game and return your character to world recall, The Snails statue in Restoria City.`,
@@ -303,13 +338,13 @@ const HELP: {
   ],
   RULES: [
     `${padStringToLength79(`RULES`)}`,
-    `We protect the safety, dignity, and fun of Restoria users by removing players who abuse others. Everything we say and do in Restoria is logged, and if you are found to be intentionally bothering anyone else in the game, your account may be deleted without warning. In this case, your writing, character experience, equipment & items, and everything else associated with your account would be permanently removed (another good reason why everyone should keep a backup of all their writing, e.g. on Google Drive). If you don't have good intentions towards all other players at all times, stop playing Restoria until you do.`,
+    `We protect the safety, dignity, and fun of Restoria users by removing players who abuse others. Everything we say and do in Restoria is logged, and if you intentionally bother anyone else in the game, your account may be deleted without warning. In this case, your writing, character experience, equipment & items, and everything else associated with your account would be permanently removed (another good reason why wise authors keep a backup of all their writingf). If you don't have good intentions towards all other players at all times, stop playing Restoria until you do.`,
   ],
   SAVE: [
     `${padStringToLength79(`SAVE`)}`,
-    `Changes you make to your zones (as an author, e.g. EDIT MOB) are saved when you submit the form, and are different from saving your character's data.`,
-    `The SAVE command manually saves your (non-zone) character data. The game also tries to do this for you automatically (e.g. when you make a change with AUTOEXAMINE, EDIT USER, EDITOR, MAP, PASSWORD, or GET an item, etc.).`,
-    `<span style="color:var(--red)">REMEMBER:</span>`,
+    `When you make a change in your zone (as an author, e.g. EDIT MOB) it is saved automatically.`,
+    `Saving your character works differently: the SAVE command manually saves your (non-zone) character data like location, inventory, equipment, etc. The game tries to do this for you automatically (e.g. when you make a change with AUTOEXAMINE, EDIT USER, EDITOR, MAP, PASSWORD, or GET an item, etc.).`,
+    `<span style="color:var(--red)">REMEMBER, HOWEVER:</span>`,
     `To protect our database, Restoria won't SAVE your character (manually or automatically) more than once every 10 seconds.`,
   ],
   SAY: [
@@ -370,7 +405,7 @@ const HELP: {
     `<span style="color:var(--red)">Light:</span> can be thrown or wielded in off-hand`,
     `<span style="color:var(--red)">Reach:</span> can hit from middle or front row of formation`,
     `<span style="color:var(--red)">Ranged:</span> can hit from any row of formation`,
-    `<span style="color:var(--red)">Twohand:</span> takes up both hands, and in exchange it usually does more damage and has more effective affixes`,
+    `<span style="color:var(--red)">TwoHand:</span> takes up both hands, and in exchange it usually does more damage and has more effective affixes`,
   ],
   WHO: [
     `This feature is still in development.`,
