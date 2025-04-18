@@ -8,6 +8,9 @@ import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
 import lookExamine from "./lookExamine.js";
+import { directions } from "../constants/DIRECTIONS.js";
+import getRoomByLocation from "../util/getRoomByLocation.js";
+import matchExitFrom from "../util/matchExitFrom.js";
 async function editRoom(room, roomData, user) {
     try {
         const zone = await getZoneOfUser(user);
@@ -51,39 +54,33 @@ async function editRoom(room, roomData, user) {
                 fromZoneId: zone._id,
             });
         });
-        // // Find which exits have different properties after edit
-        // const changedExits: Direction[] = (directions as Direction[]).filter(
-        //   (direction: Direction) => {
-        //     const oldExit = room.exits[direction];
-        //     const newExit = roomData.exits[direction];
-        //     if (oldExit && newExit) {
-        //       return (
-        //         oldExit.hiddenByDefault !== newExit.hiddenByDefault ||
-        //         oldExit.closedByDefault !== newExit.closedByDefault ||
-        //         oldExit.keyItemBlueprint !== newExit.keyItemBlueprint
-        //       );
-        //     }
-        //     return false;
-        //   }
-        // );
-        // console.log("changed exits" + changedExits);
-        // changedExits.forEach(async (direction: Direction) => {
-        //   // retrieve the destination room object via getRoomByLocation
-        //   const exit = room.exits[direction];
-        //   if (!exit) {
-        //     throw new Error(`Exit ${direction} not found in room.`);
-        //   }
-        //   const location = exit.destinationLocation;
-        //   const destinationRoom = await getRoomByLocation(location);
-        //   if (!destinationRoom) {
-        //     throw new Error(
-        //       `Destination room for exit ${direction} not found in zone.`
-        //     );
-        //   }
-        //   // run matchExitFrom on the rooms to make their properties match
-        //   console.log(`matching exit from ${room.name} to ${destinationRoom.name}`);
-        //   await matchExitFrom(room, destinationRoom, direction);
-        // });
+        // Find which exits have different properties after edit
+        const changedExits = directions.filter((direction) => {
+            const oldExit = room.exits[direction];
+            const newExit = roomData.exits[direction];
+            if (oldExit && newExit) {
+                return (oldExit.hiddenByDefault !== newExit.hiddenByDefault ||
+                    oldExit.closedByDefault !== newExit.closedByDefault ||
+                    oldExit.keyItemBlueprint !== newExit.keyItemBlueprint);
+            }
+            return false;
+        });
+        console.log("changed exits" + changedExits);
+        changedExits.forEach(async (direction) => {
+            // retrieve the destination room object via getRoomByLocation
+            const exit = room.exits[direction];
+            if (!exit) {
+                throw new Error(`Exit ${direction} not found in room.`);
+            }
+            const location = exit.destinationLocation;
+            const destinationRoom = await getRoomByLocation(location);
+            if (!destinationRoom) {
+                throw new Error(`Destination room for exit ${direction} not found in zone.`);
+            }
+            // run matchExitFrom on the rooms to make their properties match
+            console.log(`matching exit from ${room.name} to ${destinationRoom.name}`);
+            await matchExitFrom(room, destinationRoom, direction);
+        });
         room.exits = roomData.exits;
         await zone.save();
         await zone.initRooms();
