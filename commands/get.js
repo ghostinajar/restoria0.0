@@ -47,7 +47,7 @@ async function get(parsedCommand, user) {
                     await relocateItem(itemToGet, room.inventory, user.inventory);
                     messageToUsername(user.username, `You got ${itemToGet.name} from the ground.`, `success`);
                 });
-                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} got some items from the ground}.`));
+                worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} got some items from the ground.`));
             }
             else {
                 //handle single object (directObjectOrdinal is an integer or unspecifed)

@@ -35,7 +35,7 @@ async function drop(parsedCommand: IParsedCommand, user: IUser) {
       let itemsToDrop = user.inventory.filter((item) =>
         item.keywords.some((keyword) => keyword.startsWith(targetKeyword))
       );
-      if (!itemsToDrop) {
+      if (!itemsToDrop || itemsToDrop.length === 0) {
         messageMissingTargetToUser(user, targetKeyword);
         return;
       }
