@@ -25,7 +25,7 @@ async function editMap(editMapData: IMapTile, user: IUser) {
       return;
     }
 
-    messageToUsername(user.name, `Map updated for this room!`);
+    messageToUsername(user.username, `Map updated for this room!`, `success`, true);
     await zone.save();
     await map({ commandWord: "map" }, user);
   } catch (error: unknown) {

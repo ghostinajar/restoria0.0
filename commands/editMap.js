@@ -18,7 +18,7 @@ async function editMap(editMapData, user) {
             console.log(`couldn't find zone for ${user.name}`);
             return;
         }
-        messageToUsername(user.name, `Map updated for this room!`);
+        messageToUsername(user.username, `Map updated for this room!`, `success`, true);
         await zone.save();
         await map({ commandWord: "map" }, user);
     }
