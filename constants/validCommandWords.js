@@ -8,6 +8,7 @@ export const validCommandWords = [
     "east",
     "edit",
     "editor",
+    "equip",
     "erase",
     "ex",
     "exit",
@@ -57,6 +58,7 @@ export const validCommandWords = [
     "up",
     "updates",
     "w",
+    "wear",
     "west",
     "who",
 ];

@@ -37,6 +37,7 @@ import inventory from "../commands/inventory.js";
 import drop from "../commands/drop.js";
 import give from "../commands/give.js";
 import put from "../commands/put.js";
+import equip from "../commands/equip.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -76,6 +77,11 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `editor`: {
         await editor(parsedCommand, user);
+        break;
+      }
+      case `wear`:
+      case `equip`: {
+        await equip(parsedCommand, user);
         break;
       }
       case `delete`: // we can't make a delete() function, so it calls erase()
