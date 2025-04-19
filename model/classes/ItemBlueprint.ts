@@ -130,15 +130,15 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     },
     mage: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     rogue: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     warrior: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     moon: {
       type: Boolean,
@@ -146,11 +146,11 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     },
     neutral: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     sun: {
       type: Boolean,
-      default: false,
+      default: true,
     }, 
     guild: {
       type: Boolean,
@@ -158,7 +158,7 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     },
     food: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     lamp: {
       type: Boolean,
@@ -170,7 +170,7 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     },
     fixture: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     quest: {
       type: Boolean,
@@ -182,7 +182,7 @@ const itemBlueprintSchema = new Schema<IItemBlueprint>({
     },
     container: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   keywords: [String],

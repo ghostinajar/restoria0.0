@@ -38,6 +38,7 @@ import drop from "../commands/drop.js";
 import give from "../commands/give.js";
 import put from "../commands/put.js";
 import equip from "../commands/equip.js";
+import wear from "../commands/wear.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -67,7 +68,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await create(parsedCommand, user);
         break;
       }
-      case `drop` : {
+      case `drop`: {
         await drop(parsedCommand, user);
         break;
       }
@@ -79,7 +80,6 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await editor(parsedCommand, user);
         break;
       }
-      case `wear`:
       case `equip`: {
         await equip(parsedCommand, user);
         break;
@@ -211,6 +211,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       }
       case `updates`: {
         await updates(parsedCommand, user);
+        break;
+      }
+      case `wear`: {
+        await wear(parsedCommand, user);
         break;
       }
       case `who`: {

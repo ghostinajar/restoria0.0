@@ -169,7 +169,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
     function failToFindContainer(username: string, itemName: string) {
       messageToUsername(
         username,
-        `You can't seem to find the ${specifiedContainerKeyword} to get it from.`,
+        `You can't seem to find the ${itemName} to get it from.`,
         `help`
       );
     }

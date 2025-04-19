@@ -16,4 +16,7 @@ const WEARABLE_LOCATION = {
     WRIST2: 'wrist2',
 };
 
+export type WEARABLE_LOCATION = typeof WEARABLE_LOCATION[keyof typeof WEARABLE_LOCATION];
+export const WEARABLE_LOCATION_VALUES = Object.values(WEARABLE_LOCATION);
+
 export default WEARABLE_LOCATION;

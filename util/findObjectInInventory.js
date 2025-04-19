@@ -1,7 +1,7 @@
 // findObjectInInventory
 // utility function to find IItem object by keyword from any inventory (an array of IItem ojects), returns the object or undefined
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
-async function findObjectInInventory(inventory, objectKeyword, objectOrdinal) {
+function findObjectInInventory(inventory, objectKeyword, objectOrdinal) {
     try {
         // find eligible matches
         const filteredInventory = inventory.filter((item) => item.keywords.some((keyword) => keyword.toLowerCase().startsWith(objectKeyword)));

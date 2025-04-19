@@ -84,7 +84,7 @@ async function get(parsedCommand, user) {
         }
         // fail if container not found anywhere
         function failToFindContainer(username, itemName) {
-            messageToUsername(username, `You can't seem to find the ${specifiedContainerKeyword} to get it from.`, `help`);
+            messageToUsername(username, `You can't seem to find the ${itemName} to get it from.`, `help`);
         }
         if (!userInventoryHasEligibleContainers &&
             !roomInventoryHasEligibleContainers &&

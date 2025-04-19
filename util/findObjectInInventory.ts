@@ -4,11 +4,11 @@
 import { IItem } from "../model/classes/Item.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 
-async function findObjectInInventory(
+function findObjectInInventory(
   inventory: IItem[],
   objectKeyword: string,
-  objectOrdinal?: number | "all"
-): Promise<IItem | undefined> {
+  objectOrdinal?: number | "all" | undefined
+): IItem | undefined {
   try {
     // find eligible matches
     const filteredInventory = inventory.filter((item) =>

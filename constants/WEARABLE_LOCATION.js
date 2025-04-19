@@ -15,4 +15,5 @@ const WEARABLE_LOCATION = {
     WRIST1: 'wrist1',
     WRIST2: 'wrist2',
 };
+export const WEARABLE_LOCATION_VALUES = Object.values(WEARABLE_LOCATION);
 export default WEARABLE_LOCATION;
