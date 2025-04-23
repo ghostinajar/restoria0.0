@@ -1,22 +1,40 @@
 const WEARABLE_LOCATION = {
-    ARMS: 'arms',
-    BODY: 'body',
-    EARS: 'ears',
-    FEET: 'feet',
-    FINGER1: 'finger1',
-    FINGER2: 'finger2',
-    HANDS: 'hands',
-    HEAD: 'head',
-    LEGS: 'legs',
-    NECK: 'neck',
-    SHIELD: 'shield',
-    SHOULDERS: 'shoulders',
-    WAIST: 'waist',
-    WRIST1: 'wrist1',
-    WRIST2: 'wrist2',
+  ARMS: "arms",
+  BODY: "body",
+  EARS: "ears",
+  FEET: "feet",
+  FINGER1: "finger1",
+  FINGER2: "finger2",
+  HANDS: "hands",
+  HEAD: "head",
+  LEGS: "legs",
+  NECK: "neck",
+  SHIELD: "shield",
+  SHOULDERS: "shoulders",
+  WAIST: "waist",
+  WRIST1: "wrist1",
+  WRIST2: "wrist2",
 };
 
-export type WEARABLE_LOCATION = typeof WEARABLE_LOCATION[keyof typeof WEARABLE_LOCATION];
+export type WEARABLE_LOCATION =
+  (typeof WEARABLE_LOCATION)[keyof typeof WEARABLE_LOCATION];
 export const WEARABLE_LOCATION_VALUES = Object.values(WEARABLE_LOCATION);
+export const DEFAULT_WEARABLE_LOCATIONS = {
+  head: false,
+  ears: false,
+  neck: false,
+  shoulders: false,
+  body: false,
+  arms: false,
+  wrist1: false,
+  wrist2: false,
+  hands: true,
+  finger1: false,
+  finger2: false,
+  waist: false,
+  legs: false,
+  feet: false,
+  shield: false,
+};
 
 export default WEARABLE_LOCATION;

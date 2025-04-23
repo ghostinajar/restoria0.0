@@ -11,6 +11,8 @@ import { IAffix } from "../model/classes/Affix.js";
 import { IItemNode } from "../model/classes/ItemNode.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import messageToUsername from "../util/messageToUsername.js";
+import { DEFAULT_WEARABLE_LOCATIONS } from "../constants/WEARABLE_LOCATION.js";
 
 export interface IEditItemBlueprintFormData {
   _id: mongoose.Types.ObjectId;
@@ -47,10 +49,10 @@ export interface IEditItemBlueprintFormData {
     warrior: boolean;
     moon: boolean;
     neutral: boolean;
-    sun: boolean; 
+    sun: boolean;
     guild: boolean;
     food: boolean;
-    lamp: boolean; 
+    lamp: boolean;
     hidden: boolean;
     fixture: boolean;
     quest: boolean;
@@ -160,7 +162,23 @@ async function editItemBlueprint(
     item.description = formData.description;
     item.tags = formData.tags;
     if (formData.itemType === "armor" && formData.wearableLocations) {
-      item.wearableLocations = formData.wearableLocations;
+      if (
+        Object.values(formData.wearableLocations).some((location) => location)
+      ) {
+        item.wearableLocations = formData.wearableLocations;
+      } else {
+        item.wearableLocations = DEFAULT_WEARABLE_LOCATIONS;
+        messageToUsername(
+          user.username,
+          `Since ${item.name} is armor, it has to be wearable somewhere.`,
+          `info`
+        );
+        messageToUsername(
+          user.username,
+          `For now, we'll make it wearable on the hands.`,
+          `info`
+        );
+      }
     }
     item.history.modifiedDate = new Date();
 

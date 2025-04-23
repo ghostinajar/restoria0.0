@@ -43,10 +43,12 @@ import wear from "../commands/wear.js";
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
     switch (parsedCommand.commandWord) {
+      // A commands ******************** (and aliases for them)
       case `autoexamine`: {
         await autoExamine(parsedCommand, user);
         break;
       }
+      // B commands ******************** (and aliases for them)
       case `bug`: {
         help(
           {
@@ -64,14 +66,17 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await bugs(user);
         break;
       }
+      // C commands ******************** (and aliases for them)
       case `create`: {
         await create(parsedCommand, user);
         break;
       }
+      // D commands ******************** (and aliases for them)
       case `drop`: {
         await drop(parsedCommand, user);
         break;
       }
+      // E commands ******************** (and aliases for them)
       case `edit`: {
         await edit(parsedCommand, user);
         break;
@@ -80,12 +85,15 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await editor(parsedCommand, user);
         break;
       }
-      case `equip`: {
+      case `equip`:
+      case `wear`:
+      case `wield`: {
         await equip(parsedCommand, user);
         break;
       }
-      case `delete`: // we can't make a delete() function, so it calls erase()
-      case `erase`: {
+      case `erase`:
+      case `delete`: {
+        // we can't make a delete() function, so it calls erase()
         await erase(parsedCommand, user);
         break;
       }
@@ -95,13 +103,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await exits(user);
         break;
       }
-      case `exa`:
-      case `examine`:
-      case `l`:
-      case `look`: {
-        await lookExamine(parsedCommand, user);
-        break;
-      }
+      // G commands ******************** (and aliases for them)
       case `get`: {
         await get(parsedCommand, user);
         break;
@@ -114,16 +116,27 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await goto(user);
         break;
       }
+      // H commands ******************** (and aliases for them)
       case `help`: {
         help(parsedCommand, user);
         break;
       }
+      // I commands ******************** (and aliases for them)
       case `i`:
       case `inv`:
       case `inventory`: {
         await inventory(user);
         break;
       }
+      // L commands ******************** (and aliases for them)
+      case `look`:
+      case `exa`:
+      case `examine`:
+      case `l`: {
+        await lookExamine(parsedCommand, user);
+        break;
+      }
+      // M commands ******************** (and aliases for them)
       case `map`: {
         await map(parsedCommand, user);
         break;
@@ -143,6 +156,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await move(parsedCommand, user);
         break;
       }
+      // P commands ******************** (and aliases for them)
       case `password`: {
         await password(parsedCommand, user);
         break;
@@ -151,10 +165,12 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await put(parsedCommand, user);
         break;
       }
+      // Q commands ******************** (and aliases for them)
       case `quit`: {
         await quit(user);
         break;
       }
+      // R commands ******************** (and aliases for them)
       case `recall`: {
         await recall(user);
         break;
@@ -164,6 +180,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await roomSummary(user);
         break;
       }
+      // S commands ******************** (and aliases for them)
       case `save`: {
         save(user);
         break;
@@ -202,6 +219,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await suggestions(user);
         break;
       }
+      // T commands ******************** (and aliases for them)
       case `t`:
       case `tel`:
       case `telepath`:
@@ -209,14 +227,12 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await telepath(parsedCommand, user);
         break;
       }
+      // U commands ******************** (and aliases for them)
       case `updates`: {
         await updates(parsedCommand, user);
         break;
       }
-      case `wear`: {
-        await wear(parsedCommand, user);
-        break;
-      }
+      // W commands ******************** (and aliases for them)
       case `who`: {
         await who(user);
         break;

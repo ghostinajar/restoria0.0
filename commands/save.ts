@@ -5,7 +5,7 @@ import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
 
-const SAVE_COOLDOWN = 10000; // 10 seconds in milliseconds
+const SAVE_COOLDOWN = 1; // 1 seconds in milliseconds
 const lastSaveTimes = new Map<string, number>();
 
 async function save(user: IUser, silent: boolean = false) {
@@ -21,7 +21,7 @@ async function save(user: IUser, silent: boolean = false) {
       if (!silent) {
         messageToUsername(
           user.username,
-          `Please wait ${remainingTime} seconds before using SAVE again.`,
+          `We can only save your character once per second. Try SAVE again now.`,
           "warning",
           true
         );

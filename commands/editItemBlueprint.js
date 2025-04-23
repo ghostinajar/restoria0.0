@@ -8,6 +8,8 @@ import getZoneOfUser from "../util/getZoneofUser.js";
 import truncateDescription from "../util/truncateDescription.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
+import messageToUsername from "../util/messageToUsername.js";
+import { DEFAULT_WEARABLE_LOCATIONS } from "../constants/WEARABLE_LOCATION.js";
 async function editItemBlueprint(formData, user) {
     try {
         //get existing item data
@@ -49,7 +51,14 @@ async function editItemBlueprint(formData, user) {
         item.description = formData.description;
         item.tags = formData.tags;
         if (formData.itemType === "armor" && formData.wearableLocations) {
-            item.wearableLocations = formData.wearableLocations;
+            if (Object.values(formData.wearableLocations).some((location) => location)) {
+                item.wearableLocations = formData.wearableLocations;
+            }
+            else {
+                item.wearableLocations = DEFAULT_WEARABLE_LOCATIONS;
+                messageToUsername(user.username, `Since ${item.name} is armor, it has to be wearable somewhere.`, `info`);
+                messageToUsername(user.username, `For now, we'll make it wearable on the hands.`, `info`);
+            }
         }
         item.history.modifiedDate = new Date();
         if (formData.tags.container && (item.capacity === 0 || !item.capacity)) {

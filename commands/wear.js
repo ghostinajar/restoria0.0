@@ -2,31 +2,15 @@
 // user can WEAR an armor-type item to an appropriate slot
 import WEARABLE_LOCATION, { WEARABLE_LOCATION_VALUES, } from "../constants/WEARABLE_LOCATION.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import findObjectInInventory from "../util/findObjectInInventory.js";
 import messageToUsername from "../util/messageToUsername.js";
-async function wear(parsedCommand, user) {
+import save from "./save.js";
+import unequip from "./unequip.js";
+async function wear(item, user, location) {
     try {
-        // Fail if user doesn't have the item in their inventory
-        const targetKeyword = parsedCommand.directObject;
-        if (!targetKeyword) {
-            throw new Error("No target keyword provided.");
-        }
-        const item = findObjectInInventory(user.inventory, targetKeyword, parsedCommand.directObjectOrdinal);
-        if (!item) {
-            messageToUsername(user.username, `You don't have the ${targetKeyword} in your inventory.`, `rejection`);
-            return;
-        }
-        console.log(`item found! ${item.name}`);
-        // Fail if item is not armor
-        if (item.itemType !== "armor") {
-            messageToUsername(user.username, `${item.name} wasn't made to be worn.`, `rejection`);
-            return;
-        }
-        console.log(`${item.name} is armor!`);
-        // Fail if item has no wearable locations
+        // Fail if armor has no wearable locations
         if (!item.wearableLocations ||
             !Object.values(item.wearableLocations).some(Boolean)) {
-            messageToUsername(user.username, `${item.name} wasn't designed with any wearable location.`, `rejection`);
+            messageToUsername(user.username, `The author of ${item.name} needs to add wearable locations.`, `rejection`);
             return;
         }
         // make an array and push the keys of the item.wearableLocations object into it if the value of that key is true
@@ -42,49 +26,76 @@ async function wear(parsedCommand, user) {
         }
         console.log(`user and item are compatible!`);
         // Fail if indirect object is provided in parsedCommand but isn't a valid wearable location
-        if (parsedCommand.indirectObject &&
-            !WEARABLE_LOCATION_VALUES.some((location) => location.startsWith(parsedCommand.indirectObject))) {
-            messageToUsername(user.username, `${parsedCommand.indirectObject} isn't a place you can wear something.`, `help`);
+        const fingerAndWristAbbrevs = ["f1", "f2", "w1", "w2"];
+        if (location &&
+            !WEARABLE_LOCATION_VALUES.some((l) => l.startsWith(location)) &&
+            !fingerAndWristAbbrevs.includes(location)) {
+            messageToUsername(user.username, `${location} isn't a place you can wear something.`, `help`);
             messageToUsername(user.username, `Read HELP EQUIP to find out more.`, `rejection`);
             return;
         }
         console.log(`indirect object is valid!`);
         // handle abbreviations of WEARABLE_LOCATION_VALUES
         let expandedLocation;
-        if (parsedCommand.indirectObject === "f1") {
+        if (location === "f1") {
             expandedLocation = WEARABLE_LOCATION.FINGER1;
         }
-        if (parsedCommand.indirectObject === "f2") {
+        if (location === "f2") {
             expandedLocation = WEARABLE_LOCATION.FINGER2;
         }
-        if (parsedCommand.indirectObject === "w1") {
+        if (location === "w1") {
             expandedLocation = WEARABLE_LOCATION.WRIST1;
         }
-        if (parsedCommand.indirectObject === "w2") {
+        if (location === "w2") {
             expandedLocation = WEARABLE_LOCATION.WRIST2;
         }
-        if (parsedCommand.indirectObject &&
-            WEARABLE_LOCATION_VALUES.some((location) => location.startsWith(parsedCommand.indirectObject))) {
-            expandedLocation = WEARABLE_LOCATION_VALUES.find((location) => location.startsWith(parsedCommand.indirectObject));
+        if (location &&
+            WEARABLE_LOCATION_VALUES.some((l) => l.startsWith(location))) {
+            expandedLocation = WEARABLE_LOCATION_VALUES.find((l) => l.startsWith(location));
         }
         console.log(`specified location (expanded): ${expandedLocation}`);
         // Fail if user provided a valid location, but the item doesn't fit there
         if (expandedLocation &&
             !locationsItemIsWearable.some((location) => location === expandedLocation)) {
-            messageToUsername(user.username, `Sadly, ${item.name} isn't meant to be worn there.`, `rejection`);
+            messageToUsername(user.username, `You can't fit ${item.name} on your ${expandedLocation}.`, `rejection`);
+            messageToUsername(user.username, `Try WEAR ${item.name} ${locationsItemIsWearable[0]}.`, `rejection`);
             return;
         }
-        //for each property in user.equipped, if the value is null, push the key into locationsUserHasEmpty as a string
+        // for each property in user.equipped, if the value is null (nothing is worn there), push the key into locationsUserHasEmpty as a string
         const locationsUserHasEmpty = WEARABLE_LOCATION_VALUES.filter((location) => !user.equipped[location]);
         console.log(`user has empty locations:`);
         console.log(locationsUserHasEmpty);
-        // Assign a value to expandedLocation if it wasn't provided in the command
-        if (!expandedLocation) {
-            expandedLocation = locationsItemIsWearable[0];
-            console.log(`expanded location auto-assigned: ${expandedLocation}`);
+        // if the user has specified an empty location, go ahead and equip the item there
+        if (expandedLocation && locationsUserHasEmpty.includes(expandedLocation)) {
+            moveItemToEquippedOnUser(user, item, expandedLocation);
+            return;
         }
-        // If the slot is already occupied, unequip the item and return it to the inventory
-        // Equip the item to the appropriate slot and remove it from inventory
+        // make a list of slots that are both empty and compatible
+        const compatibleAndEmptyLocationsOnUser = locationsUserHasEmpty.filter((location) => locationsItemIsWearable.includes(location));
+        console.log(`user has empty and compatible locations:`);
+        console.log(compatibleAndEmptyLocationsOnUser);
+        // if an empty && compatible slot exists, equip the item there
+        if (compatibleAndEmptyLocationsOnUser.length > 0) {
+            expandedLocation = compatibleAndEmptyLocationsOnUser[0];
+            console.log(`user wanted ${item.name} on empty ${expandedLocation}, equipping...`);
+            moveItemToEquippedOnUser(user, item, expandedLocation);
+            return;
+        }
+        // at this point we've handled empty slots (either specified or not)
+        // now we handle slots that are already occupied by items
+        let locationToTry = expandedLocation || locationsItemIsWearable[0];
+        console.log(`user wants ${item.name} on occupied ${locationToTry} slot...`);
+        if (!locationToTry) {
+            throw new Error(`Couldn't find locationToTry for ${item.name}.`);
+        }
+        const itemInSlot = user.equipped[locationToTry];
+        if (!itemInSlot) {
+            throw new Error(`Couldn't find itemInSlot for ${user.name}.`);
+        }
+        console.log(`item in slot: ${itemInSlot?.name} (${itemInSlot?._id}), unequipping...`);
+        unequip({ commandWord: "unequip" }, user, itemInSlot, locationToTry);
+        moveItemToEquippedOnUser(user, item, locationToTry);
+        save(user, true);
     }
     catch (error) {
         catchErrorHandlerForFunction(`wear`, error, user?.name);
@@ -127,5 +138,12 @@ function checkItemCompatibilityWithUser(user, item) {
         catchErrorHandlerForFunction(`checkItemCompatibilityWithUser`, error, user?.name);
         return false;
     }
+}
+// moves an item from inventory to an empty slot on character.equipped
+function moveItemToEquippedOnUser(user, item, location) {
+    user.equipped[location] = item;
+    user.inventory = user.inventory.filter((i) => i._id !== item._id);
+    messageToUsername(user.username, `You equipped ${item.name}.`, `itemIsHere`);
+    console.log(`${user.name}'s ${location} now holds ${user.equipped[location]?.name} (${item._id})`);
 }
 export default wear;

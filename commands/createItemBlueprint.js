@@ -13,6 +13,7 @@ import { historyStartingNow } from "../model/classes/History.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import putNumberInRange from "../util/putNumberInRange.js";
 import lookExamine from "./lookExamine.js";
+import { DEFAULT_WEARABLE_LOCATIONS } from "../constants/WEARABLE_LOCATION.js";
 async function createItemBlueprint(itemFormData, user) {
     try {
         // logger.debug(`Trying to create item blueprint ${itemFormData.name}.`);
@@ -47,23 +48,7 @@ async function createItemBlueprint(itemFormData, user) {
             newItemBlueprint.capacity = 10;
         }
         if (itemFormData.itemType === ITEM_TYPE.ARMOR) {
-            newItemBlueprint.wearableLocations = {
-                head: false,
-                ears: false,
-                neck: false,
-                shoulders: false,
-                body: false,
-                arms: false,
-                wrist1: false,
-                wrist2: false,
-                hands: false,
-                finger1: false,
-                finger2: false,
-                waist: false,
-                legs: false,
-                feet: false,
-                shield: false,
-            };
+            newItemBlueprint.wearableLocations = DEFAULT_WEARABLE_LOCATIONS;
         }
         if (itemFormData.itemType === ITEM_TYPE.POTION ||
             itemFormData.itemType === ITEM_TYPE.SCROLL ||

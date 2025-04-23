@@ -8,6 +8,7 @@ import findObjectInInventory from "../util/findObjectInInventory.js";
 import messageToUsername from "../util/messageToUsername.js";
 import { IParsedCommand } from "../util/parseCommand.js";
 import wear from "./wear.js";
+import wield from "./wield.js";
 
 async function equip(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -35,7 +36,7 @@ async function equip(parsedCommand: IParsedCommand, user: IUser) {
     if (item.itemType !== "weapon" && item.itemType !== "armor") {
       messageToUsername(
         user.username,
-        `${item.name} wasn't made to be equipped.`,
+        `Sadly, ${item.name} wasn't made to be equipped.`,
         `rejection`
       );
       return;
@@ -44,16 +45,16 @@ async function equip(parsedCommand: IParsedCommand, user: IUser) {
 
     if (item.itemType === "armor") {
       // Call wear function
-      await wear(parsedCommand, user);
-      return
+      await wear(item, user, parsedCommand.indirectObject);
+      return;
     }
 
-    // if (item.itemType === "weapon") {
-    //   // Call wear function
-    //   await wield(parsedCommand, user);
-    //   return
-    // }
-
+    if (item.itemType === "weapon") {
+      // Call wield function
+      await wield(item, user);
+      return;
+    }
+    throw new Error(`Couldn't run equip on item: ${item.name}, id: ${item._id}`);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`equip`, error, user?.name);
   }

@@ -5,6 +5,7 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import findObjectInInventory from "../util/findObjectInInventory.js";
 import messageToUsername from "../util/messageToUsername.js";
 import wear from "./wear.js";
+import wield from "./wield.js";
 async function equip(parsedCommand, user) {
     try {
         // Fail if user doesn't have the item in their inventory
@@ -20,20 +21,21 @@ async function equip(parsedCommand, user) {
         console.log(`item found! ${item.name}`);
         // Fail if item is not a weapon or armor
         if (item.itemType !== "weapon" && item.itemType !== "armor") {
-            messageToUsername(user.username, `${item.name} wasn't made to be equipped.`, `rejection`);
+            messageToUsername(user.username, `Sadly, ${item.name} wasn't made to be equipped.`, `rejection`);
             return;
         }
         console.log(`${item.name} is a weapon or armor!`);
         if (item.itemType === "armor") {
             // Call wear function
-            await wear(parsedCommand, user);
+            await wear(item, user, parsedCommand.indirectObject);
             return;
         }
-        // if (item.itemType === "weapon") {
-        //   // Call wear function
-        //   await wield(parsedCommand, user);
-        //   return
-        // }
+        if (item.itemType === "weapon") {
+            // Call wield function
+            await wield(item, user);
+            return;
+        }
+        throw new Error(`Couldn't run equip on item: ${item.name}, id: ${item._id}`);
     }
     catch (error) {
         catchErrorHandlerForFunction(`equip`, error, user?.name);
