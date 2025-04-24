@@ -151,7 +151,7 @@
         alert("Character must be exactly 1 character long");
         return;
       }
-      console.log(`char is 1 character long! ${char}`);
+      // console.log(`char is 1 character long! ${char}`);
 
       // Validate character is safe
       const unsafeCharRegex = /[<>&"'`\\\x00-\x1F\x7F]/;
@@ -160,7 +160,7 @@
         editMapCharacter.value = `·`;
         return;
       }
-      console.log(`char is safe! ${char}`);
+      // console.log(`char is safe! ${char}`);
 
       // Optional: Ensure character is visible/printable
       if (!/\S/.test(char)) {
@@ -168,7 +168,7 @@
         editMapCharacter.value = `·`;
         return;
       }
-      console.log(`char is visible! ${char}`);
+      // console.log(`char is visible! ${char}`);
 
       const editMapFormData = {
         character: char,
@@ -186,7 +186,7 @@
       });
 
     socket.on("openEditMapForm", (formData) => {
-      console.log("Opening edit map form with data:", formData);
+      // console.log("Opening edit map form with data:", formData);
       resetActiveSidebarElementTo(editMapForm);
       if (!formData.mapTile.character) {
         editMapCharacter.value = `·`;

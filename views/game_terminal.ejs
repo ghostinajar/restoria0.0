@@ -69,14 +69,14 @@
       });
 
       socket.on("userPreference", (preference) => {
-        console.log(`received userPreference:`, preference);
+        // console.log(`received userPreference:`, preference);
         userPreferences[preference.type] = preference.setting;
-        console.log(`userPreferences:`, userPreferences);
+        // console.log(`userPreferences:`, userPreferences);
       });
 
       socket.on(`userPreferences`, (preferences) => {
         userPreferences = preferences;
-        console.log("Updated userPreferences:", userPreferences);
+        // console.log("Updated userPreferences:", userPreferences);
       });
 
       socket.on("redirectToLogin", () => {

@@ -36,6 +36,8 @@ import drop from "../commands/drop.js";
 import give from "../commands/give.js";
 import put from "../commands/put.js";
 import equip from "../commands/equip.js";
+import unequip from "../commands/unequip.js";
+import equipped from "../commands/equipment.js";
 async function processCommand(parsedCommand, user) {
     try {
         switch (parsedCommand.commandWord) {
@@ -82,6 +84,11 @@ async function processCommand(parsedCommand, user) {
             case `wear`:
             case `wield`: {
                 await equip(parsedCommand, user);
+                break;
+            }
+            case `equipment`:
+            case `equipped`: {
+                await equipped(parsedCommand, user);
                 break;
             }
             case `erase`:
@@ -221,6 +228,11 @@ async function processCommand(parsedCommand, user) {
                 break;
             }
             // U commands ******************** (and aliases for them)
+            case `unequip`:
+            case `remove`: {
+                await unequip(parsedCommand, user);
+                break;
+            }
             case `updates`: {
                 await updates(parsedCommand, user);
                 break;

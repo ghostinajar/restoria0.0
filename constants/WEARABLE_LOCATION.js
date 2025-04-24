@@ -33,4 +33,27 @@ export const DEFAULT_WEARABLE_LOCATIONS = {
     feet: false,
     shield: false,
 };
+export function processWearableLocation(location) {
+    let processedLocation;
+    if (location) {
+        processedLocation = WEARABLE_LOCATION_VALUES.find((l) => l.startsWith(location));
+    }
+    switch (location) {
+        case "f1":
+            processedLocation = WEARABLE_LOCATION.FINGER1;
+            break;
+        case "f2":
+            processedLocation = WEARABLE_LOCATION.FINGER2;
+            break;
+        case "w1":
+            processedLocation = WEARABLE_LOCATION.WRIST2;
+            break;
+        case "w2":
+            processedLocation = WEARABLE_LOCATION.WRIST2;
+            break;
+        default:
+            break;
+    }
+    return processedLocation;
+}
 export default WEARABLE_LOCATION;

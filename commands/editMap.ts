@@ -10,18 +10,18 @@ import map from "./map.js";
 
 async function editMap(editMapData: IMapTile, user: IUser) {
   try {
-    console.log(`user ${user.name} submitted edit map with data:`);
-    console.log(editMapData);
+    // console.log(`user ${user.name} submitted edit map with data:`);
+    // console.log(editMapData);
     const room = await getRoomOfUser(user);
     if (!room) {
-      console.log(`couldn't find room for ${user.name}`);
+      // console.log(`couldn't find room for ${user.name}`);
       return;
     }
     room.mapTile = editMapData;
 
     const zone = await getZoneOfUser(user);
     if (!zone) {
-      console.log(`couldn't find zone for ${user.name}`);
+      // console.log(`couldn't find zone for ${user.name}`);
       return;
     }
 

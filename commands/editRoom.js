@@ -65,7 +65,7 @@ async function editRoom(room, roomData, user) {
             }
             return false;
         });
-        console.log("changed exits" + changedExits);
+        // console.log("changed exits" + changedExits);
         changedExits.forEach(async (direction) => {
             // retrieve the destination room object via getRoomByLocation
             const exit = room.exits[direction];
@@ -78,7 +78,7 @@ async function editRoom(room, roomData, user) {
                 throw new Error(`Destination room for exit ${direction} not found in zone.`);
             }
             // run matchExitFrom on the rooms to make their properties match
-            console.log(`matching exit from ${room.name} to ${destinationRoom.name}`);
+            // console.log(`matching exit from ${room.name} to ${destinationRoom.name}`);
             await matchExitFrom(room, destinationRoom, direction);
         });
         room.exits = roomData.exits;

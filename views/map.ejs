@@ -107,7 +107,7 @@
     const now = Date.now();
     // console.log("saveMap called at:", now, "lastMapSaveTime:", lastMapSaveTime);
     if (now - lastMapSaveTime < 5000) {
-      console.log("saveMap debounced, skipping save.");
+      // console.log("saveMap debounced, skipping save.");
       return;
     }
     lastMapSaveTime = now;
@@ -170,12 +170,12 @@
             `${mapTileCoords.join(",")},${userMapCoords[2]}`
           ];
         if (mapTileState) {
-          console.log(
-            "mapTileState found for",
-            mapTileCoords,
-            ":",
-            mapTileState.mapTile
-          );
+          // console.log(
+          //   "mapTileState found for",
+          //   mapTileCoords,
+          //   ":",
+          //   mapTileState.mapTile
+          // );
         }
         if (!mapTileState) {
           mapTileState = {
@@ -274,10 +274,10 @@
     }
 
     if (mapCache.zoneFloorName !== zoneFloorName) {
-      console.log(
-        "Received a eraseMapTile from a different zone, loading new map:",
-        zoneFloorName
-      );
+      // console.log(
+      //   "Received a eraseMapTile from a different zone, loading new map:",
+      //   zoneFloorName
+      // );
       await loadMapByName(zoneFloorName);
     }
     delete mapCache.mapTileStates[mapCoords.join(",")];

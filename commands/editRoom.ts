@@ -112,7 +112,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
         return false;
       }
     );
-    console.log("changed exits" + changedExits);
+    // console.log("changed exits" + changedExits);
 
     changedExits.forEach(async (direction: Direction) => {
       // retrieve the destination room object via getRoomByLocation
@@ -129,7 +129,7 @@ async function editRoom(room: IRoom, roomData: IEditRoomFormData, user: IUser) {
       }
 
       // run matchExitFrom on the rooms to make their properties match
-      console.log(`matching exit from ${room.name} to ${destinationRoom.name}`);
+      // console.log(`matching exit from ${room.name} to ${destinationRoom.name}`);
       await matchExitFrom(room, destinationRoom, direction);
     });
 

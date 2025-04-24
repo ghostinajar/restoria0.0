@@ -18,13 +18,13 @@ async function equip(parsedCommand, user) {
             messageToUsername(user.username, `You don't have the ${targetKeyword} in your inventory.`, `rejection`);
             return;
         }
-        console.log(`item found! ${item.name}`);
+        // console.log(`item found! ${item.name}`);
         // Fail if item is not a weapon or armor
         if (item.itemType !== "weapon" && item.itemType !== "armor") {
             messageToUsername(user.username, `Sadly, ${item.name} wasn't made to be equipped.`, `rejection`);
             return;
         }
-        console.log(`${item.name} is a weapon or armor!`);
+        // console.log(`${item.name} is a weapon or armor!`);
         if (item.itemType === "armor") {
             // Call wear function
             await wear(item, user, parsedCommand.indirectObject);

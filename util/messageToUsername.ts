@@ -1,7 +1,9 @@
 // messageToUsername
 // utility to emit message to a user by username
 
+import logger from "../logger.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
+import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 import makeMessage from "./makeMessage.js";
 
 async function messageToUsername(
@@ -24,7 +26,7 @@ async function messageToUsername(
       );
     }
   } catch (error: unknown) {
-    console.log(`Error in messageToUsername: ${error}`);
+    catchErrorHandlerForFunction(`messageToUsername`, error);
   }
 }
 

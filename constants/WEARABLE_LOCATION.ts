@@ -18,7 +18,9 @@ const WEARABLE_LOCATION = {
 
 export type WEARABLE_LOCATION =
   (typeof WEARABLE_LOCATION)[keyof typeof WEARABLE_LOCATION];
+
 export const WEARABLE_LOCATION_VALUES = Object.values(WEARABLE_LOCATION);
+
 export const DEFAULT_WEARABLE_LOCATIONS = {
   head: false,
   ears: false,
@@ -36,5 +38,34 @@ export const DEFAULT_WEARABLE_LOCATIONS = {
   feet: false,
   shield: false,
 };
+
+export function processWearableLocation(location: string | undefined) {
+  let processedLocation: string | undefined;
+
+  if (location) {
+    processedLocation = WEARABLE_LOCATION_VALUES.find((l) =>
+      l.startsWith(location)
+    );
+  }
+
+  switch (location) {
+    case "f1":
+      processedLocation = WEARABLE_LOCATION.FINGER1;
+      break;
+    case "f2":
+      processedLocation = WEARABLE_LOCATION.FINGER2;
+      break;
+    case "w1":
+      processedLocation = WEARABLE_LOCATION.WRIST2;
+      break;
+    case "w2":
+      processedLocation = WEARABLE_LOCATION.WRIST2;
+      break;
+    default:
+      break;
+  }
+
+  return processedLocation;
+}
 
 export default WEARABLE_LOCATION;
