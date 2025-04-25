@@ -10,8 +10,9 @@ import { IParsedCommand } from "../util/parseCommand.js";
 
 async function equipment(parsedCommand: IParsedCommand, user: IUser) {
   try {
+    let eqAndWeapons = [...WEARABLE_LOCATION_VALUES, "weapon1", "weapon2"];
     let equipmentArray: Array<[string, string]> = [];
-    WEARABLE_LOCATION_VALUES.forEach((location) => {
+    eqAndWeapons.forEach((location) => {
       let itemInSlot = user.equipped[location as keyof IUser["equipped"]];
       let arrayItem: [string, string];
       if (itemInSlot) {
@@ -24,7 +25,6 @@ async function equipment(parsedCommand: IParsedCommand, user: IUser) {
       }
       equipmentArray.push(arrayItem);
     });
-    console.log(equipmentArray);
     messageToUsername(user.username, `You're equipped with:`, `success`);
     worldEmitter.emit(`equipmentArrayFor${user.username}`, equipmentArray);
   } catch (error: unknown) {

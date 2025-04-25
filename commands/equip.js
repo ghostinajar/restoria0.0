@@ -2,6 +2,7 @@
 // user can EQUIP an item to an appropriate slot
 // this command switches on item type to call WEAR (for armor) or WIELD (for weapon)
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import checkItemCompatibilityWithUser from "../util/checkItemCompatibilityWithUser.js";
 import findObjectInInventory from "../util/findObjectInInventory.js";
 import messageToUsername from "../util/messageToUsername.js";
 import wear from "./wear.js";
@@ -11,7 +12,8 @@ async function equip(parsedCommand, user) {
         // Fail if user doesn't have the item in their inventory
         const targetKeyword = parsedCommand.directObject;
         if (!targetKeyword) {
-            throw new Error("No target keyword provided.");
+            messageToUsername(user.username, `${parsedCommand.commandWord} what?`, `rejection`);
+            return;
         }
         const item = findObjectInInventory(user.inventory, targetKeyword, parsedCommand.directObjectOrdinal);
         if (!item) {
@@ -25,6 +27,12 @@ async function equip(parsedCommand, user) {
             return;
         }
         // console.log(`${item.name} is a weapon or armor!`);
+        // Fail if user and item aren't compatible (e.g. level, job, spirit)
+        if (!checkItemCompatibilityWithUser(user, item)) {
+            // NB checkItemCompatibilityWithUser already notified the user
+            return;
+        }
+        // console.log(`user and item are compatible!`);
         if (item.itemType === "armor") {
             // Call wear function
             await wear(item, user, parsedCommand.indirectObject);

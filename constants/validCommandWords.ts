@@ -8,6 +8,7 @@ export const validCommandWords = [
   "east",
   "edit",
   "editor",
+  "eq",
   "equip",
   "equipment",
   "equipped",
@@ -64,6 +65,7 @@ export const validCommandWords = [
   "w",
   "wear",
   "west",
+  "wield",
   "who",
 ];
 export const commandsWith1Param = [
@@ -189,6 +191,7 @@ export const commandsWith2Params = [
   "unequip",
   "use",
   "wear",
+  "wield",
 ];
 
 export default validCommandWords;

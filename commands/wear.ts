@@ -41,13 +41,6 @@ async function wear(item: IItem, user: IUser, location?: string) {
     // console.log(`item is wearable! locations:`);
     // console.log(locationsItemIsWearable);
 
-    // Fail if user and item aren't compatible (e.g. level, job, spirit)
-    if (!checkItemCompatibilityWithUser(user, item)) {
-      // NB checkItemCompatibilityWithUser already notified the user
-      return;
-    }
-    // console.log(`user and item are compatible!`);
-
     // Fail if indirect object is provided in parsedCommand but isn't a valid wearable location
     let requestedLocation = processWearableLocation(location);
     if (location && !requestedLocation) {
@@ -144,88 +137,14 @@ async function wear(item: IItem, user: IUser, location?: string) {
     unequip({ commandWord: "unequip" }, user, itemInSlot, locationToTry);
     moveItemToEquippedOnUser(user, item, locationToTry);
 
-    save(user, true);
+    await save(user, true);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`wear`, error, user?.name);
   }
 }
 
-// returns true if the item's level, job and spirit requirements are met by the user
-function checkItemCompatibilityWithUser(user: IUser, item: IItem): boolean {
-  try {
-    // fail if user's level isn't high enough
-    if (user.level < item.minimumLevel) {
-      messageToUsername(
-        user.username,
-        `You need to be at least level ${item.minimumLevel} to use this item.`,
-        `rejection`,
-        true
-      );
-      return false;
-    }
-
-    // fail if user's job isn't compatible with the item
-    if (
-      (user.job === "cleric" && !item.tags.cleric) ||
-      (user.job === "mage" && !item.tags.mage) ||
-      (user.job === "rogue" && !item.tags.rogue) ||
-      (user.job === "warrior" && !item.tags.warrior)
-    ) {
-      messageToUsername(
-        user.username,
-        `Sadly, ${item.name} can't be worn by ${user.job}s.`,
-        `rejection`,
-        false
-      );
-      return false;
-    }
-
-    // fail if the users's spirit is incompatible with the item
-    if (user.statBlock.spirit > -333 && !item.tags.moon) {
-      messageToUsername(
-        user.username,
-        `Your spirit is too moon-aligned to wear ${item.name}.`,
-        `rejection`,
-        false
-      );
-      return false;
-    }
-    if (
-      user.statBlock.spirit > -333 &&
-      user.statBlock.spirit < 333 &&
-      !item.tags.neutral
-    ) {
-      messageToUsername(
-        user.username,
-        `Your spirit is too neutral to wear ${item.name}.`,
-        `rejection`,
-        false
-      );
-      return false;
-    }
-    if (user.statBlock.spirit > 333 && !item.tags.sun) {
-      messageToUsername(
-        user.username,
-        `Your spirit is too sun-aligned to wear ${item.name}.`,
-        `rejection`,
-        false
-      );
-      return false;
-    }
-
-    return true;
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(
-      `checkItemCompatibilityWithUser`,
-      error,
-      user?.name
-    );
-    return false;
-  }
-}
-
 // moves an item from inventory to an empty slot on character.equipped
-function moveItemToEquippedOnUser(user: IUser, item: IItem, location: string) {
+export function moveItemToEquippedOnUser(user: IUser, item: IItem, location: string) {
   user.equipped[location as keyof IEquipped] = item;
   user.inventory = user.inventory.filter((i) => i._id !== item._id);
   messageToUsername(user.username, `You equipped ${item.name}.`, `itemIsHere`);

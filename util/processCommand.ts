@@ -93,7 +93,8 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `equipment`:
-      case `equipped`: {
+      case `equipped`:
+      case `eq`: {
         await equipped(parsedCommand, user);
         break;
       }
@@ -188,7 +189,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
       }
       // S commands ******************** (and aliases for them)
       case `save`: {
-        save(user);
+        await save(user);
         break;
       }
       case `say`: {

@@ -270,7 +270,7 @@ const HELP = {
     ],
     LIGHT: [
         `${padStringToLength79(`LIGHT`)}`,
-        `LIGHT can be an ambiguous word. In Restoria, a LIGHT weapon can be thrown or wielded in the off-hand. An item that can illuminate a dark room is a LAMP.`,
+        `LIGHT can be an ambiguous word. In Restoria, a LIGHT weapon can be thrown or dualwielded. An item that can illuminate a dark room is a LAMP.`,
     ],
     LOOK_COMMAND: [
         `${padStringToLength79(`LOOK COMMAND`)}`,
@@ -394,7 +394,7 @@ const HELP = {
         `Users and Mobs can WIELD a weapon to equip it for combat.`,
         `<span style="color:var(--red)">Damage:</span>The first number determines how many dice are rolled. The second is how many sides per die (ie the max roll per die). e.g. 3d4 Bludgeoning deals between 3-12 bludgeoning damage per hit.`,
         `<span style="color:var(--red)">Finesse:</span> uses dexterity to determine damage bonus (instead of strength)`,
-        `<span style="color:var(--red)">Light:</span> can be thrown or wielded in off-hand`,
+        `<span style="color:var(--red)">Light:</span> can be thrown or dualwielded`,
         `<span style="color:var(--red)">Reach:</span> can hit from middle or front row of formation`,
         `<span style="color:var(--red)">Ranged:</span> can hit from any row of formation`,
         `<span style="color:var(--red)">TwoHand:</span> takes up both hands, and in exchange it usually does more damage and has more effective affixes`,

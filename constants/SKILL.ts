@@ -10,7 +10,7 @@ const SKILL = {
   HIDE: "hide",
   KICK: "kick",
   MEDITATE: "meditate",
-  OFFHAND: "offhand",
+  DUALWIELD: "dualwield",
   PARRY: "parry",
   PICK: "pick",
   SCAN: "scan",

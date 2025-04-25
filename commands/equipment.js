@@ -6,8 +6,9 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 import messageToUsername from "../util/messageToUsername.js";
 async function equipment(parsedCommand, user) {
     try {
+        let eqAndWeapons = [...WEARABLE_LOCATION_VALUES, "weapon1", "weapon2"];
         let equipmentArray = [];
-        WEARABLE_LOCATION_VALUES.forEach((location) => {
+        eqAndWeapons.forEach((location) => {
             let itemInSlot = user.equipped[location];
             let arrayItem;
             if (itemInSlot) {
@@ -21,7 +22,6 @@ async function equipment(parsedCommand, user) {
             }
             equipmentArray.push(arrayItem);
         });
-        console.log(equipmentArray);
         messageToUsername(user.username, `You're equipped with:`, `success`);
         worldEmitter.emit(`equipmentArrayFor${user.username}`, equipmentArray);
     }

@@ -4,6 +4,7 @@
 
 import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import checkItemCompatibilityWithUser from "../util/checkItemCompatibilityWithUser.js";
 import findObjectInInventory from "../util/findObjectInInventory.js";
 import messageToUsername from "../util/messageToUsername.js";
 import { IParsedCommand } from "../util/parseCommand.js";
@@ -15,7 +16,12 @@ async function equip(parsedCommand: IParsedCommand, user: IUser) {
     // Fail if user doesn't have the item in their inventory
     const targetKeyword = parsedCommand.directObject;
     if (!targetKeyword) {
-      throw new Error("No target keyword provided.");
+      messageToUsername(
+        user.username,
+        `${parsedCommand.commandWord} what?`,
+        `rejection`
+      );
+      return;
     }
     const item = findObjectInInventory(
       user.inventory,
@@ -43,6 +49,13 @@ async function equip(parsedCommand: IParsedCommand, user: IUser) {
     }
     // console.log(`${item.name} is a weapon or armor!`);
 
+    // Fail if user and item aren't compatible (e.g. level, job, spirit)
+    if (!checkItemCompatibilityWithUser(user, item)) {
+      // NB checkItemCompatibilityWithUser already notified the user
+      return;
+    }
+    // console.log(`user and item are compatible!`);
+
     if (item.itemType === "armor") {
       // Call wear function
       await wear(item, user, parsedCommand.indirectObject);
@@ -54,7 +67,9 @@ async function equip(parsedCommand: IParsedCommand, user: IUser) {
       await wield(item, user);
       return;
     }
-    throw new Error(`Couldn't run equip on item: ${item.name}, id: ${item._id}`);
+    throw new Error(
+      `Couldn't run equip on item: ${item.name}, id: ${item._id}`
+    );
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`equip`, error, user?.name);
   }

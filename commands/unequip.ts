@@ -89,11 +89,11 @@ async function unequip(
     // console.log(`no location specified.`);
     // Search through all equipped slots for matching item
     let itemInSlot: IItem | null = null;
-    for (const l of WEARABLE_LOCATION_VALUES) {
+    for (const l of [...WEARABLE_LOCATION_VALUES, "weapon1", "weapon2"]) {
       itemInSlot = user.equipped[l as keyof IUser["equipped"]];
       if (itemInSlot) {
         if (
-          itemInSlot.keywords.some((k) => requestedItemKeyword.startsWith(k))
+          itemInSlot.keywords.some((k) => k.startsWith(requestedItemKeyword))
         ) {
           removeItemFromSlot(user, itemInSlot, l);
           return;

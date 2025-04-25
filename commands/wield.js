@@ -1,10 +1,19 @@
 // wield
-// // user can WEILD a weapon-type item
+// // user can WEILD a weapon-type item in their WEAPON1
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
-import messageToUsername from "../util/messageToUsername.js";
+import save from "./save.js";
+import unequip from "./unequip.js";
+import { moveItemToEquippedOnUser } from "./wear.js";
 async function wield(item, user) {
     try {
-        messageToUsername(user.username, `WIELD is still in development.`);
+        // handle item currently equipped item in weapon1 slot
+        const itemInSlot = user.equipped["weapon1"];
+        if (itemInSlot) {
+            unequip({ commandWord: "unequip" }, user, itemInSlot, "weapon1");
+        }
+        // equip item and save
+        moveItemToEquippedOnUser(user, item, "weapon1");
+        await save(user, true);
     }
     catch (error) {
         catchErrorHandlerForFunction(`wield`, error, user?.name);
