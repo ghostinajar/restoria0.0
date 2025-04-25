@@ -1,7 +1,6 @@
 // unequip
 // remove an item from the user's equipped items
 
-import { remove } from "winston";
 import {
   processWearableLocation,
   WEARABLE_LOCATION_VALUES,
@@ -11,7 +10,6 @@ import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
 import { IParsedCommand } from "../util/parseCommand.js";
-import save from "./save.js";
 
 async function unequip(
   parsedCommand: IParsedCommand,
@@ -129,7 +127,6 @@ function removeItemFromSlot(user: IUser, item: IItem, location: string): void {
   //     user.equipped[location as keyof IUser["equipped"]]
   //   }`
   // );
-  save(user, true);
 }
 
 export default unequip;

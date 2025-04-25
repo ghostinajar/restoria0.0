@@ -64,6 +64,17 @@
         });
       });
 
+      socket.on("equipmentArray", (equipmentArray) => {
+        equipmentArray.forEach((arrayItem) => {
+          let itemName = arrayItem[1] === "nothing" ? { color: "grey_dark", content: arrayItem[1] } : { color: "blue_light", content: arrayItem[1] }
+          appendMulticolorStringToTerminal([
+            { color: "yellow", content: arrayItem[0] },
+            { color: "white", content: " : " },
+            itemName,
+          ]);
+        });
+      });
+
       socket.on("message", (message) => {
         appendMessageToTerminal(message);
       });

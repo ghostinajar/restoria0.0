@@ -9,6 +9,8 @@ export const validCommandWords = [
   "edit",
   "editor",
   "equip",
+  "equipment",
+  "equipped",
   "erase",
   "ex",
   "exit",

@@ -3,7 +3,6 @@
 import { processWearableLocation, WEARABLE_LOCATION_VALUES, } from "../constants/WEARABLE_LOCATION.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
-import save from "./save.js";
 async function unequip(parsedCommand, user, item, location) {
     try {
         // handle a direct server call (e.g. from within another command like EQUIP) with item and location already confirmed
@@ -82,6 +81,5 @@ function removeItemFromSlot(user, item, location) {
     //     user.equipped[location as keyof IUser["equipped"]]
     //   }`
     // );
-    save(user, true);
 }
 export default unequip;
