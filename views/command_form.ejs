@@ -132,6 +132,7 @@
         
         socket.emit("userSentCommand", DOMPurify.sanitize(input.value));
         input.value = "";
+        historyIndex = -1;
       }
     });
   });
