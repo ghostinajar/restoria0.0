@@ -75,7 +75,7 @@ async function unequip(parsedCommand, user, item, location) {
 function removeItemFromSlot(user, item, location) {
     user.inventory.push(item);
     user.equipped[location] = null;
-    messageToUsername(user.username, `You unequipped ${item.name}.`, `itemIsHere`);
+    messageToUsername(user.username, `You unequip ${item.name}.`, `itemIsHere`);
     // console.log(
     //   `${user.name}'s ${location} now holds ${
     //     user.equipped[location as keyof IUser["equipped"]]

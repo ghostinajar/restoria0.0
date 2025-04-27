@@ -89,7 +89,7 @@ async function give(parsedCommand: IParsedCommand, user: IUser) {
     await user.save();
     messageToUsername(
       user.username,
-      `You gave ${item.name} to ${recipient.name}.`,
+      `You give ${item.name} to ${recipient.name}.`,
       `success`,
       false
     );
@@ -98,7 +98,7 @@ async function give(parsedCommand: IParsedCommand, user: IUser) {
       await recipient.save();
       messageToUsername(
         recipient.username,
-        `${user.name} gave you ${item.name}.`,
+        `${user.name} gives you ${item.name}.`,
         `success`,
         false
       );

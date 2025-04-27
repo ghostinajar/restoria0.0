@@ -73,7 +73,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           await relocateItem(itemToGet, room.inventory, user.inventory);
           messageToUsername(
             user.username,
-            `You got ${itemToGet.name} from the ground.`,
+            `You get ${itemToGet.name} from the ground.`,
             `success`
           );
         });
@@ -81,7 +81,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
           `messageFor${user.username}sRoom`,
           makeMessage(
             `itemIsHere`,
-            `${user.name} got some items from the ground.`
+            `${user.name} gets some items from the ground.`
           )
         );
       } else {
@@ -99,14 +99,14 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         await relocateItem(itemToGet, room.inventory, user.inventory);
         messageToUsername(
           user.username,
-          `You got ${itemToGet.name} from the ground.`,
+          `You get ${itemToGet.name} from the ground.`,
           `success`
         );
         worldEmitter.emit(
           `messageFor${user.username}sRoom`,
           makeMessage(
             `itemIsHere`,
-            `${user.name} got ${itemToGet.name} from the ground.`
+            `${user.name} gets ${itemToGet.name} from the ground.`
           )
         );
       }
@@ -250,7 +250,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         await relocateItem(itemToGet, originInventory, user.inventory);
         messageToUsername(
           user.username,
-          `You got ${itemToGet.name} from ${originContainer.name}.`,
+          `You get ${itemToGet.name} from ${originContainer.name}.`,
           `success`
         );
       });
@@ -258,7 +258,7 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
         `messageFor${user.username}sRoom`,
         makeMessage(
           `itemIsHere`,
-          `${user.name} got some items from ${originContainer.name}.`
+          `${user.name} gets some items from ${originContainer.name}.`
         )
       );
     } else {
@@ -266,14 +266,14 @@ async function get(parsedCommand: IParsedCommand, user: IUser) {
       await relocateItem(itemToGet, originInventory, user.inventory);
       messageToUsername(
         user.username,
-        `You got ${itemToGet.name} from ${originContainer.name}.`,
+        `You get ${itemToGet.name} from ${originContainer.name}.`,
         `success`
       );
       worldEmitter.emit(
         `messageFor${user.username}sRoom`,
         makeMessage(
           `itemIsHere`,
-          `${user.name} got ${itemToGet.name} from ${originContainer.name}.`
+          `${user.name} gets ${itemToGet.name} from ${originContainer.name}.`
         )
       );
     }

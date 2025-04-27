@@ -43,7 +43,7 @@ async function drop(parsedCommand: IParsedCommand, user: IUser) {
         await relocateItem(itemToDrop, user.inventory, room.inventory);
         messageToUsername(
           user.username,
-          `You dropped ${itemToDrop.name} on the ground.`,
+          `You drop ${itemToDrop.name} on the ground.`,
           `success`
         );
       });
@@ -51,7 +51,7 @@ async function drop(parsedCommand: IParsedCommand, user: IUser) {
         `messageFor${user.username}sRoom`,
         makeMessage(
           `itemIsHere`,
-          `${user.name} dropped some items on the ground.`
+          `${user.name} drops some items on the ground.`
         )
       );
     } else {
@@ -69,14 +69,14 @@ async function drop(parsedCommand: IParsedCommand, user: IUser) {
       await relocateItem(itemToDrop, user.inventory, room.inventory);
       messageToUsername(
         user.username,
-        `You dropped ${itemToDrop.name} on the ground.`,
+        `You drop ${itemToDrop.name} on the ground.`,
         `success`
       );
       worldEmitter.emit(
         `messageFor${user.username}sRoom`,
         makeMessage(
           `itemIsHere`,
-          `${user.name} dropped ${itemToDrop.name} on the ground.`
+          `${user.name} drops ${itemToDrop.name} on the ground.`
         )
       );
     }

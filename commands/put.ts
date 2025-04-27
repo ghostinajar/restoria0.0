@@ -41,7 +41,7 @@ async function put(parsedCommand: IParsedCommand, user: IUser) {
     if (!container) {
       messageToUsername(
         user.username,
-        `You couldn't find a ${containerKeyword} to put something in.`,
+        `You can't find a ${containerKeyword} to put something in.`,
         "failure"
       );
       return;
@@ -88,7 +88,7 @@ async function put(parsedCommand: IParsedCommand, user: IUser) {
         } else {
           messageToUsername(
             user.username,
-            `You couldn't fit ${itemToPut.name} in ${container.name}.`,
+            `You can't fit ${itemToPut.name} in ${container.name}.`,
             "failure"
           );
         }

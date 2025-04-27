@@ -25,7 +25,7 @@ async function put(parsedCommand, user) {
             container = selectTargetByOrdinal(parsedCommand.indirectObjectOrdinal || 0, containerKeyword, room.inventory);
         }
         if (!container) {
-            messageToUsername(user.username, `You couldn't find a ${containerKeyword} to put something in.`, "failure");
+            messageToUsername(user.username, `You can't find a ${containerKeyword} to put something in.`, "failure");
             return;
         }
         // fail if container is full or not a container
@@ -51,7 +51,7 @@ async function put(parsedCommand, user) {
                     messageToUsername(user.username, `You put ${itemToPut.name} in ${container.name}.`, `success`);
                 }
                 else {
-                    messageToUsername(user.username, `You couldn't fit ${itemToPut.name} in ${container.name}.`, "failure");
+                    messageToUsername(user.username, `You can't fit ${itemToPut.name} in ${container.name}.`, "failure");
                 }
             });
         }

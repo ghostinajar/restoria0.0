@@ -334,7 +334,7 @@ const setupSocket = (io: any) => {
       // On connection, alert room and lookExamine
       let userArrivedMessage = makeMessage(
         `userArrived`,
-        `${user.name} entered Restoria.`
+        `${user.name} enters Restoria.`
       );
       worldEmitter.emit(`messageFor${user.username}sRoom`, userArrivedMessage);
       await lookExamine({ commandWord: `look` }, user);

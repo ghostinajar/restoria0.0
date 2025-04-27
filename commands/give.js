@@ -48,10 +48,10 @@ async function give(parsedCommand, user) {
         // relocate the item, save and notify users
         await relocateItem(item, user.inventory, recipient.inventory);
         await user.save();
-        messageToUsername(user.username, `You gave ${item.name} to ${recipient.name}.`, `success`, false);
+        messageToUsername(user.username, `You give ${item.name} to ${recipient.name}.`, `success`, false);
         if ("save" in recipient) {
             await recipient.save();
-            messageToUsername(recipient.username, `${user.name} gave you ${item.name}.`, `success`, false);
+            messageToUsername(recipient.username, `${user.name} gives you ${item.name}.`, `success`, false);
         }
     }
     catch (error) {

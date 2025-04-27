@@ -28,9 +28,9 @@ async function drop(parsedCommand, user) {
             }
             itemsToDrop.forEach(async (itemToDrop) => {
                 await relocateItem(itemToDrop, user.inventory, room.inventory);
-                messageToUsername(user.username, `You dropped ${itemToDrop.name} on the ground.`, `success`);
+                messageToUsername(user.username, `You drop ${itemToDrop.name} on the ground.`, `success`);
             });
-            worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} dropped some items on the ground.`));
+            worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} drops some items on the ground.`));
         }
         else {
             // handle single object
@@ -40,8 +40,8 @@ async function drop(parsedCommand, user) {
                 return;
             }
             await relocateItem(itemToDrop, user.inventory, room.inventory);
-            messageToUsername(user.username, `You dropped ${itemToDrop.name} on the ground.`, `success`);
-            worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} dropped ${itemToDrop.name} on the ground.`));
+            messageToUsername(user.username, `You drop ${itemToDrop.name} on the ground.`, `success`);
+            worldEmitter.emit(`messageFor${user.username}sRoom`, makeMessage(`itemIsHere`, `${user.name} drops ${itemToDrop.name} on the ground.`));
         }
         await user.save();
     }

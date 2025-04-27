@@ -119,7 +119,7 @@ function removeItemFromSlot(user: IUser, item: IItem, location: string): void {
   user.equipped[location as keyof IUser["equipped"]] = null;
   messageToUsername(
     user.username,
-    `You unequipped ${item.name}.`,
+    `You unequip ${item.name}.`,
     `itemIsHere`
   );
   // console.log(
