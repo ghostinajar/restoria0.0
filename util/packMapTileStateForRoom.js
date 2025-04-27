@@ -17,13 +17,13 @@ async function packMapTileStateForRoom(room) {
         const directions = ["north", "east", "south", "west"];
         directions.forEach((direction) => {
             if (room.exits[direction]) {
-                if (room.exits[direction].isClosed) {
+                if (room?.exits[direction]?.isClosed) {
                     mapTileState.walls[direction] = "closed";
                 }
                 else {
                     mapTileState.walls[direction] = "open";
                 }
-                if (room.exits[direction].hiddenByDefault) {
+                if (room?.exits[direction]?.hiddenByDefault) {
                     mapTileState.walls[direction] = "wall";
                 }
             }

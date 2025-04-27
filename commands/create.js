@@ -20,11 +20,15 @@ async function create(parsedCommand, user) {
             worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`));
             return;
         }
+        let creatureString = "creature";
+        if (creatureString.startsWith(target)) {
+            messageToUsername(user.username, `In Restoria, we call a creature a MOB. HELP MOB for more info.`);
+        }
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
         }
-        if (target === "item" || target === "mob" || target === "room") {
+        if (target === "item" || target === "creature" || target === "mob" || target === "room") {
             if (!userHasZoneAuthorId(zone.author.toString(), user)) {
                 return;
             }
