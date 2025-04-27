@@ -232,11 +232,20 @@ button {
   align-items: center;
   width: auto;
   margin: 0 auto;
-  padding: 0;
+}
+
+.menuItem a.button {
+  font-family: "Roboto Mono", monospace;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: var(--grey_dark);
   text-decoration: none;
+  background-color: var(--grey_light);
 }
 
 .menu {
+  padding-top: 10px;
+  text-decoration: none;
   display: flex;
   justify-content: center;
   width: 100%;
