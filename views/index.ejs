@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-  
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Restoria</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Restoria - Home</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
-
   <body>
-    <ul id="messages">
-      <h1>Restoria 0.2</h1>
-      <li><a href="/login">Play</a></li>
-      <li><a href="/register">Create a Character</a></li>
-    </ul>
+    <%- include('menu'); %>
+    <h1>Restoria 0.2</h1>
+    <h2>author the world together</h2>
+    <h3>in a text-based morpg</h3>
     <%- include('help_cheatsheet'); %>
   </body>
-
 </html>

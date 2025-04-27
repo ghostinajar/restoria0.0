@@ -8,9 +8,10 @@
   </head>
 
   <body>
+    <%- include('menu'); %>
+    <h1>Restoria 0.2</h1>
+    <h2>Log in</h2>
     <ul id="messages">
-      <h1>Restoria 0.1.0</h1>
-      <h2>Log in</h2>
       <li>
         <form action="/login/password" method="post">
           <ul>
@@ -42,7 +43,6 @@
         </form>
       </li>
       <li>Don't have an character yet? <a href="/register">Create one!</a></li>
-      <li>Or go <a href="/">home.</a></li>
     </ul>
     <%- include('help_cheatsheet'); %>
   </body>

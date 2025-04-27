@@ -8,9 +8,10 @@
   </head>
 
   <body>
+    <%- include('menu'); %>
+    <h1>Restoria 0.2</h1>
+    <h2>Register</h2>
     <ul id="messages">
-      <h1>Restoria 0.1.0</h1>
-      <h2>Register</h2>
       <% if (typeof errorMessage !== 'undefined') { %>
       <p style="color: red"><%= errorMessage %></p>
       <% } %>
@@ -27,8 +28,12 @@
                   autocomplete="name"
                   required
                 />
-                <small class="help-text">Letters only, up to 18 characters.</small>
-                <div class="invalid-feedback">Letters only, up to 18 characters.</div>
+                <small class="help-text"
+                  >Letters only, up to 18 characters.</small
+                >
+                <div class="invalid-feedback">
+                  Letters only, up to 18 characters.
+                </div>
               </div>
             </li>
             <li>
@@ -41,8 +46,14 @@
                   autocomplete="new-password"
                   required
                 />
-                <small class="help-text">Minimum 8 characters, must include uppercase, lowercase, and number.</small>
-                <div class="invalid-feedback">Minimum 8 characters, must include uppercase, lowercase, and number.</div>
+                <small class="help-text"
+                  >Minimum 8 characters, must include uppercase, lowercase, and
+                  number.</small
+                >
+                <div class="invalid-feedback">
+                  Minimum 8 characters, must include uppercase, lowercase, and
+                  number.
+                </div>
               </div>
             </li>
             <li>
@@ -69,41 +80,41 @@
           </ul>
         </form>
       </li>
-      <li>Already have a character? <a href="/login">Play!</a></li>
-      <li>Or go <a href="/">home.</a></li>
     </ul>
     <%- include('help_cheatsheet'); %>
   </body>
 </html>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector("form");
     const nameInput = document.getElementById("name");
     const passwordInput = document.getElementById("new-password");
 
     // Real-time name validation
-    nameInput.addEventListener('input', function() {
-        const isValid = /^[A-Za-z]{1,18}$/.test(this.value);
-        this.classList.toggle('is-invalid', !isValid);
+    nameInput.addEventListener("input", function () {
+      const isValid = /^[A-Za-z]{1,18}$/.test(this.value);
+      this.classList.toggle("is-invalid", !isValid);
     });
 
     // Real-time password validation
-    passwordInput.addEventListener('input', function() {
-        const isValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(this.value);
-        this.classList.toggle('is-invalid', !isValid);
+    passwordInput.addEventListener("input", function () {
+      const isValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(this.value);
+      this.classList.toggle("is-invalid", !isValid);
     });
 
     // Form submission validation
     form.addEventListener("submit", function (e) {
-        const passwordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(passwordInput.value);
-        const nameValid = /^[A-Za-z]{1,18}$/.test(nameInput.value);
+      const passwordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(
+        passwordInput.value
+      );
+      const nameValid = /^[A-Za-z]{1,18}$/.test(nameInput.value);
 
-        if (!passwordValid || !nameValid) {
-            e.preventDefault();
-            if (!nameValid) nameInput.classList.add('is-invalid');
-            if (!passwordValid) passwordInput.classList.add('is-invalid');
-        }
+      if (!passwordValid || !nameValid) {
+        e.preventDefault();
+        if (!nameValid) nameInput.classList.add("is-invalid");
+        if (!passwordValid) passwordInput.classList.add("is-invalid");
+      }
     });
-});
+  });
 </script>
