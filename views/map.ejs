@@ -209,7 +209,7 @@
         }
         // set mapTile borders based on mapTileState.walls values being "open" (no border), "wall" (single line), or "closed" (double line)
         const wallStyles = {
-          open: "none",
+          open: "1px solid transparent",
           wall: `1px solid var(--${mapTileState.mapTile.wallColor})`,
           closed: `1px dashed var(--${mapTileState.mapTile.wallColor})`,
         };
