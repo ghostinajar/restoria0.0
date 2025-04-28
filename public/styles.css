@@ -435,6 +435,7 @@ ul {
   line-height: 1;
   font-size: 1rem;
   vertical-align: top;
+  margin:1px;
 }
 
 .tabs {
