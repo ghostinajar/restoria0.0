@@ -15,7 +15,7 @@
 
   <body>
     <nav class="nav">
-      <h1>Restoria 0.1.0</h1>
+      <h1>Restoria 0.2</h1>
       <form action="/logout" method="post">
         <button id="logout" type="submit">Quit</button>
       </form>
@@ -24,7 +24,7 @@
     <!-- Messages and side forms -->
     <div id="main">
       <div id="messagesContainer">
-        <ul id="messages"></ul>
+        <ul id="messages"><li>New Player? Type HELP CHEATSHEET in the command box at the bottom to learn the basics.</li></ul>
       </div>
       <!-- Define ejs modules array -->
       <% const partials = [ 'bug_form', 'create_item_blueprint_form',
