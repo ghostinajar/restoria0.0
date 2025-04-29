@@ -12,7 +12,6 @@ import IEquipped from "../../types/Equipped.js";
 import historySchema, { IHistory } from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
-import IAgentRuntimeProps from "../../types/AgentRuntimeProps.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -50,7 +49,6 @@ export interface IUser extends mongoose.Document {
   description: IDescription;
   users: Array<mongoose.Types.ObjectId>;
   unpublishedZoneTally: number;
-  //may change when training is implemented
   trained: Array<ITrained>;
   inventory: Array<IItem>;
   capacity: number;
@@ -63,114 +61,162 @@ export interface IUser extends mongoose.Document {
     mapRadius: number;
     autoMap: boolean;
   };
-  runtimeProps?: IAgentRuntimeProps;
+  _currentHp?: number;
+  _currentMp?: number;
+  _currentMv?: number;
+  currentHp: number; // virtual
+  maxHp: number; // virtual
+  currentMp: number; // virtual
+  maxMp: number; // virtual
+  currentMv: number; // virtual
+  maxMv: number; // virtual
   comparePassword(candidatePassword: string): Promise<boolean>;
   calculateMaxHp(): number;
   calculateMaxMp(): number;
   calculateMaxMv(): number;
 }
 
-export const userSchema = new Schema<IUser>({
-  _id: Schema.Types.ObjectId,
-  username: { type: String, required: true, unique: true },
-  name: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // as a salted hash
-  salt: { type: String, required: true },
-  isAdmin: { type: Boolean, required: true, default: false },
-  author: {
-    type: Schema.Types.ObjectId,
-    default: null,
-  },
-  location: {
-    type: locationSchema,
-    required: true,
-    default: WORLD_RECALL,
-  },
-  // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
-  pronouns: { type: Number, required: true, default: 3 },
-  history: { type: historySchema, required: true },
-  hoursPlayed: { type: Number, required: true, default: 0 },
-  job: { type: String, required: true, default: "cleric" },
-  level: { type: Number, required: true, default: 1 },
-  statBlock: { type: statBlockSchema, required: true, default: () => ({}) },
-  goldHeld: { type: Number, required: true, default: 0 },
-  goldBanked: { type: Number, required: true, default: 0 },
-  trainingPoints: { type: Number, required: true, default: 0 },
-  jobLevels: {
-    type: {
-      cleric: { type: Number, required: true, default: 0 },
-      mage: { type: Number, required: true, default: 0 },
-      rogue: { type: Number, required: true, default: 0 },
-      warrior: { type: Number, required: true, default: 0 },
+export const userSchema = new Schema<IUser>(
+  {
+    _id: Schema.Types.ObjectId,
+    username: { type: String, required: true, unique: true },
+    name: { type: String, required: true, unique: true },
+    password: { type: String, required: true }, // as a salted hash
+    salt: { type: String, required: true },
+    isAdmin: { type: Boolean, required: true, default: false },
+    author: {
+      type: Schema.Types.ObjectId,
+      default: null,
     },
-    required: true,
-  },
-  description: { type: descriptionSchema, required: true, default: () => ({}) },
-  users: {
-    type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    required: true,
-    default: () => [],
-  },
-  unpublishedZoneTally: { type: Number, required: true, default: 0 },
-  trained: {
-    type: [{ name: String, level: Number }],
-    required: true,
-    default: () => [],
-  },
-  inventory: { type: [itemSchema], required: true, default: () => [] },
-  capacity: { type: Number, required: true, default: 30 },
-  storage: { type: [itemSchema], required: true, default: () => [] },
-  equipped: {
-    type: {
-      arms: { type: itemSchema, default: null },
-      body: { type: itemSchema, default: null },
-      ears: { type: itemSchema, default: null },
-      feet: { type: itemSchema, default: null },
-      finger1: { type: itemSchema, default: null },
-      finger2: { type: itemSchema, default: null },
-      hands: { type: itemSchema, default: null },
-      head: { type: itemSchema, default: null },
-      held: { type: itemSchema, default: null },
-      legs: { type: itemSchema, default: null },
-      neck: { type: itemSchema, default: null },
-      shield: { type: itemSchema, default: null },
-      shoulders: { type: itemSchema, default: null },
-      waist: { type: itemSchema, default: null },
-      wrist1: { type: itemSchema, default: null },
-      wrist2: { type: itemSchema, default: null },
-      weapon1: { type: itemSchema, default: null },
-      weapon2: { type: itemSchema, default: null },
+    location: {
+      type: locationSchema,
+      required: true,
+      default: WORLD_RECALL,
     },
-    required: true,
-  },
-  affixes: {
-    type: [{ type: affixSchema, required: true, default: () => ({}) }],
-    required: true,
-    default: () => [],
-  },
-  editor: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    default: null,
-  },
-  preferences: {
-    type: {
-      autoExamine: { type: Boolean, required: true, default: true },
-      mapRadius: { type: Number, required: true, default: 8 },
-      autoMap: { type: Boolean, required: true, default: true },
+    pronouns: { type: Number, required: true, default: 3 },
+    history: { type: historySchema, required: true },
+    hoursPlayed: { type: Number, required: true, default: 0 },
+    job: { type: String, required: true, default: "cleric" },
+    level: { type: Number, required: true, default: 1 },
+    statBlock: { type: statBlockSchema, required: true, default: () => ({}) },
+    goldHeld: { type: Number, required: true, default: 0 },
+    goldBanked: { type: Number, required: true, default: 0 },
+    trainingPoints: { type: Number, required: true, default: 0 },
+    jobLevels: {
+      type: {
+        cleric: { type: Number, required: true, default: 0 },
+        mage: { type: Number, required: true, default: 0 },
+        rogue: { type: Number, required: true, default: 0 },
+        warrior: { type: Number, required: true, default: 0 },
+      },
+      required: true,
     },
-    required: true,
-    default: () => ({ autoExamine: false, mapRadius: 8, autoMap: true, }),
+    description: {
+      type: descriptionSchema,
+      required: true,
+      default: () => ({}),
+    },
+    users: {
+      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+      required: true,
+      default: () => [],
+    },
+    unpublishedZoneTally: { type: Number, required: true, default: 0 },
+    trained: {
+      type: [{ name: String, level: Number }],
+      required: true,
+      default: () => [],
+    },
+    inventory: { type: [itemSchema], required: true, default: () => [] },
+    capacity: { type: Number, required: true, default: 30 },
+    storage: { type: [itemSchema], required: true, default: () => [] },
+    equipped: {
+      type: {
+        arms: { type: itemSchema, default: null },
+        body: { type: itemSchema, default: null },
+        ears: { type: itemSchema, default: null },
+        feet: { type: itemSchema, default: null },
+        finger1: { type: itemSchema, default: null },
+        finger2: { type: itemSchema, default: null },
+        hands: { type: itemSchema, default: null },
+        head: { type: itemSchema, default: null },
+        held: { type: itemSchema, default: null },
+        legs: { type: itemSchema, default: null },
+        neck: { type: itemSchema, default: null },
+        shield: { type: itemSchema, default: null },
+        shoulders: { type: itemSchema, default: null },
+        waist: { type: itemSchema, default: null },
+        wrist1: { type: itemSchema, default: null },
+        wrist2: { type: itemSchema, default: null },
+        weapon1: { type: itemSchema, default: null },
+        weapon2: { type: itemSchema, default: null },
+      },
+      required: true,
+    },
+    affixes: {
+      type: [{ type: affixSchema, required: true, default: () => ({}) }],
+      required: true,
+      default: () => [],
+    },
+    editor: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    preferences: {
+      type: {
+        autoExamine: { type: Boolean, required: true, default: true },
+        mapRadius: { type: Number, required: true, default: 8 },
+        autoMap: { type: Boolean, required: true, default: true },
+      },
+      required: true,
+      default: () => ({ autoExamine: false, mapRadius: 8, autoMap: true }),
+    },
+  },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
   }
+);
+
+userSchema.virtual("currentHp")
+  .get(function () {
+    return this._currentHp ?? this.calculateMaxHp();
+  })
+  .set(function (value: number) {
+    this._currentHp = value;
+  });
+
+userSchema.virtual("maxHp").get(function () {
+  return this.calculateMaxHp();
 });
 
-userSchema.pre("save", function (next) {
-  // Prevent runtimeProps from being stored in DB
-  // Temporarily store the runtimeProps to restore after saving
-  const runtimeProps = this.runtimeProps;
-  this.runtimeProps = undefined;
-  next();
-  this.runtimeProps = runtimeProps;
+userSchema.virtual("currentMp")
+  .get(function () {
+    return this._currentMp ?? this.calculateMaxMp();
+  })
+  .set(function (value: number) {
+    this._currentMp = value;
+  });
+
+userSchema.virtual("maxMp").get(function () {
+  return this.calculateMaxMp();
+});
+
+userSchema.virtual("currentMv")
+  .get(function () {
+    return this._currentMv ?? this.calculateMaxMv();
+  })
+  .set(function (value: number) {
+    this._currentMv = value;
+  });
+
+userSchema.virtual("maxMv").get(function () {
+  return this.calculateMaxMv();
 });
 
 userSchema.methods.comparePassword = async function (
@@ -238,10 +284,10 @@ userSchema.methods.calculateMaxMp = function () {
 userSchema.methods.calculateMaxMv = function () {
   try {
     let MaxMv = 10; // Base Mv
-  MaxMv += this.level * 10; // Increase by level
-  MaxMv += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
-  // TODO Add Mv from equipped items
-  return MaxMv;
+    MaxMv += this.level * 10; // Increase by level
+    MaxMv += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
+    // TODO Add Mv from equipped items
+    return MaxMv;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`User.calculateMaxMv`, error, this.name);
   }

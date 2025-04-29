@@ -4,7 +4,6 @@
 import recall from "../../commands/recall.js";
 import logger from "../../logger.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
-import initRuntimePropsForAgent from "../../util/initRuntimePropsForAgent.js";
 import User, { IUser } from "./User.js";
 import worldEmitter from "./WorldEmitter.js";
 import mongoose from "mongoose";
@@ -123,7 +122,6 @@ class UserManager {
         return null;
       }
 
-      initRuntimePropsForAgent(user);
       this.users.set(user._id.toString(), user);
       return user;
     } catch (error: unknown) {

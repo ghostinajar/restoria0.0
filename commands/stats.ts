@@ -9,7 +9,7 @@ function stats(user: IUser) {
   try {
     let statsMessage = makeMessage(
       `stats`,
-      `< ${user.runtimeProps?.currentHp}/${user.runtimeProps?.maxHp}hp ${user.runtimeProps?.currentMp}/${user.runtimeProps?.maxMp}mp ${user.runtimeProps?.currentMv}/${user.runtimeProps?.maxMv}mv >`
+      `< ${user.currentHp}/${user.maxHp}hp ${user.currentMp}/${user.maxMp}mp ${user.currentMv}/${user.maxMv}mv >`
     );
     worldEmitter.emit(`messageFor${user.username}`, statsMessage);
   } catch (error: unknown) {

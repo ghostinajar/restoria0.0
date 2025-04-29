@@ -4,7 +4,6 @@
 import recall from "../../commands/recall.js";
 import logger from "../../logger.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
-import initRuntimePropsForAgent from "../../util/initRuntimePropsForAgent.js";
 import User from "./User.js";
 import worldEmitter from "./WorldEmitter.js";
 class UserManager {
@@ -101,7 +100,6 @@ class UserManager {
                 logger.error(`userManager couldn't add user with id ${id} to users.`);
                 return null;
             }
-            initRuntimePropsForAgent(user);
             this.users.set(user._id.toString(), user);
             return user;
         }

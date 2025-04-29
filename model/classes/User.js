@@ -28,7 +28,6 @@ export const userSchema = new Schema({
         required: true,
         default: WORLD_RECALL,
     },
-    // 0 = he/him, 1 = it/it, 2 = she/her, 3 = they/them
     pronouns: { type: Number, required: true, default: 3 },
     history: { type: historySchema, required: true },
     hoursPlayed: { type: Number, required: true, default: 0 },
@@ -47,7 +46,11 @@ export const userSchema = new Schema({
         },
         required: true,
     },
-    description: { type: descriptionSchema, required: true, default: () => ({}) },
+    description: {
+        type: descriptionSchema,
+        required: true,
+        default: () => ({}),
+    },
     users: {
         type: [{ type: Schema.Types.ObjectId, ref: "User" }],
         required: true,
@@ -102,16 +105,45 @@ export const userSchema = new Schema({
             autoMap: { type: Boolean, required: true, default: true },
         },
         required: true,
-        default: () => ({ autoExamine: false, mapRadius: 8, autoMap: true, }),
-    }
+        default: () => ({ autoExamine: false, mapRadius: 8, autoMap: true }),
+    },
+}, {
+    toJSON: {
+        virtuals: true,
+    },
+    toObject: {
+        virtuals: true,
+    },
 });
-userSchema.pre("save", function (next) {
-    // Prevent runtimeProps from being stored in DB
-    // Temporarily store the runtimeProps to restore after saving
-    const runtimeProps = this.runtimeProps;
-    this.runtimeProps = undefined;
-    next();
-    this.runtimeProps = runtimeProps;
+userSchema.virtual("currentHp")
+    .get(function () {
+    return this._currentHp ?? this.calculateMaxHp();
+})
+    .set(function (value) {
+    this._currentHp = value;
+});
+userSchema.virtual("maxHp").get(function () {
+    return this.calculateMaxHp();
+});
+userSchema.virtual("currentMp")
+    .get(function () {
+    return this._currentMp ?? this.calculateMaxMp();
+})
+    .set(function (value) {
+    this._currentMp = value;
+});
+userSchema.virtual("maxMp").get(function () {
+    return this.calculateMaxMp();
+});
+userSchema.virtual("currentMv")
+    .get(function () {
+    return this._currentMv ?? this.calculateMaxMv();
+})
+    .set(function (value) {
+    this._currentMv = value;
+});
+userSchema.virtual("maxMv").get(function () {
+    return this.calculateMaxMv();
 });
 userSchema.methods.comparePassword = async function (candidatePassword) {
     try {
