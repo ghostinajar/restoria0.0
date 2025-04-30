@@ -57,17 +57,17 @@ async function map(parsedCommand: IParsedCommand, user: IUser) {
     // handle a number parameter
     if (!isNaN(Number(directObject))) {
       let newMapRadius = Number(directObject);
-      if (newMapRadius > 10) {
-        directObject = "10";
+      if (newMapRadius > 12) {
+        newMapRadius = 12;
       } else if (newMapRadius < 1) {
-        directObject = "1";
+        newMapRadius = 1;
       }
       user.preferences.mapRadius = newMapRadius;
       await save(user);
       await emitUserPreferenceToClient(user, "mapRadius", newMapRadius);
       messageToUsername(
         user.username,
-        `MAP radius set to ${newMapRadius}! It can be any number from 1-10.`,
+        `MAP radius set to ${newMapRadius}! It can be any number from 1-12.`,
         `help`
       );
     }
