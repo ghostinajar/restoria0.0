@@ -18,7 +18,7 @@ import messageToUsername from "../util/messageToUsername.js";
 async function edit(parsedCommand, user) {
     try {
         const rejectionString = `Edit what? Try EDIT ITEM, EDIT MAP, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`;
-        // fail if target not provided
+        // fail if target isn't provided
         let providedTarget = parsedCommand.directObject;
         if (!providedTarget) {
             messageToUsername(user.username, rejectionString, `help`, true);
@@ -31,6 +31,7 @@ async function edit(parsedCommand, user) {
         // fail if target is invalid
         const validTargets = [
             "character",
+            "creature",
             "item",
             "map",
             "mob",
@@ -42,7 +43,7 @@ async function edit(parsedCommand, user) {
             "zone",
         ];
         let target = expandAbbreviatedString(providedTarget, validTargets);
-        if (!target) {
+        if (!target || !validTargets.includes(target)) {
             messageToUsername(user.username, rejectionString, `help`, true);
             return;
         }
@@ -80,9 +81,6 @@ async function edit(parsedCommand, user) {
                 });
                 break;
             }
-            case `monster`:
-            case `npc`:
-                messageToUsername(user.username, `Monsters and NPCs are considered mobs in Restoria.`, `help`, true);
             case `map`: {
                 const room = await getRoomOfUser(user);
                 if (!room) {
@@ -94,6 +92,10 @@ async function edit(parsedCommand, user) {
                 });
                 break;
             }
+            case `monster`:
+            case `creature`:
+            case `npc`:
+                messageToUsername(user.username, `A ${target} is called a mob in Restoria. HELP MOB for more info.`, `help`, true);
             case `mob`: {
                 const zone = await getZoneOfUser(user);
                 if (!zone) {

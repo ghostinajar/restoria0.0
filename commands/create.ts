@@ -5,6 +5,7 @@ import { itemTypes } from "../constants/ITEM_TYPE.js";
 import { IUser } from "../model/classes/User.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import expandAbbreviatedString from "../util/expandAbbreviatedString.js";
 import getAvailableExitsForCreateExit from "../util/getAvailableExitsForCreateExit.js";
 import getAvailableExitsForCreateRoom from "../util/getAvailableExitsForCreateRoom.js";
 import getZoneOfUser from "../util/getZoneofUser.js";
@@ -18,21 +19,31 @@ import help from "./help.js";
 
 async function create(parsedCommand: IParsedCommand, user: IUser) {
   try {
-    let target = parsedCommand.directObject;
-    if (!target) {
-      worldEmitter.emit(
-        `messageFor${user.username}`,
-        makeMessage(
-          `rejection`,
-          `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`
-        )
-      );
+    const rejectionString = `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`;
+
+    // fail if target isn't provided
+    let providedTarget = parsedCommand.directObject;
+    if (!providedTarget) {
+      messageToUsername(user.username, rejectionString, `help`, true);
       return;
     }
 
-    let creatureString = "creature";
-    if (creatureString.startsWith(target)) {
-      messageToUsername(user.username, `In Restoria, we call a creature a MOB. HELP MOB for more info.`)
+    // fail if target is invalid
+    const validTargets = [
+      "creature",
+      "exit",
+      "item",
+      "mob",
+      "monster",
+      "npc",
+      "object",
+      "room",
+      "zone",
+    ];
+    let target = expandAbbreviatedString(providedTarget, validTargets);
+    if (!target || !validTargets.includes(target)) {
+      messageToUsername(user.username, rejectionString, `help`, true);
+      return;
     }
 
     const zone = await getZoneOfUser(user);
@@ -40,10 +51,18 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
       throw new Error(`Couldn't get ${user.username}'s zone.`);
     }
 
-    if (target === "item" || target ==="creature" || target === "mob" || target === "room") {
-      if (!userHasZoneAuthorId(zone.author.toString(), user)) {
-        return;
-      }
+    // fail if user isn't author of the zone they're in
+    if (!userHasZoneAuthorId(zone.author.toString(), user)) {
+      //NB userHasZoneAuthorId has messaged unauthorized user
+      return;
+    }
+
+    let creatureString = "creature";
+    if (creatureString.startsWith("creature")) {
+      messageToUsername(
+        user.username,
+        `In Restoria, we call a creature a MOB. HELP MOB for more info.`
+      );
     }
 
     const providedDirection = parsedCommand.indirectObject?.toLowerCase();
@@ -80,9 +99,11 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `object`:
-        worldEmitter.emit(
-          `messageFor${user.username}`,
-          makeMessage(`help`, `Objects are called items in Restoria.`)
+        messageToUsername(
+          user.username,
+          `Objects are called items in Restoria.`,
+          `help`,
+          true
         );
       case `item`: {
         help(
@@ -99,13 +120,13 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       case `monster`:
+      case `creature`:
       case `npc`:
-        worldEmitter.emit(
-          `messageFor${user.username}`,
-          makeMessage(
-            `help`,
-            `Monsters and NPCs are considered mobs in Restoria.`
-          )
+        messageToUsername(
+          user.username,
+          `A ${target} is called a mob in Restoria. HELP MOB for more info.`,
+          `help`,
+          true
         );
       case `mob`: {
         help(
@@ -179,13 +200,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       default: {
-        worldEmitter.emit(
-          `messageFor${user.username}`,
-          makeMessage(
-            `rejection`,
-            `Create what? Try CREATE ITEM, CREATE MOB, CREATE ROOM, or CREATE ZONE.`
-          )
-        );
+        messageToUsername(user.username, rejectionString, `help`, true);
         return;
       }
     }
