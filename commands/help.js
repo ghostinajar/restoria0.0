@@ -3,22 +3,115 @@
 import HELP from "../constants/HELP.js";
 import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
+import expandAbbreviatedString from "../util/expandAbbreviatedString.js";
 import htmlTableOfContentsForKeysOfObject from "../util/htmlTableOfContentsForKeysOfObject.js";
 import makeMessage from "../util/makeMessage.js";
+import messageToUsername from "../util/messageToUsername.js";
 function help(parsedCommand, user) {
     try {
-        if (!parsedCommand.directObject) {
+        // fail if target isn't provided
+        let target = parsedCommand.directObject;
+        if (!target) {
             const helpContents = htmlTableOfContentsForKeysOfObject(HELP);
-            worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, `Here are all the commands you can try in Restoria:`));
-            worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, helpContents));
-            worldEmitter.emit(`safeMessageFor${user.username}`, makeMessage(`help`, `What would you like help with? E.g. HELP CREATE`));
+            messageToUsername(user.username, `Here are all the commands you can try in Restoria:`, `help`, true);
+            messageToUsername(user.username, helpContents, `help`, true);
+            messageToUsername(user.username, `What would you like help with? E.g. HELP CREATE`, `help`, true);
             return;
         }
-        let target = parsedCommand.directObject;
+        // format multiword target for search
         if (parsedCommand.string) {
-            target = `${parsedCommand.directObject} ${parsedCommand.string}`;
+            target = `${target} ${parsedCommand.string}`;
         }
-        target = target.replace(/ /g, "_");
+        if (target) {
+            target = target.replace(/ /g, "_");
+        }
+        // list all valid targets
+        const validTargets = [
+            ...Object.keys(HELP),
+            "aggressive",
+            "character",
+            "user",
+            "bugs",
+            "capacity",
+            "room",
+            "edit_zone",
+            "zone",
+            "look",
+            "examine",
+            "study",
+            "research",
+            "edit_user",
+            "delete",
+            "erase_item",
+            "delete_item",
+            "erase_mob",
+            "delete_mob",
+            "erase_room",
+            "delete_room",
+            "erase_user",
+            "delete_user",
+            "erase_zone",
+            "delete_zone",
+            "ex",
+            "edit_room_exits",
+            "hidden_item",
+            "hidden_user",
+            "hidden_mob",
+            "hidden_exit",
+            "item_spell",
+            "armor",
+            "potion",
+            "scroll",
+            "token",
+            "treasure",
+            "wand",
+            "fishing_rod",
+            "fixture",
+            "food",
+            "lamp",
+            "temporary",
+            "keyword",
+            "key_word",
+            "key_words",
+            "hp",
+            "health",
+            "mp",
+            "mana",
+            "magic",
+            "mv",
+            "movement",
+            "str",
+            "strength",
+            "dex",
+            "dexterity",
+            "con",
+            "constitution",
+            "int",
+            "intelligence",
+            "wis",
+            "wisdom",
+            "spi",
+            "spirit",
+            "finesse",
+            "finesse_weapon",
+            "light_weapon",
+            "reach",
+            "reach_weapon",
+            "range",
+            "range_weapon",
+            "ranged",
+            "ranged_weapon",
+            "twohand",
+            "two_hand",
+            "twohand_weapon",
+            "two_hand_weapon",
+            "unique",
+        ]
+            .map((targ) => targ.toLowerCase())
+            .sort();
+        // handle abbreviation
+        target = expandAbbreviatedString(target, validTargets);
+        // handle synonyms and topics that share the same help file
         switch (target.toLowerCase()) {
             case `aggressive`:
                 target = `aggressive_mob`;
@@ -135,9 +228,10 @@ function help(parsedCommand, user) {
             default:
                 break;
         }
+        // handle no help file for target
         if (!HELP.hasOwnProperty(target.toUpperCase())) {
             target = target.replace(/_/g, " ");
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `Sorry, there's no help available yet for ${target}.`));
+            messageToUsername(user.username, `Sorry, there's no help available yet for ${target}. Try HELP on its own.`, `help`);
             return;
         }
         let stringArray = HELP[target.toUpperCase()];

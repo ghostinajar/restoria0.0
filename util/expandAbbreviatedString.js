@@ -12,10 +12,11 @@ function expandAbbreviatedString(providedString, expandedStrings) {
                 }
             }
         }
-        return output;
+        return output || "";
     }
     catch (error) {
         catchErrorHandlerForFunction(`expandAbbreviatedString`, error);
+        return "";
     }
 }
 export default expandAbbreviatedString;

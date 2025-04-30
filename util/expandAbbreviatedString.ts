@@ -5,7 +5,7 @@ import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 function expandAbbreviatedString(
   providedString: string | undefined,
   expandedStrings: Array<string>
-) {
+): string {
   try {
     let output = providedString || "";
     if (providedString) {
@@ -16,9 +16,10 @@ function expandAbbreviatedString(
         }
       }
     }
-    return output;
+    return output || "";
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`expandAbbreviatedString`, error);
+    return "";
   }
 }
 
