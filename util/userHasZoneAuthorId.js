@@ -1,15 +1,14 @@
-import worldEmitter from "../model/classes/WorldEmitter.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
-import makeMessage from "./makeMessage.js";
+import messageToUsername from "./messageToUsername.js";
 function userHasZoneAuthorId(zoneAuthorId, user) {
     try {
         // admins can be authors anywhere
         if (user.isAdmin) {
             return true;
         }
-        // if the user is the author of the zone, they can edit it
+        // fail if user isn't the zone's author
         if (zoneAuthorId !== user._id.toString()) {
-            worldEmitter.emit(`messageFor${user.username}`, makeMessage(`rejection`, `You aren't an author for this zone.`));
+            messageToUsername(user.username, `You aren't an author for this zone. You can SUGGEST a change instead.`, `help`, true);
             return false;
         }
         return true;

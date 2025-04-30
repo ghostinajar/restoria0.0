@@ -1,5 +1,4 @@
 import worldEmitter from "../model/classes/WorldEmitter.js";
-import makeMessage from "../util/makeMessage.js";
 import getItemBlueprintNamesFromZone from "../util/getItemBlueprintNamesFromZone.js";
 import getMobBlueprintNamesFromZone from "../util/getMobBlueprintNamesFromZone.js";
 import getRoomOfUser from "../util/getRoomOfUser.js";
@@ -14,29 +13,53 @@ import getNameById from "../util/getNameById.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import HELP from "../constants/HELP.js";
 import help from "./help.js";
-function sendRejectionMessage(username) {
-    worldEmitter.emit(`messageFor${username}`, makeMessage(`rejection`, `Edit what? Try EDIT ITEM, EDIT MAP, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`));
-}
+import expandAbbreviatedString from "../util/expandAbbreviatedString.js";
+import messageToUsername from "../util/messageToUsername.js";
 async function edit(parsedCommand, user) {
     try {
-        let target = parsedCommand.directObject;
+        const rejectionString = `Edit what? Try EDIT ITEM, EDIT MAP, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`;
+        // fail if target not provided
+        let providedTarget = parsedCommand.directObject;
+        if (!providedTarget) {
+            messageToUsername(user.username, rejectionString, `help`, true);
+            return;
+        }
+        // allow user to EDIT THEIR_OWN_NAME as EDIT USER
+        if (providedTarget === user.username) {
+            providedTarget = "user";
+        }
+        // fail if target is invalid
+        const validTargets = [
+            "character",
+            "item",
+            "map",
+            "mob",
+            "monster",
+            "npc",
+            "object",
+            "room",
+            "user",
+            "zone",
+        ];
+        let target = expandAbbreviatedString(providedTarget, validTargets);
+        if (!target) {
+            messageToUsername(user.username, rejectionString, `help`, true);
+            return;
+        }
         const zone = await getZoneOfUser(user);
         if (!zone) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
         }
-        const rejectionString = `Edit what? Try EDIT ITEM, EDIT MAP, EDIT MOB, EDIT ROOM, EDIT USER, or EDIT ZONE.`;
-        if (!target) {
-            sendRejectionMessage(user.username);
-            return;
-        }
+        // fail if user isn't author of target
         if (target !== "user" && target !== "character") {
             if (!userHasZoneAuthorId(zone.author.toString(), user)) {
+                //NB userHasZoneAuthorId has messaged unauthorized user
                 return;
             }
         }
         switch (target) {
             case `object`:
-                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Objects are called items in Restoria.`));
+                messageToUsername(user.username, `Objects are called items in Restoria.`, `help`, true);
             case `item`: {
                 worldEmitter.emit(`formPromptFor${user.username}`, {
                     form: `editItemBlueprintForm`,
@@ -59,7 +82,7 @@ async function edit(parsedCommand, user) {
             }
             case `monster`:
             case `npc`:
-                worldEmitter.emit(`messageFor${user.username}`, makeMessage(`help`, `Monsters and NPCs are considered mobs in Restoria.`));
+                messageToUsername(user.username, `Monsters and NPCs are considered mobs in Restoria.`, `help`, true);
             case `map`: {
                 const room = await getRoomOfUser(user);
                 if (!room) {
@@ -165,7 +188,7 @@ async function edit(parsedCommand, user) {
                 break;
             }
             default: {
-                sendRejectionMessage(user.username);
+                messageToUsername(user.username, rejectionString, `help`, true);
                 return;
             }
         }
@@ -198,7 +221,7 @@ function getMobNodesFromRoom(room, zone) {
         let mobNodesList = [];
         for (let node of room.mobNodes) {
             const mobName = getNameById(zone.mobBlueprints, node.loadsBlueprintId.toString());
-            //TODO handle cases where the mob originates in another zone
+            //TODO handle cases where the mob originates in another zone?
             const nodeObject = {
                 _id: node._id,
                 loadsBlueprintId: node.loadsBlueprintId,
