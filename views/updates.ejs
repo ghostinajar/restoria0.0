@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Restoria - Updates</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <%- include('menu'); %> <%- include('title'); %>
+    <div class="content-wrapper">
+      <!-- updates -->
+      <div id="updates-panel">
+        <h3>Recent Updates:</h3>
+        <ul class="updates-list" style="list-style-type: disc;">
+          <% updates.forEach(function(update) { %>
+          <li>
+            <span class="updates-date"><%= update.date %></span>
+            <span class="updates-content"><%= update.content %></span>
+          </li>
+          <% }); %>
+        </ul>
+      </div>
+
+      <!-- planned bug fixes and features -->
+      <div class="plans-panel">
+        <h3>Planned Bug Fixes and Features:</h3>
+        <% if (bugs && bugs.length > 0) { %>
+        <ul class="updates-list" style="list-style-type: circle">
+          <% bugs.forEach(function(bug) { %>
+          <li>
+            <span class="yellow"><%= bug %></span>
+          </li>
+          <% }); %>
+        </ul>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

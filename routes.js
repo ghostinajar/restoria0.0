@@ -1,9 +1,12 @@
 // routes
+import Bug from "./model/classes/Bug.js";
 import passport from "passport";
 import validCommandWords from "./constants/validCommandWords.js";
 import HELP from "./constants/HELP.js";
 import logger from "./logger.js";
 import createUser from "./util/createUser.js";
+import formatDate from "./util/formatDate.js";
+
 
 const setupRoutes = (app, __dirname) => {
   app.get("/", (req, res, next) => {
@@ -26,6 +29,38 @@ const setupRoutes = (app, __dirname) => {
   app.get("/login", (req, res, next) => {
     const cheatsheet = HELP.CHEATSHEET;
     res.render("login", { cheatsheet: cheatsheet });
+  });
+
+  app.get("/updates", async (req, res, next) => {
+    try {
+      // Get fixed bugs (updates)
+      const fixedBugs = await Bug.find(
+        { isFixed: true },
+        { date: 1, description: 1, _id: 0 }
+      ).sort({ date: -1 });
+
+      // Format updates same way as updates.ts
+      const formattedUpdates = fixedBugs.map((bug) => ({
+        date: formatDate(bug.date),
+        content: bug.description
+      }));
+
+      // Get unfixed bugs
+      const unfixedBugs = await Bug.find(
+        { isFixed: false, isValid: true },
+        { description: 1, _id: 0 }
+      ).sort({ date: -1 });
+
+      // Map to just the descriptions
+      const bugDescriptions = unfixedBugs.map(bug => bug.description);
+
+      res.render("updates", { 
+        updates: formattedUpdates, 
+        bugs: bugDescriptions 
+      });
+    } catch (err) {
+      next(err);
+    }
   });
 
   app.post(
