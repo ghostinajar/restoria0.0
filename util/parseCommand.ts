@@ -1,11 +1,12 @@
 // parseCommand
 // processes a full user input string into components in an object
 // e.g. {commandWord, directObject?, indirectObject?, string?}
-import {
+import validCommandWords, {
   commandsWith1Param,
   commandsWith2Params,
 } from "../constants/validCommandWords.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
+import expandAbbreviatedString from "./expandAbbreviatedString.js";
 
 export interface IParsedCommand {
   commandWord: string;
@@ -25,20 +26,23 @@ function parseCommand(command: string) {
     let splitCommand = command.split(" ");
 
     // treat "look at/in" as "look"
-    if (splitCommand[0] === "look") {
+    if (splitCommand[0] === "look" || splitCommand[0] === "l") {
       if (splitCommand[1] === "at" || splitCommand[1] === "in") {
         splitCommand.splice(1, 1);
       }
     }
 
     // treat "get x from y" as "get x y"
-    if (splitCommand[0] === "get") {
+    if (splitCommand[0] === "get" || splitCommand[0] === "g") {
       if (splitCommand[2] === "from") {
         splitCommand.splice(2, 1);
       }
     }
 
-    parsedCommand.commandWord = splitCommand[0].toLowerCase();
+    parsedCommand.commandWord = expandAbbreviatedString(
+      splitCommand[0].toLowerCase(),
+      validCommandWords
+    );
 
     function parseAndPackageObject(objectStr: string, isDirectObject: boolean) {
       const lowerObj = objectStr.toLowerCase();

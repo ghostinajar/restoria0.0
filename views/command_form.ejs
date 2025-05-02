@@ -1,6 +1,10 @@
 <!-- Command form -->
 <form id="commandForm" action="" autocomplete="off">
-  <input id="commandInput" maxlength="80" placeholder="Type a command here (e.g. to LOOK or to move NORTH), then hit ENTER. Type HELP to see a list of commands." />
+  <input
+    id="commandInput"
+    maxlength="80"
+    placeholder="Type a command here (e.g. to LOOK or to move NORTH), then hit ENTER. Type HELP to see a list of commands."
+  />
   <button id="commandSend" type="submit">ENTER</button>
 </form>
 
@@ -10,17 +14,15 @@
   document.addEventListener("DOMContentLoaded", () => {
     const commandForm = document.getElementById("commandForm");
     const validCommandWords = <%- JSON.stringify(validCommandWords) %>;
-    
     const commandHistory = [];
     let historyIndex = -1;
     const MAX_HISTORY = 10;
     let currentInput = '';
 
-    function isValidCommandWord(commandWord) {
-      if (!validCommandWords.includes(commandWord.toLowerCase())) {
-        return false;
-      }
-      return true;
+    function isValidCommandWord(word) {
+      return validCommandWords.some((vWord) =>
+      vWord.startsWith(word.toLowerCase())
+    );
     }
 
     function parseCommand(command) {
@@ -38,13 +40,10 @@
       if (!command || (commandHistory.length > 0 && commandHistory[0] === command)) {
         return;
       }
-      
       commandHistory.unshift(command);
-      
       if (commandHistory.length > MAX_HISTORY) {
         commandHistory.pop();
       }
-      
       // Reset the history index
       historyIndex = -1;
     }
@@ -99,7 +98,7 @@
         if (directions.includes(parsedCommand.commandWord)) {
           activeSideBarElement.style.display = "none";
         }
-        
+
         //reject invalid command words
         if (!isValidCommandWord(parsedCommand.commandWord)) {
           const shortenedCommand = parsedCommand.commandWord.slice(0, 10);
@@ -129,7 +128,6 @@
 
         // Add command to history before clearing input
         addToHistory(input.value);
-        
         socket.emit("userSentCommand", DOMPurify.sanitize(input.value));
         input.value = "";
         historyIndex = -1;

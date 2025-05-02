@@ -1,70 +1,74 @@
 // validCommandWords
+// * most commonly used commands are bumped up out of alpha-order to take priority when abbreviated (e.g. we want "d" to mean down, not delete)
 export const validCommandWords = [
   "autoexamine",
+
   "bug",
   "bugs",
+
   "create",
-  "e",
+
+  "down", // *
+  "delete",
+  "drop",
+
   "east",
   "edit",
   "editor",
-  "eq",
-  "equip",
-  "equipment",
+  // * normally wouldn't include abbrevs here,
+  // but the order below is to make sure eq takes priority,
+  // but "equip" is not expanded to equipment
+  "eq", // *
+  "equip", // *
+  "equipment", // *
   "equipped",
   "erase",
-  "ex",
-  "exit",
-  "exits",
-  "exa",
   "examine",
-  "d",
-  "delete",
-  "down",
-  "drop",
+  "exits",
+
   "get",
   "give",
   "goto",
+
   "help",
-  "i",
-  "inv",
+
   "inventory",
-  "l",
+
   "look",
+
   "map",
-  "n",
+
   "north",
+
+  "put", // *
   "password",
-  "put",
+
   "quit",
+
+  "remove", // *
   "recall",
-  "remove",
   "research",
-  "roomsum",
   "roomsummary",
+
+  "south", // *
+  "say", // *
   "save",
-  "say",
   "shout",
-  "s",
-  "south",
-  "stat",
   "stats",
   "study",
+  "suggest", // *
+  "suggestions", // *
   "sudobug",
   "sudobugs",
-  "suggest",
-  "suggestions",
-  "t",
-  "tel",
+
   "telepath",
-  "tell",
-  "u",
-  "up",
+
+  "up", // *
   "unequip",
   "updates",
-  "w",
+
+  "west", // *
   "wear",
-  "west",
   "wield",
   "who",
 ];

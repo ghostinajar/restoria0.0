@@ -104,8 +104,6 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await erase(parsedCommand, user);
         break;
       }
-      case `ex`:
-      case `exit`:
       case `exits`: {
         await exits(user);
         break;
@@ -129,17 +127,13 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       // I commands ******************** (and aliases for them)
-      case `i`:
-      case `inv`:
       case `inventory`: {
         await inventory(user);
         break;
       }
       // L commands ******************** (and aliases for them)
       case `look`:
-      case `exa`:
-      case `examine`:
-      case `l`: {
+      case `examine`: {
         await lookExamine(parsedCommand, user);
         break;
       }
@@ -148,17 +142,11 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await map(parsedCommand, user);
         break;
       }
-      case `n`:
       case `north`:
-      case `e`:
       case `east`:
-      case `s`:
       case `south`:
-      case `w`:
       case `west`:
-      case `u`:
       case `up`:
-      case `d`:
       case `down`: {
         await move(parsedCommand, user);
         break;
@@ -182,7 +170,6 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         await recall(user);
         break;
       }
-      case `roomsum`:
       case `roomsummary`: {
         await roomSummary(user);
         break;
@@ -200,7 +187,6 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         shout(parsedCommand, user);
         break;
       }
-      case `stat`:
       case `stats`: {
         stats(user);
         break;
@@ -227,10 +213,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       // T commands ******************** (and aliases for them)
-      case `t`:
-      case `tel`:
-      case `telepath`:
-      case `tell`: {
+      case `telepath`: {
         await telepath(parsedCommand, user);
         break;
       }

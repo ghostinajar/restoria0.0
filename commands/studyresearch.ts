@@ -31,7 +31,7 @@ async function studyresearch(parsedCommand: IParsedCommand, user: IUser) {
             `messageFor${user.username}`,
             makeMessage(
               `rejection`,
-              `There's not much to research about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`
+              `There's not much to research about the ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`
             )
           );
         }
@@ -48,7 +48,7 @@ async function studyresearch(parsedCommand: IParsedCommand, user: IUser) {
             `messageFor${user.username}`,
             makeMessage(
               `rejection`,
-              `There's not much to study about that ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`
+              `There's not much to study about the ${targetKeyword}. Try EXAMINE ${targetKeyword?.toUpperCase()} instead.`
             )
           );
         }
@@ -68,6 +68,7 @@ async function studyresearch(parsedCommand: IParsedCommand, user: IUser) {
 
     // target is missing or room?
     if (!targetKeyword || targetKeyword === "room") {
+      targetKeyword = "room";
       studyresearchForObject(room, research);
       return;
     }
