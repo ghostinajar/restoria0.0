@@ -63,6 +63,7 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         });
         break;
       }
+      case `plans`:
       case `bugs`: {
         await bugs(user);
         break;

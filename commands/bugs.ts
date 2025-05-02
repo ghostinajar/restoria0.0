@@ -19,7 +19,7 @@ async function bugs(user: IUser) {
       return makeMessage("message", `${formattedDate}: ${bug.description}`);
     });
     validBugStrings.unshift(
-      makeMessage(`help`, `Current known bugs in Restoria:`)
+      makeMessage(`help`, `Planned fixes and features in Restoria:`)
     );
     worldEmitter.emit(`messageArrayFor${user.username}`, validBugStrings);
   } catch (error: unknown) {

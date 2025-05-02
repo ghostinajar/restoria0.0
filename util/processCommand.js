@@ -57,6 +57,7 @@ async function processCommand(parsedCommand, user) {
                 });
                 break;
             }
+            case `plans`:
             case `bugs`: {
                 await bugs(user);
                 break;
