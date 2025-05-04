@@ -52,7 +52,7 @@ async function create(parsedCommand: IParsedCommand, user: IUser) {
     }
 
     // fail if user isn't author of the zone they're in
-    if (!userHasZoneAuthorId(zone.author.toString(), user)) {
+    if (target !== "zone" &&!userHasZoneAuthorId(zone.author.toString(), user)) {
       //NB userHasZoneAuthorId has messaged unauthorized user
       return;
     }

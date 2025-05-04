@@ -45,7 +45,7 @@ async function create(parsedCommand, user) {
             throw new Error(`Couldn't get ${user.username}'s zone.`);
         }
         // fail if user isn't author of the zone they're in
-        if (!userHasZoneAuthorId(zone.author.toString(), user)) {
+        if (target !== "zone" && !userHasZoneAuthorId(zone.author.toString(), user)) {
             //NB userHasZoneAuthorId has messaged unauthorized user
             return;
         }

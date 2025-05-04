@@ -49,7 +49,7 @@ const setupRoutes = (app, __dirname) => {
       const unfixedBugs = await Bug.find(
         { isFixed: false, isValid: true },
         { description: 1, _id: 0 }
-      ).sort({ date: -1 });
+      ).sort({ date: 1 });
 
       // Map to just the descriptions
       const bugDescriptions = unfixedBugs.map(bug => bug.description);
