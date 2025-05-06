@@ -2,6 +2,17 @@ import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.j
 const BASE_HP = 10;
 const BASE_MP = 10;
 const BASE_MV = 10;
+const BASE_SPEED = 0;
+const BASE_HITBONUS = 0;
+const BASE_DAMAGEBONUS = 0;
+const BASE_ARMOR = 0;
+const BASE_HEALTH_REGEN = 0;
+const BASE_MANA_REGEN = 0;
+const BASE_MOVE_REGEN = 0;
+const BASE_RESIST_COLD = 0;
+const BASE_RESIST_ELECTRIC = 0;
+const BASE_RESIST_FIRE = 0;
+const BASE_SPELL_SAVE = 0;
 const BASE_CLERIC = {
     hpMod: 10,
     mpMod: 10,
