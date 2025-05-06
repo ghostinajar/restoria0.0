@@ -16,6 +16,21 @@ import {
   calculateMaxHp,
   calculateMaxMp,
   calculateMaxMv,
+  calculateStrength,
+  calculateDexterity,
+  calculateConstitution,
+  calculateIntelligence,
+  calculateWisdom,
+  calculateCharisma,
+  calculateSpirit,
+  calculateDamageBonus,
+  calculateHitBonus,
+  calculateArmorClass,
+  calculateSpellSave,
+  calculateSpeed,
+  calculateResistCold,
+  calculateResistFire,
+  calculateResistElec,
 } from "../../constants/BASE_STATS.js";
 
 const { Schema, Types, model } = mongoose;
@@ -75,6 +90,21 @@ export interface IUser extends mongoose.Document {
   maxMp: number; // virtual
   currentMv: number; // virtual
   maxMv: number; // virtual
+  strength: number; // virtual
+  dexterity: number; // virtual
+  constitution: number; // virtual
+  intelligence: number; // virtual
+  wisdom: number; // virtual
+  charisma: number; // virtual
+  spirit: number; // virtual
+  damageBonus: number; // virtual
+  hitBonus: number; // virtual
+  armorClass: number; // virtual
+  spellSave: number; // virtual
+  speed: number; // virtual
+  resistCold: number; // virtual
+  resistFire: number; // virtual
+  resistElec: number; // virtual
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -222,6 +252,66 @@ userSchema
 
 userSchema.virtual("maxMv").get(function () {
   return calculateMaxMv(this);
+});
+
+userSchema.virtual("strength").get(function () {
+  return calculateStrength(this);
+});
+
+userSchema.virtual("dexterity").get(function () {
+  return calculateDexterity(this);
+});
+
+userSchema.virtual("constitution").get(function () {
+  return calculateConstitution(this);
+});
+
+userSchema.virtual("intelligence").get(function () {
+  return calculateIntelligence(this);
+});
+
+userSchema.virtual("wisdom").get(function () {
+  return calculateWisdom(this);
+});
+
+userSchema.virtual("charisma").get(function () {
+  return calculateCharisma(this);
+});
+
+userSchema.virtual("spirit").get(function () {
+  return calculateSpirit(this);
+});
+
+userSchema.virtual("damageBonus").get(function () {
+  return calculateDamageBonus(this);
+});
+
+userSchema.virtual("hitBonus").get(function () {
+  return calculateHitBonus(this);
+});
+
+userSchema.virtual("armorClass").get(function () {
+  return calculateArmorClass(this);
+});
+
+userSchema.virtual("spellSave").get(function () {
+  return calculateSpellSave(this);
+});
+
+userSchema.virtual("speed").get(function () {
+  return calculateSpeed(this);
+});
+
+userSchema.virtual("resistCold").get(function () {
+  return calculateResistCold(this);
+});
+
+userSchema.virtual("resistFire").get(function () {
+  return calculateResistFire(this);
+});
+
+userSchema.virtual("resistElec").get(function () {
+  return calculateResistElec(this);
 });
 
 userSchema.methods.comparePassword = async function (

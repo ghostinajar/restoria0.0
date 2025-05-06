@@ -11,7 +11,7 @@ import statBlockSchema from "./StatBlock.js";
 import historySchema from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
-import { calculateMaxHp, calculateMaxMp, calculateMaxMv, } from "../../constants/BASE_STATS.js";
+import { calculateMaxHp, calculateMaxMp, calculateMaxMv, calculateStrength, calculateDexterity, calculateConstitution, calculateIntelligence, calculateWisdom, calculateCharisma, calculateSpirit, calculateDamageBonus, calculateHitBonus, calculateArmorClass, calculateSpellSave, calculateSpeed, calculateResistCold, calculateResistFire, calculateResistElec, } from "../../constants/BASE_STATS.js";
 const { Schema, Types, model } = mongoose;
 export const userSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -148,6 +148,51 @@ userSchema
 });
 userSchema.virtual("maxMv").get(function () {
     return calculateMaxMv(this);
+});
+userSchema.virtual("strength").get(function () {
+    return calculateStrength(this);
+});
+userSchema.virtual("dexterity").get(function () {
+    return calculateDexterity(this);
+});
+userSchema.virtual("constitution").get(function () {
+    return calculateConstitution(this);
+});
+userSchema.virtual("intelligence").get(function () {
+    return calculateIntelligence(this);
+});
+userSchema.virtual("wisdom").get(function () {
+    return calculateWisdom(this);
+});
+userSchema.virtual("charisma").get(function () {
+    return calculateCharisma(this);
+});
+userSchema.virtual("spirit").get(function () {
+    return calculateSpirit(this);
+});
+userSchema.virtual("damageBonus").get(function () {
+    return calculateDamageBonus(this);
+});
+userSchema.virtual("hitBonus").get(function () {
+    return calculateHitBonus(this);
+});
+userSchema.virtual("armorClass").get(function () {
+    return calculateArmorClass(this);
+});
+userSchema.virtual("spellSave").get(function () {
+    return calculateSpellSave(this);
+});
+userSchema.virtual("speed").get(function () {
+    return calculateSpeed(this);
+});
+userSchema.virtual("resistCold").get(function () {
+    return calculateResistCold(this);
+});
+userSchema.virtual("resistFire").get(function () {
+    return calculateResistFire(this);
+});
+userSchema.virtual("resistElec").get(function () {
+    return calculateResistElec(this);
 });
 userSchema.methods.comparePassword = async function (candidatePassword) {
     try {

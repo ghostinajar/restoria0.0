@@ -24,7 +24,12 @@
     <!-- Messages and side forms -->
     <div id="main">
       <div id="messagesContainer">
-        <ul id="messages" class="help"><li>New Player? To learn the basics, type HELP CHEATSHEET in the command box below.</li></ul>
+        <ul id="messages" class="help">
+          <li>
+            New Player? To learn the basics, type HELP CHEATSHEET in the command
+            box below.
+          </li>
+        </ul>
       </div>
       <!-- Define ejs modules array -->
       <% const partials = [ 'bug_form', 'create_item_blueprint_form',
@@ -64,9 +69,29 @@
         });
       });
 
+      socket.on("characterData", (characterData) => {
+        // Ralu the Lvl.1 Neutral Cleric
+        // STR	: 20         DB  : 20         Cleric Lvl.  : 20         Resist Cold : 100%
+        // DEX	: 20         HB  : 20         Mage Lvl.    : 20         Resist Elec : 100%
+        // CON	: 20         AC  : 100        Rogue Lvl.   : 31	        Resist Fire : 100%
+        // INT	: 20         SS  : 20         Warrior Lvl	 : 31         Created	    : 2024
+        // WIS	: 20         SPI : 1000       Training Pts : 20         Hrs. Played : 1000
+        // CHA	: 20         SPD : 20         Capacity	   : 200
+        // Gold Held : 999,999,999,999        Gold Stored : 999,999,999,999
+
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: characterData.name },
+          { color: "white", content: " : " },
+        ]);
+        console.log(characterData)
+      });
+
       socket.on("equipmentArray", (equipmentArray) => {
         equipmentArray.forEach((arrayItem) => {
-          let itemName = arrayItem[1] === "nothing" ? { color: "grey_dark", content: arrayItem[1] } : { color: "blue_light", content: arrayItem[1] }
+          let itemName =
+            arrayItem[1] === "nothing"
+              ? { color: "grey_dark", content: arrayItem[1] }
+              : { color: "blue_light", content: arrayItem[1] };
           appendMulticolorStringToTerminal([
             { color: "yellow", content: arrayItem[0] },
             { color: "white", content: " : " },
