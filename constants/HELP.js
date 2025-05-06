@@ -277,7 +277,7 @@ const HELP = {
     MOUNT: [
         `This feature is still in development.`,
         `${padStringToLength79(`MOUNT`)}`,
-        `A mount is a mob that a user can ride around, usually increasing their movement, stamina, and speed outdoors. Use the MOUNT command to (for example) MOUNT HORSE before a long journey.`,
+        `A mount is a mob that a user can ride around, usually increasing their speed and movement capacity outdoors. Use the MOUNT command to (for example) MOUNT HORSE before a long journey.`,
     ],
     MOVE: [
         `${padStringToLength79(`Move`)}`,
