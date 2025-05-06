@@ -11,7 +11,7 @@ import statBlockSchema from "./StatBlock.js";
 import historySchema from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
-import { calculateMaxHp, calculateMaxMp, calculateMaxMv, calculateStrength, calculateDexterity, calculateConstitution, calculateIntelligence, calculateWisdom, calculateCharisma, calculateSpirit, calculateDamageBonus, calculateHitBonus, calculateArmorClass, calculateSpellSave, calculateSpeed, calculateResistCold, calculateResistFire, calculateResistElec, } from "../../constants/BASE_STATS.js";
+import { calculateMaxHp, calculateMaxMp, calculateMaxMv, calculateStrength, calculateDexterity, calculateConstitution, calculateIntelligence, calculateWisdom, calculateCharisma, calculateDamageBonus, calculateHitBonus, calculateArmorClass, calculateSpellSave, calculateSpeed, calculateResistCold, calculateResistFire, calculateResistElec, } from "../../constants/BASE_STATS.js";
 const { Schema, Types, model } = mongoose;
 export const userSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -166,9 +166,6 @@ userSchema.virtual("wisdom").get(function () {
 });
 userSchema.virtual("charisma").get(function () {
     return calculateCharisma(this);
-});
-userSchema.virtual("spirit").get(function () {
-    return calculateSpirit(this);
 });
 userSchema.virtual("damageBonus").get(function () {
     return calculateDamageBonus(this);

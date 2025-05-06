@@ -1,8 +1,14 @@
-// base stats and calculations for mobs and users
+// base stats, and calculations for derived/runtime stats on mobs and users
 import { IMob } from "../model/classes/Mob.js";
 import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 
+const BASE_STRENGTH = 2;
+const BASE_DEXTERITY = 2;
+const BASE_CONSTITUTION = 2;
+const BASE_INTELLIGENCE = 2;
+const BASE_WISDOM = 2;
+const BASE_CHARISMA = 2;
 const BASE_HP = 10;
 const BASE_MP = 10;
 const BASE_MV = 10;
@@ -56,7 +62,7 @@ export function calculateMaxHp(agent: IUser | IMob) {
       maxHp += agent.level * BASE_WARRIOR.hpMod; // Increase by level
     }
     // TODO Add HP from equipped items
-    return maxHp;
+    return Math.max(BASE_HP, maxHp);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateMaxHp`, error);
   }
@@ -81,7 +87,7 @@ export function calculateMaxMp(agent: IUser | IMob) {
       maxMp += agent.level * BASE_WARRIOR.mpMod; // Increase by level
     }
     // TODO Add Mp from equipped items
-    return maxMp;
+    return Math.max(BASE_MP, maxMp);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateMaxMp`, error);
   }
@@ -93,7 +99,7 @@ export function calculateMaxMv(agent: IUser | IMob) {
     MaxMv += agent.level * 10; // Increase by level
     MaxMv += ((agent.statBlock.constitution - 10) / 2) * agent.level; // Add constitution bonus * level
     // TODO Add Mv from equipped items
-    return MaxMv;
+    return Math.max(BASE_MV, MaxMv);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateMaxMv`, error);
   }
@@ -103,7 +109,7 @@ export function calculateStrength(agent: IUser | IMob) {
   try {
     let strength = agent.statBlock.strength;
     // TODO Add strength from equipped items
-    return strength;
+    return Math.max(BASE_STRENGTH, strength);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateStrength`, error);
   }
@@ -113,7 +119,7 @@ export function calculateDexterity(agent: IUser | IMob) {
   try {
     let dexterity = agent.statBlock.dexterity;
     // TODO Add dexterity from equipped items
-    return dexterity;
+    return Math.max(BASE_DEXTERITY, dexterity);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateDexterity`, error);
   }
@@ -123,7 +129,7 @@ export function calculateConstitution(agent: IUser | IMob) {
   try {
     let constitution = agent.statBlock.constitution;
     // TODO Add constitution from equipped items
-    return constitution;
+    return Math.max(BASE_CONSTITUTION, constitution);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateConstitution`, error);
   }
@@ -133,7 +139,7 @@ export function calculateIntelligence(agent: IUser | IMob) {
   try {
     let intelligence = agent.statBlock.intelligence;
     // TODO Add intelligence from equipped items
-    return intelligence;
+    return Math.max(BASE_INTELLIGENCE, intelligence);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateIntelligence`, error);
   }
@@ -143,7 +149,7 @@ export function calculateWisdom(agent: IUser | IMob) {
   try {
     let wisdom = agent.statBlock.wisdom;
     // TODO Add wisdom from equipped items
-    return wisdom;
+    return Math.max(BASE_WISDOM, wisdom);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateWisdom`, error);
   }
@@ -153,19 +159,9 @@ export function calculateCharisma(agent: IUser | IMob) {
   try {
     let charisma = agent.statBlock.charisma;
     // TODO Add charisma from equipped items
-    return charisma;
+    return Math.max(BASE_CHARISMA, charisma);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateCharisma`, error);
-  }
-}
-
-export function calculateSpirit(agent: IUser | IMob) {
-  try {
-    let spirit = agent.statBlock.spirit;
-    // TODO Add spirit from equipped items
-    return spirit;
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(`calculateSpirit`, error);
   }
 }
 
@@ -174,7 +170,8 @@ export function calculateDamageBonus(agent: IUser | IMob) {
     let damageBonus = BASE_DAMAGEBONUS;
     damageBonus += Math.floor((agent.statBlock.strength - 10) / 2); // Add strength modifier
     // TODO Add damage bonus from equipped items
-    return damageBonus;
+    // TODO Add bonus per level for rogue and warrior
+    return Math.max(BASE_DAMAGEBONUS, damageBonus);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateDamageBonus`, error);
   }
@@ -185,7 +182,8 @@ export function calculateHitBonus(agent: IUser | IMob) {
     let hitBonus = BASE_HITBONUS;
     hitBonus += Math.floor((agent.statBlock.dexterity - 10) / 2); // Add dexterity modifier
     // TODO Add hit bonus from equipped items
-    return hitBonus;
+    // TODO Add bonus per level for rogue and warrior
+    return Math.max(BASE_HITBONUS, hitBonus);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateHitBonus`, error);
   }
@@ -196,7 +194,8 @@ export function calculateArmorClass(agent: IUser | IMob) {
     let armorClass = BASE_ARMOR_CLASS;
     armorClass += Math.floor((agent.statBlock.dexterity - 10) / 2); // Add dexterity modifier
     // TODO Add armor class from equipped items
-    return armorClass;
+    // TODO Add bonus per level for warrior
+    return Math.max(BASE_ARMOR_CLASS, armorClass);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateArmorClass`, error);
   }
@@ -207,7 +206,8 @@ export function calculateSpellSave(agent: IUser | IMob) {
     let spellSave = BASE_SPELL_SAVE;
     spellSave += Math.floor((agent.statBlock.wisdom - 10) / 2); // Add wisdom modifier
     // TODO Add spell save from equipped items
-    return spellSave;
+    // TODO Add bonus per level for mage and cleric
+    return Math.max(BASE_SPELL_SAVE, spellSave);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateSpellSave`, error);
   }
@@ -218,7 +218,7 @@ export function calculateSpeed(agent: IUser | IMob) {
     let speed = BASE_SPEED;
     speed += Math.floor((agent.statBlock.dexterity - 10) / 2); // Add dexterity modifier
     // TODO Add speed from equipped items
-    return speed;
+    return Math.max(BASE_SPEED, speed);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateSpeed`, error);
   }
@@ -228,7 +228,7 @@ export function calculateResistCold(agent: IUser | IMob) {
   try {
     let resistCold = BASE_RESIST_COLD;
     // TODO Add resist cold from equipped items
-    return resistCold;
+    return Math.max(BASE_RESIST_COLD, resistCold);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateResistCold`, error);
   }
@@ -238,7 +238,7 @@ export function calculateResistFire(agent: IUser | IMob) {
   try {
     let resistFire = BASE_RESIST_FIRE;
     // TODO Add resist fire from equipped items
-    return resistFire;
+    return Math.max(BASE_RESIST_FIRE, resistFire);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateResistFire`, error);
   }
@@ -248,7 +248,7 @@ export function calculateResistElec(agent: IUser | IMob) {
   try {
     let resistElec = BASE_RESIST_ELECTRIC;
     // TODO Add resist electric from equipped items
-    return resistElec;
+    return Math.max(BASE_RESIST_ELECTRIC, resistElec);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateResistElec`, error);
   }
@@ -259,7 +259,7 @@ export function calculateHealthRegen(agent: IUser | IMob) {
     let healthRegen = BASE_HEALTH_REGEN;
     healthRegen += Math.floor((agent.statBlock.constitution - 10) / 2); // Add constitution modifier
     // TODO Add health regen from equipped items
-    return healthRegen;
+    return Math.max(BASE_HEALTH_REGEN, healthRegen);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateHealthRegen`, error);
   }
@@ -272,7 +272,7 @@ export function calculateManaRegen(agent: IUser | IMob) {
       (agent.statBlock.wisdom + agent.statBlock.intelligence - 20) / 4
     ); // Add int & wis modifiers
     // TODO Add mana regen from equipped items
-    return manaRegen;
+    return Math.max(BASE_MANA_REGEN, manaRegen);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateManaRegen`, error);
   }
@@ -283,7 +283,7 @@ export function calculateMoveRegen(agent: IUser | IMob) {
     let moveRegen = BASE_MOVE_REGEN;
     moveRegen += Math.floor((agent.statBlock.constitution - 10) / 2); // Add constitution modifier
     // TODO Add move regen from equipped items
-    return moveRegen;
+    return Math.max(BASE_MOVE_REGEN, moveRegen);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateMoveRegen`, error);
   }

@@ -22,7 +22,6 @@ import {
   calculateIntelligence,
   calculateWisdom,
   calculateCharisma,
-  calculateSpirit,
   calculateDamageBonus,
   calculateHitBonus,
   calculateArmorClass,
@@ -96,7 +95,6 @@ export interface IUser extends mongoose.Document {
   intelligence: number; // virtual
   wisdom: number; // virtual
   charisma: number; // virtual
-  spirit: number; // virtual
   damageBonus: number; // virtual
   hitBonus: number; // virtual
   armorClass: number; // virtual
@@ -276,10 +274,6 @@ userSchema.virtual("wisdom").get(function () {
 
 userSchema.virtual("charisma").get(function () {
   return calculateCharisma(this);
-});
-
-userSchema.virtual("spirit").get(function () {
-  return calculateSpirit(this);
 });
 
 userSchema.virtual("damageBonus").get(function () {

@@ -24,7 +24,7 @@ async function character(parsedCommand: IParsedCommand, user: IUser) {
       hitBonus: user.hitBonus,
       armorClass: user.armorClass,
       spellSave: user.spellSave,
-      spirit: user.spirit,
+      spirit: user.statBlock.spirit,
       speed: user.speed,
 
       clericLvl: user.jobLevels.cleric,

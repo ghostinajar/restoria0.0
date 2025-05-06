@@ -18,7 +18,7 @@ async function character(parsedCommand, user) {
             hitBonus: user.hitBonus,
             armorClass: user.armorClass,
             spellSave: user.spellSave,
-            spirit: user.spirit,
+            spirit: user.statBlock.spirit,
             speed: user.speed,
             clericLvl: user.jobLevels.cleric,
             mageLvl: user.jobLevels.mage,
