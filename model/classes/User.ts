@@ -12,6 +12,11 @@ import IEquipped from "../../types/Equipped.js";
 import historySchema, { IHistory } from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
+import {
+  calculateMaxHp,
+  calculateMaxMp,
+  calculateMaxMv,
+} from "../../constants/BASE_STATS.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -71,9 +76,6 @@ export interface IUser extends mongoose.Document {
   currentMv: number; // virtual
   maxMv: number; // virtual
   comparePassword(candidatePassword: string): Promise<boolean>;
-  calculateMaxHp(): number;
-  calculateMaxMp(): number;
-  calculateMaxMv(): number;
 }
 
 export const userSchema = new Schema<IUser>(
@@ -183,40 +185,43 @@ export const userSchema = new Schema<IUser>(
   }
 );
 
-userSchema.virtual("currentHp")
+userSchema
+  .virtual("currentHp")
   .get(function () {
-    return this._currentHp ?? this.calculateMaxHp();
+    return this._currentHp ?? calculateMaxHp(this);
   })
   .set(function (value: number) {
     this._currentHp = value;
   });
 
 userSchema.virtual("maxHp").get(function () {
-  return this.calculateMaxHp();
+  return calculateMaxHp(this);
 });
 
-userSchema.virtual("currentMp")
+userSchema
+  .virtual("currentMp")
   .get(function () {
-    return this._currentMp ?? this.calculateMaxMp();
+    return this._currentMp ?? calculateMaxMp(this);
   })
   .set(function (value: number) {
     this._currentMp = value;
   });
 
 userSchema.virtual("maxMp").get(function () {
-  return this.calculateMaxMp();
+  return calculateMaxMp(this);
 });
 
-userSchema.virtual("currentMv")
+userSchema
+  .virtual("currentMv")
   .get(function () {
-    return this._currentMv ?? this.calculateMaxMv();
+    return this._currentMv ?? calculateMaxMv(this);
   })
   .set(function (value: number) {
     this._currentMv = value;
   });
 
 userSchema.virtual("maxMv").get(function () {
-  return this.calculateMaxMv();
+  return calculateMaxMv(this);
 });
 
 userSchema.methods.comparePassword = async function (
@@ -229,67 +234,6 @@ userSchema.methods.comparePassword = async function (
       `User.comparePassword for user id ${this._id}`,
       error
     );
-  }
-};
-
-userSchema.methods.calculateMaxHp = function () {
-  try {
-    // Implement your logic to calculate max Hp
-    let maxHp = 10; // Base HP
-    maxHp += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
-    if (this.job === "cleric") {
-      maxHp += this.level * 10; // Increase by level
-    }
-    if (this.job === "mage") {
-      maxHp += this.level * 8; // Increase by level
-    }
-    if (this.job === "thief") {
-      maxHp += this.level * 10; // Increase by level
-    }
-    if (this.job === "warrior") {
-      maxHp += this.level * 12; // Increase by level
-    }
-    // TODO Add HP from equipped items
-    return maxHp;
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(`User.calculateMaxHp`, error, this.name);
-  }
-};
-
-userSchema.methods.calculateMaxMp = function () {
-  try {
-    // Implement your logic to calculate max Hp
-    let maxMp = 10; // Base Hp
-    if (this.job === "cleric") {
-      maxMp += this.level * 10; // Increase by level
-      maxMp += (this.statBlock.wisdom - 10) * this.level; // Add wisdom bonus * level
-    }
-    if (this.job === "mage") {
-      maxMp += this.level * 12; // Increase by level
-      maxMp += (this.statBlock.intelligence - 10) * this.level; // Add intelligence bonus * level
-    }
-    if (this.job === "thief") {
-      maxMp += this.level * 10; // Increase by level
-    }
-    if (this.job === "warrior") {
-      maxMp += this.level * 8; // Increase by level
-    }
-    // Add Mp from equipped items
-    return maxMp;
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(`User.calculateMaxMp`, error, this.name);
-  }
-};
-
-userSchema.methods.calculateMaxMv = function () {
-  try {
-    let MaxMv = 10; // Base Mv
-    MaxMv += this.level * 10; // Increase by level
-    MaxMv += ((this.statBlock.constitution - 10) / 2) * this.level; // Add constitution bonus * level
-    // TODO Add Mv from equipped items
-    return MaxMv;
-  } catch (error: unknown) {
-    catchErrorHandlerForFunction(`User.calculateMaxMv`, error, this.name);
   }
 };
 

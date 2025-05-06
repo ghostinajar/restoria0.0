@@ -7,6 +7,11 @@ import { IMobBlueprint } from "./MobBlueprint";
 import { IStatBlock } from "./StatBlock";
 import mongoose from "mongoose";
 import IEquipped from "../../types/Equipped";
+import {
+  calculateMaxHp,
+  calculateMaxMp,
+  calculateMaxMv,
+} from "../../constants/BASE_STATS.js";
 
 export interface IMob {
   _id: mongoose.Types.ObjectId;
@@ -30,6 +35,12 @@ export interface IMob {
   inventory: Array<IItem>;
   capacity: number;
   equipped: IEquipped;
+  currentHp: number;
+  maxHp: number;
+  currentMp: number;
+  maxMp: number;
+  currentMv: number;
+  maxMv: number;
 }
 
 class Mob implements IMob {
@@ -50,7 +61,7 @@ class Mob implements IMob {
     this.description = blueprint.description;
     this.keywords = blueprint.keywords;
     this.affixes = blueprint.affixes;
-    this.equipped = {
+    (this.equipped = {
       arms: null,
       body: null,
       ears: null,
@@ -69,11 +80,17 @@ class Mob implements IMob {
       wrist2: null,
       weapon1: null,
       weapon2: null,
-    },
-    this.chatters = blueprint.chatters;
+    }),
+      (this.chatters = blueprint.chatters);
     this.emotes = blueprint.emotes;
     this.inventory = [];
     this.capacity = blueprint.capacity;
+    this.currentHp = calculateMaxHp(this) || 100;
+    this.maxHp = calculateMaxHp(this) || 100;
+    this.currentMp = calculateMaxMp(this) || 100;
+    this.maxMp = calculateMaxMp(this) || 100;
+    this.currentMv = calculateMaxMv(this) || 100;
+    this.maxMv = calculateMaxMv(this) || 100;
   }
   _id: mongoose.Types.ObjectId;
   author: mongoose.Types.ObjectId;
@@ -96,6 +113,12 @@ class Mob implements IMob {
   emotes: Array<IEmote>;
   inventory: Array<IItem>;
   capacity: number;
+  currentHp: number;
+  maxHp: number;
+  currentMp: number;
+  maxMp: number;
+  currentMv: number;
+  maxMv: number;
 }
 
 export default Mob;

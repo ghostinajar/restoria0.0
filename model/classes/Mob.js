@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { calculateMaxHp, calculateMaxMp, calculateMaxMv, } from "../../constants/BASE_STATS.js";
 class Mob {
     constructor(blueprint) {
         this._id = new mongoose.Types.ObjectId();
@@ -17,7 +18,7 @@ class Mob {
         this.description = blueprint.description;
         this.keywords = blueprint.keywords;
         this.affixes = blueprint.affixes;
-        this.equipped = {
+        (this.equipped = {
             arms: null,
             body: null,
             ears: null,
@@ -36,11 +37,17 @@ class Mob {
             wrist2: null,
             weapon1: null,
             weapon2: null,
-        },
-            this.chatters = blueprint.chatters;
+        }),
+            (this.chatters = blueprint.chatters);
         this.emotes = blueprint.emotes;
         this.inventory = [];
         this.capacity = blueprint.capacity;
+        this.currentHp = calculateMaxHp(this) || 100;
+        this.maxHp = calculateMaxHp(this) || 100;
+        this.currentMp = calculateMaxMp(this) || 100;
+        this.maxMp = calculateMaxMp(this) || 100;
+        this.currentMv = calculateMaxMv(this) || 100;
+        this.maxMv = calculateMaxMv(this) || 100;
     }
     _id;
     author;
@@ -63,5 +70,11 @@ class Mob {
     emotes;
     inventory;
     capacity;
+    currentHp;
+    maxHp;
+    currentMp;
+    maxMp;
+    currentMv;
+    maxMv;
 }
 export default Mob;
