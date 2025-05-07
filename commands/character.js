@@ -25,6 +25,7 @@ async function character(parsedCommand, user) {
             rogueLvl: user.jobLevels.rogue,
             warriorLvl: user.jobLevels.warrior,
             trainingPoints: user.trainingPoints,
+            inventoryCount: user.inventory.length,
             capacity: user.capacity,
             resistCold: user.resistCold,
             resistFire: user.resistFire,

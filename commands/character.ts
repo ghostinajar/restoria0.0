@@ -32,6 +32,7 @@ async function character(parsedCommand: IParsedCommand, user: IUser) {
       rogueLvl: user.jobLevels.rogue,
       warriorLvl: user.jobLevels.warrior,
       trainingPoints: user.trainingPoints,
+      inventoryCount: user.inventory.length,
       capacity: user.capacity,
 
       resistCold: user.resistCold,
