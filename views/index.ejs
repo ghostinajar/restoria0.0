@@ -8,9 +8,20 @@
   </head>
   <body>
     <%- include('menu'); %>
-    <%- include('title'); %>
-    <h2 style="text-align: center;">author the world together</h2>
-    <h3 style="text-align: center;">in a text-based morpg</h3>
-    <%- include('help_cheatsheet'); %>
+    <div class="wrapper">
+      <%- include('title'); %>
+      <h2 style="text-align: center">author the world together</h2>
+      <h3 style="text-align: center">in a text-based morpg</h3>
+      <div class="callToAction">
+        <div class="callToActionItem1">
+          <a href="/register" class="button">Create a Character</a>
+        </div>
+        <div class="callToActionItem2">
+          <a href="/login" class="button">Play</a>
+        </div>
+      </div>
+      <%- include('help_cheatsheet'); %>
+    </div>
+    <%- include('footer'); %>
   </body>
 </html>

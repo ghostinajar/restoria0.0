@@ -170,7 +170,7 @@ a:visited {
 
 html,
 body {
-  margin: 0;
+  margin: 0px;
   background: var(--grey_dark);
   color: var(--grey);
   display: inline-block;
@@ -225,16 +225,15 @@ button {
   padding: 0.5rem 1rem;
 }
 
-.menuItem {
-  display: inline-flex;
+.callToActionItem1,
+.callToActionItem2 {
+  display: inline-block;
   font-size: 1.17em;
-  justify-content: space-evenly;
   align-items: center;
-  width: auto;
-  margin: 0 auto;
+  margin: 0 1rem;
 }
 
-.menuItem a.button {
+.callToActionItem1 a.button {
   font-family: "Roboto Mono", monospace;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -243,12 +242,47 @@ button {
   background-color: var(--grey_light);
 }
 
-.menu {
-  padding-top: 10px;
+.callToActionItem2 a.button {
+  font-family: "Roboto Mono", monospace;
+  border-radius: 0.5rem;
+  border: solid white;
+  padding: 0.5rem 1rem;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.callToAction {
+  padding: 2rem;
   text-decoration: none;
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.menuItem {
+  display: inline-flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: auto;
+  margin: 0 auto;
+  text-decoration: none;
+}
+
+.menuItem a {
+  text-decoration: none;
+}
+
+.menu {
+  background-color: #000;
+  padding: 10px;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.wrapper {
+  margin: 0 3em;
 }
 
 .cancelButton {
@@ -394,12 +428,6 @@ ul {
   display: inline-block;
   width: 46%;
   vertical-align: top;
-}
-
-/* Add a container to ensure proper alignment */
-.content-wrapper {
-  margin: 0 auto;
-  padding: 20px;
 }
 
 .updates-list {

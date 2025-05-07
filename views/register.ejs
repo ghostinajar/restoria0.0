@@ -9,79 +9,82 @@
 
   <body>
     <%- include('menu'); %>
-    <%- include('title'); %>
-    <h2>Register</h2>
-    <ul id="messages">
-      <% if (typeof errorMessage !== 'undefined') { %>
-      <p style="color: red"><%= errorMessage %></p>
-      <% } %>
-      <li>
-        <form action="/register" method="post" class="registration-form">
-          <ul>
-            <li>
-              <label for="name">Name: </label>
-              <div class="input-container">
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autocomplete="name"
-                  required
-                />
-                <small class="help-text"
-                  >Letters only, up to 18 characters.</small
-                >
-                <div class="invalid-feedback">
-                  Letters only, up to 18 characters.
+    <div class="wrapper">
+      <%- include('title'); %>
+      <h2>Register</h2>
+      <ul id="messages">
+        <% if (typeof errorMessage !== 'undefined') { %>
+        <p style="color: red"><%= errorMessage %></p>
+        <% } %>
+        <li>
+          <form action="/register" method="post" class="registration-form">
+            <ul>
+              <li>
+                <label for="name">Name: </label>
+                <div class="input-container">
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autocomplete="name"
+                    required
+                  />
+                  <small class="help-text"
+                    >Letters only, up to 18 characters.</small
+                  >
+                  <div class="invalid-feedback">
+                    Letters only, up to 18 characters.
+                  </div>
                 </div>
-              </div>
-            </li>
-            <li>
-              <label for="new-password">Password:</label>
-              <div class="input-container">
-                <input
-                  id="new-password"
-                  name="password"
-                  type="password"
-                  autocomplete="new-password"
-                  required
-                />
-                <small class="help-text"
-                  >Minimum 8 characters, must include uppercase, lowercase, and
-                  number.</small
-                >
-                <div class="invalid-feedback">
-                  Minimum 8 characters, must include uppercase, lowercase, and
-                  number.
+              </li>
+              <li>
+                <label for="new-password">Password:</label>
+                <div class="input-container">
+                  <input
+                    id="new-password"
+                    name="password"
+                    type="password"
+                    autocomplete="new-password"
+                    required
+                  />
+                  <small class="help-text"
+                    >Minimum 8 characters, must include uppercase, lowercase,
+                    and number.</small
+                  >
+                  <div class="invalid-feedback">
+                    Minimum 8 characters, must include uppercase, lowercase, and
+                    number.
+                  </div>
                 </div>
-              </div>
-            </li>
-            <li>
-              <label for="pronouns">Pronouns:</label>
-              <select id="pronouns" name="pronouns" required>
-                <option value="0">He/Him</option>
-                <option value="1">It/It</option>
-                <option value="2">She/Her</option>
-                <option value="3">They/Them</option>
-              </select>
-            </li>
-            <li>
-              <label for="job">Job: </label>
-              <select id="job" name="job" required>
-                <option value="cleric">Cleric</option>
-                <option value="mage">Mage</option>
-                <option value="rogue">Rogue</option>
-                <option value="warrior">Warrior</option>
-              </select>
-            </li>
-            <li>
-              <button class="button" type="submit">Create it!</button>
-            </li>
-          </ul>
-        </form>
-      </li>
-    </ul>
-    <%- include('help_cheatsheet'); %>
+              </li>
+              <li>
+                <label for="pronouns">Pronouns:</label>
+                <select id="pronouns" name="pronouns" required>
+                  <option value="0">He/Him</option>
+                  <option value="1">It/It</option>
+                  <option value="2">She/Her</option>
+                  <option value="3">They/Them</option>
+                </select>
+              </li>
+              <li>
+                <label for="job">Job: </label>
+                <select id="job" name="job" required>
+                  <option value="cleric">Cleric</option>
+                  <option value="mage">Mage</option>
+                  <option value="rogue">Rogue</option>
+                  <option value="warrior">Warrior</option>
+                </select>
+              </li>
+              <li>
+                <button class="button" type="submit">Create it!</button>
+              </li>
+            </ul>
+          </form>
+        </li>
+      </ul>
+      <%- include('help_cheatsheet'); %>
+    </div>
+    <%- include('footer'); %>
   </body>
 </html>
 
