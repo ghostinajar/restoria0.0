@@ -22,34 +22,41 @@ const BASE_SPELL_SAVE = 0;
 const BASE_CLERIC = {
     hpMod: 10,
     mpMod: 10,
+    ssMod: 0.1,
 };
 const BASE_MAGE = {
     hpMod: 6,
     mpMod: 12,
+    ssMod: 0.1,
 };
 const BASE_ROGUE = {
     hpMod: 10,
     mpMod: 8,
+    dbMod: 0.25,
+    hbMod: 0.13,
 };
 const BASE_WARRIOR = {
     hpMod: 12,
     mpMod: 6,
+    dbMod: 0.13,
+    hbMod: 0.25,
+    acMod: 0.1,
 };
 export function calculateMaxHp(agent) {
     try {
         let maxHp = BASE_HP;
-        maxHp += Math.max(0, (agent.statBlock.constitution - 10) / 2) * agent.level; // Add constitution bonus * level
+        maxHp += Math.max(0, (agent.statBlock.constitution - 10) / 2) * agent.level;
         if (agent.job === "cleric") {
-            maxHp += agent.level * BASE_CLERIC.hpMod; // Increase by level
+            maxHp += agent.level * BASE_CLERIC.hpMod;
         }
         if (agent.job === "mage") {
-            maxHp += agent.level * BASE_MAGE.hpMod; // Increase by level
+            maxHp += agent.level * BASE_MAGE.hpMod;
         }
         if (agent.job === "rogue") {
-            maxHp += agent.level * BASE_ROGUE.hpMod; // Increase by level
+            maxHp += agent.level * BASE_ROGUE.hpMod;
         }
         if (agent.job === "warrior") {
-            maxHp += agent.level * BASE_WARRIOR.hpMod; // Increase by level
+            maxHp += agent.level * BASE_WARRIOR.hpMod;
         }
         // TODO Add HP from equipped items
         return Math.max(BASE_HP, maxHp);
@@ -62,18 +69,18 @@ export function calculateMaxMp(agent) {
     try {
         let maxMp = BASE_MP;
         if (agent.job === "cleric") {
-            maxMp += agent.level * BASE_CLERIC.mpMod; // Increase by level
-            maxMp += Math.max(0, agent.statBlock.wisdom - 10) * agent.level; // Add wisdom bonus * level
+            maxMp += agent.level * BASE_CLERIC.mpMod;
+            maxMp += Math.max(0, agent.statBlock.wisdom - 10) * agent.level;
         }
         if (agent.job === "mage") {
-            maxMp += agent.level * BASE_MAGE.mpMod; // Increase by level
-            maxMp += Math.max(0, agent.statBlock.intelligence - 10) * agent.level; // Add intelligence bonus * level
+            maxMp += agent.level * BASE_MAGE.mpMod;
+            maxMp += Math.max(0, agent.statBlock.intelligence - 10) * agent.level;
         }
         if (agent.job === "rogue") {
-            maxMp += agent.level * BASE_ROGUE.mpMod; // Increase by level
+            maxMp += agent.level * BASE_ROGUE.mpMod;
         }
         if (agent.job === "warrior") {
-            maxMp += agent.level * BASE_WARRIOR.mpMod; // Increase by level
+            maxMp += agent.level * BASE_WARRIOR.mpMod;
         }
         // TODO Add Mp from equipped items
         return Math.max(BASE_MP, maxMp);
@@ -84,11 +91,11 @@ export function calculateMaxMp(agent) {
 }
 export function calculateMaxMv(agent) {
     try {
-        let MaxMv = BASE_MV;
-        MaxMv += agent.level * 10; // Increase by level
-        MaxMv += ((agent.statBlock.constitution - 10) / 2) * agent.level; // Add constitution bonus * level
+        let maxMv = BASE_MV;
+        maxMv += agent.level * 10;
+        maxMv += ((agent.statBlock.constitution - 10) / 2) * agent.level;
         // TODO Add Mv from equipped items
-        return Math.max(BASE_MV, MaxMv);
+        return Math.max(BASE_MV, maxMv);
     }
     catch (error) {
         catchErrorHandlerForFunction(`calculateMaxMv`, error);
@@ -157,9 +164,14 @@ export function calculateCharisma(agent) {
 export function calculateDamageBonus(agent) {
     try {
         let damageBonus = BASE_DAMAGEBONUS;
-        damageBonus += Math.floor((agent.statBlock.strength - 10) / 2); // Add strength modifier
+        damageBonus += Math.floor((agent.statBlock.strength - 10) / 2);
         // TODO Add damage bonus from equipped items
-        // TODO Add bonus per level for rogue and warrior
+        if (agent.job === "rogue") {
+            damageBonus += Math.floor(agent.level * BASE_ROGUE.dbMod);
+        }
+        if (agent.job === "warrior") {
+            damageBonus += Math.floor(agent.level * BASE_WARRIOR.dbMod);
+        }
         return Math.max(BASE_DAMAGEBONUS, damageBonus);
     }
     catch (error) {
@@ -169,9 +181,14 @@ export function calculateDamageBonus(agent) {
 export function calculateHitBonus(agent) {
     try {
         let hitBonus = BASE_HITBONUS;
-        hitBonus += Math.floor((agent.statBlock.dexterity - 10) / 2); // Add dexterity modifier
+        hitBonus += Math.floor((agent.statBlock.dexterity - 10) / 2);
         // TODO Add hit bonus from equipped items
-        // TODO Add bonus per level for rogue and warrior
+        if (agent.job === "rogue") {
+            hitBonus += Math.floor(agent.level * BASE_ROGUE.hbMod);
+        }
+        if (agent.job === "warrior") {
+            hitBonus += Math.floor(agent.level * BASE_WARRIOR.hbMod);
+        }
         return Math.max(BASE_HITBONUS, hitBonus);
     }
     catch (error) {
@@ -181,9 +198,11 @@ export function calculateHitBonus(agent) {
 export function calculateArmorClass(agent) {
     try {
         let armorClass = BASE_ARMOR_CLASS;
-        armorClass += Math.floor((agent.statBlock.dexterity - 10) / 2); // Add dexterity modifier
+        armorClass += Math.floor((agent.statBlock.dexterity - 10) / 2);
         // TODO Add armor class from equipped items
-        // TODO Add bonus per level for warrior
+        if (agent.job === "warrior") {
+            armorClass += Math.floor(agent.level * BASE_WARRIOR.acMod);
+        }
         return Math.max(BASE_ARMOR_CLASS, armorClass);
     }
     catch (error) {
@@ -193,9 +212,14 @@ export function calculateArmorClass(agent) {
 export function calculateSpellSave(agent) {
     try {
         let spellSave = BASE_SPELL_SAVE;
-        spellSave += Math.floor((agent.statBlock.wisdom - 10) / 2); // Add wisdom modifier
+        spellSave += Math.floor((agent.statBlock.wisdom - 10) / 2);
         // TODO Add spell save from equipped items
-        // TODO Add bonus per level for mage and cleric
+        if (agent.job === "cleric") {
+            spellSave += Math.floor(agent.level * BASE_CLERIC.ssMod);
+        }
+        if (agent.job === "mage") {
+            spellSave += Math.floor(agent.level * BASE_MAGE.ssMod);
+        }
         return Math.max(BASE_SPELL_SAVE, spellSave);
     }
     catch (error) {
@@ -205,7 +229,7 @@ export function calculateSpellSave(agent) {
 export function calculateSpeed(agent) {
     try {
         let speed = BASE_SPEED;
-        speed += Math.floor((agent.statBlock.dexterity - 10) / 2); // Add dexterity modifier
+        speed += Math.floor((agent.statBlock.dexterity - 10) / 2);
         // TODO Add speed from equipped items
         return Math.max(BASE_SPEED, speed);
     }
@@ -246,7 +270,7 @@ export function calculateResistElec(agent) {
 export function calculateHealthRegen(agent) {
     try {
         let healthRegen = BASE_HEALTH_REGEN;
-        healthRegen += Math.floor((agent.statBlock.constitution - 10) / 2); // Add constitution modifier
+        healthRegen += Math.floor((agent.statBlock.constitution - 10) / 2);
         // TODO Add health regen from equipped items
         return Math.max(BASE_HEALTH_REGEN, healthRegen);
     }
@@ -257,7 +281,7 @@ export function calculateHealthRegen(agent) {
 export function calculateManaRegen(agent) {
     try {
         let manaRegen = BASE_MANA_REGEN;
-        manaRegen += Math.floor((agent.statBlock.wisdom + agent.statBlock.intelligence - 20) / 4); // Add int & wis modifiers
+        manaRegen += Math.floor((agent.statBlock.wisdom + agent.statBlock.intelligence - 20) / 4);
         // TODO Add mana regen from equipped items
         return Math.max(BASE_MANA_REGEN, manaRegen);
     }
@@ -268,7 +292,7 @@ export function calculateManaRegen(agent) {
 export function calculateMoveRegen(agent) {
     try {
         let moveRegen = BASE_MOVE_REGEN;
-        moveRegen += Math.floor((agent.statBlock.constitution - 10) / 2); // Add constitution modifier
+        moveRegen += Math.floor((agent.statBlock.constitution - 10) / 2);
         // TODO Add move regen from equipped items
         return Math.max(BASE_MOVE_REGEN, moveRegen);
     }
