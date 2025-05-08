@@ -1,11 +1,11 @@
 // calculateAffixBonuses
 // gather all affixes from equipped items and total the bonuses
-import { baseAffixBonuses } from "../constants/AFFIX_BONUSES.js";
+import { AFFIX_BONUSES } from "../constants/AFFIX_BONUSES.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 import getEquippedItems from "./getEquippedItems.js";
 function calculateAffixBonuses(agent) {
     try {
-        const bonuses = baseAffixBonuses;
+        const bonuses = AFFIX_BONUSES;
         const equippedItems = getEquippedItems(agent);
         // Sum up all affix values from equipped items
         for (const item of equippedItems) {
@@ -18,11 +18,12 @@ function calculateAffixBonuses(agent) {
                 }
             }
         }
+        console.log(bonuses);
         return bonuses;
     }
     catch (error) {
         catchErrorHandlerForFunction(`calculateAffixBonuses`, error);
-        return baseAffixBonuses;
+        return AFFIX_BONUSES;
     }
 }
 export default calculateAffixBonuses;

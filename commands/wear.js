@@ -1,6 +1,7 @@
 // wear
 // user can WEAR an armor-type item to an appropriate slot
 import { processWearableLocation, WEARABLE_LOCATION_VALUES, } from "../constants/WEARABLE_LOCATION.js";
+import calculateAffixBonuses from "../util/calculateAffixBonuses.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
 import save from "./save.js";
@@ -47,6 +48,7 @@ async function wear(item, user, location) {
         if (requestedLocation &&
             locationsUserHasEmpty.includes(requestedLocation)) {
             moveItemToEquippedOnUser(user, item, requestedLocation);
+            user.affixBonuses = calculateAffixBonuses(user);
             return;
         }
         // make a list of slots that are both empty and compatible
@@ -60,6 +62,7 @@ async function wear(item, user, location) {
             //   `user wanted ${item.name} on empty ${requestedLocation}, equipping...`
             // );
             moveItemToEquippedOnUser(user, item, requestedLocation);
+            user.affixBonuses = calculateAffixBonuses(user);
             return;
         }
         // at this point we've handled empty slots (either specified or not)
@@ -78,6 +81,7 @@ async function wear(item, user, location) {
         // );
         unequip({ commandWord: "unequip" }, user, itemInSlot, locationToTry);
         moveItemToEquippedOnUser(user, item, locationToTry);
+        user.affixBonuses = calculateAffixBonuses(user);
         await save(user, true);
     }
     catch (error) {

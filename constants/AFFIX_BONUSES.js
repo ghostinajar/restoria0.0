@@ -1,4 +1,4 @@
-export const baseAffixBonuses = {
+export const AFFIX_BONUSES = {
     maxHp: 0,
     maxMp: 0,
     maxMv: 0,

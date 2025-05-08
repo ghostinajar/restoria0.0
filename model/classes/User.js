@@ -12,6 +12,7 @@ import historySchema from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
 import { calculateMaxHp, calculateMaxMp, calculateMaxMv, calculateStrength, calculateDexterity, calculateConstitution, calculateIntelligence, calculateWisdom, calculateCharisma, calculateDamageBonus, calculateHitBonus, calculateArmorClass, calculateSpellSave, calculateSpeed, calculateResistCold, calculateResistFire, calculateResistElec, } from "../../constants/BASE_STATS.js";
+import calculateAffixBonuses from "../../util/calculateAffixBonuses.js";
 const { Schema, Types, model } = mongoose;
 export const userSchema = new Schema({
     _id: Schema.Types.ObjectId,
@@ -190,6 +191,14 @@ userSchema.virtual("resistFire").get(function () {
 });
 userSchema.virtual("resistElec").get(function () {
     return calculateResistElec(this);
+});
+userSchema
+    .virtual("affixBonuses")
+    .get(function () {
+    return this._affixBonuses || calculateAffixBonuses(this);
+})
+    .set(function (value) {
+    this._affixBonuses = value;
 });
 userSchema.methods.comparePassword = async function (candidatePassword) {
     try {

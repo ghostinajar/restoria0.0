@@ -31,6 +31,8 @@ import {
   calculateResistFire,
   calculateResistElec,
 } from "../../constants/BASE_STATS.js";
+import { IAffixBonuses } from "../../constants/AFFIX_BONUSES.js";
+import calculateAffixBonuses from "../../util/calculateAffixBonuses.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -80,29 +82,31 @@ export interface IUser extends mongoose.Document {
     mapRadius: number;
     autoMap: boolean;
   };
-  _currentHp?: number;
-  _currentMp?: number;
-  _currentMv?: number;
-  currentHp: number; // virtual
-  maxHp: number; // virtual
-  currentMp: number; // virtual
-  maxMp: number; // virtual
-  currentMv: number; // virtual
-  maxMv: number; // virtual
-  strength: number; // virtual
-  dexterity: number; // virtual
-  constitution: number; // virtual
-  intelligence: number; // virtual
-  wisdom: number; // virtual
-  charisma: number; // virtual
-  damageBonus: number; // virtual
-  hitBonus: number; // virtual
-  armorClass: number; // virtual
-  spellSave: number; // virtual
-  speed: number; // virtual
-  resistCold: number; // virtual
-  resistFire: number; // virtual
-  resistElec: number; // virtual
+  currentHp: number; // virtual with setter
+  _currentHp?: number; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
+  currentMp: number; // virtual with setter
+  _currentMp?: number; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
+  currentMv: number; // virtual with setter
+  _currentMv?: number; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
+  maxHp: number; // derived virtual, no setter
+  maxMp: number; // derived virtual, no setter
+  maxMv: number; // derived virtual, no setter
+  strength: number; // derived virtual, no setter
+  dexterity: number; // derived virtual, no setter
+  constitution: number; // derived virtual, no setter
+  intelligence: number; // derived virtual, no setter
+  wisdom: number; // derived virtual, no setter
+  charisma: number; // derived virtual, no setter
+  damageBonus: number; // derived virtual, no setter
+  hitBonus: number; // derived virtual, no setter
+  armorClass: number; // derived virtual, no setter
+  spellSave: number; // derived virtual, no setter
+  speed: number; // derived virtual, no setter
+  resistCold: number; // derived virtual, no setter
+  resistFire: number; // derived virtual, no setter
+  resistElec: number; // derived virtual, no setter
+  affixBonuses: IAffixBonuses; // virtual with setter
+  _affixBonuses: IAffixBonuses; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -307,6 +311,15 @@ userSchema.virtual("resistFire").get(function () {
 userSchema.virtual("resistElec").get(function () {
   return calculateResistElec(this);
 });
+
+userSchema
+  .virtual("affixBonuses")
+  .get(function () {
+    return this._affixBonuses || calculateAffixBonuses(this);
+  })
+  .set(function (value: IAffixBonuses) {
+    this._affixBonuses = value;
+  });
 
 userSchema.methods.comparePassword = async function (
   candidatePassword: string

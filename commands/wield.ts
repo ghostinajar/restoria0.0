@@ -3,6 +3,7 @@
 
 import { IItem } from "../model/classes/Item.js";
 import { IUser } from "../model/classes/User.js";
+import calculateAffixBonuses from "../util/calculateAffixBonuses.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import save from "./save.js";
 import unequip from "./unequip.js";
@@ -18,6 +19,7 @@ async function wield(item: IItem, user: IUser) {
 
     // equip item and save
     moveItemToEquippedOnUser(user, item, "weapon1");
+    user.affixBonuses = calculateAffixBonuses(user);
     await save(user, true);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`wield`, error, user?.name);

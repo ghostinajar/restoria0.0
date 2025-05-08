@@ -1,5 +1,6 @@
 // wield
 // // user can WEILD a weapon-type item in their WEAPON1
+import calculateAffixBonuses from "../util/calculateAffixBonuses.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import save from "./save.js";
 import unequip from "./unequip.js";
@@ -13,6 +14,7 @@ async function wield(item, user) {
         }
         // equip item and save
         moveItemToEquippedOnUser(user, item, "weapon1");
+        user.affixBonuses = calculateAffixBonuses(user);
         await save(user, true);
     }
     catch (error) {

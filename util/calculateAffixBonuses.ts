@@ -1,17 +1,15 @@
 // calculateAffixBonuses
 // gather all affixes from equipped items and total the bonuses
 
-import { baseAffixBonuses, IAffixBonuses } from "../constants/AFFIX_BONUSES.js";
+import { AFFIX_BONUSES, IAffixBonuses } from "../constants/AFFIX_BONUSES.js";
 import { IMob } from "../model/classes/Mob.js";
-import { 
-  IUser,
-} from "../model/classes/User.js";
+import { IUser } from "../model/classes/User.js";
 import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 import getEquippedItems from "./getEquippedItems.js";
 
 function calculateAffixBonuses(agent: IUser | IMob) {
   try {
-    const bonuses = baseAffixBonuses;
+    const bonuses = AFFIX_BONUSES;
     const equippedItems = getEquippedItems(agent);
 
     // Sum up all affix values from equipped items
@@ -25,11 +23,11 @@ function calculateAffixBonuses(agent: IUser | IMob) {
         }
       }
     }
-
+    console.log(bonuses);
     return bonuses;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateAffixBonuses`, error);
-    return baseAffixBonuses;
+    return AFFIX_BONUSES;
   }
 }
 
