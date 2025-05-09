@@ -138,10 +138,10 @@ class ZoneManager {
             logger.info(`active zones in zoneManager: ${JSON.stringify(Array.from(this.zones.values()).map((zone) => zone.name))}`);
             // if blueprints are empty, add dummy data (necessary for user forms)
             if (zone.itemBlueprints.length === 0) {
-                zone.itemBlueprints = [DEFAULT_APPLE];
+                zone.itemBlueprints = [{ ...DEFAULT_APPLE }];
             }
             if (zone.mobBlueprints.length === 0) {
-                zone.mobBlueprints = [DEFAULT_GOBLIN];
+                zone.mobBlueprints = [{ ...DEFAULT_GOBLIN }];
             }
             await zone.initRooms();
             return zone;

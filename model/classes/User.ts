@@ -82,6 +82,8 @@ export interface IUser extends mongoose.Document {
     mapRadius: number;
     autoMap: boolean;
   };
+  affixBonuses: IAffixBonuses; // virtual with setter
+  _affixBonuses: IAffixBonuses; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
   currentHp: number; // virtual with setter
   _currentHp?: number; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
   currentMp: number; // virtual with setter
@@ -105,8 +107,6 @@ export interface IUser extends mongoose.Document {
   resistCold: number; // derived virtual, no setter
   resistFire: number; // derived virtual, no setter
   resistElec: number; // derived virtual, no setter
-  affixBonuses: IAffixBonuses; // virtual with setter
-  _affixBonuses: IAffixBonuses; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -218,6 +218,15 @@ export const userSchema = new Schema<IUser>(
 );
 
 userSchema
+  .virtual("affixBonuses")
+  .get(function () {
+    return this._affixBonuses || calculateAffixBonuses(this);
+  })
+  .set(function (value: IAffixBonuses) {
+    this._affixBonuses = value;
+  });
+
+userSchema
   .virtual("currentHp")
   .get(function () {
     return this._currentHp ?? calculateMaxHp(this);
@@ -311,15 +320,6 @@ userSchema.virtual("resistFire").get(function () {
 userSchema.virtual("resistElec").get(function () {
   return calculateResistElec(this);
 });
-
-userSchema
-  .virtual("affixBonuses")
-  .get(function () {
-    return this._affixBonuses || calculateAffixBonuses(this);
-  })
-  .set(function (value: IAffixBonuses) {
-    this._affixBonuses = value;
-  });
 
 userSchema.methods.comparePassword = async function (
   candidatePassword: string

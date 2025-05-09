@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { calculateMaxHp, calculateMaxMp, calculateMaxMv, } from "../../constants/BASE_STATS.js";
+import { calculateArmorClass, calculateCharisma, calculateConstitution, calculateDamageBonus, calculateDexterity, calculateHealthRegen, calculateHitBonus, calculateIntelligence, calculateManaRegen, calculateMaxHp, calculateMaxMp, calculateMaxMv, calculateMoveRegen, calculateResistCold, calculateResistElec, calculateResistFire, calculateSpeed, calculateSpellSave, calculateStrength, calculateWisdom, } from "../../constants/BASE_STATS.js";
+import { AFFIX_BONUSES } from "../../constants/AFFIX_BONUSES.js";
 class Mob {
     constructor(blueprint) {
         this._id = new mongoose.Types.ObjectId();
@@ -42,12 +43,30 @@ class Mob {
         this.emotes = blueprint.emotes;
         this.inventory = [];
         this.capacity = blueprint.capacity;
+        this.affixBonuses = { ...AFFIX_BONUSES };
         this.currentHp = calculateMaxHp(this) || 100;
         this.maxHp = calculateMaxHp(this) || 100;
         this.currentMp = calculateMaxMp(this) || 100;
         this.maxMp = calculateMaxMp(this) || 100;
         this.currentMv = calculateMaxMv(this) || 100;
         this.maxMv = calculateMaxMv(this) || 100;
+        this.strength = calculateStrength(this) || 10;
+        this.dexterity = calculateDexterity(this) || 10;
+        this.constitution = calculateConstitution(this) || 10;
+        this.intelligence = calculateIntelligence(this) || 10;
+        this.wisdom = calculateWisdom(this) || 10;
+        this.charisma = calculateCharisma(this) || 10;
+        this.speed = calculateSpeed(this) || 0;
+        this.hitBonus = calculateHitBonus(this) || 2;
+        this.damageBonus = calculateDamageBonus(this) || 0;
+        this.armorClass = calculateArmorClass(this) || 10;
+        this.healthRegen = calculateHealthRegen(this) || 0;
+        this.manaRegen = calculateManaRegen(this) || 0;
+        this.moveRegen = calculateMoveRegen(this) || 0;
+        this.resistCold = calculateResistCold(this) || 0;
+        this.resistElectric = calculateResistElec(this) || 0;
+        this.resistFire = calculateResistFire(this) || 0;
+        this.spellSave = calculateSpellSave(this) || 0;
     }
     _id;
     author;
@@ -70,11 +89,29 @@ class Mob {
     emotes;
     inventory;
     capacity;
+    affixBonuses;
     currentHp;
     maxHp;
     currentMp;
     maxMp;
     currentMv;
     maxMv;
+    strength;
+    dexterity;
+    constitution;
+    intelligence;
+    wisdom;
+    charisma;
+    speed;
+    hitBonus;
+    damageBonus;
+    armorClass;
+    healthRegen;
+    manaRegen;
+    moveRegen;
+    resistCold;
+    resistElectric;
+    resistFire;
+    spellSave;
 }
 export default Mob;
