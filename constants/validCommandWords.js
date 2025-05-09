@@ -4,6 +4,7 @@ export const validCommandWords = [
     "autoexamine",
     "bug",
     "bugs",
+    "character",
     "create",
     "down", // *
     "delete",

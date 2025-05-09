@@ -24,7 +24,12 @@
     <!-- Messages and side forms -->
     <div id="main">
       <div id="messagesContainer">
-        <ul id="messages" class="help"><li>New Player? To learn the basics, type HELP CHEATSHEET in the command box below.</li></ul>
+        <ul id="messages" class="help">
+          <li>
+            New Player? To learn the basics, type HELP CHEATSHEET in the command
+            box below.
+          </li>
+        </ul>
       </div>
       <!-- Define ejs modules array -->
       <% const partials = [ 'bug_form', 'create_item_blueprint_form',
@@ -64,12 +69,229 @@
         });
       });
 
+      socket.on("characterData", (characterData) => {
+        // Ralu the Lvl.1 Neutral Cleric
+        // STR	: 20     Dmg Bonus : 20         Cleric Lvl.  : 20     Resist Cold : 100%
+        // DEX	: 20     Hit Bonus : 20         Mage Lvl.    : 20     Resist Elec : 100%
+        // CON	: 20     ArmorClass: 100        Rogue Lvl.   : 31     Resist Fire : 100%
+        // INT	: 20     SpellSave : 20         Warrior Lvl	 : 31     Created	    : 2024
+        // WIS	: 20     Spirit    : 1000       Training Pts : 20     Hrs. Played : 1000
+        // CHA	: 20     Speed     : 20         Capacity	   : 200
+        // Gold Held : 999,999,999,999        Gold Stored : 999,999,999,999
+
+        const columnBuffer = { color: "white", content: `   ` };
+        const labelBuffer = { color: "white", content: ` : ` };
+
+        // show first line (Name, Level, Spirit, Job)
+        let spiritColor = "white";
+        let spiritText = "Neutral";
+        if (characterData.spirit > 333) {
+          spiritColor = "yellow_light";
+          spiritText = "Sun";
+        }
+        if (characterData.spirit < -333) {
+          spiritColor = "cyan";
+          spiritText = "Moon";
+        }
+        let jobColor = "white";
+        let jobText = ` ${
+          characterData.job.charAt(0).toUpperCase() + characterData.job.slice(1)
+        }`;
+        switch (characterData.job) {
+          case "cleric": {
+            jobColor = "cyan_light";
+            break;
+          }
+          case "mage": {
+            jobColor = "blue";
+            break;
+          }
+          case "rogue": {
+            jobColor = "purple";
+            break;
+          }
+          case "warrior": {
+            jobColor = "red";
+            break;
+          }
+          default:
+            break;
+        }
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: characterData.name },
+          { color: "grey_light", content: ` the Lvl. ${characterData.lvl} ` },
+          { color: spiritColor, content: spiritText },
+          { color: jobColor, content: jobText },
+        ]);
+
+        // show second line (STR, DB, Cleric Lvl., Resist Cold)
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: "STR" },
+          labelBuffer,
+          { color: "cyan", content: characterData.strength },
+          columnBuffer,
+          { color: "yellow", content: "Dmg Bonus" },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.damageBonus.toString().padEnd(5, " "),
+          },
+          columnBuffer,
+          { color: "cyan_light", content: "Cleric Lvl. " },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.clericLvl.toString().padEnd(3, " "),
+          },
+          columnBuffer,
+          { color: "white", content: "Resist Cold" },
+          labelBuffer,
+          { color: "cyan", content: `${characterData.resistCold}%` },
+        ]);
+
+        // show third line (DEX, HB, Mage Lvl., Resist Elec)
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: "DEX" },
+          labelBuffer,
+          { color: "cyan", content: characterData.dexterity },
+          columnBuffer,
+          { color: "yellow", content: "Hit Bonus" },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.hitBonus.toString().padEnd(5, " "),
+          },
+          columnBuffer,
+          { color: "blue", content: "Mage Lvl.   " },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.mageLvl.toString().padEnd(3, " "),
+          },
+          columnBuffer,
+          { color: "yellow_light", content: "Resist Elec" },
+          labelBuffer,
+          { color: "cyan", content: `${characterData.resistElec}%` },
+        ]);
+
+        // show fourth line (CON, AC, Rogue Lvl., Resist Fire)
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: "CON" },
+          labelBuffer,
+          { color: "cyan", content: characterData.constitution },
+          columnBuffer,
+          { color: "yellow", content: "ArmorClss" },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.armorClass.toString().padEnd(5, " "),
+          },
+          columnBuffer,
+          { color: "purple", content: "Rogue Lvl.  " },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.rogueLvl.toString().padEnd(3, " "),
+          },
+          columnBuffer,
+          { color: "red_dark", content: "Resist Fire" },
+          labelBuffer,
+          { color: "cyan", content: `${characterData.resistFire}%` },
+        ]);
+
+        // show fifth line (INT, SS, Warrior Lvl., Created)
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: "INT" },
+          labelBuffer,
+          { color: "cyan", content: characterData.intelligence },
+          columnBuffer,
+          { color: "yellow", content: "SpellSave" },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.spellSave.toString().padEnd(5, " "),
+          },
+          columnBuffer,
+          { color: "red", content: "Warrior Lvl." },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.warriorLvl.toString().padEnd(3, " "),
+          },
+          columnBuffer,
+          { color: "yellow", content: "Created    " },
+          labelBuffer,
+          { color: "cyan", content: `${characterData.creationYear}` },
+        ]);
+
+        // show sixth line (WIS, SPI, Training Pts, Hrs. Played)
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: "WIS" },
+          labelBuffer,
+          { color: "cyan", content: characterData.wisdom },
+          columnBuffer,
+          { color: "yellow", content: "Spirit   " },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.spirit.toString().padEnd(5, " "),
+          },
+          columnBuffer,
+          { color: "yellow", content: "Training Pts" },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.trainingPoints.toString().padEnd(3, " "),
+          },
+          columnBuffer,
+          { color: "yellow", content: "Hrs. Played" },
+          labelBuffer,
+          { color: "cyan", content: characterData.hoursPlayed },
+        ]);
+
+        // show seventh line (CHA, SPD, Capacity)
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: "CHA" },
+          labelBuffer,
+          { color: "cyan", content: characterData.charisma },
+          columnBuffer,
+          { color: "yellow", content: "Speed    " },
+          labelBuffer,
+          {
+            color: "cyan",
+            content: characterData.speed.toString().padEnd(5, " "),
+          },
+          columnBuffer,
+          { color: "yellow", content: "Inventory" },
+          labelBuffer,
+          { color: "cyan", content: characterData.inventoryCount },
+          { color: "white", content: ` / ` },
+          { color: "cyan", content: characterData.capacity },
+        ]);
+
+        // show eighth line (Gold Held, Gold Stored)
+        appendMulticolorStringToTerminal([
+          { color: "yellow", content: "Gold Held" },
+          labelBuffer,
+          { color: "cyan", content: characterData.goldHeld },
+          columnBuffer,
+          { color: "yellow", content: "Gold Stored" },
+          labelBuffer,
+          { color: "cyan", content: characterData.goldStored },
+        ]);
+
+        console.log(characterData);
+      });
+
       socket.on("equipmentArray", (equipmentArray) => {
         equipmentArray.forEach((arrayItem) => {
-          let itemName = arrayItem[1] === "nothing" ? { color: "grey_dark", content: arrayItem[1] } : { color: "blue_light", content: arrayItem[1] }
+          let itemName =
+            arrayItem[1] === "nothing"
+              ? { color: "grey_dark", content: arrayItem[1] }
+              : { color: "blue_light", content: arrayItem[1] };
           appendMulticolorStringToTerminal([
             { color: "yellow", content: arrayItem[0] },
-            { color: "white", content: " : " },
+            { color: "white", content: ` : ` },
             itemName,
           ]);
         });

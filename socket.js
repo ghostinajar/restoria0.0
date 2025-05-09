@@ -30,6 +30,7 @@ const setupSocket = (io) => {
             }
             // Remove existing event listeners for the user before adding new ones
             function removeAllListenersForUser(user) {
+                worldEmitter.removeAllListeners(`characterDataFor${user.username}`);
                 worldEmitter.removeAllListeners(`eraseMapTileFor${user.username}`);
                 worldEmitter.removeAllListeners(`equipmentArrayFor${user.username}`);
                 worldEmitter.removeAllListeners(`formPromptFor${user.username}`);
@@ -49,6 +50,9 @@ const setupSocket = (io) => {
             }
             removeAllListenersForUser(user);
             // Listen for game events
+            worldEmitter.on(`characterDataFor${user.username}`, async (characterData) => {
+                socket.emit(`characterData`, characterData);
+            });
             worldEmitter.on(`eraseMapTileFor${user.username}`, async (zoneFloorName, roomCoords) => {
                 socket.emit(`eraseMapTile`, zoneFloorName, roomCoords);
             });

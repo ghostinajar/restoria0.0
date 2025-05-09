@@ -40,6 +40,7 @@ import put from "../commands/put.js";
 import equip from "../commands/equip.js";
 import unequip from "../commands/unequip.js";
 import equipped from "../commands/equipment.js";
+import character from "../commands/character.js";
 
 async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
   try {
@@ -69,6 +70,10 @@ async function processCommand(parsedCommand: IParsedCommand, user: IUser) {
         break;
       }
       // C commands ******************** (and aliases for them)
+      case `character`: {
+        await character(parsedCommand, user);
+        break;
+      }
       case `create`: {
         await create(parsedCommand, user);
         break;

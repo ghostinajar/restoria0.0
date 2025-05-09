@@ -9,41 +9,46 @@
 
   <body>
     <%- include('menu'); %>
-    <%- include('title'); %>
-    <h2>Log in</h2>
-    <ul id="messages">
-      <li>
-        <form action="/login/password" method="post">
-          <ul>
-            <li>
-              <label for="username">Username:</label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                autocomplete="username"
-                required
-                autofocus
-              />
-            </li>
-            <li>
-              <label for="current-password">Password:</label>
-              <input
-                id="current-password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                required
-              />
-            </li>
-            <li>
-              <button type="submit">Log in</button>
-            </li>
-          </ul>
-        </form>
-      </li>
-      <li>Don't have an character yet? <a href="/register">Create one!</a></li>
-    </ul>
-    <%- include('help_cheatsheet'); %>
+    <div class="wrapper">
+      <%- include('title'); %>
+      <h2>Log in</h2>
+      <ul id="messages">
+        <li>
+          <form action="/login/password" method="post">
+            <ul>
+              <li>
+                <label for="username">Username:</label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autocomplete="username"
+                  required
+                  autofocus
+                />
+              </li>
+              <li>
+                <label for="current-password">Password:</label>
+                <input
+                  id="current-password"
+                  name="password"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                />
+              </li>
+              <li>
+                <button type="submit">Log in</button>
+              </li>
+            </ul>
+          </form>
+        </li>
+        <li>
+          Don't have an character yet? <a href="/register">Create one!</a>
+        </li>
+      </ul>
+      <%- include('help_cheatsheet'); %>
+    </div>
+    <%- include('footer'); %>
   </body>
 </html>

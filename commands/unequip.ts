@@ -7,6 +7,7 @@ import {
 } from "../constants/WEARABLE_LOCATION.js";
 import { IItem } from "../model/classes/Item.js";
 import { IUser } from "../model/classes/User.js";
+import calculateAffixBonuses from "../util/calculateAffixBonuses.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
 import { IParsedCommand } from "../util/parseCommand.js";
@@ -24,6 +25,7 @@ async function unequip(
       //   `unequip called (server direct) with item ${item.name} and location ${location}`
       // );
       removeItemFromSlot(user, item, location);
+      user.affixBonuses = calculateAffixBonuses(user);
       return;
     }
 
@@ -83,6 +85,7 @@ async function unequip(
         return;
       }
       removeItemFromSlot(user, itemInSlot, processedLocation);
+      user.affixBonuses = calculateAffixBonuses(user);
       return;
     }
 
@@ -96,6 +99,7 @@ async function unequip(
           itemInSlot.keywords.some((k) => k.startsWith(requestedItemKeyword))
         ) {
           removeItemFromSlot(user, itemInSlot, l);
+          user.affixBonuses = calculateAffixBonuses(user);
           return;
         }
       }

@@ -8,6 +8,7 @@ import {
 import { IItem } from "../model/classes/Item.js";
 import { IUser } from "../model/classes/User.js";
 import IEquipped from "../types/Equipped.js";
+import calculateAffixBonuses from "../util/calculateAffixBonuses.js";
 import catchErrorHandlerForFunction from "../util/catchErrorHandlerForFunction.js";
 import messageToUsername from "../util/messageToUsername.js";
 import save from "./save.js";
@@ -99,6 +100,7 @@ async function wear(item: IItem, user: IUser, location?: string) {
       locationsUserHasEmpty.includes(requestedLocation)
     ) {
       moveItemToEquippedOnUser(user, item, requestedLocation);
+      user.affixBonuses = calculateAffixBonuses(user);
       return;
     }
 
@@ -115,6 +117,7 @@ async function wear(item: IItem, user: IUser, location?: string) {
       //   `user wanted ${item.name} on empty ${requestedLocation}, equipping...`
       // );
       moveItemToEquippedOnUser(user, item, requestedLocation);
+      user.affixBonuses = calculateAffixBonuses(user);
       return;
     }
 
@@ -136,7 +139,7 @@ async function wear(item: IItem, user: IUser, location?: string) {
     // );
     unequip({ commandWord: "unequip" }, user, itemInSlot, locationToTry);
     moveItemToEquippedOnUser(user, item, locationToTry);
-
+    user.affixBonuses = calculateAffixBonuses(user);
     await save(user, true);
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`wear`, error, user?.name);
