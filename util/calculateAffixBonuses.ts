@@ -9,9 +9,8 @@ import getEquippedItems from "./getEquippedItems.js";
 
 function calculateAffixBonuses(agent: IUser | IMob) {
   try {
-    const bonuses = AFFIX_BONUSES;
+    const bonuses = { ...AFFIX_BONUSES };
     const equippedItems = getEquippedItems(agent);
-
     // Sum up all affix values from equipped items
     for (const item of equippedItems) {
       if (item.affixes) {
@@ -23,7 +22,6 @@ function calculateAffixBonuses(agent: IUser | IMob) {
         }
       }
     }
-    console.log(bonuses);
     return bonuses;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateAffixBonuses`, error);

@@ -1,7 +1,4 @@
 export const AFFIX_BONUSES = {
-    maxHp: 0,
-    maxMp: 0,
-    maxMv: 0,
     strength: 0,
     dexterity: 0,
     constitution: 0,

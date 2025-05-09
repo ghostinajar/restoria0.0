@@ -1,8 +1,4 @@
-
 export interface IAffixBonuses {
-  maxHp: number;
-  maxMp: number;
-  maxMv: number;
   strength: number;
   dexterity: number;
   constitution: number;
@@ -25,10 +21,7 @@ export interface IAffixBonuses {
   spellSave: number;
 }
 
-export const AFFIX_BONUSES = {
-  maxHp: 0,
-  maxMp: 0,
-  maxMv: 0,
+export const AFFIX_BONUSES: IAffixBonuses = {
   strength: 0,
   dexterity: 0,
   constitution: 0,

@@ -5,7 +5,7 @@ import catchErrorHandlerForFunction from "./catchErrorHandlerForFunction.js";
 import getEquippedItems from "./getEquippedItems.js";
 function calculateAffixBonuses(agent) {
     try {
-        const bonuses = AFFIX_BONUSES;
+        const bonuses = { ...AFFIX_BONUSES };
         const equippedItems = getEquippedItems(agent);
         // Sum up all affix values from equipped items
         for (const item of equippedItems) {
@@ -18,7 +18,6 @@ function calculateAffixBonuses(agent) {
                 }
             }
         }
-        console.log(bonuses);
         return bonuses;
     }
     catch (error) {
