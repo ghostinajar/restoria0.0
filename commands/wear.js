@@ -92,7 +92,7 @@ async function wear(item, user, location) {
 export function moveItemToEquippedOnUser(user, item, location) {
     user.equipped[location] = item;
     user.inventory = user.inventory.filter((i) => i._id !== item._id);
-    messageToUsername(user.username, `You equipped ${item.name}.`, `itemIsHere`);
+    messageToUsername(user.username, `You equip ${item.name}.`, `itemIsHere`);
     // console.log(
     //   `${user.name}'s ${location} now holds ${
     //     user.equipped[location as keyof IEquipped]?.name

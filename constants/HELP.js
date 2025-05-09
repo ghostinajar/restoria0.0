@@ -339,7 +339,6 @@ const HELP = {
         `A magic spell has a damaging, healing, or some other effect on its target. Users and mobs learn spells if they belong to the mage or cleric jobs. Certain items like scrolls, potions, and wands carry spells that any user can cast by using the item. Many spells have a duration, after which the spell and its effects disappear. It is said amongst the wise that the creation of all Restoria began with a single spell.`,
     ],
     STATS: [
-        `This feature is still in development.`,
         `${padStringToLength79(`STATS, HP, MP, MV, STR, DEX, CON, INT, WIS, CHA, SPIRIT`)}`,
         `${padStringToLength79(`SPEED, HITBONUS, DAMAGEBONUS, ARMOR CLASS, REGEN, RESIST, SPELLSAVE`)}`,
         `<span style="color:var(--red)">Typing STATS</span> as a command will show you your current HP, MP, and MV.`,
