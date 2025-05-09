@@ -55,7 +55,7 @@ async function editItemBlueprint(formData, user) {
                 item.wearableLocations = formData.wearableLocations;
             }
             else {
-                item.wearableLocations = DEFAULT_WEARABLE_LOCATIONS;
+                item.wearableLocations = { ...DEFAULT_WEARABLE_LOCATIONS };
                 messageToUsername(user.username, `Since ${item.name} is armor, it has to be wearable somewhere.`, `info`);
                 messageToUsername(user.username, `For now, we'll make it wearable on the hands.`, `info`);
             }

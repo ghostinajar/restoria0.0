@@ -48,7 +48,7 @@ async function createItemBlueprint(itemFormData, user) {
             newItemBlueprint.capacity = 10;
         }
         if (itemFormData.itemType === ITEM_TYPE.ARMOR) {
-            newItemBlueprint.wearableLocations = DEFAULT_WEARABLE_LOCATIONS;
+            newItemBlueprint.wearableLocations = { ...DEFAULT_WEARABLE_LOCATIONS };
         }
         if (itemFormData.itemType === ITEM_TYPE.POTION ||
             itemFormData.itemType === ITEM_TYPE.SCROLL ||

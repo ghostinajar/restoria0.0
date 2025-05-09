@@ -88,7 +88,7 @@ async function createItemBlueprint(
     }
 
     if (itemFormData.itemType === ITEM_TYPE.ARMOR) {
-      newItemBlueprint.wearableLocations = DEFAULT_WEARABLE_LOCATIONS;
+      newItemBlueprint.wearableLocations = {...DEFAULT_WEARABLE_LOCATIONS};
     }
 
     if (

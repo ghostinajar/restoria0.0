@@ -25,7 +25,7 @@ function calculateAffixBonuses(agent: IUser | IMob) {
     return bonuses;
   } catch (error: unknown) {
     catchErrorHandlerForFunction(`calculateAffixBonuses`, error);
-    return AFFIX_BONUSES;
+    return {...AFFIX_BONUSES};
   }
 }
 

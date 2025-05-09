@@ -22,7 +22,7 @@ function calculateAffixBonuses(agent) {
     }
     catch (error) {
         catchErrorHandlerForFunction(`calculateAffixBonuses`, error);
-        return AFFIX_BONUSES;
+        return { ...AFFIX_BONUSES };
     }
 }
 export default calculateAffixBonuses;
