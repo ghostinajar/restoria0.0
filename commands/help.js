@@ -27,85 +27,96 @@ function help(parsedCommand, user) {
         }
         // list all valid targets
         const validTargets = [
-            ...Object.keys(HELP),
+            "ac",
             "aggressive",
-            "character",
-            "user",
+            "armor",
+            "armor_class",
             "bugs",
             "capacity",
-            "room",
-            "edit_zone",
-            "zone",
-            "look",
-            "examine",
-            "study",
-            "research",
-            "edit_user",
-            "delete",
-            "erase_item",
-            "delete_item",
-            "erase_mob",
-            "delete_mob",
-            "erase_room",
-            "delete_room",
-            "erase_user",
-            "delete_user",
-            "erase_zone",
-            "delete_zone",
-            "ex",
-            "edit_room_exits",
-            "hidden_item",
-            "hidden_user",
-            "hidden_mob",
-            "hidden_exit",
-            "item_spell",
-            "armor",
-            "potion",
-            "scroll",
-            "token",
-            "treasure",
-            "wand",
-            "fishing_rod",
-            "fixture",
-            "food",
-            "lamp",
-            "temporary",
-            "keyword",
-            "key_word",
-            "key_words",
-            "hp",
-            "health",
-            "mp",
-            "mana",
-            "magic",
-            "mv",
-            "movement",
-            "str",
-            "strength",
-            "dex",
-            "dexterity",
-            "con",
+            "character",
+            "charisma",
             "constitution",
-            "int",
-            "intelligence",
-            "wis",
-            "wisdom",
-            "spi",
-            "spirit",
+            "damage_bonus",
+            "damagebonus",
+            "dambonus",
+            "db",
+            "delete",
+            "delete_item",
+            "delete_mob",
+            "delete_room",
+            "delete_user",
+            "delete_zone",
+            "dexterity",
+            "edit_room_exits",
+            "edit_user",
+            "edit_zone",
+            "erase_item",
+            "erase_mob",
+            "erase_room",
+            "erase_user",
+            "erase_zone",
+            "examine",
+            "exits",
             "finesse",
             "finesse_weapon",
+            "fixture",
+            "fishing_rod",
+            "food",
+            "health",
+            "hidden_exit",
+            "hidden_item",
+            "hidden_mob",
+            "hidden_user",
+            "hit_bonus",
+            "hitbonus",
+            "hp",
+            "intelligence",
+            "item_spell",
+            "item_tag",
+            "item_type",
+            "key_word",
+            "key_words",
+            "keyword",
+            "lamp",
             "light_weapon",
-            "reach",
-            "reach_weapon",
+            "look",
+            "magic",
+            "mana",
+            "movement",
+            "mp",
+            "mv",
+            "potion",
             "range",
             "range_weapon",
             "ranged",
             "ranged_weapon",
-            "twohand",
+            "reach",
+            "reach_weapon",
+            "regen",
+            "research",
+            "resist",
+            "room",
+            "scroll",
+            "speed",
+            "spell_save",
+            "spellsave",
+            "spirit",
+            "ss",
+            "stats",
+            "strength",
+            "study",
+            "temporary",
+            "token",
+            "treasure",
             "two_hand",
-            "twohand_weapon",
             "two_hand_weapon",
+            "twohand",
+            "twohand_weapon",
             "unique",
+            "user",
+            "wand",
+            "wisdom",
+            "zone",
         ]
             .map((targ) => targ.toLowerCase())
             .sort();
@@ -193,18 +204,28 @@ function help(parsedCommand, user) {
             case `magic`:
             case `mv`:
             case `movement`:
-            case `str`:
             case `strength`:
-            case `dex`:
             case `dexterity`:
-            case `con`:
             case `constitution`:
-            case `int`:
             case `intelligence`:
-            case `wis`:
             case `wisdom`:
-            case `spi`:
+            case `charisma`:
             case `spirit`:
+            case `speed`:
+            case `regen`:
+            case `resist`:
+            case `ac`:
+            case `armor_class`:
+            case `spellsave`:
+            case `spell_save`:
+            case `ss`:
+            case `hb`:
+            case `hitbonus`:
+            case `hit_bonus`:
+            case `db`:
+            case `dambonus`:
+            case `damagebonus`:
+            case `damage_bonus`:
                 target = `stats`;
                 break;
             case `finesse`:
