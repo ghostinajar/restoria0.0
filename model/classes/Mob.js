@@ -44,12 +44,15 @@ class Mob {
         this.inventory = [];
         this.capacity = blueprint.capacity;
         this.affixBonuses = { ...AFFIX_BONUSES };
-        this.currentHp = calculateMaxHp(this) || 100;
-        this.maxHp = calculateMaxHp(this) || 100;
-        this.currentMp = calculateMaxMp(this) || 100;
-        this.maxMp = calculateMaxMp(this) || 100;
-        this.currentMv = calculateMaxMv(this) || 100;
-        this.maxMv = calculateMaxMv(this) || 100;
+        this.currentHp = calculateMaxHp(this) || 20;
+        this.maxHp = calculateMaxHp(this) || 20;
+        this.healthRegen = calculateHealthRegen(this) || 0;
+        this.currentMp = calculateMaxMp(this) || 20;
+        this.maxMp = calculateMaxMp(this) || 20;
+        this.manaRegen = calculateManaRegen(this) || 0;
+        this.currentMv = calculateMaxMv(this) || 20;
+        this.maxMv = calculateMaxMv(this) || 20;
+        this.moveRegen = calculateMoveRegen(this) || 0;
         this.strength = calculateStrength(this) || 10;
         this.dexterity = calculateDexterity(this) || 10;
         this.constitution = calculateConstitution(this) || 10;
@@ -60,11 +63,8 @@ class Mob {
         this.hitBonus = calculateHitBonus(this) || 2;
         this.damageBonus = calculateDamageBonus(this) || 0;
         this.armorClass = calculateArmorClass(this) || 10;
-        this.healthRegen = calculateHealthRegen(this) || 0;
-        this.manaRegen = calculateManaRegen(this) || 0;
-        this.moveRegen = calculateMoveRegen(this) || 0;
         this.resistCold = calculateResistCold(this) || 0;
-        this.resistElectric = calculateResistElec(this) || 0;
+        this.resistElec = calculateResistElec(this) || 0;
         this.resistFire = calculateResistFire(this) || 0;
         this.spellSave = calculateSpellSave(this) || 0;
     }
@@ -92,10 +92,13 @@ class Mob {
     affixBonuses;
     currentHp;
     maxHp;
+    healthRegen;
     currentMp;
     maxMp;
+    manaRegen;
     currentMv;
     maxMv;
+    moveRegen;
     strength;
     dexterity;
     constitution;
@@ -106,11 +109,8 @@ class Mob {
     hitBonus;
     damageBonus;
     armorClass;
-    healthRegen;
-    manaRegen;
-    moveRegen;
     resistCold;
-    resistElectric;
+    resistElec;
     resistFire;
     spellSave;
 }

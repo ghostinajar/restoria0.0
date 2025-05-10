@@ -30,9 +30,13 @@ import {
   calculateResistCold,
   calculateResistFire,
   calculateResistElec,
+  calculateHealthRegen,
+  calculateManaRegen,
+  calculateMoveRegen,
 } from "../../constants/BASE_STATS.js";
 import { IAffixBonuses } from "../../constants/AFFIX_BONUSES.js";
 import calculateAffixBonuses from "../../util/calculateAffixBonuses.js";
+import { IAgent } from "./Agent.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -48,65 +52,32 @@ export interface ITrained {
   level: number;
 }
 
-export interface IUser extends mongoose.Document {
+export interface IUser extends mongoose.Document, IAgent {
   _id: mongoose.Types.ObjectId;
   username: string;
-  name: string;
   password: string;
   salt: string;
   isAdmin: boolean;
-  author: mongoose.Types.ObjectId | null;
   location: ILocation;
-  pronouns: number;
   history: IHistory;
   hoursPlayed: number;
-  job: string;
-  level: number;
-  statBlock: IStatBlock;
   goldHeld: number;
   goldBanked: number;
   trainingPoints: number;
   jobLevels: IJobLevels;
-  description: IDescription;
-  users: Array<mongoose.Types.ObjectId>;
   unpublishedZoneTally: number;
   trained: Array<ITrained>;
-  inventory: Array<IItem>;
-  capacity: number;
   storage: Array<IItem>;
-  equipped: IEquipped;
-  affixes: Array<IAffix>;
   editor: mongoose.Types.ObjectId | null;
   preferences: {
     autoExamine: boolean;
     mapRadius: number;
     autoMap: boolean;
   };
-  affixBonuses: IAffixBonuses; // virtual with setter
   _affixBonuses: IAffixBonuses; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
-  currentHp: number; // virtual with setter
   _currentHp?: number; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
-  currentMp: number; // virtual with setter
   _currentMp?: number; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
-  currentMv: number; // virtual with setter
   _currentMv?: number; // this is necessary for the setter, since this is a stored virtual (not derived on every get)
-  maxHp: number; // derived virtual, no setter
-  maxMp: number; // derived virtual, no setter
-  maxMv: number; // derived virtual, no setter
-  strength: number; // derived virtual, no setter
-  dexterity: number; // derived virtual, no setter
-  constitution: number; // derived virtual, no setter
-  intelligence: number; // derived virtual, no setter
-  wisdom: number; // derived virtual, no setter
-  charisma: number; // derived virtual, no setter
-  damageBonus: number; // derived virtual, no setter
-  hitBonus: number; // derived virtual, no setter
-  armorClass: number; // derived virtual, no setter
-  spellSave: number; // derived virtual, no setter
-  speed: number; // derived virtual, no setter
-  resistCold: number; // derived virtual, no setter
-  resistFire: number; // derived virtual, no setter
-  resistElec: number; // derived virtual, no setter
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -149,11 +120,6 @@ export const userSchema = new Schema<IUser>(
       type: descriptionSchema,
       required: true,
       default: () => ({}),
-    },
-    users: {
-      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-      required: true,
-      default: () => [],
     },
     unpublishedZoneTally: { type: Number, required: true, default: 0 },
     trained: {
@@ -239,6 +205,10 @@ userSchema.virtual("maxHp").get(function () {
   return calculateMaxHp(this);
 });
 
+userSchema.virtual("healthRegen").get(function () {
+  return calculateHealthRegen(this);
+});
+
 userSchema
   .virtual("currentMp")
   .get(function () {
@@ -252,6 +222,10 @@ userSchema.virtual("maxMp").get(function () {
   return calculateMaxMp(this);
 });
 
+userSchema.virtual("manaRegen").get(function () {
+  return calculateManaRegen(this);
+});
+
 userSchema
   .virtual("currentMv")
   .get(function () {
@@ -263,6 +237,10 @@ userSchema
 
 userSchema.virtual("maxMv").get(function () {
   return calculateMaxMv(this);
+});
+
+userSchema.virtual("moveRegen").get(function () {
+  return calculateMoveRegen(this);
 });
 
 userSchema.virtual("strength").get(function () {

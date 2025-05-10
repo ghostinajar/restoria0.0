@@ -11,7 +11,7 @@ import statBlockSchema from "./StatBlock.js";
 import historySchema from "./History.js";
 import catchErrorHandlerForFunction from "../../util/catchErrorHandlerForFunction.js";
 import WORLD_RECALL from "../../constants/WORLD_RECALL.js";
-import { calculateMaxHp, calculateMaxMp, calculateMaxMv, calculateStrength, calculateDexterity, calculateConstitution, calculateIntelligence, calculateWisdom, calculateCharisma, calculateDamageBonus, calculateHitBonus, calculateArmorClass, calculateSpellSave, calculateSpeed, calculateResistCold, calculateResistFire, calculateResistElec, } from "../../constants/BASE_STATS.js";
+import { calculateMaxHp, calculateMaxMp, calculateMaxMv, calculateStrength, calculateDexterity, calculateConstitution, calculateIntelligence, calculateWisdom, calculateCharisma, calculateDamageBonus, calculateHitBonus, calculateArmorClass, calculateSpellSave, calculateSpeed, calculateResistCold, calculateResistFire, calculateResistElec, calculateHealthRegen, calculateManaRegen, calculateMoveRegen, } from "../../constants/BASE_STATS.js";
 import calculateAffixBonuses from "../../util/calculateAffixBonuses.js";
 const { Schema, Types, model } = mongoose;
 export const userSchema = new Schema({
@@ -52,11 +52,6 @@ export const userSchema = new Schema({
         type: descriptionSchema,
         required: true,
         default: () => ({}),
-    },
-    users: {
-        type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-        required: true,
-        default: () => [],
     },
     unpublishedZoneTally: { type: Number, required: true, default: 0 },
     trained: {
@@ -136,6 +131,9 @@ userSchema
 userSchema.virtual("maxHp").get(function () {
     return calculateMaxHp(this);
 });
+userSchema.virtual("healthRegen").get(function () {
+    return calculateHealthRegen(this);
+});
 userSchema
     .virtual("currentMp")
     .get(function () {
@@ -147,6 +145,9 @@ userSchema
 userSchema.virtual("maxMp").get(function () {
     return calculateMaxMp(this);
 });
+userSchema.virtual("manaRegen").get(function () {
+    return calculateManaRegen(this);
+});
 userSchema
     .virtual("currentMv")
     .get(function () {
@@ -157,6 +158,9 @@ userSchema
 });
 userSchema.virtual("maxMv").get(function () {
     return calculateMaxMv(this);
+});
+userSchema.virtual("moveRegen").get(function () {
+    return calculateMoveRegen(this);
 });
 userSchema.virtual("strength").get(function () {
     return calculateStrength(this);
